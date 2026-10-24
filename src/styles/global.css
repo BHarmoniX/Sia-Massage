@@ -76,3 +76,30 @@
 .skip-link:focus {
   top: 1rem;
 }
+
+/* ── Capture guard (see src/scripts/capture-guard.ts) ─────────────────────────────────────
+   During a full-page screenshot of a live site: the page content and header are hidden (the
+   layout keeps its size), the Illuminara footer shows only its blank frosted glass, and the
+   design notice sits in the middle of the screen. */
+html[data-capture-blocked] main,
+html[data-capture-blocked] .site-header,
+html[data-capture-blocked] .ambient,
+html[data-capture-blocked] .ill-footer__main > :not(.ill-footer__glass, .ill-footer__cutout),
+html[data-capture-blocked] .ill-footer__piece > :not(.ill-footer__glass) {
+  visibility: hidden !important;
+}
+html[data-capture-blocked] body::after {
+  content: var(--capture-notice);
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--color-muted);
+  pointer-events: none;
+}

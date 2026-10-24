@@ -2,7 +2,10 @@
 import BaseHead from '../components/BaseHead.astro';
 import IlluminaraFooter from '../components/footer/IlluminaraFooter.astro';
 import AmbientAudio from '../components/media/AmbientAudio.astro';
+import { SITE_ENV } from 'astro:env/server';
+import { features } from '../../config/features.mjs';
 import { site } from '../config/site';
+import { studio } from '../config/studio';
 import '../styles/global.css';
 
 interface Props {
@@ -15,10 +18,16 @@ interface Props {
 }
 
 const { hideFooter = false, ...props } = Astro.props;
+// The capture guard only runs on live sites (see config/features.mjs).
+const guard = features.captureGuard && SITE_ENV === 'production';
 ---
 
 <!doctype html>
-<html lang={site.locale}>
+<html
+  lang={site.locale}
+  data-capture-guard={guard ? '' : undefined}
+  data-capture-notice={guard ? studio.designCredit : undefined}
+>
   <head>
     <BaseHead {...props} />
     <slot name="head" />
@@ -36,4 +45,5 @@ const { hideFooter = false, ...props } = Astro.props;
 
 <script>
   import '../scripts/depth.ts';
+  import '../scripts/capture-guard.ts';
 </script>
