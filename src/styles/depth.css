@@ -6,21 +6,19 @@
   Use:
     <a class="btn-3d">…</a>                         raised, lit button that presses in
     <a class="btn-3d btn-3d--ghost">…</a>           outlined variant
-    <div class="card-3d" data-tilt>…</div>          tilts toward the pointer, with glare
+    <div class="card-3d" data-tilt>…</div>          tilts toward the pointer
     <div data-tilt><span data-depth="0.6">…</span>  children drift by depth (parallax)
     <div class="breathe">…</div>                    slow, living scale/float
 
   Tune per client with these tokens (defaults below):
     --depth-tilt       max card tilt in degrees
     --depth-lift       hover lift distance
-    --depth-glare      glare strength (0–1)
-    --depth-speed      base transition time
+      --depth-speed      base transition time
 */
 
 :root {
   --depth-tilt: 8deg;
   --depth-lift: 3px;
-  --depth-glare: 0.35;
   --depth-speed: 450ms;
   --depth-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -73,10 +71,12 @@
     inset 0 1px 0 color-mix(in oklab, white 35%, transparent),
     0 2px 0 var(--btn-edge),
     0 6px 14px -8px color-mix(in oklab, var(--btn-edge) 70%, transparent);
-  transform: translateY(0);
+  /* Lift with `top`, never `transform`: a transform would give the button its own
+     stacking context and pull the hole (::after) in front of its face. */
+  top: 0;
   transition:
     --btn-hl var(--depth-speed) var(--depth-ease),
-    transform var(--depth-speed) var(--depth-ease),
+    top var(--depth-speed) var(--depth-ease),
     box-shadow var(--depth-speed) var(--depth-ease);
   -webkit-tap-highlight-color: transparent;
 }
@@ -93,14 +93,15 @@
     inset 0 2px 5px color-mix(in oklab, black 35%, transparent),
     inset 0 -1px 0 color-mix(in oklab, white 25%, transparent),
     0 1px 0 color-mix(in oklab, white 30%, transparent);
-  transition: transform var(--depth-speed) var(--depth-ease);
+  top: calc(var(--hole-gap) * -1);
+  transition: top var(--depth-speed) var(--depth-ease);
   pointer-events: none;
 }
 
 .btn-3d:hover,
 .btn-3d:focus-visible {
   --btn-hl: 1;
-  transform: translateY(calc(var(--depth-lift) * -0.5));
+  top: calc(var(--depth-lift) * -0.5);
   box-shadow:
     inset 0 1px 0 color-mix(in oklab, white 45%, transparent),
     0 3px 0 var(--btn-edge),
@@ -110,19 +111,19 @@
 /* The hole stays put while the button rises within it. */
 .btn-3d:hover::after,
 .btn-3d:focus-visible::after {
-  transform: translateY(calc(var(--depth-lift) * 0.5));
+  top: calc(var(--hole-gap) * -1 + var(--depth-lift) * 0.5);
 }
 
 /* Pressed: settles into the hole. */
 .btn-3d:active {
-  transform: translateY(1px);
+  top: 1px;
   transition-duration: 90ms;
   box-shadow:
     inset 0 1px 4px color-mix(in oklab, black 20%, transparent),
     0 0 0 var(--btn-edge);
 }
 .btn-3d:active::after {
-  transform: translateY(-1px);
+  top: calc(var(--hole-gap) * -1 - 1px);
 }
 
 .btn-3d--ghost {
@@ -139,42 +140,20 @@
   --ry: 0deg;
   --mx: 50%;
   --my: 50%;
-  --glare: 0;
   position: relative;
   transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
   transform-style: preserve-3d;
   transition:
     transform var(--depth-speed) var(--depth-ease),
     box-shadow var(--depth-speed) var(--depth-ease);
-  box-shadow:
-    0 1px 0 color-mix(in oklab, white 60%, transparent) inset,
-    0 18px 40px -24px color-mix(in oklab, var(--color-text) 40%, transparent);
+  box-shadow: 0 18px 40px -24px color-mix(in oklab, var(--color-text) 40%, transparent);
   will-change: transform;
 }
 .card-3d[data-tilting] {
   transition-duration: 120ms;
-  box-shadow:
-    0 1px 0 color-mix(in oklab, white 60%, transparent) inset,
-    calc(var(--ry) * -2) calc(24px + var(--rx) * 2) 50px -24px
-      color-mix(in oklab, var(--color-text) 45%, transparent);
+  box-shadow: calc(var(--ry) * -2) calc(24px + var(--rx) * 2) 50px -24px
+    color-mix(in oklab, var(--color-text) 45%, transparent);
 }
-/* Glare: a soft light sheen where the pointer is. */
-.card-3d::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(
-    400px circle at var(--mx) var(--my),
-    color-mix(in oklab, white calc(var(--depth-glare) * 100%), transparent),
-    transparent 55%
-  );
-  opacity: var(--glare);
-  mix-blend-mode: soft-light;
-  transition: opacity var(--depth-speed) var(--depth-ease);
-}
-
 /* ── Parallax layers inside a tilting element ────────────────────────────────────── */
 
 [data-depth] {
@@ -322,14 +301,11 @@
   position: relative;
   border-radius: var(--radius-card, 1rem);
   border: 1px solid color-mix(in oklab, white 45%, transparent);
-  background:
-    linear-gradient(135deg, color-mix(in oklab, white 30%, transparent), transparent 42%),
-    color-mix(in oklab, var(--glass-tint) 62%, transparent);
+  background: color-mix(in oklab, var(--glass-tint) 62%, transparent);
   backdrop-filter: blur(var(--glass-blur)) saturate(140%);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 65%, transparent),
-    inset 0 -1px 0 color-mix(in oklab, black 6%, transparent),
+    inset 0 1px 0 color-mix(in oklab, white 18%, transparent),
     0 24px 48px -28px color-mix(in oklab, var(--color-text) 45%, transparent);
 }
 
@@ -404,10 +380,10 @@
 
 .crystal {
   isolation: isolate;
-  background-image:
-    linear-gradient(135deg, color-mix(in oklab, white 30%, transparent), transparent 42%),
-    linear-gradient(color-mix(in oklab, var(--glass-tint, var(--color-surface)) 58%, transparent),
-      color-mix(in oklab, var(--glass-tint, var(--color-surface)) 58%, transparent));
+  background-image: linear-gradient(
+    color-mix(in oklab, var(--glass-tint, var(--color-surface)) 58%, transparent),
+    color-mix(in oklab, var(--glass-tint, var(--color-surface)) 58%, transparent)
+  );
   transition:
     transform var(--depth-speed) var(--depth-ease),
     box-shadow 600ms var(--depth-ease);
@@ -415,7 +391,6 @@
 .crystal:hover,
 .crystal:focus-within {
   box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
     0 0 0 1px color-mix(in oklab, var(--color-accent) 40%, transparent),
     0 0 36px -6px color-mix(in oklab, var(--color-accent) 55%, transparent),
     0 24px 48px -28px color-mix(in oklab, var(--color-text) 45%, transparent);
@@ -546,6 +521,6 @@
   }
   .btn-3d:hover,
   .btn-3d:focus-visible {
-    transform: none;
+    top: 0;
   }
 }
