@@ -1,0 +1,78 @@
+---
+// Floating "scroll down" cue for heroes (from the Sa Massage build): a mouse outline with a
+// small dot, fading in after a moment and drifting gently up and down. It's a real link to
+// the next section, so it also works for keyboard and screen-reader users.
+
+interface Props {
+  /** Where it leads, e.g. '#philosophy'. */
+  href: string;
+  /** Accessible name, e.g. 'Scroll to our philosophy'. */
+  label?: string;
+}
+
+const { href, label = 'Scroll down' } = Astro.props;
+---
+
+<a href={href} class="scroll-cue" aria-label={label}>
+  <span class="scroll-cue__mouse" aria-hidden="true">
+    <span class="scroll-cue__dot"></span>
+  </span>
+</a>
+
+<style>
+  .scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 3rem;
+    translate: -50% 0;
+    display: block;
+    padding: 0.5rem;
+    opacity: 0;
+    animation: scroll-cue-in 500ms ease 1.2s forwards;
+  }
+  .scroll-cue__mouse {
+    display: flex;
+    justify-content: center;
+    width: 1.5rem;
+    height: 2.5rem;
+    padding-top: 0.5rem;
+    border: 2px solid color-mix(in oklab, var(--color-muted) 70%, transparent);
+    border-radius: 9999px;
+    transition: border-color 300ms ease;
+  }
+  .scroll-cue__dot {
+    width: 0.375rem;
+    height: 0.75rem;
+    border-radius: 9999px;
+    background: var(--color-accent);
+  }
+  .scroll-cue:hover .scroll-cue__mouse,
+  .scroll-cue:focus-visible .scroll-cue__mouse {
+    border-color: var(--color-accent);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-cue__mouse {
+      animation: scroll-cue-float 2s ease-in-out infinite;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue {
+      opacity: 1;
+      animation: none;
+    }
+  }
+  @keyframes scroll-cue-in {
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes scroll-cue-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(10px);
+    }
+  }
+</style>
