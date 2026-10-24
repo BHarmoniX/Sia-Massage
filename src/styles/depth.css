@@ -1,0 +1,283 @@
+/*
+  Illuminara depth module: 3D buttons, tilting cards, pointer-following light, parallax
+  layers and "breathing". Pure CSS driven by a few custom properties that
+  src/scripts/depth.ts updates from the pointer. Only transform/opacity animate (60fps).
+
+  Use:
+    <a class="btn-3d">…</a>                         raised, lit button that presses in
+    <a class="btn-3d btn-3d--ghost">…</a>           outlined variant
+    <div class="card-3d" data-tilt>…</div>          tilts toward the pointer, with glare
+    <div data-tilt><span data-depth="0.6">…</span>  children drift by depth (parallax)
+    <div class="breathe">…</div>                    slow, living scale/float
+
+  Tune per client with these tokens (defaults below):
+    --depth-tilt       max card tilt in degrees
+    --depth-lift       hover lift distance
+    --depth-glare      glare strength (0–1)
+    --depth-speed      base transition time
+*/
+
+:root {
+  --depth-tilt: 8deg;
+  --depth-lift: 3px;
+  --depth-glare: 0.35;
+  --depth-speed: 450ms;
+  --depth-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── 3D button ────────────────────────────────────────────────────────────────────── */
+
+.btn-3d {
+  --mx: 50%;
+  --my: 0%;
+  --btn-face: var(--color-accent);
+  --btn-text: var(--color-on-accent);
+  --btn-edge: color-mix(in oklab, var(--btn-face) 62%, black);
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.8rem;
+  border-radius: 9999px;
+  color: var(--btn-text);
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  /* Lit from above: lighter top, deeper bottom. */
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--btn-face) 82%, white) 0%,
+    var(--btn-face) 55%,
+    color-mix(in oklab, var(--btn-face) 88%, black) 100%
+  );
+  /* The visible underside ("edge") plus a soft cast shadow give physical thickness. */
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 45%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, black 15%, transparent),
+    0 4px 0 var(--btn-edge),
+    0 10px 22px -8px color-mix(in oklab, var(--btn-edge) 70%, transparent);
+  transform: translateY(0);
+  transition:
+    transform var(--depth-speed) var(--depth-ease),
+    box-shadow var(--depth-speed) var(--depth-ease),
+    filter var(--depth-speed) var(--depth-ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Specular highlight that follows the pointer across the button. */
+.btn-3d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    120px circle at var(--mx) var(--my),
+    color-mix(in oklab, white 55%, transparent),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity var(--depth-speed) var(--depth-ease);
+}
+
+.btn-3d:hover,
+.btn-3d:focus-visible {
+  transform: translateY(calc(var(--depth-lift) * -1));
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, black 15%, transparent),
+    0 calc(4px + var(--depth-lift)) 0 var(--btn-edge),
+    0 18px 34px -10px color-mix(in oklab, var(--btn-edge) 75%, transparent),
+    0 0 28px -4px color-mix(in oklab, var(--btn-face) 55%, transparent);
+}
+.btn-3d:hover::before,
+.btn-3d:focus-visible::before {
+  opacity: 1;
+}
+
+/* Pressed: sinks onto its edge. */
+.btn-3d:active {
+  transform: translateY(3px);
+  transition-duration: 90ms;
+  box-shadow:
+    inset 0 2px 6px color-mix(in oklab, black 20%, transparent),
+    0 1px 0 var(--btn-edge),
+    0 4px 10px -6px color-mix(in oklab, var(--btn-edge) 60%, transparent);
+}
+
+.btn-3d--ghost {
+  --btn-text: var(--color-accent-strong);
+  --btn-edge: color-mix(in oklab, var(--color-accent) 35%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--color-bg) 70%, white),
+    var(--color-bg)
+  );
+  border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
+}
+.btn-3d--ghost::before {
+  background: radial-gradient(
+    120px circle at var(--mx) var(--my),
+    color-mix(in oklab, var(--color-accent) 22%, transparent),
+    transparent 65%
+  );
+}
+
+/* ── 3D card ──────────────────────────────────────────────────────────────────────── */
+
+.card-3d {
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 50%;
+  --glare: 0;
+  position: relative;
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition:
+    transform var(--depth-speed) var(--depth-ease),
+    box-shadow var(--depth-speed) var(--depth-ease);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, white 60%, transparent) inset,
+    0 18px 40px -24px color-mix(in oklab, var(--color-text) 40%, transparent);
+  will-change: transform;
+}
+.card-3d[data-tilting] {
+  transition-duration: 120ms;
+  box-shadow:
+    0 1px 0 color-mix(in oklab, white 60%, transparent) inset,
+    calc(var(--ry) * -2) calc(24px + var(--rx) * 2) 50px -24px
+      color-mix(in oklab, var(--color-text) 45%, transparent);
+}
+/* Glare: a soft light sheen where the pointer is. */
+.card-3d::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    400px circle at var(--mx) var(--my),
+    color-mix(in oklab, white calc(var(--depth-glare) * 100%), transparent),
+    transparent 55%
+  );
+  opacity: var(--glare);
+  mix-blend-mode: soft-light;
+  transition: opacity var(--depth-speed) var(--depth-ease);
+}
+
+/* ── Parallax layers inside a tilting element ────────────────────────────────────── */
+
+[data-depth] {
+  --px: 0;
+  --py: 0;
+  transform: translate3d(calc(var(--px) * 1px), calc(var(--py) * 1px), 0);
+  transition: transform 900ms var(--depth-ease);
+}
+
+/* ── Breathing: slow, living motion ───────────────────────────────────────────────── */
+
+@keyframes depth-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.012);
+  }
+}
+@keyframes depth-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .breathe {
+    animation: depth-breathe 9s ease-in-out infinite;
+  }
+  .breathe-glow {
+    animation: depth-glow 7s ease-in-out infinite;
+  }
+}
+
+/* ── Scroll motion for images ─────────────────────────────────────────────────────
+
+  <figure class="img-reveal">…<img>…</figure>   unveils from an inset frame, easing out of a
+                                                slight zoom, when scrolled into view
+  <div class="scroll-drift">…</div>             parallax: drifts slower than the page
+
+  Drift uses native scroll-driven animations where supported, otherwise
+  src/scripts/depth.ts sets --drift on scroll (class .scroll-drift-js).
+*/
+
+.img-reveal {
+  overflow: hidden;
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .img-reveal {
+    clip-path: inset(10% 8% 10% 8% round var(--radius-card, 0));
+    transition: clip-path 1.6s var(--depth-ease);
+  }
+  .img-reveal img {
+    transform: scale(1.18);
+    transition: transform 2.2s var(--depth-ease);
+  }
+  .img-reveal.is-visible {
+    clip-path: inset(0 0 0 0 round var(--radius-card, 0));
+  }
+  .img-reveal.is-visible img {
+    transform: scale(1);
+  }
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 1.1s var(--depth-ease),
+      transform 1.1s var(--depth-ease);
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-drift {
+      animation: depth-scroll-drift linear both;
+      animation-timeline: view();
+    }
+  }
+}
+@keyframes depth-scroll-drift {
+  from {
+    transform: translateY(-7%) scale(1.14);
+  }
+  to {
+    transform: translateY(7%) scale(1.14);
+  }
+}
+.scroll-drift-js {
+  transform: translateY(var(--drift, 0%)) scale(1.14);
+  will-change: transform;
+}
+
+/* Reduced motion: keep the light and depth styling, drop movement. */
+@media (prefers-reduced-motion: reduce) {
+  .card-3d,
+  [data-depth] {
+    transform: none !important;
+  }
+  .btn-3d:hover,
+  .btn-3d:focus-visible {
+    transform: none;
+  }
+}

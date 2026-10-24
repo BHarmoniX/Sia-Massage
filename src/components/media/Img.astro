@@ -1,0 +1,52 @@
+---
+// Optimised responsive image. At build time the source (JPG/PNG/WebP in src/) is converted
+// to AVIF and WebP at several widths; each browser downloads only the smallest version that
+// fits the screen. Width and height are always set, so the page never jumps while loading.
+//
+//   <Img src={roomPhoto} alt="Treatment room with soft lamplight" sizes="(min-width: 1024px) 50vw, 100vw" />
+//
+// Above-the-fold images: pass priority, so they load first instead of lazily.
+
+import type { ImageMetadata } from 'astro';
+import { Picture } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  /** Describe what the image shows. Use alt="" only for purely decorative images. */
+  alt: string;
+  /** How wide the image is shown, so the browser picks the right file. */
+  sizes?: string;
+  widths?: number[];
+  priority?: boolean;
+  class?: string;
+  pictureClass?: string;
+}
+
+const {
+  src,
+  alt,
+  sizes = '100vw',
+  widths = [480, 768, 1080, 1440, 1920, 2560],
+  priority = false,
+  class: className,
+  pictureClass,
+} = Astro.props;
+
+// Never upscale: drop widths larger than the original.
+const usable = widths.filter((w) => w <= src.width);
+const finalWidths = usable.length > 0 ? usable : [src.width];
+---
+
+<Picture
+  src={src}
+  alt={alt}
+  formats={['avif', 'webp']}
+  widths={finalWidths}
+  sizes={sizes}
+  quality={78}
+  loading={priority ? 'eager' : 'lazy'}
+  decoding={priority ? 'sync' : 'async'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  class={className}
+  pictureAttributes={{ class: pictureClass }}
+/>

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './depth.css';
 
 /*
   Design tokens: restyle a client site by changing these values only. Components never use
