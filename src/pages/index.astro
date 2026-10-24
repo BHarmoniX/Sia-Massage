@@ -250,30 +250,21 @@ const faqs = [
       <div class="sia-visit__door">
         <Img src={bambooPath} alt="" sizes="100vw" class="h-full w-full object-cover" />
       </div>
-      <!-- Ornate frame. Its geometry is set by the doorway script from the same numbers
-           that cut the arch, so frame and opening are always exactly the same shape. -->
-      <!-- A complete arch (the outline of the client's stone arch, mirrored exactly) with a
-           sill, traced by a gold line and an even fine line, flanked by a pair of vertical
-           calligraphy couplets as on a traditional Chinese doorway. The doorway script draws
-           the opening, the border and the couplets from one geometry. -->
+      <!-- A gateway: the outline of the client's stone arch (crown mirrored exactly, posts
+           extended to doorway height), traced by a gold line and an even fine line. No sill: the
+           photo and the posts fade into the moss at the foot, so the path runs out to meet you. Either side, carved and gilded into the wall, a couplet read right
+           to left: 身体放松 · 心自宁静, "a relaxed body creates a calm mind". The doorway script
+           draws everything from one geometry. -->
       <svg class="sia-visit__frame" data-frame>
         <path class="sia-arch__line" data-line="0" />
         <path class="sia-arch__line sia-arch__line--fine" data-line="11" />
-        <!-- Couplet, read right panel first: 身体放松 · 心自宁静
-             "A relaxed body creates a calm mind." -->
-        <g class="sia-couplet" data-couplet="right" lang="zh-Hans" role="img" aria-label="身体放松: a relaxed body">
-          <rect class="sia-couplet__panel" x="-26" y="0" width="52" height="236" rx="3" />
-          <rect class="sia-couplet__inner" x="-21" y="5" width="42" height="226" rx="2" />
-          <text class="sia-couplet__text" x="0">
-            <tspan x="0" y="44">身</tspan><tspan x="0" y="96">体</tspan><tspan x="0" y="148">放</tspan><tspan x="0" y="200">松</tspan>
-          </text>
+        <g class="sia-carving" data-couplet="right" lang="zh-Hans" role="img" aria-label="身体放松: a relaxed body">
+          <text class="sia-carving__cut" x="0" y="0"><tspan x="0" y="0.0em">身</tspan><tspan x="0" y="1.3em">体</tspan><tspan x="0" y="2.6em">放</tspan><tspan x="0" y="3.9em">松</tspan></text>
+          <text class="sia-carving__gilt" x="0" y="0"><tspan x="0" y="0.0em">身</tspan><tspan x="0" y="1.3em">体</tspan><tspan x="0" y="2.6em">放</tspan><tspan x="0" y="3.9em">松</tspan></text>
         </g>
-        <g class="sia-couplet" data-couplet="left" lang="zh-Hans" role="img" aria-label="心自宁静: creates a calm mind">
-          <rect class="sia-couplet__panel" x="-26" y="0" width="52" height="236" rx="3" />
-          <rect class="sia-couplet__inner" x="-21" y="5" width="42" height="226" rx="2" />
-          <text class="sia-couplet__text" x="0">
-            <tspan x="0" y="44">心</tspan><tspan x="0" y="96">自</tspan><tspan x="0" y="148">宁</tspan><tspan x="0" y="200">静</tspan>
-          </text>
+        <g class="sia-carving" data-couplet="left" lang="zh-Hans" role="img" aria-label="心自宁静: creates a calm mind">
+          <text class="sia-carving__cut" x="0" y="0"><tspan x="0" y="0.0em">心</tspan><tspan x="0" y="1.3em">自</tspan><tspan x="0" y="2.6em">宁</tspan><tspan x="0" y="3.9em">静</tspan></text>
+          <text class="sia-carving__gilt" x="0" y="0"><tspan x="0" y="0.0em">心</tspan><tspan x="0" y="1.3em">自</tspan><tspan x="0" y="2.6em">宁</tspan><tspan x="0" y="3.9em">静</tspan></text>
         </g>
       </svg>
       <p class="sia-visit__threshold">
@@ -875,24 +866,20 @@ const faqs = [
     stroke-width: 1;
     opacity: 0.65;
   }
-  /* Couplet panels: moss lacquer with the same gold lines and brush characters. */
-  .sia-couplet__panel {
-    fill: rgb(47 61 42 / 0.55);
-    stroke: #d2bf8c;
-    stroke-width: 1.5;
-  }
-  .sia-couplet__inner {
-    fill: none;
-    stroke: #d2bf8c;
-    stroke-width: 0.75;
-    opacity: 0.6;
-  }
-  .sia-couplet__text {
+  /* Characters carved into the wall and gilded: a dark cut edge above, gold within. */
+  .sia-carving text {
     font-family: var(--font-han);
-    font-size: 30px;
-    fill: #e2d3a6;
+    font-size: 40px;
     text-anchor: middle;
     dominant-baseline: central;
+  }
+  .sia-carving__cut {
+    fill: rgb(0 0 0 / 0.55);
+    transform: translate(-1.2px, -1.4px);
+  }
+  .sia-carving__gilt {
+    fill: #c9b47c;
+    filter: drop-shadow(0 1px 0 rgb(255 255 255 / 0.12));
   }
   .sia-visit__threshold {
     position: absolute;
@@ -1163,25 +1150,25 @@ const faqs = [
     const lines = Array.from(archFrame.querySelectorAll<SVGPathElement>('[data-line]'));
     const n = (v: number) => v.toFixed(1);
 
-    // The complete arch (with a sill), for posts at cx ± A and the sill at y = base.
-    // Proportions come from the outer edge of the reference stone arch, mirrored exactly.
-    // `d` grows the shape evenly outward (for the border lines).
-    const SHOULDER = 0.78; // post height before the crown begins, × A
-    const APEX = 1.432; // total height, × A
+    // The gateway outline: posts at cx ± A from the threshold (y = base) up to the crown.
+    // The crown is the reference stone arch's, mirrored exactly; the posts are extended so the
+    // doorway is about 1.75× as tall as it is wide. `d` grows the shape evenly outward.
+    const CROWN = 0.652; // crown height, × A (from the reference)
+    const APEX = 3.5; // total height, × A
+    const SHOULDER = APEX - CROWN;
     const arch = (cx: number, base: number, A: number, d = 0) => {
       const L = cx - A - d;
       const R = cx + A + d;
-      const b = base + d;
       const sy = base - SHOULDER * A;
       const ay = base - APEX * A - d;
-      const c1y = base - 1.14 * A - d * 0.6;
+      const c1y = base - (SHOULDER + 0.36) * A - d * 0.6;
       const c2x = 0.448 * A + d * 0.4;
-      const c2y = base - 1.368 * A - d;
+      const c2y = base - (SHOULDER + 0.588) * A - d;
       return (
-        `M${n(L)} ${n(b)} L${n(L)} ${n(sy)} ` +
+        `M${n(L)} ${n(base)} L${n(L)} ${n(sy)} ` +
         `C${n(L)} ${n(c1y)} ${n(cx - c2x)} ${n(c2y)} ${n(cx)} ${n(ay)} ` +
         `C${n(cx + c2x)} ${n(c2y)} ${n(R)} ${n(c1y)} ${n(R)} ${n(sy)} ` +
-        `L${n(R)} ${n(b)} Z`
+        `L${n(R)} ${n(base)}` + (d === 0 ? ' Z' : '')
       );
     };
     const couplets = {
@@ -1199,13 +1186,14 @@ const faqs = [
       const w = stage.clientWidth;
       const h = stage.clientHeight;
       const cx = w / 2;
-      // Closed: the whole arch fits with room above (heading) and below (breathing space).
-      const A0 = Math.max(60, Math.min(w * 0.26, (h - 170) / APEX));
+      // Closed: the gateway stands on its threshold near the foot of the stage, full height
+      // in view with room above for the heading.
+      const base0 = h - Math.max(40, h * 0.08);
+      const A0 = Math.max(55, Math.min(w * 0.17, (base0 - 120) / APEX));
       const height0 = APEX * A0;
-      const base0 = h / 2 + height0 / 2 + 34;
-      // Stepping in scales everything about the middle of the arch until it fills the screen.
-      const pivotY = base0 - height0 * 0.5;
-      const sMax = Math.max((w * 0.62) / A0, ((h + 40) * 1.15) / height0 + 0.6);
+      // Walking in: scale about a point low in the doorway (eye level) until it fills the screen.
+      const pivotY = base0 - height0 * 0.38;
+      const sMax = Math.max((w * 0.62) / A0, (pivotY * 1.25) / (height0 - height0 * 0.38) + 0.5);
       const s = 1 + (sMax - 1) * open ** 1.4;
       const A = A0 * s;
       const base = pivotY + (base0 - pivotY) * s;
@@ -1213,14 +1201,19 @@ const faqs = [
       door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A)}")`;
       for (const line of lines) line.setAttribute('d', arch(cx, base, A, Number(line.dataset.line)));
 
-      // Couplets hang in the upper spandrels, scaled with the arch; hidden when there's
-      // no room beside it (narrow screens) and fading as you step through.
-      const k = (height0 * 0.62) / 236 * s;
-      const gap = A * 0.34;
-      const room = cx - A0 - A0 * 0.34 - 26 * (height0 * 0.62 / 236) - 16;
-      const show = room > 0 ? Math.max(0, 1 - open * 2.4) : 0;
-      const yTop = base - height0 * s * 0.98;
-      const offset = A + gap + 26 * k;
+      // No sill: the photo and the posts fade into the moss toward the foot of the doorway.
+      const fade = open >= 1 ? 'none' : `linear-gradient(to bottom, #000 ${n(base - 1.1 * A)}px, transparent ${n(base)}px)`;
+      door.style.maskImage = archFrame.style.maskImage = fade;
+      door.style.setProperty('-webkit-mask-image', fade);
+      archFrame.style.setProperty('-webkit-mask-image', fade);
+
+      // Carved couplets in the wall either side, from the shoulder of the doorway downward.
+      const room = cx - A0 - 24;
+      const size = Math.min(56, Math.max(28, A0 * 0.36));
+      const show = room > size * 1.6 ? Math.max(0, 1 - open * 2.4) : 0;
+      const k = (size / 40) * s;
+      const offset = A + Math.min(room * 0.5, A0 * 0.62) * s;
+      const yTop = base - (SHOULDER * A) + size * 0.4 * s;
       couplets.right.setAttribute('transform', `translate(${n(cx + offset)} ${n(yTop)}) scale(${n(k)})`);
       couplets.left.setAttribute('transform', `translate(${n(cx - offset)} ${n(yTop)}) scale(${n(k)})`);
       couplets.right.style.opacity = couplets.left.style.opacity = String(show);
