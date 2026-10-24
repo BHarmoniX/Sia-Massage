@@ -622,9 +622,7 @@ const faqs = [
     /* Exactly the screen below the fixed header, so the hero centres in what you can see. */
     min-height: calc(100dvh - var(--header-height));
     margin: 0 auto;
-    /* A little more room on top, for the header's curved corners, so the space you see above
-       the moon window matches the space below it. */
-    padding: 6rem 1.5rem 3.5rem;
+    padding: 4rem 1.5rem 6rem;
   }
   @media (min-width: 1024px) {
     .sia-hero__grid {
@@ -636,6 +634,12 @@ const faqs = [
   .sia-hero__copy {
     position: relative;
     padding-left: clamp(0rem, 4vw, 3.5rem);
+  }
+  /* Side by side: lift the heading block so its top lines up with the top of the window. */
+  @media (min-width: 1024px) {
+    .sia-hero__copy {
+      top: -2.1rem;
+    }
   }
   .sia-hero__seal {
     position: absolute;
