@@ -86,9 +86,14 @@ Hostinger supported for static sites with a hardened `.htaccess`.
    rate limits, honeypot, Turnstile, validation) with 14 attack tests; preview/production
    split with noindex previews; GitHub deploy workflow (client repos only); live header
    scanner; actions pinned to SHAs. Dashboard steps in docs/CLOUDFLARE.md.
-3. Illuminara footer + client config + design tokens
+3. ✅ Illuminara footer + client config + design tokens — done 2026-10-24. Merged Sa + Rise
+   layout, config-driven (contact, hours, logo, social, menus), Digital Services credit page,
+   ABN checksum, works without JS, keyboard accessible, verified desktop + mobile.
 4. Page shells + legal templates
 5. Experience modules
 6. Business modules
-7. Rebuild Sa Massage on the base as the first client
+7. Rebuild Sa Massage on the base as the first client, in a NEW repo (decided 2026-10-24).
+   The existing Sa Massage repo stays untouched as an archive (keeps its Replit link); the
+   live Hostinger site stays up until the new site is approved.
+   Also: Sia Massage, a new business for the same owner, gets its own new repo and site.
 8. Docs, launch security checklist, maintained system map

@@ -8,15 +8,36 @@ const auPhone = z
   .string()
   .regex(/^(\+61|0)[2-478]( ?\d){8}$/, 'Use an Australian number, e.g. 0468 865 876 or +61 7 3000 0000');
 
+/** ATO checksum: subtract 1 from the first digit, weight, sum, divisible by 89. */
+export function isValidAbn(abn: string): boolean {
+  const digits = abn.replace(/\s/g, '').split('').map(Number);
+  if (digits.length !== 11 || digits.some(Number.isNaN)) return false;
+  const weights = [10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+  digits[0]! -= 1;
+  return digits.reduce((sum, d, i) => sum + d * weights[i]!, 0) % 89 === 0;
+}
+
 const abn = z
   .string()
-  .regex(/^\d{2} ?\d{3} ?\d{3} ?\d{3}$/, 'ABN is 11 digits, e.g. 12 345 678 901')
+  .regex(/^\d{2} ?\d{3} ?\d{3} ?\d{3}$/, 'ABN is 11 digits, e.g. 51 824 753 556')
+  .refine(isValidAbn, 'ABN fails the ATO checksum. Check it for a typo.')
   .optional();
 
 const link = z.object({
   label: z.string().min(1),
-  href: z.string().min(1),
+  // Site paths, page anchors, or https links only. Blocks javascript: and data: URLs.
+  href: z.string().regex(/^(\/|#|https:\/\/|mailto:|tel:)/, 'Links must start with /, #, https://, mailto: or tel:'),
 });
+
+export const SOCIAL_PLATFORMS = [
+  'facebook',
+  'instagram',
+  'linkedin',
+  'tiktok',
+  'youtube',
+  'x',
+  'google',
+] as const;
 
 export const siteSchema = z.object({
   name: z.string().min(1),
@@ -39,10 +60,31 @@ export const siteSchema = z.object({
         postcode: z.string().regex(/^\d{4}$/),
       })
       .optional(),
+    /** Shown where there's no public street address, e.g. "Service area: Moreton Bay". */
+    serviceArea: z.string().optional(),
+    /** Opening hours as shown to visitors, e.g. "Open 7 days 9am–11pm". */
+    hours: z.string().optional(),
   }),
-  social: z.array(link.extend({ href: z.url({ protocol: /^https$/ }) })).default([]),
+  /** Logo in /public (SVG or WebP). Without one, the footer shows the name as a wordmark. */
+  logo: z
+    .object({
+      src: z.string().regex(/^\//),
+      alt: z.string().min(1),
+      width: z.number().int().positive(),
+      height: z.number().int().positive(),
+    })
+    .optional(),
+  social: z
+    .array(z.object({ platform: z.enum(SOCIAL_PLATFORMS), href: z.url({ protocol: /^https$/ }) }))
+    .default([]),
   nav: z.array(link).default([]),
-  legal: z.array(link).default([]),
+  /**
+   * Footer fold-out menus, in order. Nav links appear as "Quick Links" automatically, and
+   * the Illuminara "Digital Services" credit is always added last.
+   */
+  footerMenus: z
+    .array(z.object({ title: z.string().min(1), links: z.array(link).min(1) }))
+    .default([]),
   /** Who to contact about a security problem (published in /.well-known/security.txt). */
   securityContact: z.email(),
   /** Block AI training crawlers in robots.txt. Search engines are still allowed. */
@@ -56,15 +98,27 @@ export const site: Site = siteSchema.parse({
   tagline: 'Secure, immersive websites',
   description: 'A secure, fast, production-ready website base by Illuminara Creative Studio.',
   url: 'https://example.com.au',
+  // Placeholder contact details for previewing the base. The phone number is from the
+  // ACMA range reserved for fiction, and the ABN is the ATO's published example.
   business: {
     legalName: 'Illuminara Creative Studio',
+    abn: '51 824 753 556',
+    phone: '0491 570 006',
     email: 'hello@example.com.au',
+    address: { street: '1 Example Street', suburb: 'Brisbane City', state: 'QLD', postcode: '4000' },
+    hours: 'Open 7 days 9am–5pm',
   },
+  social: [{ platform: 'facebook', href: 'https://www.facebook.com/' }],
   nav: [{ label: 'Home', href: '/' }],
-  legal: [
-    { label: 'Privacy Policy', href: '/privacy-policy' },
-    { label: 'Terms & Conditions', href: '/terms-conditions' },
-    { label: 'Accessibility', href: '/accessibility' },
+  footerMenus: [
+    {
+      title: 'Legal & Privacy',
+      links: [
+        { label: 'Privacy Policy', href: '/privacy-policy' },
+        { label: 'Terms & Conditions', href: '/terms-conditions' },
+        { label: 'Accessibility', href: '/accessibility' },
+      ],
+    },
   ],
   securityContact: 'security@example.com.au',
 });

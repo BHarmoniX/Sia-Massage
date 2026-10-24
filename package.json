@@ -7,7 +7,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "node ./node_modules/astro/bin/astro.mjs dev",
+    "dev": "DEPLOY_TARGET=${DEPLOY_TARGET:-node} node ./node_modules/astro/bin/astro.mjs dev",
     "build": "node ./node_modules/astro/bin/astro.mjs build && node scripts/check-dist.mjs",
     "build:cloudflare": "DEPLOY_TARGET=cloudflare node ./node_modules/astro/bin/astro.mjs build && node scripts/check-dist.mjs",
     "build:node": "DEPLOY_TARGET=node node ./node_modules/astro/bin/astro.mjs build && node scripts/check-dist.mjs",

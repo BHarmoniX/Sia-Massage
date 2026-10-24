@@ -1,0 +1,320 @@
+---
+// The Illuminara footer: standard on every client site, merged from the Sa Massage and
+// Rise builds. Everything it shows comes from src/config/site.ts and the look from the
+// design tokens in global.css, so it never needs redesigning per client.
+//
+//   ┌──────────────┬───────────────────┬──────────────┐
+//   │ contact info │  logo + tagline   │ social icons │
+//   └──────────────┴───────────────────┴──────────────┘
+//        Quick Links ▾   Legal & Privacy ▾   …   Digital Services ▾
+//   ───────────────────────────────────────────────────────────────
+//             Legal name · ABN · © year. All rights reserved.
+//
+// Menus are native <details> elements: they work without JavaScript and with a keyboard.
+// The small script only adds polish (one open at a time, close on mouse-out / Escape).
+
+import { formatAuPhone, site, telHref } from '../../config/site';
+import { studio } from '../../config/studio';
+import FooterIcon from './FooterIcon.astro';
+
+const { business, logo, social, nav, footerMenus } = site;
+
+const menus = [
+  ...(nav.length > 0 ? [{ title: 'Quick Links', links: nav }] : []),
+  ...footerMenus,
+  { title: studio.footerMenuTitle, links: [{ label: studio.creditLabel, href: studio.page }] },
+];
+
+const socialLabels: Record<(typeof social)[number]['platform'], string> = {
+  facebook: 'Facebook',
+  instagram: 'Instagram',
+  linkedin: 'LinkedIn',
+  tiktok: 'TikTok',
+  youtube: 'YouTube',
+  x: 'X',
+  google: 'Google Business Profile',
+};
+
+const year = new Date().getFullYear();
+const legalLine = [
+  business.legalName,
+  business.abn ? `ABN ${business.abn}` : null,
+  `© ${year}. All rights reserved.`,
+]
+  .filter(Boolean)
+  .join(' · ');
+---
+
+<footer class="ill-footer relative overflow-hidden border-t border-border bg-bg text-text">
+  <div class="ill-footer__glow" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-7xl px-4 pt-10 pb-6 sm:px-6 md:pt-14 lg:px-8">
+    <!-- Top band: contact · brand · social -->
+    <div class="grid grid-cols-2 items-start gap-6 md:grid-cols-3">
+      <!-- Brand (first on mobile, centre on desktop) -->
+      <div class="col-span-2 flex flex-col items-center text-center md:order-2 md:col-span-1">
+        <a href="/" class="ill-footer__brand inline-flex flex-col items-center gap-2">
+          {
+            logo ? (
+              <img
+                src={logo.src}
+                alt={logo.alt}
+                width={logo.width}
+                height={logo.height}
+                class="ill-footer__logo h-auto max-h-24 w-auto"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span class="ill-footer__wordmark font-display text-3xl tracking-wide text-accent">
+                {site.name}
+              </span>
+            )
+          }
+        </a>
+        {
+          site.tagline && (
+            <p class="mt-2 font-display text-base text-accent italic">{site.tagline}</p>
+          )
+        }
+        <p class="mt-1 max-w-xs text-xs leading-relaxed text-subtle">{site.description}</p>
+      </div>
+
+      <!-- Contact (left) -->
+      <address class="space-y-2 text-xs not-italic text-muted md:order-1 md:mt-12 md:text-sm">
+        {
+          business.address ? (
+            <p class="flex items-start gap-2">
+              <FooterIcon name="pin" class="mt-0.5 size-4 shrink-0 text-accent" />
+              <span>
+                {business.address.street}
+                <br />
+                {business.address.suburb} {business.address.state} {business.address.postcode}
+              </span>
+            </p>
+          ) : (
+            business.serviceArea && (
+              <p class="flex items-start gap-2">
+                <FooterIcon name="pin" class="mt-0.5 size-4 shrink-0 text-accent" />
+                <span>{business.serviceArea}</span>
+              </p>
+            )
+          )
+        }
+        {
+          business.phone && (
+            <p class="flex items-center gap-2">
+              <FooterIcon name="phone" class="size-4 shrink-0 text-accent" />
+              <a href={telHref(business.phone)} class="ill-footer__link">
+                {formatAuPhone(business.phone)}
+              </a>
+            </p>
+          )
+        }
+        {
+          business.email && (
+            <p class="flex items-center gap-2">
+              <FooterIcon name="mail" class="size-4 shrink-0 text-accent" />
+              <a href={`mailto:${business.email}`} class="ill-footer__link break-all">
+                {business.email}
+              </a>
+            </p>
+          )
+        }
+        {
+          business.hours && (
+            <p class="flex items-start gap-2">
+              <FooterIcon name="clock" class="mt-0.5 size-4 shrink-0 text-accent" />
+              <span>{business.hours}</span>
+            </p>
+          )
+        }
+      </address>
+
+      <!-- Social (right) -->
+      {
+        social.length > 0 && (
+          <ul class="flex flex-wrap items-start justify-end gap-3 md:order-3 md:mt-12" role="list">
+            {social.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ill-footer__social"
+                  aria-label={`${socialLabels[s.platform]} (opens in a new tab)`}
+                >
+                  <FooterIcon name={s.platform} class="size-5" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <!-- Menu band -->
+    <nav
+      class="ill-footer__menus mt-8 flex flex-col items-center gap-2 border-b border-border pb-5 md:flex-row md:flex-wrap md:items-start md:justify-center md:gap-8"
+      aria-label="Footer"
+    >
+      {
+        menus.map((menu) => (
+          <details class="ill-footer__menu group w-full md:w-auto" data-footer-menu>
+            <summary class="ill-footer__summary">
+              {menu.title}
+              <FooterIcon
+                name="chevron"
+                class="size-4 transition-transform duration-200 group-open:rotate-180"
+              />
+            </summary>
+            <ul class="mt-1 space-y-1 pb-2 text-center md:text-left" role="list">
+              {menu.links.map((l) => (
+                <li>
+                  <a href={l.href} class="ill-footer__menu-link">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+    </nav>
+
+    <!-- Legal band -->
+    <p class="pt-5 text-center text-xs text-subtle">{legalLine}</p>
+  </div>
+</footer>
+
+<style>
+  .ill-footer__glow {
+    position: absolute;
+    inset: 0 auto auto 50%;
+    width: min(48rem, 100%);
+    height: 100%;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      60% 45% at 50% 0%,
+      color-mix(in oklab, var(--color-accent) 14%, transparent),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .ill-footer__logo,
+  .ill-footer__wordmark {
+    filter: drop-shadow(0 0 14px color-mix(in oklab, var(--color-accent) 40%, transparent));
+    transition: filter 300ms ease;
+  }
+  .ill-footer__brand:hover .ill-footer__logo,
+  .ill-footer__brand:hover .ill-footer__wordmark {
+    filter: drop-shadow(0 0 22px color-mix(in oklab, var(--color-accent) 60%, transparent));
+  }
+
+  .ill-footer__link {
+    transition: color 200ms ease;
+  }
+  .ill-footer__link:hover {
+    color: var(--color-accent);
+  }
+
+  .ill-footer__social {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-border);
+    background: color-mix(in oklab, var(--color-surface) 70%, transparent);
+    color: var(--color-muted);
+    transition:
+      color 200ms ease,
+      border-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+  .ill-footer__social:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: var(--glow-accent);
+  }
+
+  .ill-footer__summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    transition:
+      color 200ms ease,
+      background-color 200ms ease;
+  }
+  .ill-footer__summary::-webkit-details-marker {
+    display: none;
+  }
+  .ill-footer__summary:hover,
+  .ill-footer__menu[open] .ill-footer__summary {
+    color: var(--color-text);
+    background: color-mix(in oklab, var(--color-accent) 12%, transparent);
+  }
+
+  .ill-footer__menu-link {
+    display: block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--color-subtle);
+    transition:
+      color 200ms ease,
+      background-color 200ms ease;
+  }
+  .ill-footer__menu-link:hover {
+    color: var(--color-accent);
+    background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+  }
+
+  /* Mobile: first menu full width, the rest in two columns (from the Sa Massage layout). */
+  @media (max-width: 767px) {
+    .ill-footer__menus {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .ill-footer__menu:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<script>
+  const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-footer-menu]'));
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  for (const menu of menus) {
+    // One menu open at a time.
+    menu.addEventListener('toggle', () => {
+      if (!menu.open) return;
+      for (const other of menus) if (other !== menu) other.open = false;
+    });
+    // Desktop: close when the mouse leaves (as on the Sa Massage and Rise sites).
+    if (finePointer) menu.addEventListener('mouseleave', () => (menu.open = false));
+  }
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Node)) return;
+    for (const menu of menus) if (!menu.contains(event.target)) menu.open = false;
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    const open = menus.find((m) => m.open);
+    if (!open) return;
+    open.open = false;
+    open.querySelector('summary')?.focus();
+  });
+</script>

@@ -45,14 +45,15 @@ After cloning this repo, run `npm ci` then `npm run setup` once (switches on the
 3. In the client folder: `npm ci`, `npm run setup`, then fill in `src/config/site.ts`
    (business name, ABN, phone, email, address, links, security contact). It's checked at
    build time, so a typo'd phone or URL stops the build.
-4. Design: tokens in `src/styles/global.css`, pages in `src/pages`.
+4. Design: change the token values at the top of `src/styles/global.css` (colours, fonts,
+   radius). Every component, the footer included, follows them. Pages go in `src/pages`.
 5. Pick the host: set `DEPLOY_TARGET` to `cloudflare`, `node` or `static`.
 
 ## Commands
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | Local preview with live reload |
+| `npm run dev` | Local preview (Node mode; Cloudflare's local emulator can't handle the `:` in the folder path) |
 | `npm run build` | Build for `DEPLOY_TARGET` (default cloudflare), then run the security check |
 | `npm run build:static` | Plain files for Hostinger / Apache (upload `dist/`) |
 | `npm run build:node` / `npm run start` | Build and run on a Node host |
@@ -85,7 +86,9 @@ scripts/check-dist.mjs     build guard: blocks secrets, PHP, source maps, missin
 scripts/guard-base-repo.mjs  keeps client work out of the base repo
 scripts/new-client.mjs     creates a client repo from the base
 .githooks/, .github/       pre-commit hook and the Verify GitHub Action
-src/config/site.ts         the per-client settings file
+src/config/site.ts         the per-client settings file (contact, hours, logo, social, footer menus)
+src/config/studio.ts       Illuminara Creative Studio credit (base-owned)
+src/components/footer/     the standard Illuminara footer
 src/middleware.ts          gatekeeper for live pages
 src/layouts, components    page shell and head tags
 src/pages                  pages, robots.txt, security.txt, /api/health

@@ -1,0 +1,71 @@
+---
+// Standard developer-credit page on every client site, linked from the footer's
+// "Digital Services" menu. Content comes from src/config/studio.ts (base-owned).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { studio } from '../config/studio';
+
+const services = [
+  {
+    title: 'Website design & development',
+    text: 'Custom-built websites and web applications that look exceptional and perform flawlessly on every device.',
+  },
+  {
+    title: 'Immersive 3D experiences',
+    text: 'Spatial navigation, motion and lighting that make a site memorable, built to load fast and stay durable.',
+  },
+  {
+    title: 'Brand identity',
+    text: 'Logos, colour palettes and typography that give a business a presence its audience remembers.',
+  },
+  {
+    title: 'Security & ongoing care',
+    text: 'Hardened hosting, security monitoring and optional maintenance so a site stays fast and safe after launch.',
+  },
+];
+---
+
+<BaseLayout
+  title={`Digital services by ${studio.name}`}
+  description={`${site.name}'s website was designed and built by ${studio.name}.`}
+>
+  <section class="mx-auto max-w-4xl px-4 py-20 sm:px-6">
+    <a href="/" class="text-sm text-muted transition-colors hover:text-accent">← Back to {site.name}</a>
+
+    <p class="mt-10 text-sm tracking-widest text-accent uppercase">Digital services</p>
+    <h1 class="mt-2 font-display text-4xl sm:text-5xl">{studio.name}</h1>
+    <p class="mt-4 max-w-2xl text-lg text-muted">{studio.tagline}.</p>
+
+    <ul class="mt-12 grid gap-4 sm:grid-cols-2" role="list">
+      {
+        services.map((s) => (
+          <li class="rounded-(--radius-card) border border-border bg-surface p-6">
+            <h2 class="font-display text-xl text-accent">{s.title}</h2>
+            <p class="mt-2 text-sm leading-relaxed text-muted">{s.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-12 rounded-(--radius-card) border border-border bg-surface-raised p-8">
+      <h2 class="font-display text-2xl">About this website</h2>
+      <p class="mt-3 text-muted">
+        The {site.name} website was designed and developed by {studio.name}, built on a
+        security-first foundation: strict content security policy, protected forms, and hosting
+        hardened against automated attacks.
+      </p>
+      {
+        studio.email && (
+          <p class="mt-6">
+            <a
+              href={`mailto:${studio.email}`}
+              class="inline-block rounded-full bg-accent px-6 py-3 font-medium text-on-accent transition-shadow hover:shadow-(--glow-accent)"
+            >
+              Enquire about a website
+            </a>
+          </p>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
