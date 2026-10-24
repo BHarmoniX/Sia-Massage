@@ -1,0 +1,60 @@
+---
+// Silent, looping background video (water, light, texture). Built for speed:
+// - nothing downloads until it scrolls near the screen; it pauses when off-screen
+// - visitors with reduced motion, data saver or a slow connection get the still poster
+// - always muted, inline and without controls (decorative), so browsers allow autoplay
+// Put the video in /public/video (H.264 MP4, ideally under ~5 MB and under ~20 s).
+
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  src: string;
+  poster: ImageMetadata;
+  class?: string;
+}
+
+const { src, poster, class: className } = Astro.props;
+const posterImage = await getImage({ src: poster, width: 1600, format: 'webp', quality: 72 });
+---
+
+<video
+  class={className}
+  data-ambient-video={src}
+  poster={posterImage.src}
+  muted
+  loop
+  playsinline
+  preload="none"
+  disablepictureinpicture
+  disableremoteplayback
+  aria-hidden="true"
+  tabindex="-1"></video>
+
+<script>
+  type NetInfo = { saveData?: boolean; effectiveType?: string };
+  const videos = document.querySelectorAll<HTMLVideoElement>('[data-ambient-video]');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const net = (navigator as Navigator & { connection?: NetInfo }).connection;
+  const lean = Boolean(net?.saveData) || /(^|-)2g$/.test(net?.effectiveType ?? '');
+
+  if (!reduced && !lean && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const video = entry.target as HTMLVideoElement;
+          if (entry.isIntersecting) {
+            if (!video.src) video.src = video.dataset.ambientVideo ?? '';
+            video.play().catch(() => {
+              /* autoplay refused: the poster stays, which is fine */
+            });
+          } else if (!video.paused) {
+            video.pause();
+          }
+        }
+      },
+      { rootMargin: '200px 0px' },
+    );
+    for (const video of videos) io.observe(video);
+  }
+</script>

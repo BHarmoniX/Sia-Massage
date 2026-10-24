@@ -96,6 +96,8 @@ src/styles/depth.css       depth module: .btn-3d, .card-3d + data-tilt, data-dep
                            .breathe, .img-reveal, .scroll-drift, data-reveal (see file header)
 src/scripts/depth.ts       pointer light/tilt and scroll motion for the depth module
 src/components/media/Img   optimised responsive images (AVIF/WebP, srcset, no layout jump)
+src/components/media/AmbientVideo  lazy, muted background video; poster on data saver / reduced motion
+src/components/media/AmbientAudio  floating play/pause brand music (site.audio)
 src/middleware.ts          gatekeeper for live pages
 src/layouts, components    page shell and head tags
 src/pages                  pages, robots.txt, security.txt, /api/health
