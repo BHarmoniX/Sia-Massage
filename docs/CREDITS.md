@@ -23,6 +23,8 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 | moss-waterfall.jpg | https://unsplash.com/photos/A_-cJ3PmB2o |
 | moss-river.jpg | https://unsplash.com/photos/ALrCdq-ui_Q |
 | round-window.jpg (unused, reserved) | https://unsplash.com/photos/s2UiS34ftf8 |
+| stone-wall.jpg (gateway stone texture) | https://unsplash.com/photos/mCbD0vSX2xw |
+| grass-weave.jpg (gateway woven panel) | https://unsplash.com/photos/O73A0SmCAqE |
 
 ## Artwork — The Metropolitan Museum of Art, Open Access (public domain, CC0)
 

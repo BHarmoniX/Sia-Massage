@@ -19,7 +19,14 @@ import bambooBasin from '../client/photos/bamboo-basin.jpg';
 import mossWaterfall from '../client/photos/moss-waterfall.jpg';
 import mossRiver from '../client/photos/moss-river.jpg';
 import rainPoster from '../client/photos/rain-leaves-poster.jpg';
+import stoneWall from '../client/photos/stone-wall.jpg';
+import grassWeave from '../client/photos/grass-weave.jpg';
+import { getImage } from 'astro:assets';
 import autumnScroll from '../client/art/streams-mountains-autumn-mist.jpg';
+
+// Real textures for the gateway (optimised WebP, used inside SVG patterns).
+const stoneTexture = await getImage({ src: stoneWall, width: 1600, format: 'webp', quality: 74 });
+const weaveTexture = await getImage({ src: grassWeave, width: 1100, format: 'webp', quality: 74 });
 
 const { business } = site;
 const phone = business.phone!;
@@ -252,37 +259,57 @@ const faqs = [
       </div>
       <!-- Ornate frame. Its geometry is set by the doorway script from the same numbers
            that cut the arch, so frame and opening are always exactly the same shape. -->
+      <!-- The gateway: a stone pointed arch with a glowing reveal, a woven grass panel, and a cusped wooden arch framing the path. Every shape is computed by the
+           doorway script from one set of proportions, so the photograph's opening and the
+           wooden arch are always identical and everything scales together as you step in. -->
       <svg class="sia-visit__frame" data-frame>
-        <path class="sia-frame__outer" data-band="18" />
-        <path id="sia-fret-path" class="sia-frame__guide" data-band="10.5" />
-        <text class="sia-frame__fret" lang="zh-Hans">
-          <textPath href="#sia-fret-path">{'回'.repeat(360)}</textPath>
-        </text>
-        <path class="sia-frame__main" data-band="3.5" />
-        <path class="sia-frame__inner" data-band="-5" />
-
-        <g class="sia-frame__ornament" data-ornament="crown">
-          <path class="sia-frame__wing" d="M-24 -6 C-42 -2 -58 -12 -54 -25 C-51 -35 -38 -34 -40 -24 M24 -6 C42 -2 58 -12 54 -25 C51 -35 38 -34 40 -24" />
-          <path class="sia-frame__ruyi" d="M0 -46 C-15 -46 -22 -33 -15 -24 C-26 -26 -33 -12 -24 -5 C-15 2 -6 -2 0 -9 C6 -2 15 2 24 -5 C33 -12 26 -26 15 -24 C22 -33 15 -46 0 -46 Z" />
-          <circle class="sia-frame__pearl" cx="0" cy="-27" r="5" />
-          <path class="sia-frame__wing" d="M-6 -36 C-3 -32 3 -32 6 -36" />
-        </g>
-        <g class="sia-frame__ornament" data-ornament="bracket-left">
-          <path class="sia-frame__ruyi" d="M0 0 H40 C30 5 26 14 31 23 C21 20 12 25 10 35 C4 25 0 14 0 0 Z" />
-          <path class="sia-frame__wing" d="M10 9 C17 6 23 11 20 17" />
-        </g>
-        <g class="sia-frame__ornament" data-ornament="bracket-right">
-          <path class="sia-frame__ruyi" d="M0 0 H-40 C-30 5 -26 14 -31 23 C-21 20 -12 25 -10 35 C-4 25 0 14 0 0 Z" />
-          <path class="sia-frame__wing" d="M-10 9 C-17 6 -23 11 -20 17" />
-        </g>
-        <g class="sia-frame__ornament" data-ornament="plinth-left">
-          <path class="sia-frame__ruyi" d="M-16 0 V-14 H-11 V-26 H11 V-14 H16 V0 Z" />
-          <path class="sia-frame__wing" d="M-11 -14 H11" />
-        </g>
-        <g class="sia-frame__ornament" data-ornament="plinth-right">
-          <path class="sia-frame__ruyi" d="M-16 0 V-14 H-11 V-26 H11 V-14 H16 V0 Z" />
-          <path class="sia-frame__wing" d="M-11 -14 H11" />
-        </g>
+        <defs>
+          <pattern id="sia-masonry" width="900" height="562" x="-450" patternUnits="userSpaceOnUse" data-pattern>
+            <image href={stoneTexture.src} width="900" height="562" preserveAspectRatio="xMidYMid slice" />
+          </pattern>
+          <pattern id="sia-dapple" width="420" height="262" patternUnits="userSpaceOnUse" data-pattern>
+            <image href={stoneTexture.src} width="420" height="262" preserveAspectRatio="xMidYMid slice" />
+          </pattern>
+          <linearGradient id="sia-reveal-warm" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#ffb347" />
+            <stop offset="0.5" stop-color="#e08a2e" />
+            <stop offset="1" stop-color="#ffb347" />
+          </linearGradient>
+          <radialGradient id="sia-reveal-glow" cx="50%" cy="60%" r="55%">
+            <stop offset="0" stop-color="#ffe1a0" stop-opacity="0.75" />
+            <stop offset="1" stop-color="#ffe1a0" stop-opacity="0" />
+          </radialGradient>
+          <!-- Woven grass: a real natural-fibre basket weave. -->
+          <pattern id="sia-weave" width="440" height="293" x="-220" patternUnits="userSpaceOnUse" data-pattern>
+            <image href={weaveTexture.src} width="440" height="293" preserveAspectRatio="xMidYMid slice" />
+          </pattern>
+          <radialGradient id="sia-paper-glow" cx="50%" cy="55%" r="60%">
+            <stop offset="0" stop-color="#ffe9b0" stop-opacity="0.18" />
+            <stop offset="1" stop-color="#3a2a12" stop-opacity="0.35" />
+          </radialGradient>
+          <linearGradient id="sia-stone-shade" x1="0" x2="1" y1="0" y2="0.3">
+            <stop offset="0" stop-color="#000" stop-opacity="0.35" />
+            <stop offset="0.35" stop-color="#000" stop-opacity="0" />
+            <stop offset="0.7" stop-color="#000" stop-opacity="0.05" />
+            <stop offset="1" stop-color="#000" stop-opacity="0.4" />
+          </linearGradient>
+          <linearGradient id="sia-reveal-shade" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#5a2f12" stop-opacity="0.35" />
+            <stop offset="0.5" stop-color="#5a2f12" stop-opacity="0" />
+            <stop offset="1" stop-color="#5a2f12" stop-opacity="0.3" />
+          </linearGradient>
+        </defs>
+        <path data-shape="paper" fill="url(#sia-weave)" fill-rule="evenodd" />
+        <path data-shape="paper" fill="url(#sia-paper-glow)" fill-rule="evenodd" />
+        <path data-shape="reveal" fill="url(#sia-dapple)" fill-rule="evenodd" />
+        <path data-shape="reveal" class="sia-gate__warm" fill="url(#sia-reveal-warm)" fill-rule="evenodd" />
+        <path data-shape="reveal" class="sia-gate__glow" fill="url(#sia-reveal-glow)" fill-rule="evenodd" />
+        <path data-shape="reveal" fill="url(#sia-reveal-shade)" fill-rule="evenodd" />
+        <path data-shape="stone" fill="url(#sia-masonry)" fill-rule="evenodd" />
+        <path data-shape="stone" fill="url(#sia-stone-shade)" fill-rule="evenodd" />
+        <path data-shape="stone-edge" class="sia-gate__stone-edge" />
+        <path data-shape="wood" class="sia-gate__wood" />
+        <path data-shape="wood" class="sia-gate__wood-light" />
       </svg>
       <p class="sia-visit__threshold">
         <span class="font-han" lang="zh-Hans">入</span>
@@ -864,59 +891,36 @@ const faqs = [
     background: linear-gradient(180deg, rgb(20 28 18 / 0.5), rgb(20 28 18 / 0.15) 45%, rgb(20 28 18 / 0.55));
     opacity: var(--open);
   }
-  /* Ornate frame: gilded moulding (bold band + fine lines), a 回 key-fret border, a ruyi
-     cloud crown, cloud-scroll brackets and stepped plinths, all in antique gold. */
+  /* The gateway SVG sits over the photograph and scales with it. */
   .sia-visit__frame {
-    --gold: #c9b06a;
-    --gold-deep: #9c8446;
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     overflow: visible;
     pointer-events: none;
+  }
+  .sia-gate__warm {
+    mix-blend-mode: multiply;
+  }
+  .sia-gate__glow {
+    mix-blend-mode: screen;
+  }
+  .sia-gate__stone-edge {
     fill: none;
+    stroke: #6d6558;
+    stroke-width: 1.5;
   }
-  .sia-frame__outer {
-    stroke: var(--gold);
-    stroke-width: 1.6;
-  }
-  .sia-frame__main {
-    stroke: var(--gold);
-    stroke-width: 6;
-    filter: drop-shadow(0 1px 0 rgb(0 0 0 / 0.35));
-  }
-  .sia-frame__inner {
-    stroke: var(--gold);
-    stroke-width: 1.2;
-    opacity: 0.85;
-  }
-  .sia-frame__guide {
-    stroke: none;
-  }
-  .sia-frame__fret {
-    font-family: var(--font-han);
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    fill: var(--gold);
-    dominant-baseline: central;
-  }
-  .sia-frame__ruyi {
-    fill: color-mix(in oklab, var(--gold) 28%, #26321f);
-    stroke: var(--gold);
-    stroke-width: 2.5;
+  .sia-gate__wood {
+    fill: none;
+    stroke: #6b3f1d;
     stroke-linejoin: round;
   }
-  .sia-frame__wing {
-    stroke: var(--gold);
-    stroke-width: 2.5;
-    stroke-linecap: round;
-  }
-  .sia-frame__pearl {
-    fill: var(--gold);
-  }
-  .sia-frame__ornament {
-    transition: opacity 200ms linear;
+  .sia-gate__wood-light {
+    fill: none;
+    stroke: #c58a4c;
+    stroke-linejoin: round;
+    opacity: 0.9;
   }
   .sia-visit__threshold {
     position: absolute;
@@ -1173,29 +1177,85 @@ const faqs = [
 </style>
 
 <script>
-  // Doorway: scroll position → how far you have stepped in (0 = arch on the page, 1 =
-  // inside). The arch's geometry is computed here once per frame and drives both the
-  // photograph's opening (clip-path) and every line of the ornate frame, so they are always
-  // exactly the same shape and grow together.
+  // Doorway: scroll position → how far you have stepped in (0 = gateway standing in the
+  // wall, 1 = through it). One set of proportions (from the client's reference design)
+  // produces every shape; stepping in scales them all about the ground at the centre, so
+  // the photograph's opening and the wooden arch always match exactly.
   const doorway = document.querySelector<HTMLElement>('[data-doorway]');
   const stage = doorway?.querySelector<HTMLElement>('.sia-visit__stage');
   const door = doorway?.querySelector<HTMLElement>('.sia-visit__door');
-  const frameSvg = doorway?.querySelector<SVGSVGElement>('[data-frame]');
+  const gate = doorway?.querySelector<SVGSVGElement>('[data-frame]');
+  const threshold = doorway?.querySelector<HTMLElement>('.sia-visit__threshold');
 
-  if (doorway && stage && door && frameSvg) {
+  if (doorway && stage && door && gate) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const bands = Array.from(frameSvg.querySelectorAll<SVGPathElement>('[data-band]'));
-    const ornament = (name: string) =>
-      frameSvg.querySelector<SVGGElement>(`[data-ornament="${name}"]`)!;
-    const crown = ornament('crown');
-    const brackets = [ornament('bracket-left'), ornament('bracket-right')];
-    const plinths = [ornament('plinth-left'), ornament('plinth-right')];
+    const shapes = (name: string) =>
+      Array.from(gate.querySelectorAll<SVGPathElement>(`[data-shape="${name}"]`));
+    const [stone, reveal, paper, stoneEdge, wood] = [
+      shapes('stone'),
+      shapes('reveal'),
+      shapes('paper'),
+      shapes('stone-edge'),
+      shapes('wood'),
+    ];
+    const patterns = Array.from(gate.querySelectorAll<SVGPatternElement>('[data-pattern]'));
+    const n = (v: number) => v.toFixed(1);
 
-    // Arch outline: straight posts, elliptical shoulders, a flat run between them
-    // (zero-length when the shoulders meet at the crown).
-    const archPath = (x0: number, x1: number, y0: number, y1: number, rx: number, ry: number) =>
-      `M${x0} ${y1} L${x0} ${y0 + ry} A${rx} ${ry} 0 0 1 ${x0 + rx} ${y0} ` +
-      `L${x1 - rx} ${y0} A${rx} ${ry} 0 0 1 ${x1} ${y0 + ry} L${x1} ${y1}`;
+    // All shapes, for a gateway of half-width `a` standing on the ground at (cx, g).
+    const gateway = (cx: number, g: number, a: number) => {
+      const X = (k: number) => n(cx + k * a);
+      const Y = (k: number) => n(g - k * a);
+
+      // Wooden arch: straight posts, a cusped (scalloped) cap and a small pointed finial.
+      const springY = g - 1.8 * a;
+      const capH = 0.62 * a;
+      const lobes = 4;
+      const gap = 0.09;
+      const env = (t: number) => [cx + a * Math.cos(t), springY - capH * Math.sin(t)] as const;
+      let cap = '';
+      const side = (from: number, to: number) => {
+        for (let i = 0; i < lobes; i++) {
+          const t0 = from + ((to - from) * i) / lobes;
+          const t1 = from + ((to - from) * (i + 1)) / lobes;
+          const [x0, y0] = env(t0);
+          const [x1, y1] = env(t1);
+          const r = Math.hypot(x1 - x0, y1 - y0) * 0.62;
+          if (i === 0) cap += ` L${n(x0)} ${n(y0)}`;
+          cap += ` A${n(r)} ${n(r)} 0 0 1 ${n(x1)} ${n(y1)}`;
+        }
+      };
+      side(Math.PI, Math.PI / 2 + gap);
+      const tipY = springY - capH - 0.13 * a;
+      const ly = env(Math.PI / 2 + gap)[1];
+      const [rx, ry] = env(Math.PI / 2 - gap);
+      cap += ` Q${n(cx - 0.02 * a)} ${n(ly - 0.02 * a)} ${n(cx)} ${n(tipY)}`;
+      cap += ` Q${n(cx + 0.02 * a)} ${n(ry - 0.02 * a)} ${n(rx)} ${n(ry)}`;
+      side(Math.PI / 2 - gap, 0);
+      const woodPath = `M${X(-1)} ${n(g)}${cap} L${X(1)} ${n(g)}`;
+
+      // Stone opening edges: a horseshoe-pointed curve, widest at mid-height.
+      const curve = (bottom: number, mid: number, apex: number) =>
+        `M${X(-bottom)} ${n(g)} C${X(-(bottom + (mid - bottom) * 0.75))} ${Y(0.45)} ${X(-(mid + 0.05))} ${Y(0.95)} ${X(-mid)} ${Y(1.45)} ` +
+        `C${X(-(mid - 0.04))} ${Y(apex * 0.7)} ${X(-mid * 0.55)} ${Y(apex * 0.92)} ${X(0)} ${Y(apex)} ` +
+        `C${X(mid * 0.55)} ${Y(apex * 0.92)} ${X(mid - 0.04)} ${Y(apex * 0.7)} ${X(mid)} ${Y(1.45)} ` +
+        `C${X(mid + 0.05)} ${Y(0.95)} ${X(bottom + (mid - bottom) * 0.75)} ${Y(0.45)} ${X(bottom)} ${n(g)} Z`;
+      const revealOuter = curve(1.78, 2.05, 3.08);
+      const revealInner = curve(1.38, 1.62, 2.9);
+
+      // Stone face: straight outer posts rising into a pointed crown.
+      const stoneOuter =
+        `M${X(-2.5)} ${n(g)} L${X(-2.5)} ${Y(1.95)} C${X(-2.5)} ${Y(2.85)} ${X(-1.12)} ${Y(3.42)} ${X(0)} ${Y(3.58)} ` +
+        `C${X(1.12)} ${Y(3.42)} ${X(2.5)} ${Y(2.85)} ${X(2.5)} ${Y(1.95)} L${X(2.5)} ${n(g)} Z`;
+
+      return {
+        wood: woodPath,
+        stone: `${stoneOuter} ${revealOuter}`,
+        stoneEdge: `${stoneOuter} ${revealOuter}`,
+        reveal: `${revealOuter} ${revealInner}`,
+        paper: `${revealInner} ${woodPath} Z`,
+        crownY: g - 3.58 * a,
+      };
+    };
 
     let queued = false;
     const update = () => {
@@ -1206,35 +1266,32 @@ const faqs = [
 
       const w = stage.clientWidth;
       const h = stage.clientHeight;
-      const closed = 1 - open;
-      const x0 = w * 0.32 * closed;
-      const x1 = w - x0;
-      const y0 = h * 0.24 * closed;
-      const y1 = h;
-      const rx = (x1 - x0) * 0.5 * closed;
-      const ry = (y1 - y0) * 0.3 * closed;
+      const cx = w / 2;
+      const g = h;
+      // Base size: the whole gateway fits the stage with room above for the heading.
+      // The full gateway is 5a wide and 3.58a tall: use as much of the stage as fits.
+      const a0 = Math.max(48, Math.min(w * 0.18, (w * 0.92) / 5, (h - 110) / 3.58));
+      // Stepping in: grow until the wooden opening fills the screen.
+      const sMax = Math.max((w * 0.6) / a0, (g * 1.08) / (2.4 * a0));
+      const s = 1 + (sMax - 1) * open ** 1.4;
+      const a = a0 * s;
 
-      door.style.clipPath =
-        open >= 1 ? 'none' : `path("${archPath(x0, x1, y0, y1, rx, ry)} L${x0} ${y1} Z")`;
-
-      // Each band runs parallel to the opening at a fixed distance (negative = inside).
-      for (const band of bands) {
-        const d = Number(band.dataset.band);
-        band.setAttribute(
-          'd',
-          archPath(x0 - d, x1 + d, y0 - d, y1 + 30, rx > 0 ? rx + d : 0, ry > 0 ? ry + d : 0),
-        );
+      const shape = gateway(cx, g, a);
+      door.style.clipPath = open >= 1 ? 'none' : `path("${shape.wood} Z")`;
+      for (const el of stone) el.setAttribute('d', shape.stone);
+      for (const el of stoneEdge) el.setAttribute('d', shape.stoneEdge);
+      for (const el of reveal) el.setAttribute('d', shape.reveal);
+      for (const el of paper) el.setAttribute('d', shape.paper);
+      for (const el of wood) el.setAttribute('d', shape.wood);
+      wood[0]!.style.strokeWidth = String(0.075 * a);
+      wood[1]!.style.strokeWidth = String(0.018 * a);
+      // Textures scale with the gateway too.
+      const k = a / 140;
+      for (const pat of patterns) {
+        pat.setAttribute('patternTransform', `matrix(${k} 0 0 ${k} ${n(cx * (1 - k))} ${n(g * (1 - k))})`);
       }
-
-      // Ornaments scale with the arch and fade as you pass through it.
-      const s = Math.min(1.6, Math.max(0.6, (x1 - x0) / 340));
-      const fade = String(Math.max(0, 1 - open * 2.2));
-      crown.setAttribute('transform', `translate(${w / 2} ${y0 - 18}) scale(${s})`);
-      brackets[0]!.setAttribute('transform', `translate(${x0 + 3} ${y0 + ry}) scale(${s})`);
-      brackets[1]!.setAttribute('transform', `translate(${x1 - 3} ${y0 + ry}) scale(${s})`);
-      plinths[0]!.setAttribute('transform', `translate(${x0 - 7} ${y1}) scale(${s})`);
-      plinths[1]!.setAttribute('transform', `translate(${x1 + 7} ${y1}) scale(${s})`);
-      for (const g of [crown, ...brackets, ...plinths]) g.style.opacity = fade;
+      gate.style.opacity = String(Math.max(0, 1 - Math.max(0, open - 0.75) * 4));
+      if (threshold) threshold.style.top = `${Math.max(8, shape.crownY - 58)}px`;
     };
 
     update();
