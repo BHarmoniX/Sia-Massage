@@ -292,7 +292,9 @@ const legalLine = [
       display: grid;
       grid-template-columns: 1fr 1fr;
     }
-    .ill-footer__menu:first-child {
+    .ill-footer__menu:first-child,
+    /* An unpaired last menu gets its own centred row instead of sitting alone on the left. */
+    .ill-footer__menu:first-child ~ .ill-footer__menu:last-child:nth-child(even) {
       grid-column: 1 / -1;
     }
   }
