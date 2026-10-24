@@ -252,7 +252,7 @@ const faqs = [
       </div>
       <!-- A gateway: the outline of the client's stone arch (crown mirrored exactly, posts
            extended to doorway height), traced by a gold line and an even fine line. No sill: the
-           photo and the posts fade into the moss at the foot, so the path runs out to meet you. Either side, carved and gilded into the wall, a couplet read right
+           photo fades into the moss at the foot, while the posts end squarely in the ground. Either side, carved and gilded into the wall, a couplet read right
            to left: 身体放松 · 心自宁静, "a relaxed body creates a calm mind". The doorway script
            draws everything from one geometry. -->
       <svg class="sia-visit__frame" data-frame>
@@ -861,6 +861,7 @@ const faqs = [
     stroke: #d2bf8c;
     stroke-width: 3;
     stroke-linejoin: round;
+    stroke-linecap: butt;
   }
   .sia-arch__line--fine {
     stroke-width: 1;
@@ -1156,7 +1157,7 @@ const faqs = [
     const CROWN = 0.652; // crown height, × A (from the reference)
     const APEX = 3.5; // total height, × A
     const SHOULDER = APEX - CROWN;
-    const arch = (cx: number, base: number, A: number, d = 0) => {
+    const arch = (cx: number, base: number, A: number, d = 0, closed = d === 0) => {
       const L = cx - A - d;
       const R = cx + A + d;
       const sy = base - SHOULDER * A;
@@ -1168,7 +1169,7 @@ const faqs = [
         `M${n(L)} ${n(base)} L${n(L)} ${n(sy)} ` +
         `C${n(L)} ${n(c1y)} ${n(cx - c2x)} ${n(c2y)} ${n(cx)} ${n(ay)} ` +
         `C${n(cx + c2x)} ${n(c2y)} ${n(R)} ${n(c1y)} ${n(R)} ${n(sy)} ` +
-        `L${n(R)} ${n(base)}` + (d === 0 ? ' Z' : '')
+        `L${n(R)} ${n(base)}` + (closed ? ' Z' : '')
       );
     };
     const couplets = {
@@ -1199,13 +1200,13 @@ const faqs = [
       const base = pivotY + (base0 - pivotY) * s;
 
       door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A)}")`;
-      for (const line of lines) line.setAttribute('d', arch(cx, base, A, Number(line.dataset.line)));
+      for (const line of lines) line.setAttribute('d', arch(cx, base, A, Number(line.dataset.line), false));
 
-      // No sill: the photo and the posts fade into the moss toward the foot of the doorway.
+      // No sill: the photo fades into the moss toward the foot of the doorway, while the
+      // gold posts stay solid and end squarely at ground level, set into the ground.
       const fade = open >= 1 ? 'none' : `linear-gradient(to bottom, #000 ${n(base - 1.1 * A)}px, transparent ${n(base)}px)`;
-      door.style.maskImage = archFrame.style.maskImage = fade;
+      door.style.maskImage = fade;
       door.style.setProperty('-webkit-mask-image', fade);
-      archFrame.style.setProperty('-webkit-mask-image', fade);
 
       // Carved couplets in the wall either side, from the shoulder of the doorway downward.
       const room = cx - A0 - 24;
