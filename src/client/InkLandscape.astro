@@ -34,6 +34,21 @@ const { class: className } = Astro.props;
     <circle cx="790" cy="330" r="120" fill="none" stroke="#b9c8a4" stroke-width="1.5" opacity="0.6" />
   </g>
 
+  <!-- Clouds: clusters of overlapping puffs, no outlines, shaded like real ones (deeper sage
+       behind, brighter in front, a soft shadow beneath), drifting slowly; one passes across the
+       lower edge of the sun. -->
+  <defs>
+    <filter id="sia-cloud-soft" x="-10%" y="-20%" width="120%" height="140%">
+      <feGaussianBlur stdDeviation="2.2" />
+    </filter>
+  </defs>
+  <g data-depth="-0.08" filter="url(#sia-cloud-soft)">
+    <g class="ink-cloud ink-cloud--a"><g transform="translate(300 250) scale(1.6 1.6)"><ellipse cx="0" cy="16" rx="70" ry="12" fill="#cfd8c0" /><ellipse cx="14" cy="-16" rx="34" ry="28" fill="#dfe5d2" /><ellipse cx="-22" cy="-6" rx="29" ry="22" fill="#dfe5d2" /><ellipse cx="46" cy="-2" rx="27" ry="20" fill="#dfe5d2" /><ellipse cx="30" cy="-24" rx="22" ry="18" fill="#e7ecde" /><ellipse cx="-6" cy="-20" rx="24" ry="19" fill="#e7ecde" /><ellipse cx="-48" cy="6" rx="28" ry="16" fill="#e7ecde" /><ellipse cx="66" cy="8" rx="20" ry="12" fill="#e7ecde" /><ellipse cx="-74" cy="12" rx="17" ry="10" fill="#e7ecde" /><ellipse cx="18" cy="-8" rx="30" ry="20" fill="#edf1e6" /><ellipse cx="-26" cy="2" rx="26" ry="15" fill="#edf1e6" /><ellipse cx="2" cy="9" rx="60" ry="12" fill="#e7ecde" /></g></g>
+    <g class="ink-cloud ink-cloud--b"><g transform="translate(995 210) scale(-0.95 0.95)"><ellipse cx="0" cy="16" rx="70" ry="12" fill="#cfd8c0" /><ellipse cx="14" cy="-16" rx="34" ry="28" fill="#dfe5d2" /><ellipse cx="-22" cy="-6" rx="29" ry="22" fill="#dfe5d2" /><ellipse cx="46" cy="-2" rx="27" ry="20" fill="#dfe5d2" /><ellipse cx="30" cy="-24" rx="22" ry="18" fill="#e7ecde" /><ellipse cx="-6" cy="-20" rx="24" ry="19" fill="#e7ecde" /><ellipse cx="-48" cy="6" rx="28" ry="16" fill="#e7ecde" /><ellipse cx="66" cy="8" rx="20" ry="12" fill="#e7ecde" /><ellipse cx="-74" cy="12" rx="17" ry="10" fill="#e7ecde" /><ellipse cx="18" cy="-8" rx="30" ry="20" fill="#edf1e6" /><ellipse cx="-26" cy="2" rx="26" ry="15" fill="#edf1e6" /><ellipse cx="2" cy="9" rx="60" ry="12" fill="#e7ecde" /></g></g>
+    <g class="ink-cloud ink-cloud--c"><g transform="translate(560 420) scale(-1.1 1.1)"><ellipse cx="0" cy="16" rx="70" ry="12" fill="#cfd8c0" /><ellipse cx="14" cy="-16" rx="34" ry="28" fill="#dfe5d2" /><ellipse cx="-22" cy="-6" rx="29" ry="22" fill="#dfe5d2" /><ellipse cx="46" cy="-2" rx="27" ry="20" fill="#dfe5d2" /><ellipse cx="30" cy="-24" rx="22" ry="18" fill="#e7ecde" /><ellipse cx="-6" cy="-20" rx="24" ry="19" fill="#e7ecde" /><ellipse cx="-48" cy="6" rx="28" ry="16" fill="#e7ecde" /><ellipse cx="66" cy="8" rx="20" ry="12" fill="#e7ecde" /><ellipse cx="-74" cy="12" rx="17" ry="10" fill="#e7ecde" /><ellipse cx="18" cy="-8" rx="30" ry="20" fill="#edf1e6" /><ellipse cx="-26" cy="2" rx="26" ry="15" fill="#edf1e6" /><ellipse cx="2" cy="9" rx="60" ry="12" fill="#e7ecde" /></g></g>
+    <g class="ink-cloud ink-cloud--d"><g transform="translate(880 432) scale(1.35 1.35)"><ellipse cx="0" cy="16" rx="70" ry="12" fill="#cfd8c0" /><ellipse cx="14" cy="-16" rx="34" ry="28" fill="#dfe5d2" /><ellipse cx="-22" cy="-6" rx="29" ry="22" fill="#dfe5d2" /><ellipse cx="46" cy="-2" rx="27" ry="20" fill="#dfe5d2" /><ellipse cx="30" cy="-24" rx="22" ry="18" fill="#e7ecde" /><ellipse cx="-6" cy="-20" rx="24" ry="19" fill="#e7ecde" /><ellipse cx="-48" cy="6" rx="28" ry="16" fill="#e7ecde" /><ellipse cx="66" cy="8" rx="20" ry="12" fill="#e7ecde" /><ellipse cx="-74" cy="12" rx="17" ry="10" fill="#e7ecde" /><ellipse cx="18" cy="-8" rx="30" ry="20" fill="#edf1e6" /><ellipse cx="-26" cy="2" rx="26" ry="15" fill="#edf1e6" /><ellipse cx="2" cy="9" rx="60" ry="12" fill="#e7ecde" /></g></g>
+  </g>
+
   <g data-depth="0.15"><g class="ink-layer ink-layer--far">
     <path
       fill="#dfe5d4"
@@ -64,14 +79,62 @@ const { class: className } = Astro.props;
     />
   </g></g>
 
-  <g data-depth="0.25" fill="none" stroke="#4f5c4c" stroke-width="3" stroke-linecap="round" opacity="0.7">
-    <path d="M360 300 q 12 -12 24 0 q 12 -12 24 0" />
-    <path d="M420 350 q 9 -9 18 0 q 9 -9 18 0" />
+  <!-- Two birds in ink silhouette: they start near the top left (close, in the foreground) and
+       fly in one steady line away into the mist on the far right hill, shrinking as they go. -->
+  <g data-depth="0.25" fill="#3b4738">
+    <g class="ink-flight"><g class="ink-flight__fade">
+      <g class="ink-bird">
+          <path d="M-9 1 C -6 -2.5, 2 -3.5, 8 -1.5 C 11 -2.6, 14 -2.2, 15.5 -0.4 L 19 0.6 L 15 1.4 C 12 3.2, 3 4.4, -4 3 L -12 5.5 L -9 1 Z" />
+          <g transform="translate(-1 -1)"><path class="ink-bird__wing ink-bird__wing--l" d="M0 0 C -8 -9, -22 -15, -40 -12 C -30 -9, -22 -5, -16 -2 C -10 -1, -5 1, 0 2 Z" /></g>
+          <g transform="translate(2 -1)"><path class="ink-bird__wing ink-bird__wing--r" d="M0 0 C 7 -10, 19 -17, 36 -16 C 27 -11, 20 -6, 14 -3 C 9 -1, 4 1, 0 2 Z" /></g>
+        </g>
+      <g transform="translate(-58 30) scale(0.78)">
+        <g class="ink-bird ink-bird--late">
+          <path d="M-9 1 C -6 -2.5, 2 -3.5, 8 -1.5 C 11 -2.6, 14 -2.2, 15.5 -0.4 L 19 0.6 L 15 1.4 C 12 3.2, 3 4.4, -4 3 L -12 5.5 L -9 1 Z" />
+          <g transform="translate(-1 -1)"><path class="ink-bird__wing ink-bird__wing--l" d="M0 0 C -8 -9, -22 -15, -40 -12 C -30 -9, -22 -5, -16 -2 C -10 -1, -5 1, 0 2 Z" /></g>
+          <g transform="translate(2 -1)"><path class="ink-bird__wing ink-bird__wing--r" d="M0 0 C 7 -10, 19 -17, 36 -16 C 27 -11, 20 -6, 14 -3 C 9 -1, 4 1, 0 2 Z" /></g>
+        </g>
+      </g>
+    </g></g>
   </g>
 </svg>
 
 <style>
   @media (prefers-reduced-motion: no-preference) {
+    /* The birds fly from the top left (near) into the distance (far, smaller, paler): a few
+       wing beats, then a long glide, again and again, each bird out of step with the other. */
+    .ink-cloud {
+      animation: ink-cloud 46s ease-in-out infinite alternate;
+    }
+    .ink-cloud--b {
+      animation-duration: 58s;
+      animation-direction: alternate-reverse;
+    }
+    .ink-cloud--c {
+      animation-duration: 64s;
+      animation-delay: -20s;
+    }
+    .ink-cloud--d {
+      animation-duration: 52s;
+      animation-direction: alternate-reverse;
+      animation-delay: -12s;
+    }
+    .ink-flight {
+      animation: ink-flight 30s infinite;
+    }
+    .ink-flight__fade {
+      opacity: 0;
+      animation: ink-flight-fade 30s linear infinite;
+    }
+    .ink-bird__wing--l {
+      animation: ink-wing-l 5.5s ease-in-out infinite;
+    }
+    .ink-bird__wing--r {
+      animation: ink-wing-r 5.5s ease-in-out infinite;
+    }
+    .ink-bird--late .ink-bird__wing {
+      animation-delay: -1.7s;
+    }
     .ink-layer {
       animation: ink-drift 18s ease-in-out infinite alternate;
     }
@@ -96,6 +159,85 @@ const { class: className } = Astro.props;
     to {
       opacity: 0.8;
       transform: scale(1.04);
+    }
+  }
+  /* One straight, steady line from the top left (near) to the mist on the far right hill.
+     They slow and shrink as they recede, and fade gradually until they're gone. */
+  @keyframes ink-flight {
+    0% {
+      transform: translate(170px, 190px) scale(2.1);
+      animation-timing-function: cubic-bezier(0.32, 0.4, 0.5, 1);
+    }
+    86% {
+      transform: translate(1065px, 590px) scale(0.32);
+    }
+    100% {
+      transform: translate(1065px, 590px) scale(0.32);
+    }
+  }
+  /* Opacity runs on its own curve: in quickly, then a long, even fade into the distance. */
+  @keyframes ink-flight-fade {
+    0% {
+      opacity: 0;
+    }
+    6% {
+      opacity: 0.9;
+    }
+    40% {
+      opacity: 0.85;
+    }
+    86%,
+    100% {
+      opacity: 0;
+    }
+  }
+  /* Wings pivot at the shoulder: three beats (up, down), then held slightly raised to glide. */
+  @keyframes ink-wing-l {
+    0%,
+    9%,
+    18%,
+    27% {
+      transform: rotate(26deg);
+    }
+    4.5%,
+    13.5%,
+    22.5% {
+      transform: rotate(-34deg);
+    }
+    36%,
+    92% {
+      transform: rotate(6deg);
+    }
+    100% {
+      transform: rotate(26deg);
+    }
+  }
+  @keyframes ink-wing-r {
+    0%,
+    9%,
+    18%,
+    27% {
+      transform: rotate(-26deg);
+    }
+    4.5%,
+    13.5%,
+    22.5% {
+      transform: rotate(34deg);
+    }
+    36%,
+    92% {
+      transform: rotate(-6deg);
+    }
+    100% {
+      transform: rotate(-26deg);
+    }
+  }
+  @keyframes ink-cloud {
+    from {
+      transform: translateX(-26px);
+    }
+    to {
+      transform: translateX(26px);
     }
   }
 </style>

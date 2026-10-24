@@ -103,19 +103,13 @@ const faqs = [
   <!-- ───────────── Hero: an invitation, a window onto mountains ───────────── -->
   <section class="sia-hero" aria-labelledby="hero-title">
     <!-- A soft ink landscape across the foot of the hero: pale ridges drifting very slowly,
-         mist passing over them and two birds crossing now and then (from the moon gate). -->
+         and mist passing over them. -->
     <div class="sia-hero__land" aria-hidden="true">
       <svg class="sia-hero__ridge sia-hero__ridge--far" viewBox="0 0 2400 260" preserveAspectRatio="none"><path d="M0 132 Q100 93 200 141 Q300 86 400 121 Q500 87 600 137 Q700 118 800 143 Q900 92 1000 120 Q1100 99 1200 132 Q1300 113 1400 141 Q1500 104 1600 121 Q1700 101 1800 137 Q1900 98 2000 143 Q2100 85 2200 120 Q2300 85 2400 132 V260 H0Z" /></svg>
       <div class="sia-hero__mist sia-hero__mist--high"></div>
       <svg class="sia-hero__ridge sia-hero__ridge--mid" viewBox="0 0 2400 260" preserveAspectRatio="none"><path d="M0 173 Q100 144 200 178 Q300 166 400 190 Q500 130 600 152 Q700 129 800 197 Q900 160 1000 171 Q1100 153 1200 173 Q1300 148 1400 178 Q1500 158 1600 190 Q1700 126 1800 152 Q1900 138 2000 197 Q2100 156 2200 171 Q2300 158 2400 173 V260 H0Z" /></svg>
       <div class="sia-hero__mist"></div>
       <svg class="sia-hero__ridge sia-hero__ridge--near" viewBox="0 0 2400 260" preserveAspectRatio="none"><path d="M0 201 Q100 183 200 233 Q300 193 400 209 Q500 191 600 228 Q700 180 800 200 Q900 190 1000 233 Q1100 190 1200 201 Q1300 185 1400 233 Q1500 198 1600 209 Q1700 199 1800 228 Q1900 191 2000 200 Q2100 182 2200 233 Q2300 183 2400 201 V260 H0Z" /></svg>
-      <svg class="sia-hero__birds" viewBox="0 0 80 50">
-        <g fill="none" stroke="#4f5c4c" stroke-width="2" stroke-linecap="round">
-          <path class="sia-hero__wing" d="M4 14 q 8 -8 16 0 q 8 -8 16 0" />
-          <path class="sia-hero__wing sia-hero__wing--late" d="M44 38 q 6 -6 12 0 q 6 -6 12 0" />
-        </g>
-      </svg>
     </div>
     <div class="sia-hero__bamboo" aria-hidden="true">
       <Img src={bambooLight} alt="" sizes="50vw" priority class="h-full w-full object-cover" />
@@ -132,14 +126,16 @@ const faqs = [
         </p>
         <div class="sia-hero__actions">
           <a href="#contact" class="btn-3d">Book a treatment</a>
-          <a href="#treatments" class="btn-3d btn-3d--ghost">See the menu</a>
+          <a href="#treatments" class="btn-3d sia-btn-white">See the menu</a>
         </div>
         <p class="sia-hero__hours">{business.hours}</p>
       </div>
 
       <div class="sia-hero__gate-wrap" data-reveal>
-        <div class="sia-moongate card-3d breathe" data-tilt>
-          <InkLandscape class="absolute inset-0 h-full w-full" />
+        <div class="sia-moongate" data-tilt>
+          <div class="sia-moongate__face">
+            <InkLandscape class="absolute inset-0 h-full w-full" />
+          </div>
         </div>
         <span class="sia-hero__rest font-han" aria-hidden="true">息</span>
       </div>
@@ -574,13 +570,6 @@ const faqs = [
     bottom: 52%;
     opacity: 0.8;
   }
-  .sia-hero__birds {
-    position: absolute;
-    top: max(-60vh, -26rem);
-    left: 0;
-    width: 3.2rem;
-    opacity: 0;
-  }
   @media (prefers-reduced-motion: no-preference) {
     .sia-hero__ridge--far {
       animation: sia-slide 240s linear infinite;
@@ -598,50 +587,10 @@ const faqs = [
       animation-duration: 130s;
       animation-direction: reverse;
     }
-    .sia-hero__birds {
-      animation: sia-birds 42s linear infinite 3s;
-    }
-    .sia-hero__wing {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: sia-flap 1.6s ease-in-out infinite alternate;
-    }
-    .sia-hero__wing--late {
-      animation-delay: -0.7s;
-    }
   }
   @keyframes sia-slide {
     to {
       transform: translateX(-50%);
-    }
-  }
-  /* The birds glide across once (left to right, drifting gently), then rest out of view. */
-  @keyframes sia-birds {
-    0% {
-      transform: translate(-10vw, 0);
-      opacity: 0;
-    }
-    4% {
-      opacity: 0.75;
-    }
-    25% {
-      transform: translate(49vw, -1.5rem);
-    }
-    45% {
-      opacity: 0.75;
-    }
-    50% {
-      transform: translate(108vw, 0.5rem);
-      opacity: 0;
-    }
-    100% {
-      transform: translate(108vw, 0.5rem);
-      opacity: 0;
-    }
-  }
-  @keyframes sia-flap {
-    to {
-      transform: scaleY(0.55);
     }
   }
   /* The scroll cue only makes sense when the hero fits one screen (wide layouts). */
@@ -653,13 +602,15 @@ const faqs = [
       display: block;
     }
   }
+  /* The bamboo is the wall's wallpaper: it carries on across the wall on both sides of the
+     window, only fading out behind the hero text. */
   .sia-hero__bamboo {
     position: absolute;
     inset: 0 0 0 auto;
-    width: min(60vw, 56rem);
+    width: min(82vw, 76rem);
     opacity: 0.55;
-    mask-image: linear-gradient(to left, black 30%, transparent 95%);
-    -webkit-mask-image: linear-gradient(to left, black 30%, transparent 95%);
+    -webkit-mask-image: linear-gradient(to left, black 55%, transparent 97%);
+    mask-image: linear-gradient(to left, black 55%, transparent 97%);
     pointer-events: none;
   }
   .sia-hero__grid {
@@ -668,9 +619,12 @@ const faqs = [
     gap: 3.5rem;
     align-items: center;
     max-width: 82rem;
-    min-height: inherit;
+    /* Exactly the screen below the fixed header, so the hero centres in what you can see. */
+    min-height: calc(100dvh - var(--header-height));
     margin: 0 auto;
-    padding: 4rem 1.5rem 6rem;
+    /* A little more room on top, for the header's curved corners, so the space you see above
+       the moon window matches the space below it. */
+    padding: 6rem 1.5rem 3.5rem;
   }
   @media (min-width: 1024px) {
     .sia-hero__grid {
@@ -720,17 +674,42 @@ const faqs = [
     width: min(100%, 34rem);
     margin-inline: auto;
   }
+  /* The moon gate as a deep round window in the hero wall: a slim frame (lit top left, shaded
+     bottom right) with a thin mid-green trim, and depth from the wall's shadow falling into the opening from the top
+     left with a little light bouncing up from the bottom right. The window stays still; only
+     the scene inside moves. */
   .sia-moongate {
     position: relative;
     aspect-ratio: 1;
     border-radius: 9999px;
-    overflow: hidden;
+    padding: 6px;
     --depth-tilt: 7deg;
+    background: linear-gradient(135deg, #fbfaf5 0%, #e9ebdf 45%, #c3ccb2 100%);
     box-shadow:
-      0 0 0 1px var(--color-border),
-      0 0 0 14px color-mix(in oklab, var(--color-bg) 85%, transparent),
-      0 0 0 15px color-mix(in oklab, var(--color-accent) 35%, transparent),
-      0 50px 90px -40px color-mix(in oklab, var(--color-text) 45%, transparent);
+      0 0 0 2.5px #6f8c5c,
+      0 0 0 3.5px rgb(255 255 255 / 0.45),
+      0 1px 3px 2px rgb(39 50 42 / 0.16),
+      0 6px 14px -8px rgb(39 50 42 / 0.3),
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      inset 0 -1px 0 rgb(92 122 76 / 0.25);
+  }
+  .sia-moongate__face {
+    position: relative;
+    height: 100%;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .sia-moongate__face::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      inset 30px 40px 60px rgb(39 50 42 / 0.42),
+      inset 10px 14px 18px rgb(39 50 42 / 0.32),
+      inset 2px 3px 3px rgb(39 50 42 / 0.4),
+      inset -10px -14px 24px rgb(255 255 255 / 0.35);
   }
   .sia-hero__rest {
     position: absolute;
@@ -1358,6 +1337,13 @@ const faqs = [
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #3f5634;
+  }
+  /* A white button (dark moss text), for a calm second choice beside the moss one. */
+  .btn-3d.sia-btn-white {
+    --btn-face: #fbfaf6;
+    --btn-text: #27322a;
+    --btn-edge: #cfd3c4;
+    --btn-shine: #ffffff;
   }
   /* A sage green button (dark text), for a calm second choice beside the moss one. */
   .btn-3d.sia-btn-sage {
