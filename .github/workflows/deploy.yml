@@ -37,11 +37,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Skip in the base repository
+      - name: Skip in the base repo, or until Cloudflare is connected
         id: mode
+        env:
+          HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
         run: |
           if [ -f .illuminara-base ]; then
             echo "Base repository: nothing to deploy."
+            echo "client=false" >> "$GITHUB_OUTPUT"
+          elif [ "$HAS_TOKEN" != "true" ]; then
+            echo "::notice::Cloudflare not connected yet (no CLOUDFLARE_API_TOKEN secret). Skipping deploy; see docs/CLOUDFLARE.md section C."
             echo "client=false" >> "$GITHUB_OUTPUT"
           else
             echo "client=true" >> "$GITHUB_OUTPUT"

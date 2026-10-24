@@ -46,7 +46,8 @@ if (existsSync(target)) {
 /** @param {string[]} args @param {string} [cwd] */
 const git = (args, cwd = target) => execFileSync('git', args, { cwd, stdio: 'inherit' });
 
-git(['clone', '--origin', 'upstream', BASE_REPO, target], baseDir);
+git(['clone', '--template=', '--origin', 'upstream', BASE_REPO, target], baseDir);
+git(['config', 'core.hooksPath', '.githooks']);
 git(['remote', 'set-url', '--push', 'upstream', 'DISABLED-never-push-client-work-to-the-base']);
 git(['remote', 'add', 'origin', clientRepo]);
 
@@ -67,6 +68,6 @@ console.log(`
 Next:
   cd "${target}"
   npm ci
-  git config core.hooksPath .githooks
   Fill in src/config/site.ts, then design away.
+  Deploys start once Cloudflare secrets are added (docs/CLOUDFLARE.md, section C).
 `);
