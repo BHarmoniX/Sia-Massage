@@ -25,103 +25,111 @@
   --depth-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ── 3D button ────────────────────────────────────────────────────────────────────── */
+/* ── 3D button, seated in a carved hole ─────────────────────────────────────────────
+
+  Every .btn-3d sits in its own recessed hole cut into the surface (::after), with a small
+  air gap, like the Rise jigsaw footer controls. The button is subtly raised and lit from
+  above; on hover a highlight follows the pointer and the button rises within its hole.
+*/
+
+@property --btn-hl {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
 
 .btn-3d {
   --mx: 50%;
   --my: 0%;
   --btn-face: var(--color-accent);
   --btn-text: var(--color-on-accent);
-  --btn-edge: color-mix(in oklab, var(--btn-face) 62%, black);
+  --btn-edge: color-mix(in oklab, var(--btn-face) 70%, black);
+  --btn-shine: white;
+  --hole-gap: 4px;
   position: relative;
-  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  padding: 0.9rem 1.8rem;
+  margin: var(--hole-gap);
+  padding: 0.85rem 1.75rem;
   border-radius: 9999px;
   color: var(--btn-text);
   font-size: 0.875rem;
   letter-spacing: 0.08em;
-  /* Lit from above: lighter top, deeper bottom. */
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--btn-face) 82%, white) 0%,
-    var(--btn-face) 55%,
-    color-mix(in oklab, var(--btn-face) 88%, black) 100%
-  );
-  /* The visible underside ("edge") plus a soft cast shadow give physical thickness. */
+  background:
+    radial-gradient(
+      110px circle at var(--mx) var(--my),
+      color-mix(in oklab, var(--btn-shine) calc(var(--btn-hl) * 40%), transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--btn-face) 90%, white) 0%,
+      var(--btn-face) 60%,
+      color-mix(in oklab, var(--btn-face) 94%, black) 100%
+    );
   box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 45%, transparent),
-    inset 0 -1px 0 color-mix(in oklab, black 15%, transparent),
-    0 4px 0 var(--btn-edge),
-    0 10px 22px -8px color-mix(in oklab, var(--btn-edge) 70%, transparent);
+    inset 0 1px 0 color-mix(in oklab, white 35%, transparent),
+    0 2px 0 var(--btn-edge),
+    0 6px 14px -8px color-mix(in oklab, var(--btn-edge) 70%, transparent);
   transform: translateY(0);
   transition:
+    --btn-hl var(--depth-speed) var(--depth-ease),
     transform var(--depth-speed) var(--depth-ease),
-    box-shadow var(--depth-speed) var(--depth-ease),
-    filter var(--depth-speed) var(--depth-ease);
+    box-shadow var(--depth-speed) var(--depth-ease);
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Specular highlight that follows the pointer across the button. */
-.btn-3d::before {
+/* The carved hole the button sits in (behind the button, cut into the surface). */
+.btn-3d::after {
   content: '';
   position: absolute;
-  inset: 0;
+  inset: calc(var(--hole-gap) * -1);
   z-index: -1;
   border-radius: inherit;
-  background: radial-gradient(
-    120px circle at var(--mx) var(--my),
-    color-mix(in oklab, white 55%, transparent),
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity var(--depth-speed) var(--depth-ease);
+  background: color-mix(in oklab, var(--color-bg) 82%, black);
+  box-shadow:
+    inset 0 2px 5px color-mix(in oklab, black 35%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, white 25%, transparent),
+    0 1px 0 color-mix(in oklab, white 30%, transparent);
+  transition: transform var(--depth-speed) var(--depth-ease);
+  pointer-events: none;
 }
 
 .btn-3d:hover,
 .btn-3d:focus-visible {
-  transform: translateY(calc(var(--depth-lift) * -1));
+  --btn-hl: 1;
+  transform: translateY(calc(var(--depth-lift) * -0.5));
   box-shadow:
-    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
-    inset 0 -1px 0 color-mix(in oklab, black 15%, transparent),
-    0 calc(4px + var(--depth-lift)) 0 var(--btn-edge),
-    0 18px 34px -10px color-mix(in oklab, var(--btn-edge) 75%, transparent),
-    0 0 28px -4px color-mix(in oklab, var(--btn-face) 55%, transparent);
+    inset 0 1px 0 color-mix(in oklab, white 45%, transparent),
+    0 3px 0 var(--btn-edge),
+    0 8px 18px -8px color-mix(in oklab, var(--btn-edge) 70%, transparent),
+    0 0 22px -6px color-mix(in oklab, var(--btn-face) 60%, transparent);
 }
-.btn-3d:hover::before,
-.btn-3d:focus-visible::before {
-  opacity: 1;
+/* The hole stays put while the button rises within it. */
+.btn-3d:hover::after,
+.btn-3d:focus-visible::after {
+  transform: translateY(calc(var(--depth-lift) * 0.5));
 }
 
-/* Pressed: sinks onto its edge. */
+/* Pressed: settles into the hole. */
 .btn-3d:active {
-  transform: translateY(3px);
+  transform: translateY(1px);
   transition-duration: 90ms;
   box-shadow:
-    inset 0 2px 6px color-mix(in oklab, black 20%, transparent),
-    0 1px 0 var(--btn-edge),
-    0 4px 10px -6px color-mix(in oklab, var(--btn-edge) 60%, transparent);
+    inset 0 1px 4px color-mix(in oklab, black 20%, transparent),
+    0 0 0 var(--btn-edge);
+}
+.btn-3d:active::after {
+  transform: translateY(-1px);
 }
 
 .btn-3d--ghost {
+  --btn-face: color-mix(in oklab, var(--color-bg) 88%, white);
   --btn-text: var(--color-accent-strong);
-  --btn-edge: color-mix(in oklab, var(--color-accent) 35%, transparent);
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--color-bg) 70%, white),
-    var(--color-bg)
-  );
-  border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
-}
-.btn-3d--ghost::before {
-  background: radial-gradient(
-    120px circle at var(--mx) var(--my),
-    color-mix(in oklab, var(--color-accent) 22%, transparent),
-    transparent 65%
-  );
+  --btn-edge: color-mix(in oklab, var(--color-accent) 30%, transparent);
+  --btn-shine: var(--color-accent);
 }
 
 /* ── 3D card ──────────────────────────────────────────────────────────────────────── */
@@ -387,33 +395,31 @@
   border-top-right-radius: 0;
 }
 
-/* ── Crystal: frosted glass with a prismatic edge and a sweeping light facet ──────
+/* ── Crystal: frosted glass with a prismatic edge that glows on hover ──────────────
 
   <div class="glass-3d crystal">…</div>
-  The hairline edge catches colour like cut crystal; on hover a band of light sweeps
-  across the surface. Works on any background (photos look best).
+  The hairline edge catches colour like cut crystal; on hover the card glows softly.
+  Add data-glow for a light that follows the pointer across the surface.
 */
 
 .crystal {
   isolation: isolate;
   background-image:
-    linear-gradient(115deg, transparent 38%, color-mix(in oklab, white 42%, transparent) 48%,
-      transparent 58%),
-    linear-gradient(135deg, color-mix(in oklab, white 34%, transparent), transparent 42%),
+    linear-gradient(135deg, color-mix(in oklab, white 30%, transparent), transparent 42%),
     linear-gradient(color-mix(in oklab, var(--glass-tint, var(--color-surface)) 58%, transparent),
       color-mix(in oklab, var(--glass-tint, var(--color-surface)) 58%, transparent));
-  background-size: 260% 100%, 100% 100%, 100% 100%;
-  background-position: 130% 0, 0 0, 0 0;
-  background-repeat: no-repeat;
   transition:
-    background-position 1.4s var(--depth-ease),
     transform var(--depth-speed) var(--depth-ease),
-    box-shadow var(--depth-speed) var(--depth-ease);
+    box-shadow 600ms var(--depth-ease);
 }
-.crystal:hover {
-  background-position: -30% 0, 0 0, 0 0;
+.crystal:hover,
+.crystal:focus-within {
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--color-accent) 40%, transparent),
+    0 0 36px -6px color-mix(in oklab, var(--color-accent) 55%, transparent),
+    0 24px 48px -28px color-mix(in oklab, var(--color-text) 45%, transparent);
 }
-/* Prismatic hairline edge (a 1px ring masked out of a conic gradient). */
 .crystal::before {
   content: '';
   position: absolute;
@@ -438,6 +444,60 @@
     linear-gradient(#000 0 0) content-box exclude,
     linear-gradient(#000 0 0);
   pointer-events: none;
+}
+
+/* ── Cursor glow: a soft light that follows the pointer across a surface ───────────
+  <div class="… " data-glow>   (src/scripts/depth.ts supplies --mx / --my)
+*/
+
+[data-glow] {
+  --mx: 50%;
+  --my: 50%;
+}
+[data-glow]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    320px circle at var(--mx) var(--my),
+    color-mix(in oklab, var(--color-accent) 22%, transparent),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 500ms var(--depth-ease);
+}
+[data-glow]:hover::after {
+  opacity: 1;
+}
+
+/* ── Floating: elements drift gently, out of step with each other ──────────────────
+  <li class="float">…</li>   uses the independent `translate` property, so it combines
+  with tilt and hover transforms instead of fighting them.
+*/
+
+@keyframes depth-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .float {
+    animation: depth-float 7s ease-in-out infinite;
+  }
+  .float:nth-child(3n + 2) {
+    animation-duration: 8.5s;
+    animation-delay: -2s;
+  }
+  .float:nth-child(3n + 3) {
+    animation-duration: 6.2s;
+    animation-delay: -4s;
+  }
 }
 
 /* ── Jigsaw cut-outs: a true circular opening in a card's edge ────────────────────
