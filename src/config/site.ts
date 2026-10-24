@@ -74,8 +74,18 @@ export const siteSchema = z.object({
       height: z.number().int().positive(),
     })
     .optional(),
+  /**
+   * Social and business profiles, shown as icons on the right of the footer. Leave href out
+   * while the real profile isn't known yet: the icon shows as a placeholder, and a
+   * production build refuses to go live until every placeholder has a real link.
+   */
   social: z
-    .array(z.object({ platform: z.enum(SOCIAL_PLATFORMS), href: z.url({ protocol: /^https$/ }) }))
+    .array(
+      z.object({
+        platform: z.enum(SOCIAL_PLATFORMS),
+        href: z.url({ protocol: /^https$/ }).optional(),
+      }),
+    )
     .default([]),
   /**
    * Header navigation. On a one-page site use section anchors ('#services'); the header
@@ -114,7 +124,8 @@ export const site: Site = siteSchema.parse({
     address: { street: '1 Example Street', suburb: 'Brisbane City', state: 'QLD', postcode: '4000' },
     hours: 'Open 7 days 9am–5pm',
   },
-  social: [{ platform: 'facebook', href: 'https://www.facebook.com/' }],
+  // Placeholders (no href) show as icons; a production build refuses them.
+  social: [{ platform: 'facebook' }, { platform: 'instagram' }, { platform: 'google' }],
   nav: [
     { label: 'About', href: '#about' },
     { label: 'Services', href: '#services' },
