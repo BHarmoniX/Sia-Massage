@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './depth.css';
 @import '@fontsource-variable/cormorant-garamond';
 @import '@fontsource-variable/cormorant-garamond/wght-italic.css';
 @import '@fontsource-variable/jost';

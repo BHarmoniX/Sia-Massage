@@ -92,6 +92,10 @@ src/components/footer/     the standard Illuminara footer
 src/components/layout/     header (nav, mobile menu, CTA) and Section for one-page sites
 src/layouts/OnePageLayout  header + scroll-spy + footer; use for every page
 src/scripts/one-page.ts    highlights the section in view, keeps the address shareable
+src/styles/depth.css       depth module: .btn-3d, .card-3d + data-tilt, data-depth parallax,
+                           .breathe, .img-reveal, .scroll-drift, data-reveal (see file header)
+src/scripts/depth.ts       pointer light/tilt and scroll motion for the depth module
+src/components/media/Img   optimised responsive images (AVIF/WebP, srcset, no layout jump)
 src/middleware.ts          gatekeeper for live pages
 src/layouts, components    page shell and head tags
 src/pages                  pages, robots.txt, security.txt, /api/health

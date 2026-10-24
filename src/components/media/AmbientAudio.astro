@@ -1,0 +1,269 @@
+---
+// Ambient brand music with a floating 3D glass play/pause button (from the Sa Massage build).
+//
+// - Starts softly (fade-in to the configured volume) on the visitor's first tap, click or
+//   keypress. Browsers never allow sound to start on page load or scroll, by design.
+// - If the visitor pauses, it stays off, including on later visits (remembered locally).
+// - On multi-page sites, playback continues from the same point on the next page.
+// - Visitors who prefer reduced motion get no auto-start; the button still works.
+// Configured by `audio` in src/config/site.ts; renders nothing when that's not set.
+
+import { site } from '../../config/site';
+
+const audio = site.audio;
+---
+
+{
+  audio && (
+    <div class="ambient" data-ambient data-volume={audio.volume} data-autostart={String(audio.autoStart)}>
+      <audio src={audio.src} preload="none" loop data-ambient-track />
+      <button
+        type="button"
+        class="ambient__button"
+        aria-pressed="false"
+        aria-label={`Play ${audio.title}`}
+        data-label-play={`Play ${audio.title}`}
+        data-label-pause={`Pause ${audio.title}`}
+        data-ambient-toggle
+      >
+        <span class="ambient__ring" aria-hidden="true" />
+        <span class="ambient__ring ambient__ring--late" aria-hidden="true" />
+        <span class="ambient__bars" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+        </span>
+        <svg class="ambient__muted" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11 5 6 9H3v6h3l5 4V5z" />
+          <path d="m22 9-6 6M16 9l6 6" />
+        </svg>
+      </button>
+    </div>
+  )
+}
+
+<style is:global>
+  .ambient {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 60;
+  }
+
+  .ambient__button {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    color: var(--color-accent-strong);
+    /* 3D glass disc */
+    background:
+      radial-gradient(circle at 32% 25%, color-mix(in oklab, white 60%, transparent), transparent 45%),
+      color-mix(in oklab, var(--color-bg) 55%, transparent);
+    border: 1px solid color-mix(in oklab, white 45%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, white 60%, transparent),
+      inset 0 -6px 12px color-mix(in oklab, var(--color-accent) 18%, transparent),
+      0 10px 24px -8px color-mix(in oklab, var(--color-text) 45%, transparent);
+    transition:
+      transform 400ms var(--depth-ease, ease),
+      box-shadow 400ms var(--depth-ease, ease);
+  }
+  .ambient__button:hover,
+  .ambient__button:focus-visible {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, white 70%, transparent),
+      inset 0 -6px 12px color-mix(in oklab, var(--color-accent) 25%, transparent),
+      0 0 26px color-mix(in oklab, var(--color-accent) 40%, transparent),
+      0 14px 28px -8px color-mix(in oklab, var(--color-text) 45%, transparent);
+  }
+  .ambient__button:active {
+    transform: scale(0.96);
+  }
+
+  /* Equaliser bars while playing; muted speaker icon while paused. */
+  .ambient__bars {
+    display: none;
+    align-items: flex-end;
+    gap: 3px;
+    height: 1.1rem;
+  }
+  .ambient__bars span {
+    width: 3px;
+    height: 35%;
+    border-radius: 2px;
+    background: currentColor;
+  }
+  .ambient__muted {
+    width: 1.35rem;
+    height: 1.35rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ambient__ring {
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid color-mix(in oklab, var(--color-accent) 50%, transparent);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ambient[data-playing] .ambient__bars {
+    display: flex;
+  }
+  .ambient[data-playing] .ambient__muted {
+    display: none;
+  }
+  .ambient[data-playing] .ambient__bars span {
+    height: 80%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ambient[data-playing] .ambient__bars span {
+      animation: ambient-bar 1.4s ease-in-out infinite;
+    }
+    .ambient[data-playing] .ambient__bars span:nth-child(2) {
+      animation-delay: -0.5s;
+    }
+    .ambient[data-playing] .ambient__bars span:nth-child(3) {
+      animation-delay: -0.9s;
+    }
+    .ambient[data-playing] .ambient__bars span:nth-child(4) {
+      animation-delay: -0.2s;
+    }
+    .ambient[data-playing] .ambient__ring {
+      animation: ambient-ring 3.2s ease-out infinite;
+    }
+    .ambient[data-playing] .ambient__ring--late {
+      animation-delay: 1.6s;
+    }
+  }
+  @keyframes ambient-bar {
+    0%,
+    100% {
+      height: 30%;
+    }
+    50% {
+      height: 95%;
+    }
+  }
+  @keyframes ambient-ring {
+    from {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    to {
+      transform: scale(1.7);
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-ambient]');
+  const track = root?.querySelector<HTMLAudioElement>('[data-ambient-track]');
+  const button = root?.querySelector<HTMLButtonElement>('[data-ambient-toggle]');
+
+  if (root && track && button) {
+    const KEY = 'ill-ambient';
+    const target = Number(root.dataset.volume) || 0.25;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const store = {
+      get: (k: string, s: Storage) => {
+        try {
+          return s.getItem(k);
+        } catch {
+          return null;
+        }
+      },
+      set: (k: string, v: string, s: Storage) => {
+        try {
+          s.setItem(k, v);
+        } catch {
+          /* private mode: just don't remember */
+        }
+      },
+    };
+
+    let fade = 0;
+    const fadeTo = (to: number, ms: number) =>
+      new Promise<void>((resolve) => {
+        cancelAnimationFrame(fade);
+        const from = track.volume;
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = Math.min(1, (now - start) / ms);
+          track.volume = from + (to - from) * t;
+          if (t < 1) fade = requestAnimationFrame(step);
+          else resolve();
+        };
+        fade = requestAnimationFrame(step);
+      });
+
+    const setState = (playing: boolean) => {
+      root.toggleAttribute('data-playing', playing);
+      button.setAttribute('aria-pressed', String(playing));
+      button.setAttribute(
+        'aria-label',
+        (playing ? button.dataset.labelPause : button.dataset.labelPlay) ?? '',
+      );
+    };
+
+    const play = async () => {
+      const resumeAt = Number(store.get(`${KEY}-time`, sessionStorage));
+      if (resumeAt && track.currentTime === 0) track.currentTime = resumeAt;
+      track.volume = 0;
+      try {
+        await track.play();
+        setState(true);
+        fadeTo(target, 2000);
+        store.set(KEY, 'on', localStorage);
+      } catch {
+        setState(false);
+      }
+    };
+
+    const pause = async () => {
+      await fadeTo(0, 700);
+      track.pause();
+      setState(false);
+      store.set(KEY, 'off', localStorage);
+    };
+
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (track.paused) play();
+      else pause();
+    });
+
+    // Remember the position so the next page continues the music.
+    addEventListener('pagehide', () => {
+      if (!track.paused) store.set(`${KEY}-time`, String(track.currentTime), sessionStorage);
+    });
+
+    // Start on the first real interaction, unless the visitor turned it off before.
+    const wantsAuto =
+      root.dataset.autostart === 'true' && !reduced && store.get(KEY, localStorage) !== 'off';
+    if (wantsAuto) {
+      const events = ['pointerdown', 'keydown'] as const;
+      const first = (event: Event) => {
+        for (const e of events) document.removeEventListener(e, first, true);
+        // Don't start on the button itself (its own click handles that).
+        if (event.target instanceof Node && button.contains(event.target)) return;
+        if (track.paused) play();
+      };
+      for (const e of events) document.addEventListener(e, first, { capture: true, passive: true });
+    }
+  }
+</script>

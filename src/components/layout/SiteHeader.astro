@@ -44,7 +44,7 @@ const cta = site.cta ? { ...site.cta, href: resolve(site.cta.href) } : undefined
           ))
         }
       </ul>
-      {cta && <a href={cta.href} class="site-header__cta">{cta.label}</a>}
+      {cta && <a href={cta.href} class="btn-3d site-header__cta">{cta.label}</a>}
     </nav>
 
     <details class="site-header__mobile" data-mobile-menu>
@@ -63,7 +63,7 @@ const cta = site.cta ? { ...site.cta, href: resolve(site.cta.href) } : undefined
             ))
           }
         </ul>
-        {cta && <a href={cta.href} class="site-header__cta site-header__cta--block">{cta.label}</a>}
+        {cta && <a href={cta.href} class="btn-3d site-header__cta site-header__cta--block">{cta.label}</a>}
       </nav>
     </details>
   </div>
@@ -147,23 +147,11 @@ const cta = site.cta ? { ...site.cta, href: resolve(site.cta.href) } : undefined
   }
 
   .site-header__cta {
-    display: inline-block;
-    padding: 0.55rem 1.25rem;
-    border-radius: 9999px;
-    background: var(--color-accent);
-    color: var(--color-on-accent);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    transition:
-      box-shadow 200ms ease,
-      background-color 200ms ease;
-  }
-  .site-header__cta:hover {
-    background: var(--color-accent-strong);
-    box-shadow: var(--glow-accent);
+    padding: 0.6rem 1.3rem;
+    font-size: 0.875rem;
   }
   .site-header__cta--block {
-    display: block;
+    display: flex;
     margin-top: 1rem;
     text-align: center;
   }

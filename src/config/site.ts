@@ -74,8 +74,18 @@ export const siteSchema = z.object({
       height: z.number().int().positive(),
     })
     .optional(),
+  /**
+   * Social and business profiles, shown as icons on the right of the footer. Leave href out
+   * while the real profile isn't known yet: the icon shows as a placeholder, and a
+   * production build refuses to go live until every placeholder has a real link.
+   */
   social: z
-    .array(z.object({ platform: z.enum(SOCIAL_PLATFORMS), href: z.url({ protocol: /^https$/ }) }))
+    .array(
+      z.object({
+        platform: z.enum(SOCIAL_PLATFORMS),
+        href: z.url({ protocol: /^https$/ }).optional(),
+      }),
+    )
     .default([]),
   /**
    * Header navigation. On a one-page site use section anchors ('#services'); the header
@@ -91,6 +101,20 @@ export const siteSchema = z.object({
   footerMenus: z
     .array(z.object({ title: z.string().min(1), links: z.array(link).min(1) }))
     .default([]),
+  /**
+   * Ambient brand music: a floating play/pause button. The track lives in /public/audio
+   * and must be licensed for commercial use. Omit to switch the feature off.
+   */
+  audio: z
+    .object({
+      src: z.string().regex(/^\/audio\/[\w.-]+\.(mp3|m4a|ogg|webm)$/, 'Put the track in /public/audio'),
+      title: z.string().default('Background music'),
+      /** 0–1. Kept low by default: atmosphere, not a soundtrack. */
+      volume: z.number().min(0).max(1).default(0.25),
+      /** Start softly on the visitor's first tap/click/keypress, unless they paused it before. */
+      autoStart: z.boolean().default(true),
+    })
+    .optional(),
   /** Who to contact about a security problem (published in /.well-known/security.txt). */
   securityContact: z.email(),
   /** Block AI training crawlers in robots.txt. Search engines are still allowed. */
@@ -123,7 +147,9 @@ export const site: Site = siteSchema.parse({
     },
     hours: 'Open 7 days · 9am – 9pm', // MOCK
   },
-  social: [], // MOCK: add real Facebook / Instagram / Google profile links when known
+  // MOCK: placeholder profiles (no href) show as icons; a production build refuses them
+  // until the real Facebook / Instagram / Google Business links are added.
+  social: [{ platform: 'facebook' }, { platform: 'instagram' }, { platform: 'google' }],
   nav: [
     { label: 'Philosophy', href: '#philosophy' },
     { label: 'Treatments', href: '#treatments' },

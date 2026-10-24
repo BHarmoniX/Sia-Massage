@@ -1,23 +1,34 @@
 ---
-// The Illuminara footer: standard on every client site, merged from the Sa Massage and
-// Rise builds. Everything it shows comes from src/config/site.ts and the look from the
-// design tokens in global.css, so it never needs redesigning per client.
+// The Illuminara glass jigsaw footer: standard on every client site. Merged from the Sa
+// Massage layout and the Rise 2 glass jigsaw (companion v19), rebuilt in pure CSS.
 //
-//   ┌──────────────┬───────────────────┬──────────────┐
-//   │ contact info │  logo + tagline   │ social icons │
-//   └──────────────┴───────────────────┴──────────────┘
-//        Quick Links ▾   Legal & Privacy ▾   …   Digital Services ▾
-//   ───────────────────────────────────────────────────────────────
-//             Legal name · ABN · © year. All rights reserved.
+//   ╭──────────────────────────────────────────────────────────────────────╮
+//   │  ✉ contact rail          ◯ logo + tagline           (f) (◎) (G)    │  main glass pane
+//   │  ☎ …                                                 social wells   │
+//   │        ╭──────────────────────────────────────────────╮             │
+//   │        │ [Quick Links ▾] [Legal & Privacy ▾] [Digital ▾] │            │  companion piece,
+//   ╰────────┤   Legal name · ABN · © year                    ├────────────╯  fitted into a cut-out
+//            ╰──────────────────────────────────────────────╯               with a 0.25rem air gap
 //
-// Menus are native <details> elements: they work without JavaScript and with a keyboard.
-// The small script only adds polish (one open at a time, close on mouse-out / Escape).
+// Everything shown comes from src/config/site.ts; colours come from the design tokens (a
+// client can override the footer's tokens on `.ill-footer`). Menus are native <details>:
+// they work without JavaScript and with a keyboard. On desktop they open upwards.
 
+import { SITE_ENV } from 'astro:env/server';
 import { formatAuPhone, site, telHref } from '../../config/site';
 import { studio } from '../../config/studio';
 import FooterIcon from './FooterIcon.astro';
 
 const { business, logo, social, nav, footerMenus } = site;
+
+// Publication gate: a placeholder social profile (no link yet) must never go live.
+const pending = social.filter((s) => !s.href);
+if (SITE_ENV === 'production' && pending.length > 0) {
+  throw new Error(
+    `Footer: ${pending.map((s) => s.platform).join(', ')} profile link(s) are still placeholders. ` +
+      'Add the real URLs in src/config/site.ts (social) or remove them before a production build.',
+  );
+}
 
 // '#section' links on a one-page site must point back to the home page from other pages.
 const onHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
@@ -52,57 +63,33 @@ const legalLine = [
   .join(' · ');
 ---
 
-<footer class="ill-footer relative overflow-hidden border-t border-border bg-bg text-text">
-  <div class="ill-footer__glow" aria-hidden="true"></div>
+<footer class="ill-footer" aria-label={`${site.name} footer`}>
+  <div class="ill-footer__stage">
+    <!-- Main glass pane -->
+    <section class="ill-footer__main" aria-label="Contact and connection">
+      <span class="ill-footer__glass" aria-hidden="true"></span>
 
-  <div class="relative mx-auto max-w-7xl px-4 pt-10 pb-6 sm:px-6 md:pt-14 lg:px-8">
-    <!-- Top band: contact · brand · social -->
-    <div class="grid grid-cols-2 items-start gap-6 md:grid-cols-3">
-      <!-- Brand (first on mobile, centre on desktop) -->
-      <div class="col-span-2 flex flex-col items-center text-center md:order-2 md:col-span-1">
-        <a href="/" class="ill-footer__brand inline-flex flex-col items-center gap-2">
-          {
-            logo ? (
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                width={logo.width}
-                height={logo.height}
-                class="ill-footer__logo h-auto max-h-24 w-auto"
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <span class="ill-footer__wordmark font-display text-3xl tracking-wide text-accent">
-                {site.name}
-              </span>
-            )
-          }
-        </a>
+      <address class="ill-footer__contact">
         {
-          site.tagline && (
-            <p class="mt-2 font-display text-base text-accent italic">{site.tagline}</p>
+          business.email && (
+            <p>
+              <FooterIcon name="mail" class="ill-footer__etch-icon" />
+              <a href={`mailto:${business.email}`}>{business.email}</a>
+            </p>
           )
         }
-        <p class="mt-1 max-w-xs text-xs leading-relaxed text-subtle">{site.description}</p>
-      </div>
-
-      <!-- Contact (left) -->
-      <address class="space-y-2 text-xs not-italic text-muted md:order-1 md:mt-12 md:text-sm">
         {
           business.address ? (
-            <p class="flex items-start gap-2">
-              <FooterIcon name="pin" class="mt-0.5 size-4 shrink-0 text-accent" />
+            <p>
+              <FooterIcon name="pin" class="ill-footer__etch-icon" />
               <span>
-                {business.address.street}
-                <br />
-                {business.address.suburb} {business.address.state} {business.address.postcode}
+                {`${business.address.street}, ${business.address.suburb} ${business.address.state} ${business.address.postcode}`}
               </span>
             </p>
           ) : (
             business.serviceArea && (
-              <p class="flex items-start gap-2">
-                <FooterIcon name="pin" class="mt-0.5 size-4 shrink-0 text-accent" />
+              <p>
+                <FooterIcon name="pin" class="ill-footer__etch-icon" />
                 <span>{business.serviceArea}</span>
               </p>
             )
@@ -110,40 +97,46 @@ const legalLine = [
         }
         {
           business.phone && (
-            <p class="flex items-center gap-2">
-              <FooterIcon name="phone" class="size-4 shrink-0 text-accent" />
-              <a href={telHref(business.phone)} class="ill-footer__link">
-                {formatAuPhone(business.phone)}
-              </a>
-            </p>
-          )
-        }
-        {
-          business.email && (
-            <p class="flex items-center gap-2">
-              <FooterIcon name="mail" class="size-4 shrink-0 text-accent" />
-              <a href={`mailto:${business.email}`} class="ill-footer__link break-all">
-                {business.email}
-              </a>
+            <p>
+              <FooterIcon name="phone" class="ill-footer__etch-icon" />
+              <a href={telHref(business.phone)}>{formatAuPhone(business.phone)}</a>
             </p>
           )
         }
         {
           business.hours && (
-            <p class="flex items-start gap-2">
-              <FooterIcon name="clock" class="mt-0.5 size-4 shrink-0 text-accent" />
+            <p>
+              <FooterIcon name="clock" class="ill-footer__etch-icon" />
               <span>{business.hours}</span>
             </p>
           )
         }
       </address>
 
-      <!-- Social (right) -->
-      {
-        social.length > 0 && (
-          <ul class="flex flex-wrap items-start justify-end gap-3 md:order-3 md:mt-12" role="list">
-            {social.map((s) => (
-              <li>
+      <a href="/" class="ill-footer__brand" aria-label={`${site.name} home`}>
+        {
+          logo ? (
+            <img
+              src={logo.src}
+              alt=""
+              width={logo.width}
+              height={logo.height}
+              class="ill-footer__logo"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span class="ill-footer__wordmark">{site.name}</span>
+          )
+        }
+        {site.tagline && <span class="ill-footer__tagline">{site.tagline}</span>}
+      </a>
+
+      <ul class="ill-footer__socials" role="list" aria-label="Social and business profiles">
+        {
+          social.map((s) => (
+            <li class="ill-footer__well">
+              {s.href ? (
                 <a
                   href={s.href}
                   target="_blank"
@@ -151,151 +144,490 @@ const legalLine = [
                   class="ill-footer__social"
                   aria-label={`${socialLabels[s.platform]} (opens in a new tab)`}
                 >
-                  <FooterIcon name={s.platform} class="size-5" />
+                  <FooterIcon name={s.platform} class="ill-footer__social-icon" />
                 </a>
-              </li>
-            ))}
-          </ul>
-        )
-      }
-    </div>
+              ) : (
+                <span
+                  class="ill-footer__social ill-footer__social--pending"
+                  role="img"
+                  aria-label={`${socialLabels[s.platform]} (link coming soon)`}
+                  title="Link coming soon"
+                >
+                  <FooterIcon name={s.platform} class="ill-footer__social-icon" />
+                </span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
 
-    <!-- Menu band -->
-    <nav
-      class="ill-footer__menus mt-8 flex flex-col items-center gap-2 border-b border-border pb-5 md:flex-row md:flex-wrap md:items-start md:justify-center md:gap-8"
-      aria-label="Footer"
-    >
-      {
-        menus.map((menu) => (
-          <details class="ill-footer__menu group w-full md:w-auto" data-footer-menu>
-            <summary class="ill-footer__summary">
-              {menu.title}
-              <FooterIcon
-                name="chevron"
-                class="size-4 transition-transform duration-200 group-open:rotate-180"
-              />
-            </summary>
-            <ul class="mt-1 space-y-1 pb-2 text-center md:text-left" role="list">
-              {menu.links.map((l) => (
-                <li>
-                  <a href={l.href} class="ill-footer__menu-link">
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </details>
-        ))
-      }
-    </nav>
+      <span class="ill-footer__cutout" aria-hidden="true"></span>
+    </section>
 
-    <!-- Legal band -->
-    <p class="pt-5 text-center text-xs text-subtle">{legalLine}</p>
+    <!-- Companion piece fitted into the cut-out -->
+    <section class="ill-footer__piece" aria-label="Footer navigation and legal">
+      <span class="ill-footer__glass ill-footer__glass--piece" aria-hidden="true"></span>
+      <nav class="ill-footer__menus" aria-label="Footer">
+        {
+          menus.map((menu) => (
+            <details class="ill-footer__menu" data-footer-menu>
+              <summary class="ill-footer__pill">
+                <span>{menu.title}</span>
+                <FooterIcon name="chevron" class="ill-footer__chevron" />
+              </summary>
+              <ul class="ill-footer__panel" role="list">
+                {menu.links.map((l) => (
+                  <li>
+                    <a href={l.href}>{l.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))
+        }
+      </nav>
+      <p class="ill-footer__legal">{legalLine}</p>
+    </section>
   </div>
 </footer>
 
-<style>
-  .ill-footer__glow {
+<style is:global>
+  .ill-footer {
+    /* Footer palette, derived from the site tokens. Clients override on .ill-footer. */
+    --footer-field: var(--color-bg);
+    --footer-glass: var(--color-surface);
+    --footer-glass-deep: color-mix(in oklab, var(--footer-glass) 80%, black);
+    --footer-text: var(--color-text);
+    --footer-muted: var(--color-muted);
+    --footer-accent: var(--color-accent);
+    --footer-gap: 0.25rem; /* the jigsaw air gap between the two pieces */
+    --footer-piece-w: min(calc(100% - 7rem), 60rem);
+    --footer-piece-h: 5.6rem;
+    --footer-radius-top: 2.7rem;
+    --footer-radius-bottom: 0.9rem;
+
+    position: relative;
+    padding: 0.9rem clamp(0.45rem, 1vw, 0.85rem) 0.75rem;
+    background: var(--footer-field);
+    color: var(--footer-muted);
+  }
+
+  .ill-footer__stage {
+    position: relative;
+    max-width: 92rem;
+    margin-inline: auto;
+  }
+
+  /* ── Frosted glass surfaces ── */
+  .ill-footer__glass {
     position: absolute;
-    inset: 0 auto auto 50%;
-    width: min(48rem, 100%);
-    height: 100%;
-    transform: translateX(-50%);
-    background: radial-gradient(
-      60% 45% at 50% 0%,
-      color-mix(in oklab, var(--color-accent) 14%, transparent),
-      transparent 70%
-    );
+    inset: 0;
+    z-index: -1;
+    border-radius: var(--footer-radius-top) var(--footer-radius-top) var(--footer-radius-bottom)
+      var(--footer-radius-bottom);
+    border: 1px solid color-mix(in oklab, white 30%, transparent);
+    background:
+      linear-gradient(118deg, color-mix(in oklab, white 10%, transparent), transparent 26%,
+          transparent 74%, color-mix(in oklab, var(--footer-accent) 8%, transparent)),
+      linear-gradient(150deg, color-mix(in oklab, var(--footer-glass) 92%, transparent),
+          color-mix(in oklab, var(--footer-glass-deep) 94%, transparent));
+    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(22px) saturate(130%);
+    box-shadow:
+      0 1.8rem 3.6rem color-mix(in oklab, var(--footer-glass-deep) 28%, transparent),
+      inset 0 2px 0 color-mix(in oklab, white 20%, transparent),
+      inset -1rem -1rem 2.2rem color-mix(in oklab, black 16%, transparent);
+  }
+  /* One clean inset glass line, 0.75rem inside each piece. */
+  .ill-footer__glass::after {
+    content: '';
+    position: absolute;
+    inset: 0.75rem;
+    border-radius: calc(var(--footer-radius-top) - 0.75rem) calc(var(--footer-radius-top) - 0.75rem)
+      0.35rem 0.35rem;
+    border: 1px solid color-mix(in oklab, white 9%, transparent);
     pointer-events: none;
   }
+  .ill-footer__glass--piece {
+    border-radius: 1.9rem 1.9rem var(--footer-radius-bottom) var(--footer-radius-bottom);
+  }
+  .ill-footer__glass--piece::after {
+    border-radius: 1.2rem 1.2rem 0.35rem 0.35rem;
+  }
 
-  .ill-footer__logo,
+  /* ── Main pane ── */
+  .ill-footer__main {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(1.2rem, 3vw, 3rem);
+    padding: 1.4rem clamp(1.4rem, 4vw, 4rem) calc(var(--footer-piece-h) + 1.1rem);
+  }
+
+  /* The jigsaw cut-out: the page field showing through, carved into the glass. */
+  .ill-footer__cutout {
+    position: absolute;
+    left: 50%;
+    bottom: -1px;
+    width: calc(var(--footer-piece-w) + var(--footer-gap) * 2);
+    height: calc(var(--footer-piece-h) + var(--footer-gap) + 1px);
+    transform: translateX(-50%);
+    border-radius: calc(1.9rem + var(--footer-gap)) calc(1.9rem + var(--footer-gap)) 0 0;
+    background: var(--footer-field);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, white 30%, transparent),
+      inset 0 0.6rem 1.2rem color-mix(in oklab, black 10%, transparent);
+  }
+
+  /* ── Etched contact rail ── */
+  .ill-footer__contact {
+    display: grid;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    font-size: 0.8125rem;
+    font-style: normal;
+  }
+  .ill-footer__contact p {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+  .ill-footer__contact a,
+  .ill-footer__contact span,
+  .ill-footer__legal,
+  .ill-footer__tagline {
+    color: var(--footer-muted);
+    /* Etched into glass: dark cut above, pale refraction below. */
+    text-shadow:
+      0 -1px 0 color-mix(in oklab, black 35%, transparent),
+      0 1px 0 color-mix(in oklab, white 10%, transparent);
+  }
+  .ill-footer__contact a {
+    transition: color 250ms ease;
+  }
+  .ill-footer__contact a:hover {
+    color: var(--footer-accent);
+  }
+  .ill-footer__etch-icon {
+    width: 1.05rem;
+    height: 1.05rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+    color: var(--footer-accent);
+    filter: drop-shadow(0 -1px 0 color-mix(in oklab, black 35%, transparent))
+      drop-shadow(0 1px 0 color-mix(in oklab, white 12%, transparent));
+  }
+
+  /* ── Brand (apex) ── */
+  .ill-footer__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    text-align: center;
+  }
+  .ill-footer__logo {
+    width: auto;
+    max-height: 6.5rem;
+    filter: drop-shadow(0 0 18px color-mix(in oklab, var(--footer-accent) 30%, transparent));
+  }
   .ill-footer__wordmark {
-    filter: drop-shadow(0 0 14px color-mix(in oklab, var(--color-accent) 40%, transparent));
-    transition: filter 300ms ease;
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 2.6vw, 2.2rem);
+    letter-spacing: 0.03em;
+    color: var(--footer-text);
+    text-shadow:
+      0 -1px 0 color-mix(in oklab, black 30%, transparent),
+      0 0 22px color-mix(in oklab, var(--footer-accent) 35%, transparent);
   }
-  .ill-footer__brand:hover .ill-footer__logo,
-  .ill-footer__brand:hover .ill-footer__wordmark {
-    filter: drop-shadow(0 0 22px color-mix(in oklab, var(--color-accent) 60%, transparent));
+  .ill-footer__tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.95rem;
   }
 
-  .ill-footer__link {
-    transition: color 200ms ease;
+  /* ── Social wells: recessed circles with raised, etched buttons ── */
+  .ill-footer__socials {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.45rem;
+    margin-top: 1rem;
   }
-  .ill-footer__link:hover {
-    color: var(--color-accent);
+  .ill-footer__well {
+    display: grid;
+    place-items: center;
+    width: 3.3rem;
+    height: 3.3rem;
+    border-radius: 9999px;
+    background: color-mix(in oklab, var(--footer-glass-deep) 70%, black);
+    box-shadow:
+      inset 0 3px 8px color-mix(in oklab, black 45%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, white 12%, transparent);
   }
-
   .ill-footer__social {
     display: grid;
     place-items: center;
-    width: 3rem;
-    height: 3rem;
+    width: 2.7rem;
+    height: 2.7rem;
     border-radius: 9999px;
-    border: 1px solid var(--color-border);
-    background: color-mix(in oklab, var(--color-surface) 70%, transparent);
-    color: var(--color-muted);
+    color: var(--footer-text);
+    background: linear-gradient(160deg, color-mix(in oklab, var(--footer-glass) 85%, white),
+        var(--footer-glass-deep));
+    box-shadow:
+      0 2px 6px color-mix(in oklab, black 35%, transparent),
+      inset 0 1px 0 color-mix(in oklab, white 22%, transparent);
     transition:
-      color 200ms ease,
-      border-color 200ms ease,
-      box-shadow 200ms ease;
+      transform 350ms var(--depth-ease, ease),
+      box-shadow 350ms var(--depth-ease, ease),
+      color 350ms ease;
   }
-  .ill-footer__social:hover {
-    color: var(--color-accent);
-    border-color: var(--color-accent);
-    box-shadow: var(--glow-accent);
+  a.ill-footer__social:hover,
+  a.ill-footer__social:focus-visible {
+    color: var(--footer-accent);
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 22px color-mix(in oklab, var(--footer-accent) 45%, transparent),
+      0 3px 8px color-mix(in oklab, black 35%, transparent),
+      inset 0 1px 0 color-mix(in oklab, white 30%, transparent);
+  }
+  a.ill-footer__social:active {
+    transform: translateY(1px);
+  }
+  .ill-footer__social--pending {
+    opacity: 0.85;
+    cursor: default;
+  }
+  .ill-footer__social-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    filter: drop-shadow(0 -1px 0 color-mix(in oklab, black 35%, transparent));
   }
 
-  .ill-footer__summary {
+  /* ── Companion piece ── */
+  .ill-footer__piece {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: var(--footer-piece-w);
+    height: var(--footer-piece-h);
+    transform: translateX(-50%);
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 0.75rem 1.25rem 0.55rem;
+  }
+
+  .ill-footer__menus {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .ill-footer__menu {
+    position: relative;
+    /* The recess the pill sits in. */
+    padding: 0.3rem;
+    border-radius: 9999px;
+    background: color-mix(in oklab, var(--footer-glass-deep) 70%, black);
+    box-shadow:
+      inset 0 3px 8px color-mix(in oklab, black 45%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, white 12%, transparent);
+  }
+  .ill-footer__pill {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    padding: 0.4rem 0.6rem;
-    border-radius: 0.5rem;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.45rem 0.9rem 0.45rem 1.05rem;
+    border-radius: 9999px;
     cursor: pointer;
     list-style: none;
-    font-family: var(--font-display);
-    font-size: 0.875rem;
-    color: var(--color-muted);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--footer-text);
+    background: linear-gradient(170deg, color-mix(in oklab, var(--footer-glass) 85%, white),
+        var(--footer-glass-deep));
+    box-shadow:
+      0 2px 6px color-mix(in oklab, black 30%, transparent),
+      inset 0 1px 0 color-mix(in oklab, white 22%, transparent),
+      inset 0 0 0 1px color-mix(in oklab, white 10%, transparent);
+    text-shadow: 0 -1px 0 color-mix(in oklab, black 35%, transparent);
     transition:
-      color 200ms ease,
-      background-color 200ms ease;
+      box-shadow 300ms ease,
+      color 300ms ease;
   }
-  .ill-footer__summary::-webkit-details-marker {
+  .ill-footer__pill::-webkit-details-marker {
     display: none;
   }
-  .ill-footer__summary:hover,
-  .ill-footer__menu[open] .ill-footer__summary {
-    color: var(--color-text);
-    background: color-mix(in oklab, var(--color-accent) 12%, transparent);
+  .ill-footer__pill:hover,
+  .ill-footer__menu[open] .ill-footer__pill {
+    color: var(--footer-accent);
+    box-shadow:
+      0 0 20px color-mix(in oklab, var(--footer-accent) 35%, transparent),
+      0 2px 6px color-mix(in oklab, black 30%, transparent),
+      inset 0 1px 0 color-mix(in oklab, white 30%, transparent),
+      inset 0 0 0 1px color-mix(in oklab, var(--footer-accent) 35%, transparent);
+  }
+  .ill-footer__chevron {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 300ms ease;
+  }
+  .ill-footer__menu[open] .ill-footer__chevron {
+    transform: rotate(180deg);
   }
 
-  .ill-footer__menu-link {
+  /* Dropdown panel: opens upwards on desktop, into the glass above. */
+  .ill-footer__panel {
+    position: absolute;
+    left: 0.3rem;
+    right: 0.3rem;
+    bottom: calc(100% + 0.5rem);
+    z-index: 5;
+    display: grid;
+    gap: 0.1rem;
+    max-height: min(18rem, 50vh);
+    overflow-y: auto;
+    padding: 0.6rem;
+    border-radius: 1.1rem;
+    border: 1px solid color-mix(in oklab, white 16%, transparent);
+    background: color-mix(in oklab, var(--footer-glass-deep) 88%, transparent);
+    backdrop-filter: blur(16px) saturate(130%);
+    -webkit-backdrop-filter: blur(16px) saturate(130%);
+    box-shadow: 0 -1rem 2.5rem color-mix(in oklab, black 30%, transparent);
+  }
+  /* Invisible bridge so the panel stays open while the pointer travels up to it. */
+  .ill-footer__panel::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 0.6rem;
+  }
+  .ill-footer__panel a {
     display: block;
-    padding: 0.15rem 0.6rem;
-    border-radius: 0.375rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 0.6rem;
     font-size: 0.875rem;
-    color: var(--color-subtle);
+    color: var(--footer-muted);
     transition:
       color 200ms ease,
       background-color 200ms ease;
   }
-  .ill-footer__menu-link:hover {
-    color: var(--color-accent);
-    background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+  .ill-footer__panel a:hover {
+    color: var(--footer-text);
+    background: color-mix(in oklab, var(--footer-accent) 16%, transparent);
   }
 
-  /* Mobile: first menu full width, the rest in two columns (from the Sa Massage layout). */
-  @media (max-width: 767px) {
-    .ill-footer__menus {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+  .ill-footer__legal {
+    margin-top: 0.45rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid color-mix(in oklab, white 9%, transparent);
+    text-align: center;
+    font-size: 0.75rem;
+  }
+
+  /* ── Tablet and phone: the two glass pieces stack, still separated by the jigsaw gap,
+        and the height follows the content (no reserved space). ── */
+  @media (max-width: 900px) {
+    .ill-footer__main {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        'brand brand'
+        'contact social';
+      gap: 1rem;
+      padding-bottom: 1.4rem;
     }
-    .ill-footer__menu:first-child,
-    /* An unpaired last menu gets its own centred row instead of sitting alone on the left. */
-    .ill-footer__menu:first-child ~ .ill-footer__menu:last-child:nth-child(even) {
+    .ill-footer__brand {
+      grid-area: brand;
+    }
+    .ill-footer__contact {
+      grid-area: contact;
+      margin-top: 0;
+    }
+    .ill-footer__socials {
+      grid-area: social;
+      margin-top: 0;
+      align-self: start;
+    }
+    .ill-footer__cutout {
+      display: none;
+    }
+    .ill-footer__glass,
+    .ill-footer__glass::after {
+      border-bottom-left-radius: var(--footer-radius-bottom);
+      border-bottom-right-radius: var(--footer-radius-bottom);
+    }
+    .ill-footer__piece {
+      position: relative;
+      left: auto;
+      bottom: auto;
+      width: auto;
+      height: auto;
+      transform: none;
+      margin-top: var(--footer-gap);
+    }
+    .ill-footer__glass--piece,
+    .ill-footer__glass--piece::after {
+      border-top-left-radius: var(--footer-radius-bottom);
+      border-top-right-radius: var(--footer-radius-bottom);
+    }
+    .ill-footer__menus {
+      grid-auto-flow: row;
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+    .ill-footer__menu:last-child:nth-child(odd) {
       grid-column: 1 / -1;
+    }
+    .ill-footer__panel {
+      position: static;
+      margin-top: 0.35rem;
+      backdrop-filter: none;
+      box-shadow: none;
+    }
+    .ill-footer__panel::after {
+      display: none;
+    }
+  }
+  @media (max-width: 520px) {
+    .ill-footer__main {
+      padding: 1.1rem 1rem 1.1rem;
+    }
+    .ill-footer__socials {
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .ill-footer__well {
+      width: 2.6rem;
+      height: 2.6rem;
+    }
+    .ill-footer__social {
+      width: 2.1rem;
+      height: 2.1rem;
+    }
+    .ill-footer__social-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+    .ill-footer__piece {
+      padding: 0.6rem 0.75rem 0.45rem;
+    }
+    .ill-footer__menus {
+      gap: 0.45rem;
+    }
+    .ill-footer__pill {
+      padding: 0.4rem 0.65rem 0.4rem 0.8rem;
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+    .ill-footer__pill span {
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 </style>
@@ -303,6 +635,7 @@ const legalLine = [
 <script>
   const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-footer-menu]'));
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const timers = new WeakMap<HTMLDetailsElement, number>();
 
   for (const menu of menus) {
     // One menu open at a time.
@@ -310,8 +643,14 @@ const legalLine = [
       if (!menu.open) return;
       for (const other of menus) if (other !== menu) other.open = false;
     });
-    // Desktop: close when the mouse leaves (as on the Sa Massage and Rise sites).
-    if (finePointer) menu.addEventListener('mouseleave', () => (menu.open = false));
+    if (finePointer) {
+      // Close on mouse-out after a short grace period (Rise: 360ms), so moving from the
+      // button up into its panel never closes it.
+      menu.addEventListener('mouseleave', () => {
+        timers.set(menu, window.setTimeout(() => (menu.open = false), 360));
+      });
+      menu.addEventListener('mouseenter', () => window.clearTimeout(timers.get(menu)));
+    }
   }
 
   document.addEventListener('click', (event) => {
