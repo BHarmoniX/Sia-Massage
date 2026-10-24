@@ -10,7 +10,6 @@ import { formatAuPhone, site, telHref } from '../config/site';
 
 import bambooLight from '../client/photos/bamboo-light.jpg';
 import teaTable from '../client/photos/tea-table.jpg';
-import teaLeaves from '../client/photos/tea-leaves.jpg';
 import hotStones from '../client/photos/hot-stones.jpg';
 import herbalCompress from '../client/photos/herbal-compress.jpg';
 import oilMassage from '../client/photos/oil-massage.jpg';
@@ -132,7 +131,7 @@ const faqs = [
     </a>
   </section>
 
-  <!-- ───────────── Philosophy: an editorial collage ───────────── -->
+  <!-- ───────────── Philosophy: photograph and crystal card, side by side ───────────── -->
   <Section id="philosophy" labelledby="philosophy-title" class="sia-philosophy">
     <div class="sia-philosophy__grid">
       <figure class="sia-philosophy__tea img-reveal">
@@ -141,11 +140,7 @@ const faqs = [
         </div>
       </figure>
 
-      <figure class="sia-philosophy__leaves img-reveal" aria-hidden="true">
-        <Img src={teaLeaves} alt="" sizes="(min-width: 1024px) 22vw, 40vw" class="h-full w-full object-cover" />
-      </figure>
-
-      <div class="sia-philosophy__card glass-3d" data-reveal>
+      <div class="sia-philosophy__card glass-3d crystal" data-reveal>
         <p class="sia-kicker font-han" lang="zh-Hans">静心 <span>a quiet heart</span></p>
         <h2 id="philosophy-title" class="sia-heading">A quiet place to return to yourself</h2>
         <p>
@@ -163,9 +158,24 @@ const faqs = [
     <div class="sia-scroll__frame scroll-pan-frame">
       <Img src={autumnScroll} alt="Ink landscape of misty mountains, willows and a fisherman’s boat, painted on paper" sizes="200vw" widths={[1200, 2000]} class="scroll-pan sia-scroll__img" />
     </div>
-    <p class="sia-scroll__credit">
-      Bian Wenyu, <em>Streams and Mountains in Autumn Mist</em>, 1634. The Metropolitan Museum of Art, public domain.
-    </p>
+    <svg class="sia-colourbreak" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="sia-break-a" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#2f3d2a" />
+          <stop offset="0.45" stop-color="#5c7a4c" />
+          <stop offset="1" stop-color="#b9c8a4" />
+        </linearGradient>
+        <linearGradient id="sia-break-b" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#b9c8a4" />
+          <stop offset="0.6" stop-color="#dfe5d4" />
+          <stop offset="1" stop-color="#5c7a4c" />
+        </linearGradient>
+      </defs>
+      <path class="sia-colourbreak__back" fill="url(#sia-break-b)" opacity="0.7"
+        d="M0 0 H1440 V58 C1300 92 1160 34 1010 62 C860 90 720 40 560 66 C400 92 250 48 120 70 C70 78 30 76 0 72 Z" />
+      <path class="sia-colourbreak__front" fill="url(#sia-break-a)"
+        d="M0 0 H1440 V30 C1310 60 1180 14 1030 38 C880 62 740 18 590 42 C430 68 290 26 150 46 C90 54 40 52 0 48 Z" />
+    </svg>
   </section>
 
   <!-- ───────────── Treatments: menu with a living picture ───────────── -->
@@ -216,22 +226,33 @@ const faqs = [
     </div>
   </Section>
 
-  <!-- ───────────── Your visit: glass over the bamboo path ───────────── -->
-  <Section id="visit" labelledby="visit-title" class="sia-visit">
-    <div class="sia-visit__bg" aria-hidden="true">
-      <div class="scroll-drift h-full">
+  <!-- ───────────── Your visit: a doorway you step through ─────────────
+       A tall arch stands on the page with the bamboo path running through it. Scrolling
+       carries you into it: the arch widens until you stand on the path, then the four
+       moments rise over the scene. -->
+  <Section id="visit" labelledby="visit-title" class="sia-visit" data-doorway>
+    <div class="sia-visit__stage" aria-hidden="true">
+      <div class="sia-visit__door">
         <Img src={bambooPath} alt="" sizes="100vw" class="h-full w-full object-cover" />
       </div>
+      <p class="sia-visit__threshold">
+        <span class="font-han" lang="zh-Hans">入</span>
+        <span class="sia-visit__threshold-text">Step inside</span>
+      </p>
     </div>
     <div class="sia-visit__inner">
       <h2 id="visit-title" class="sia-heading sia-heading--light" data-reveal>Four quiet moments</h2>
       <ol class="sia-visit__cards" role="list">
         {
           journey.map((j) => (
-            <li class="sia-visit__card glass-3d card-3d" data-tilt data-reveal>
-              <span class="font-han" aria-hidden="true" lang="zh-Hans">{j.n}</span>
-              <h3>{j.title}</h3>
-              <p>{j.text}</p>
+            <li class="sia-visit__card notch-host" data-tilt data-reveal>
+              <div class="sia-visit__panel glass-3d crystal notch">
+                <h3>{j.title}</h3>
+                <p>{j.text}</p>
+              </div>
+              <span class="notch-piece glass-3d crystal font-han" aria-hidden="true" lang="zh-Hans">
+                {j.n}
+              </span>
             </li>
           ))
         }
@@ -270,9 +291,9 @@ const faqs = [
       <Img src={mossyRocks} alt="" sizes="100vw" class="h-full w-full object-cover" />
     </div>
     <div class="sia-contact__inner">
-      <div class="jigsaw sia-contact__card" data-reveal>
-        <div class="jigsaw__main glass-3d">
-          <span class="sia-contact__seal font-han" aria-hidden="true" lang="zh-Hans">约</span>
+      <div class="jigsaw notch-host sia-contact__card" data-reveal>
+        <span class="notch-piece glass-3d crystal font-han sia-contact__seal" aria-hidden="true" lang="zh-Hans">约</span>
+        <div class="jigsaw__main glass-3d notch">
           <h2 id="contact-title" class="sia-heading">Your hour of calm awaits</h2>
           <dl class="sia-contact__details">
             <div>
@@ -291,7 +312,7 @@ const faqs = [
             </div>
           </dl>
         </div>
-        <div class="jigsaw__piece glass-3d">
+        <div class="jigsaw__piece glass-3d crystal">
           <a href={telHref(phone)} class="sia-contact__phone">{formatAuPhone(phone)}</a>
           <span class="sia-contact__actions">
             <a href={telHref(phone)} class="btn-3d">Call to book</a>
@@ -464,24 +485,22 @@ const faqs = [
     }
   }
 
-  /* ── Philosophy collage ── */
+  /* ── Philosophy: photograph + crystal card ── */
   .sia-philosophy__grid {
     display: grid;
-    gap: 1.5rem;
+    gap: 2rem;
     max-width: 82rem;
     margin: 0 auto;
     padding: 6rem 1.5rem;
+    align-items: center;
   }
   .sia-philosophy__tea {
     aspect-ratio: 4 / 5;
-    border-radius: 0.25rem;
-  }
-  .sia-philosophy__leaves {
-    display: none;
+    border-radius: 0.5rem;
   }
   .sia-philosophy__card {
-    padding: 2.25rem;
     --glass-tint: var(--color-bg);
+    padding: 2.25rem;
   }
   .sia-philosophy__card > * + * {
     margin-top: 1.1rem;
@@ -499,41 +518,22 @@ const faqs = [
   }
   @media (min-width: 1024px) {
     .sia-philosophy__grid {
-      grid-template-columns: repeat(12, 1fr);
-      grid-template-rows: auto auto;
+      grid-template-columns: 1fr 1fr;
       gap: 0;
-      padding: 9rem 3rem;
+      padding: 8rem 3rem;
     }
-    .sia-philosophy__tea {
-      grid-column: 1 / 8;
-      grid-row: 1 / 3;
-      aspect-ratio: 5 / 4;
-    }
-    .sia-philosophy__leaves {
-      display: block;
-      grid-column: 1 / 4;
-      grid-row: 2;
-      align-self: end;
-      width: 70%;
-      aspect-ratio: 3 / 4;
-      margin: 0 0 -5rem -2rem;
-      border-radius: 0.25rem;
-      box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.5);
-      z-index: 2;
-    }
+    /* The card overlaps the photograph's edge by a fixed, deliberate amount. */
     .sia-philosophy__card {
-      grid-column: 7 / 13;
-      grid-row: 1 / 3;
-      align-self: center;
-      margin-top: 6rem;
+      margin-left: -4rem;
       padding: 3.25rem;
-      z-index: 3;
+      position: relative;
+      z-index: 2;
     }
   }
 
   /* ── Handscroll band ── */
   .sia-scroll {
-    padding: 2rem 0 5rem;
+    padding: 2rem 0 3rem;
   }
   .sia-scroll__frame {
     height: clamp(16rem, 42vh, 26rem);
@@ -546,12 +546,22 @@ const faqs = [
     width: var(--pan-width);
     filter: sepia(0.15) saturate(0.8);
   }
-  .sia-scroll__credit {
-    max-width: 82rem;
-    margin: 0.9rem auto 0;
-    padding-inline: 1.5rem;
-    font-size: 0.75rem;
-    color: var(--color-subtle);
+  /* Stylised colour break: layered moss-to-sage ink washes that drip from the scroll. */
+  .sia-colourbreak {
+    display: block;
+    width: 100%;
+    height: clamp(3.5rem, 7vw, 6.5rem);
+    margin-top: -1px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sia-colourbreak__back {
+      animation: sia-wash 14s ease-in-out infinite alternate;
+    }
+  }
+  @keyframes sia-wash {
+    to {
+      transform: translateX(-2%);
+    }
   }
 
   /* ── Treatments ── */
@@ -565,7 +575,7 @@ const faqs = [
   .sia-treatments__frame {
     position: relative;
     aspect-ratio: 4 / 3;
-    border-radius: 999px 999px 0.5rem 0.5rem;
+    border-radius: 0.5rem;
     overflow: hidden;
     --depth-tilt: 4deg;
   }
@@ -665,45 +675,99 @@ const faqs = [
     }
   }
 
-  /* ── Visit: glass over photograph ── */
+  /* ── Visit: step through the doorway ── */
   .sia-visit {
+    --open: 0;
     position: relative;
-    overflow: hidden;
     isolation: isolate;
   }
-  .sia-visit__bg {
+  .sia-visit__stage {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    overflow: hidden;
+    z-index: 0;
+  }
+  /* The arch: tall, centred, standing on the floor of the section, its path leading in.
+     --open (0→1, from scroll) widens it until it fills the screen. */
+  .sia-visit__door {
+    --closed: calc(1 - var(--open));
     position: absolute;
     inset: 0;
-    z-index: -1;
+    clip-path: inset(
+      calc(var(--closed) * 12%) calc(var(--closed) * 32%) 0 calc(var(--closed) * 32%)
+        round calc(var(--closed) * 50%) calc(var(--closed) * 50%) 0 0 / calc(var(--closed) * 30%)
+        calc(var(--closed) * 30%) 0 0
+    );
+    will-change: clip-path;
   }
-  .sia-visit__bg::after {
+  .sia-visit__door img {
+    transform: scale(calc(1.18 - var(--open) * 0.18));
+    transform-origin: 50% 70%;
+    will-change: transform;
+  }
+  .sia-visit__door::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgb(20 28 18 / 0.55), rgb(20 28 18 / 0.25) 45%, rgb(20 28 18 / 0.6));
+    background: linear-gradient(180deg, rgb(20 28 18 / 0.5), rgb(20 28 18 / 0.15) 45%, rgb(20 28 18 / 0.55));
+    opacity: var(--open);
+  }
+  .sia-visit__threshold {
+    position: absolute;
+    top: 3%;
+    left: 50%;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    transform: translateX(-50%);
+    opacity: calc(1 - var(--open) * 2.5);
+    color: var(--color-accent-strong);
+    white-space: nowrap;
+  }
+  .sia-visit__threshold .font-han {
+    font-size: 2rem;
+  }
+  .sia-visit__threshold-text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--color-muted);
   }
   .sia-visit__inner {
+    position: relative;
+    z-index: 1;
     max-width: 82rem;
-    margin: 0 auto;
-    padding: 8rem 1.5rem;
+    /* Starts below the fold so the cards only rise once the arch has opened. */
+    margin: 30dvh auto 0;
+    padding: 0 1.5rem 9rem;
   }
   .sia-visit__cards {
     display: grid;
-    gap: 1.25rem;
-    margin-top: 3.5rem;
+    gap: 3rem 1.25rem;
+    margin-top: 4.5rem;
   }
   .sia-visit__card {
+    --notch-r: 1.9rem;
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform var(--depth-speed) var(--depth-ease);
+  }
+  .sia-visit__card[data-tilting] {
+    transition-duration: 120ms;
+  }
+  .sia-visit__panel {
     --glass-tint: #f6f3ec;
     --glass-blur: 16px;
-    padding: 2rem 1.75rem;
-    color: var(--color-text);
+    height: 100%;
+    padding: 3rem 1.75rem 2rem;
+    text-align: center;
   }
-  .sia-visit__card span {
-    font-size: 2.25rem;
+  .sia-visit__card .notch-piece {
+    --glass-tint: #f6f3ec;
+    font-size: 1.5rem;
     color: var(--color-accent-strong);
   }
   .sia-visit__card h3 {
-    margin-top: 0.75rem;
     font-family: var(--font-display);
     font-size: 1.6rem;
   }
@@ -719,13 +783,15 @@ const faqs = [
   }
   @media (min-width: 1024px) {
     .sia-visit__inner {
-      padding: 11rem 3rem;
+      padding: 0 3rem 11rem;
     }
     .sia-visit__cards {
       grid-template-columns: repeat(4, 1fr);
     }
-    .sia-visit__card:nth-child(even) {
-      transform: translateY(2.5rem);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sia-visit {
+      --open: 1;
     }
   }
 
@@ -830,13 +896,17 @@ const faqs = [
   }
   .sia-contact__card .jigsaw__main {
     --glass-tint: #f6f3ec;
-    padding: 3rem 2rem calc(var(--jigsaw-piece-h) + 2.25rem);
+    padding: 3.75rem 2rem calc(var(--jigsaw-piece-h) + 2.25rem);
     border-radius: 1.75rem 1.75rem 1rem 1rem;
     text-align: center;
   }
+  .sia-contact__card {
+    --notch-r: 2.4rem;
+  }
   .sia-contact__seal {
-    font-size: 2.5rem;
-    color: var(--color-accent);
+    --glass-tint: #f6f3ec;
+    font-size: 1.9rem;
+    color: var(--color-accent-strong);
   }
   .sia-contact__details {
     display: grid;
@@ -892,6 +962,26 @@ const faqs = [
 </style>
 
 <script>
+  // Doorway: map scroll position to --open (0 = arch standing on the page, 1 = inside).
+  const doorway = document.querySelector<HTMLElement>('[data-doorway]');
+  if (doorway && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const top = doorway.getBoundingClientRect().top;
+      const open = Math.min(1, Math.max(0, -top / (window.innerHeight * 0.65)));
+      doorway.style.setProperty('--open', open.toFixed(3));
+    };
+    update();
+    addEventListener('scroll', () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+    addEventListener('resize', update, { passive: true });
+  }
+
   // Treatment menu: hovering, focusing or tapping a treatment crossfades the picture.
   const frame = document.querySelector('[data-treatment-frame]');
   if (frame) {

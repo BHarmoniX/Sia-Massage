@@ -176,6 +176,12 @@ export const site: Site = siteSchema.parse({
       ],
     },
   ],
+  // Pixabay Content License (free commercial use). Alternatives to audition: docs/CREDITS.md.
+  audio: {
+    src: '/audio/sia-rain-meditation.mp3',
+    title: 'Sia ambient music',
+    volume: 0.22,
+  },
   securityContact: 'hello@siamassage.com.au', // MOCK
 });
 

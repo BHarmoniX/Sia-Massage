@@ -29,3 +29,16 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 | mountain-market-clearing-mist.jpg (unused) | Xia Gui, *Mountain Market, Clearing Mist*, early 13th century, album leaf. Met object 36005. |
 
 The handscroll is credited on the page beneath the scroll band (good practice, not required).
+
+## Music — Pixabay Content License (free commercial use, no attribution required)
+
+| File (public/audio) | Track |
+|---|---|
+| sia-rain-meditation.mp3 | *Rain Meditation* by diepthanhdk — https://pixabay.com/music/meditationspiritual-rain-meditation-450575/ |
+
+Alternatives shortlisted 2026-10-24 (human-made, calm, Asian-infused ambient/electronica):
+- *Zen* by AtlasAudio (5:06) — https://pixabay.com/music/meditationspiritual-zen-594877/
+- *Calm Asian Ambient Background Music* by Monume (0:59) — https://pixabay.com/music/ambient-calm-asian-ambient-background-music-464201/
+- *Organic Electronica / Cinnamon* by BerryDeep (2:21) — https://pixabay.com/music/electronic-organic-electronicacinnamon-623561/
+
+AI-generated tracks were excluded on purpose: a brand sound should be human-made.
