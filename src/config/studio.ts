@@ -10,4 +10,6 @@ export const studio = {
   page: '/digital-services',
   /** Public enquiry address for the studio. Leave undefined to hide the email link. */
   email: undefined as string | undefined,
+  /** Short ownership credit: footer legal line, page metadata and the capture-guard notice. */
+  designCredit: 'Design © Illuminara Creative Studio',
 } as const;

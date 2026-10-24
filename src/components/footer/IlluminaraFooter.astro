@@ -58,6 +58,7 @@ const legalLine = [
   business.legalName,
   business.abn ? `ABN ${business.abn}` : null,
   `© ${year}. All rights reserved.`,
+  studio.designCredit,
 ]
   .filter(Boolean)
   .join(' · ');

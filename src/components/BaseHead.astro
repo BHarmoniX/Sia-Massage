@@ -3,6 +3,7 @@
 // one falls back to the site default instead of crashing the build.
 import { SITE_ENV } from 'astro:env/server';
 import { site } from '../config/site';
+import { studio } from '../config/studio';
 
 interface Props {
   title?: string;
@@ -24,6 +25,7 @@ const imageUrl = new URL(image, Astro.site);
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
+<meta name="copyright" content={`${studio.designCredit}. Content © ${site.name}.`} />
 {(noindex || SITE_ENV !== 'production') && <meta name="robots" content="noindex, nofollow" />}
 
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
