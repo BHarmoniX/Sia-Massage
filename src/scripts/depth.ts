@@ -120,3 +120,33 @@ if (
     { passive: true },
   );
 }
+
+// Horizontal pan fallback (.scroll-pan) for browsers without scroll-driven animations.
+const panners = Array.from(document.querySelectorAll<HTMLElement>('.scroll-pan'));
+if (panners.length > 0 && !reducedMotion.matches && !CSS.supports('animation-timeline: view()')) {
+  for (const el of panners) el.classList.add('scroll-pan-js');
+  let queued = false;
+  const pan = () => {
+    queued = false;
+    const vh = window.innerHeight;
+    for (const el of panners) {
+      const frame = el.parentElement ?? el;
+      const rect = frame.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > vh) continue;
+      const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+      const ratio = parseFloat(getComputedStyle(el).getPropertyValue('--pan-ratio')) || 1.8;
+      el.style.setProperty('--pan', `${(progress * (100 / ratio - 100)).toFixed(2)}%`);
+    }
+  };
+  pan();
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(pan);
+      }
+    },
+    { passive: true },
+  );
+}

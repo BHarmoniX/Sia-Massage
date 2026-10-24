@@ -265,6 +265,38 @@
     transform: translateY(7%) scale(1.14);
   }
 }
+/* Horizontal pan: a wide image (e.g. a handscroll) unrolls sideways as the page scrolls.
+   <div class="scroll-pan-frame"><img class="scroll-pan" …></div> */
+.scroll-pan-frame {
+  overflow: hidden;
+}
+.scroll-pan {
+  max-width: none;
+  width: var(--pan-width, 180%);
+  height: 100%;
+  object-fit: cover;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-pan {
+      animation: depth-scroll-pan linear both;
+      animation-timeline: view(block);
+      animation-range: cover;
+    }
+  }
+}
+@keyframes depth-scroll-pan {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(100% / var(--pan-ratio, 1.8) - 100%));
+  }
+}
+.scroll-pan-js {
+  transform: translateX(var(--pan, 0%));
+  will-change: transform;
+}
 .scroll-drift-js {
   transform: translateY(var(--drift, 0%)) scale(1.14);
   will-change: transform;
