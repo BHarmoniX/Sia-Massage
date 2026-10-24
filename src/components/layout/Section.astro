@@ -3,7 +3,9 @@
 // screen readers, and registers it with the scroll-spy (src/scripts/one-page.ts).
 // It has no look of its own: each client designs what goes inside.
 
-interface Props {
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'section'>, 'id' | 'class'> {
   id: string;
   /** Accessible name, e.g. "Services". Use `labelledby` instead if the section has a visible heading id. */
   label?: string;
@@ -11,7 +13,8 @@ interface Props {
   class?: string;
 }
 
-const { id, label, labelledby, class: className } = Astro.props;
+// Any other attributes (data-*, aria-*) pass straight through to the <section>.
+const { id, label, labelledby, class: className, ...rest } = Astro.props;
 ---
 
 <section
@@ -20,6 +23,7 @@ const { id, label, labelledby, class: className } = Astro.props;
   aria-label={labelledby ? undefined : label}
   aria-labelledby={labelledby}
   data-section
+  {...rest}
 >
   <slot />
 </section>
