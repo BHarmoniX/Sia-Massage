@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/cormorant-garamond';
+@import '@fontsource-variable/cormorant-garamond/wght-italic.css';
+@import '@fontsource-variable/jost';
 
 /*
   Design tokens: restyle a client site by changing these values only. Components never use
@@ -7,22 +10,27 @@
   The default is "Illuminara Night": deep dark surfaces lit by a warm gold accent.
 */
 @theme {
-  --color-bg: #0b0b0f;
-  --color-surface: #141419;
-  --color-surface-raised: #1d1d24;
-  --color-border: #2a2a33;
-  --color-text: #f4f1ea;
-  --color-muted: #b9b4a8;
-  --color-subtle: #8a8579;
-  --color-accent: #e3a94f;
-  --color-accent-strong: #f5c36f;
-  --color-on-accent: #1a1206;
+  /* SIA MASSAGE: moss and rice paper (PROVISIONAL palette, to be confirmed by the client). */
+  --color-bg: #f6f3ec; /* rice paper */
+  --color-surface: #efebe1;
+  --color-surface-raised: #e7e2d5;
+  --color-border: #d9d3c4;
+  --color-text: #27322a; /* deep moss ink */
+  --color-muted: #4f5c4c;
+  --color-subtle: #6f7a6a;
+  --color-accent: #5c7a4c; /* moss */
+  --color-accent-strong: #46613a;
+  --color-on-accent: #f6f3ec;
+  --color-sage: #b9c8a4;
+  --color-mist: #dfe5d4;
 
-  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-body: 'Jost Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Cormorant Garamond Variable', 'Iowan Old Style', Georgia, serif;
+  /* Chinese characters use the serif already built into every device. */
+  --font-han: 'Songti SC', 'STSong', 'Noto Serif CJK SC', 'Source Han Serif SC', 'SimSun', serif;
 
-  --radius-card: 1rem;
-  --glow-accent: 0 0 24px color-mix(in oklab, var(--color-accent) 35%, transparent);
+  --radius-card: 0.25rem;
+  --glow-accent: 0 0 28px color-mix(in oklab, var(--color-accent) 25%, transparent);
 }
 
 /* Layout values (not colours, so not Tailwind theme tokens). */
@@ -38,7 +46,7 @@
   }
 
   html {
-    color-scheme: dark;
+    color-scheme: light;
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-body);
@@ -74,4 +82,21 @@
 }
 .skip-link:focus {
   top: 1rem;
+}
+
+/* Sia: the footer is a deep moss band; the base footer follows these tokens unchanged. */
+.ill-footer {
+  --color-bg: #2f3d2a;
+  --color-surface: #384833;
+  --color-border: #4a5c42;
+  --color-text: #f3efe4;
+  --color-muted: #d6dac8;
+  --color-subtle: #a9b39b;
+  --color-accent: #c3d1a6;
+  --color-accent-strong: #dae5c1;
+}
+
+body {
+  font-weight: 350;
+  line-height: 1.7;
 }

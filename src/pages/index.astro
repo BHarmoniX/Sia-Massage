@@ -1,32 +1,391 @@
 ---
-// Base demo of a one-page site. Each client replaces this page with its own sections and
-// design; the header links, scroll-spy and footer keep working unchanged.
+// SIA MASSAGE: one-page site. Prices, treatments and copy marked MOCK are placeholders.
 import Section from '../components/layout/Section.astro';
+import InkLandscape from '../client/InkLandscape.astro';
 import OnePageLayout from '../layouts/OnePageLayout.astro';
-import { site } from '../config/site';
+import { formatAuPhone, site, telHref } from '../config/site';
 
-const demo = [
-  { id: 'about', title: 'About' },
-  { id: 'services', title: 'Services' },
-  { id: 'contact', title: 'Contact' },
+const { business } = site;
+const phone = business.phone!;
+const address = business.address!;
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  `${address.street}, ${address.suburb} ${address.state} ${address.postcode}`,
+)}`;
+
+// MOCK: treatments and prices
+const treatments = [
+  {
+    name: 'Relaxation massage',
+    zh: '放松',
+    text: 'Long, flowing strokes that quiet the nervous system and melt everyday tension.',
+    prices: [
+      ['30 min', '$55'],
+      ['60 min', '$90'],
+      ['90 min', '$130'],
+    ],
+  },
+  {
+    name: 'Remedial massage',
+    zh: '理疗',
+    text: 'Focused, deeper work on tight muscles, stiff necks and aching backs.',
+    prices: [
+      ['60 min', '$100'],
+      ['90 min', '$145'],
+    ],
+  },
+  {
+    name: 'Foot reflexology',
+    zh: '足疗',
+    text: 'Traditional pressure-point therapy on the feet to restore balance through the whole body.',
+    prices: [
+      ['45 min', '$70'],
+      ['60 min', '$85'],
+    ],
+  },
+  {
+    name: 'Hot stone massage',
+    zh: '热石',
+    text: 'Warm basalt stones ease deep tension and leave a lasting sense of calm.',
+    prices: [['75 min', '$125']],
+  },
+  {
+    name: 'Head, neck & shoulders',
+    zh: '头颈',
+    text: 'A short, restorative treatment for desk-bound shoulders and tension headaches.',
+    prices: [['30 min', '$55']],
+  },
+  {
+    name: 'Traditional cupping',
+    zh: '拔罐',
+    text: 'Added to any treatment to draw out tension and support circulation.',
+    prices: [['Add-on', '$25']],
+  },
+];
+
+const journey = [
+  { n: '一', title: 'Arrive', text: 'Step out of the day. Warm tea, a quiet welcome and a short chat about how you feel.' },
+  { n: '二', title: 'Breathe', text: 'Settle into a softly lit room. Your therapist tailors pressure and focus to you.' },
+  { n: '三', title: 'Release', text: 'Skilled hands work through tension, guided by traditional Asian technique.' },
+  { n: '四', title: 'Restore', text: 'Take a moment before leaving, with a little advice to keep the calm going.' },
+];
+
+// MOCK: answers to confirm with the owner
+const faqs = [
+  {
+    q: 'Do I need to book ahead?',
+    a: 'Booking is recommended, especially for evenings and weekends. Walk-ins are welcome when a therapist is free.',
+  },
+  {
+    q: 'What should I wear?',
+    a: 'Come as you are. You will undress to your level of comfort, and you are covered with fresh towels throughout.',
+  },
+  {
+    q: 'How early should I arrive?',
+    a: 'Five to ten minutes before your appointment gives you time to settle in and share any health information.',
+  },
+  {
+    q: 'Can I claim a health fund rebate?',
+    a: 'Rebates may be available for remedial massage with eligible health funds. Please ask when you book.',
+  },
+  {
+    q: 'Is massage safe during pregnancy?',
+    a: 'Please tell us when booking. We will advise which treatments are suitable for you.',
+  },
 ];
 ---
 
 <OnePageLayout>
-  <section class="mx-auto flex min-h-[calc(100dvh-var(--header-height))] max-w-3xl flex-col justify-center gap-6 px-4">
-    <p class="text-sm tracking-widest text-accent uppercase">{site.tagline}</p>
-    <h1 class="font-display text-4xl sm:text-6xl">{site.name}</h1>
-    <p class="max-w-prose text-lg text-muted">{site.description}</p>
+  <!-- Hero: text left, moon-gate window onto an ink landscape right -->
+  <section class="sia-hero relative overflow-hidden">
+    <div
+      class="mx-auto grid min-h-[calc(100dvh-var(--header-height))] max-w-7xl items-center gap-12 px-6 py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-20"
+    >
+      <div data-reveal>
+        <p class="flex items-center gap-3 text-sm tracking-[0.3em] text-accent uppercase">
+          <span class="font-han text-2xl tracking-normal" lang="zh-Hans">静</span>
+          <span class="h-px w-10 bg-accent/50"></span>
+          Stillness
+        </p>
+        <h1 class="mt-6 font-display text-6xl leading-[0.95] font-light sm:text-7xl lg:text-8xl">
+          Sia<br /><span class="italic">Massage</span>
+        </h1>
+        <p class="mt-6 max-w-md font-display text-2xl text-muted italic">{site.tagline}.</p>
+        <p class="mt-4 max-w-md text-muted">{site.description}</p>
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href="#contact" class="sia-btn sia-btn--solid">Book a treatment</a>
+          <a href="#treatments" class="sia-btn sia-btn--ghost">View treatments</a>
+        </div>
+      </div>
+
+      <div class="relative mx-auto w-full max-w-[34rem]" data-reveal>
+        <div class="sia-moongate">
+          <InkLandscape class="absolute inset-0 h-full w-full" />
+        </div>
+        <span
+          class="font-han absolute -right-2 bottom-6 text-[7rem] leading-none text-accent/15 select-none sm:text-[9rem]"
+          aria-hidden="true">息</span
+        >
+      </div>
+    </div>
   </section>
 
-  {
-    demo.map((d) => (
-      <Section id={d.id} labelledby={`${d.id}-title`} class="border-t border-border">
-        <div class="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-4 py-24">
-          <h2 id={`${d.id}-title`} class="font-display text-3xl">{d.title}</h2>
-          <p class="mt-4 text-muted">Placeholder section. Each client designs its own.</p>
+  <!-- Philosophy -->
+  <Section id="philosophy" labelledby="philosophy-title" class="bg-surface">
+    <div class="mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-[auto_1fr] md:gap-20 md:py-32">
+      <p
+        class="font-han text-[8rem] leading-none text-accent/25 select-none md:text-[11rem] md:[writing-mode:vertical-rl]"
+        aria-hidden="true"
+        lang="zh-Hans"
+      >
+        静心
+      </p>
+      <div class="max-w-2xl" data-reveal>
+        <p class="text-sm tracking-[0.3em] text-accent uppercase">Our philosophy</p>
+        <h2 id="philosophy-title" class="mt-4 font-display text-4xl leading-tight font-light sm:text-5xl">
+          A quiet place to <span class="italic">return to yourself</span>
+        </h2>
+        <p class="mt-8 text-lg text-muted">
+          At Sia, massage is more than relief from aches. Drawing on traditional Asian bodywork,
+          each treatment is unhurried and attentive, so the body can soften and the mind can rest.
+        </p>
+        <p class="mt-4 text-lg text-muted">
+          Clean linens, soft light and gentle music. Nothing to do but breathe.
+        </p>
+        <blockquote class="mt-10 border-l border-accent/40 pl-6 font-display text-2xl text-text italic">
+          "When the body is at ease, the heart follows."
+        </blockquote>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Treatments: tea-house menu -->
+  <Section id="treatments" labelledby="treatments-title">
+    <div class="mx-auto max-w-4xl px-6 py-24 md:py-32">
+      <div class="text-center" data-reveal>
+        <p class="text-sm tracking-[0.3em] text-accent uppercase">Treatments</p>
+        <h2 id="treatments-title" class="mt-4 font-display text-4xl font-light sm:text-5xl">
+          The <span class="italic">menu</span>
+        </h2>
+        <p class="mx-auto mt-4 max-w-lg text-muted">Every treatment is tailored to you on the day.</p>
+      </div>
+
+      <ul class="mt-16 divide-y divide-border border-y border-border" role="list">
+        {
+          treatments.map((t) => (
+            <li class="grid gap-4 py-8 sm:grid-cols-[1fr_auto] sm:gap-12" data-reveal>
+              <div>
+                <h3 class="flex items-baseline gap-3 font-display text-2xl">
+                  {t.name}
+                  <span class="font-han text-base text-accent/70" lang="zh-Hans">
+                    {t.zh}
+                  </span>
+                </h3>
+                <p class="mt-2 max-w-md text-sm text-muted">{t.text}</p>
+              </div>
+              <dl class="grid min-w-44 content-start gap-1 text-sm">
+                {t.prices.map(([time, price]) => (
+                  <div class="flex items-baseline gap-3">
+                    <dt class="text-subtle">{time}</dt>
+                    <span class="sia-leader" aria-hidden="true" />
+                    <dd class="font-display text-lg text-text">{price}</dd>
+                  </div>
+                ))}
+              </dl>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-6 text-center text-xs text-subtle">Prices in AUD, GST inclusive.</p>
+    </div>
+  </Section>
+
+  <!-- Your visit -->
+  <Section id="visit" labelledby="visit-title" class="bg-mist/60">
+    <div class="mx-auto max-w-6xl px-6 py-24 md:py-32">
+      <div class="max-w-xl" data-reveal>
+        <p class="text-sm tracking-[0.3em] text-accent uppercase">Your visit</p>
+        <h2 id="visit-title" class="mt-4 font-display text-4xl font-light sm:text-5xl">
+          Four quiet <span class="italic">moments</span>
+        </h2>
+      </div>
+      <ol class="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4" role="list">
+        {
+          journey.map((j) => (
+            <li class="border-t border-accent/30 pt-6" data-reveal>
+              <span class="font-han text-4xl text-accent" aria-hidden="true" lang="zh-Hans">
+                {j.n}
+              </span>
+              <h3 class="mt-4 font-display text-2xl">{j.title}</h3>
+              <p class="mt-2 text-sm text-muted">{j.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </Section>
+
+  <!-- FAQ -->
+  <Section id="faq" labelledby="faq-title">
+    <div class="mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-[1fr_1.4fr] md:py-32">
+      <div data-reveal>
+        <p class="text-sm tracking-[0.3em] text-accent uppercase">Questions</p>
+        <h2 id="faq-title" class="mt-4 font-display text-4xl font-light sm:text-5xl">
+          Before you <span class="italic">arrive</span>
+        </h2>
+      </div>
+      <div class="divide-y divide-border border-y border-border" data-reveal>
+        {
+          faqs.map((f) => (
+            <details class="sia-faq group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-display text-xl">
+                {f.q}
+                <span class="sia-faq__mark" aria-hidden="true" />
+              </summary>
+              <p class="pb-6 text-muted">{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <!-- Contact -->
+  <Section id="contact" labelledby="contact-title" class="bg-surface">
+    <div class="mx-auto grid max-w-6xl gap-16 px-6 py-24 md:grid-cols-2 md:py-32">
+      <div data-reveal>
+        <p class="text-sm tracking-[0.3em] text-accent uppercase">Visit us</p>
+        <h2 id="contact-title" class="mt-4 font-display text-4xl font-light sm:text-5xl">
+          Your hour of <span class="italic">calm</span> awaits
+        </h2>
+        <dl class="mt-10 space-y-6">
+          <div>
+            <dt class="text-xs tracking-[0.25em] text-subtle uppercase">Address</dt>
+            <dd class="mt-1 text-lg">
+              {address.street}<br />{`${address.suburb} ${address.state} ${address.postcode}`}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs tracking-[0.25em] text-subtle uppercase">Hours</dt>
+            <dd class="mt-1 text-lg">{business.hours}</dd>
+          </div>
+          <div>
+            <dt class="text-xs tracking-[0.25em] text-subtle uppercase">Email</dt>
+            <dd class="mt-1 text-lg">
+              <a href={`mailto:${business.email}`} class="underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
+                {business.email}
+              </a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="flex flex-col justify-center rounded-(--radius-card) border border-border bg-bg p-10 text-center" data-reveal>
+        <span class="font-han text-5xl text-accent" aria-hidden="true" lang="zh-Hans">约</span>
+        <p class="mt-4 text-sm tracking-[0.25em] text-subtle uppercase">Book by phone</p>
+        <a href={telHref(phone)} class="mt-3 font-display text-4xl text-text transition-colors hover:text-accent sm:text-5xl">
+          {formatAuPhone(phone)}
+        </a>
+        <div class="mt-10 flex flex-wrap justify-center gap-4">
+          <a href={telHref(phone)} class="sia-btn sia-btn--solid">Call to book</a>
+          <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="sia-btn sia-btn--ghost">
+            Get directions
+          </a>
         </div>
-      </Section>
-    ))
-  }
+      </div>
+    </div>
+  </Section>
 </OnePageLayout>
+
+<style is:global>
+  .font-han {
+    font-family: var(--font-han);
+  }
+
+  .sia-moongate {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px var(--color-border),
+      0 0 0 14px var(--color-bg),
+      0 0 0 15px color-mix(in oklab, var(--color-accent) 35%, transparent),
+      0 40px 80px -40px color-mix(in oklab, var(--color-text) 35%, transparent);
+  }
+
+  .sia-btn {
+    display: inline-block;
+    padding: 0.85rem 1.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    transition:
+      background-color 300ms ease,
+      color 300ms ease,
+      box-shadow 300ms ease;
+  }
+  .sia-btn--solid {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+  .sia-btn--solid:hover {
+    background: var(--color-accent-strong);
+    box-shadow: var(--glow-accent);
+  }
+  .sia-btn--ghost {
+    border: 1px solid color-mix(in oklab, var(--color-accent) 50%, transparent);
+    color: var(--color-accent-strong);
+  }
+  .sia-btn--ghost:hover {
+    background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+  }
+
+  .sia-leader {
+    flex: 1;
+    border-bottom: 1px dotted var(--color-border);
+    transform: translateY(-0.3em);
+  }
+
+  .sia-faq__mark {
+    position: relative;
+    width: 0.9rem;
+    height: 0.9rem;
+    flex-shrink: 0;
+  }
+  .sia-faq__mark::before,
+  .sia-faq__mark::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 1px;
+    background: var(--color-accent);
+    transition: transform 300ms ease;
+  }
+  .sia-faq__mark::after {
+    transform: rotate(90deg);
+  }
+  .sia-faq[open] .sia-faq__mark::after {
+    transform: rotate(0deg);
+  }
+  .sia-faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 1.1s ease,
+        transform 1.1s ease;
+    }
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  import '../client/reveal.ts';
+</script>

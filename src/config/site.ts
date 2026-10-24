@@ -99,28 +99,39 @@ export const siteSchema = z.object({
 
 export type Site = z.infer<typeof siteSchema>;
 
+// ─────────────────────────────────────────────────────────────────────────────────────
+// SIA MASSAGE. Every value marked MOCK is a placeholder until the real business details
+// arrive (search this file for "MOCK"). The phone number is from the ACMA range reserved
+// for fiction and the ABN is the ATO's published example, so neither belongs to anyone.
+// ─────────────────────────────────────────────────────────────────────────────────────
 export const site: Site = siteSchema.parse({
-  name: 'Illuminara Core',
-  tagline: 'Secure, immersive websites',
-  description: 'A secure, fast, production-ready website base by Illuminara Creative Studio.',
-  url: 'https://example.com.au',
-  // Placeholder contact details for previewing the base. The phone number is from the
-  // ACMA range reserved for fiction, and the ABN is the ATO's published example.
+  name: 'Sia Massage',
+  tagline: 'Find your stillness',
+  description:
+    'Traditional Asian massage in a calm, quiet space. Relaxation, remedial and reflexology treatments to restore body and mind.',
+  url: 'https://www.siamassage.com.au', // MOCK: confirm the real domain
   business: {
-    legalName: 'Illuminara Creative Studio',
-    abn: '51 824 753 556',
-    phone: '0491 570 006',
-    email: 'hello@example.com.au',
-    address: { street: '1 Example Street', suburb: 'Brisbane City', state: 'QLD', postcode: '4000' },
-    hours: 'Open 7 days 9am–5pm',
+    legalName: 'Sia Massage', // MOCK: registered business or company name
+    abn: '51 824 753 556', // MOCK: ATO example ABN
+    phone: '0491 570 156', // MOCK: ACMA fictional number
+    email: 'hello@siamassage.com.au', // MOCK
+    address: {
+      street: 'Shop 2, 88 Example Road', // MOCK
+      suburb: 'Strathpine', // MOCK
+      state: 'QLD',
+      postcode: '4500', // MOCK
+    },
+    hours: 'Open 7 days · 9am – 9pm', // MOCK
   },
-  social: [{ platform: 'facebook', href: 'https://www.facebook.com/' }],
+  social: [], // MOCK: add real Facebook / Instagram / Google profile links when known
   nav: [
-    { label: 'About', href: '#about' },
-    { label: 'Services', href: '#services' },
+    { label: 'Philosophy', href: '#philosophy' },
+    { label: 'Treatments', href: '#treatments' },
+    { label: 'Your visit', href: '#visit' },
+    { label: 'FAQ', href: '#faq' },
     { label: 'Contact', href: '#contact' },
   ],
-  cta: { label: 'Get in touch', href: '#contact' },
+  cta: { label: 'Book a treatment', href: '#contact' },
   footerMenus: [
     {
       title: 'Legal & Privacy',
@@ -130,8 +141,16 @@ export const site: Site = siteSchema.parse({
         { label: 'Accessibility', href: '/accessibility' },
       ],
     },
+    {
+      title: 'Client Care',
+      links: [
+        { label: 'Cancellation Policy', href: '/cancellation-policy' },
+        { label: 'Health & Safety', href: '/health-safety' },
+        { label: 'Code of Conduct', href: '/code-of-conduct' },
+      ],
+    },
   ],
-  securityContact: 'security@example.com.au',
+  securityContact: 'hello@siamassage.com.au', // MOCK
 });
 
 /** "0468865876" → "0468 865 876"; "+61730000000" → "+61 7 3000 0000". */
