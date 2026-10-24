@@ -521,7 +521,9 @@ const faqs = [
        above the hero's background rather than under it. */
     isolation: isolate;
     overflow: hidden;
-    min-height: calc(100dvh - var(--header-height));
+    /* The page runs up behind the fixed glass header; the hero starts below it. */
+    min-height: 100dvh;
+    padding-top: var(--header-height);
     /* A gentle sage tone instead of plain paper: deeper toward the land, lighter up high. */
     background:
       radial-gradient(120% 70% at 75% 100%, rgb(196 210 176 / 0.55), transparent 70%),
@@ -1065,8 +1067,8 @@ const faqs = [
     inset: 0;
     pointer-events: none;
     background: linear-gradient(160deg, rgb(232 238 220 / 0.2), rgb(196 210 176 / 0.08) 55%, rgb(232 238 220 / 0.14));
-    backdrop-filter: blur(10px) saturate(1.2);
     -webkit-backdrop-filter: blur(10px) saturate(1.2);
+    backdrop-filter: blur(10px) saturate(1.2);
   }
   /* The arch border: a confident line on the doorway's edge and a fine line outside it. */
   .sia-visit__frame {
