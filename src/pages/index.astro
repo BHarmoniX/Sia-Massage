@@ -1326,8 +1326,16 @@ const faqs = [
   .sia-contact__falls {
     object-position: 50% 35%;
   }
+  /* Moss glass, like the treatment and visit cards: dark moss with cream text. */
   .sia-contact__panel.glass-3d {
-    --glass-tint: #f6f3ec;
+    --glass-tint: rgb(47 61 42 / 0.82);
+    --color-text: #f3efe4;
+    --color-muted: #d6dbc9;
+    --color-subtle: #b3bca4;
+    --color-accent: #c3d1a6;
+    --color-accent-strong: #dbe6c2;
+    color: var(--color-text);
+    box-shadow: 0 24px 44px -24px rgb(20 28 18 / 0.75);
     padding: 3.75rem 2rem 2.75rem;
     border-radius: 3rem;
     text-align: center;
@@ -1338,7 +1346,7 @@ const faqs = [
   .sia-contact__seal {
     --glass-tint: #f6f3ec;
     font-size: 1.9rem;
-    color: var(--color-accent-strong);
+    color: #46613a;
   }
   .sia-contact__details {
     display: grid;
@@ -1350,7 +1358,7 @@ const faqs = [
     font-weight: 550;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #3f5634;
+    color: #c3d1a6;
   }
   /* A white button (dark moss text), for a calm second choice beside the moss one. */
   .btn-3d.sia-btn-white {
@@ -1374,6 +1382,11 @@ const faqs = [
     text-decoration-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
     text-underline-offset: 4px;
   }
+  /* On the moss card, "Call to book" keeps its usual moss green (not the card's pale accent). */
+  .sia-contact__actions .btn-3d:not(.sia-btn-sage) {
+    --btn-face: #5c7a4c;
+    --btn-text: #f6f3ec;
+  }
   .sia-contact__actions {
     display: flex;
     flex-wrap: wrap;
@@ -1390,6 +1403,18 @@ const faqs = [
 </style>
 
 <script>
+  // ── BUILD-TIME CAPTURE MODE (remove before launch) ──────────────────────────────────
+  // Open the page with ?capture for full-page screenshots: every section shows at once (no
+  // fade-ins), every image loads straight away, and full-screen sections keep the height of
+  // the real window instead of stretching to the height of the whole capture.
+  if (new URLSearchParams(location.search).has('capture')) {
+    const root = document.documentElement;
+    root.classList.add('sia-capture');
+    root.style.setProperty('--sia-vh', `${window.innerHeight}px`);
+    for (const el of document.querySelectorAll('[data-reveal], .img-reveal')) el.classList.add('is-visible');
+    for (const img of document.querySelectorAll('img')) img.loading = 'eager';
+  }
+
   // The contact section's waterfall runs behind the footer: keep the overlap equal to the
   // footer's height as it changes with the screen size.
   const footerEl = document.querySelector<HTMLElement>('.ill-footer');
@@ -1451,7 +1476,8 @@ const faqs = [
     const update = () => {
       queued = false;
       const top = doorway.getBoundingClientRect().top;
-      const open = reduced ? 1 : Math.min(1, Math.max(0, -top / (window.innerHeight * 0.65)));
+      const capture = document.documentElement.classList.contains('sia-capture');
+      const open = capture ? 0 : reduced ? 1 : Math.min(1, Math.max(0, -top / (window.innerHeight * 0.65)));
       doorway.style.setProperty('--open', open.toFixed(3));
 
       const w = stage.clientWidth;

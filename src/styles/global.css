@@ -309,3 +309,43 @@ body {
   font-weight: 350;
   line-height: 1.7;
 }
+
+/* ── BUILD-TIME CAPTURE MODE (remove before launch) ──────────────────────────────────────
+   Active only with ?capture in the address (see the script in src/pages/index.astro). Shows
+   everything at once and keeps full-screen sections at the real window's height, so
+   full-page screenshots capture the whole design. */
+html.sia-capture *,
+html.sia-capture *::before,
+html.sia-capture *::after {
+  transition: none !important;
+}
+html.sia-capture [data-reveal],
+html.sia-capture .img-reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+html.sia-capture .img-reveal img {
+  transform: none !important;
+}
+html.sia-capture .sia-hero {
+  min-height: var(--sia-vh) !important;
+}
+html.sia-capture .sia-hero__grid {
+  min-height: calc(var(--sia-vh) - var(--header-height)) !important;
+}
+html.sia-capture .sia-visit__stage {
+  height: calc(var(--sia-vh) - var(--header-height)) !important;
+}
+html.sia-capture .sia-visit__inner {
+  margin-top: calc(var(--sia-vh) * 0.3) !important;
+}
+/* Screen-by-screen captures: the header shows once at the top, and the doorway stays put
+   (closed) instead of sticking and opening between shots. */
+html.sia-capture header.site-header[data-site-header][data-site-header] {
+  position: absolute !important;
+}
+html.sia-capture .sia-visit__stage {
+  position: relative !important;
+  top: 0 !important;
+}
