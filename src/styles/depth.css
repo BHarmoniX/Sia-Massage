@@ -311,8 +311,10 @@
   border-radius: var(--radius-card, 1rem);
   border: 1px solid color-mix(in oklab, white 45%, transparent);
   background: color-mix(in oklab, var(--glass-tint) 62%, transparent);
-  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  /* Prefixed line first: the build keeps only the last of the pair, and Chrome needs the
+     standard one. (Same order everywhere a blur is used.) */
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
   box-shadow:
     inset 0 1px 0 color-mix(in oklab, white 18%, transparent),
     0 24px 48px -28px color-mix(in oklab, var(--color-text) 45%, transparent);
