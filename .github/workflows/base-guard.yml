@@ -1,0 +1,28 @@
+# Runs on every push and pull request. In the base repo it blocks client work; in every
+# repo it runs the type check, dependency audit and the guarded build.
+name: Verify
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: node scripts/guard-base-repo.mjs
+      - run: npm ci --ignore-scripts
+      - run: npm run verify
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'

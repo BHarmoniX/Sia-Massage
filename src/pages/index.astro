@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout>
+  <section class="mx-auto flex min-h-dvh max-w-3xl flex-col justify-center gap-6 px-4 py-24">
+    <p class="text-sm tracking-widest text-accent uppercase">{site.tagline}</p>
+    <h1 class="text-4xl font-semibold sm:text-6xl">{site.name}</h1>
+    <p class="max-w-prose text-lg opacity-80">{site.description}</p>
+  </section>
+</BaseLayout>

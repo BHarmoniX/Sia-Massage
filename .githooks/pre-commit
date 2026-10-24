@@ -1,0 +1,3 @@
+#!/bin/sh
+# Blocks client work from the base repo; no-op in client repos (no .illuminara-base marker).
+exec node scripts/guard-base-repo.mjs
