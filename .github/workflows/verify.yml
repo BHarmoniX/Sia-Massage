@@ -1,5 +1,8 @@
 # Runs on every push and pull request. In the base repo it blocks client work; in every
-# repo it runs the type check, dependency audit and the guarded build.
+# repo it runs the type check, the attack tests, the dependency audit and the guarded build.
+#
+# Third-party actions are pinned to full commit SHAs (a tag can be moved by whoever controls
+# the action; a SHA can't). Only actions published by GitHub itself are used.
 name: Verify
 
 on:
@@ -14,14 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
-      - run: node scripts/guard-base-repo.mjs
       - run: npm ci --ignore-scripts
       - run: npm run verify
         env:

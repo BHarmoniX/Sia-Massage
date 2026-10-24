@@ -82,7 +82,10 @@ Hostinger supported for static sites with a hardened `.htaccess`.
 1. ✅ Base project (Astro 7, TypeScript strictest, Tailwind 4; static/hybrid/server ready) — done 2026-10-24.
    Includes the security headers, strict CSP, live-page gatekeeper, build guard and
    deploy-target guard, all verified (see docs/SECURITY.md).
-2. Security shell (edge rules, Turnstile, rate limits) + deploy pipeline (GitHub, checks, staging)
+2. ✅ Security shell + deploy pipeline — code done 2026-10-24: form gatekeeper (size cap,
+   rate limits, honeypot, Turnstile, validation) with 14 attack tests; preview/production
+   split with noindex previews; GitHub deploy workflow (client repos only); live header
+   scanner; actions pinned to SHAs. Dashboard steps in docs/CLOUDFLARE.md.
 3. Illuminara footer + client config + design tokens
 4. Page shells + legal templates
 5. Experience modules

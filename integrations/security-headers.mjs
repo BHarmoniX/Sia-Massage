@@ -7,22 +7,28 @@ import { writeFile } from 'node:fs/promises';
 import {
   blockedPathPatterns,
   immutableAssetHeaders,
-  securityHeaders,
+  securityHeaders as baseHeaders,
 } from '../config/security.mjs';
 
-function cloudflareHeaders() {
+const NOINDEX = { 'X-Robots-Tag': 'noindex, nofollow, noarchive' };
+
+/** @param {Record<string, string>} pageHeaders */
+function cloudflareHeaders(pageHeaders) {
+  /** @param {string} path @param {Record<string, string>} headers */
   const block = (path, headers) =>
     [path, ...Object.entries(headers).map(([k, v]) => `  ${k}: ${v}`)].join('\n');
   return [
-    block('/*', securityHeaders),
+    block('/*', pageHeaders),
     block('/_astro/*', immutableAssetHeaders),
     '',
   ].join('\n\n');
 }
 
-function apacheHtaccess() {
+/** @param {Record<string, string>} pageHeaders */
+function apacheHtaccess(pageHeaders) {
+  /** @param {string} v */
   const esc = (v) => v.replace(/"/g, '\\"');
-  const headerLines = Object.entries(securityHeaders)
+  const headerLines = Object.entries(pageHeaders)
     .map(([k, v]) => `  Header always set ${k} "${esc(v)}"`)
     .join('\n');
   const blocked = blockedPathPatterns
@@ -80,15 +86,21 @@ ErrorDocument 404 /404.html
 `;
 }
 
-/** @returns {import('astro').AstroIntegration} */
-export default function securityHeaders() {
+/**
+ * @param {{ indexable: boolean }} options  false for previews: adds a noindex header
+ * @returns {import('astro').AstroIntegration}
+ */
+export default function securityHeaders({ indexable }) {
+  const pageHeaders = indexable ? baseHeaders : { ...baseHeaders, ...NOINDEX };
   return {
     name: 'illuminara:security-headers',
     hooks: {
       'astro:build:done': async ({ dir, logger }) => {
-        await writeFile(new URL('_headers', dir), cloudflareHeaders());
-        await writeFile(new URL('.htaccess', dir), apacheHtaccess());
-        logger.info('Wrote _headers (Cloudflare/Netlify) and .htaccess (Apache/Hostinger)');
+        await writeFile(new URL('_headers', dir), cloudflareHeaders(pageHeaders));
+        await writeFile(new URL('.htaccess', dir), apacheHtaccess(pageHeaders));
+        logger.info(
+          `Wrote _headers and .htaccess${indexable ? '' : ' (noindex: not a production build)'}`,
+        );
       },
     },
   };

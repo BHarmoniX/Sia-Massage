@@ -11,10 +11,14 @@ explicitly allowed.**
 
 | Layer | What it does | Where it lives |
 |---|---|---|
-| Edge shield | HTTPS, firewall, bot filter, rate limits | Cloudflare dashboard (step 2) |
+| Edge shield | HTTPS, firewall, bot filter, edge rate limit, DNSSEC | Cloudflare dashboard, see `docs/CLOUDFLARE.md` |
 | Security headers | HSTS, clickjacking block, nosniff, Permissions-Policy, cross-origin isolation | `config/security.mjs` → `_headers`, `.htaccess`, `server/node.mjs`, `src/middleware.ts` |
 | Content Security Policy | Only fingerprinted (SHA-384) scripts and styles run; injected code is refused | `astro.config.mjs` `security.csp` + `config/security.mjs` |
 | Gatekeeper (live pages) | Allowed methods only, scanner probes refused, body size capped, CSRF origin check | `src/middleware.ts`, `security.checkOrigin` |
+| Form gatekeeper | Size-capped reads, per-visitor rate limits (IPs hashed), honeypot, Turnstile (fails closed), schema validation, no input echoed back | `src/lib/server/form-guard.ts`, `tests/form-guard.test.ts` |
+| Preview isolation | Non-production builds send noindex header + meta and a disallow-all robots.txt | `SITE_ENV`, `integrations/security-headers.mjs` |
+| Live scan | After every deploy, checks the real site's headers, CSP, https redirect and probe paths | `scripts/scan-headers.mjs` |
+| CI supply chain | GitHub Actions pinned to commit SHAs; only GitHub-published actions; no telemetry | `.github/workflows/` |
 | Build guard | Build fails if a secret key, PHP file, source map, `.env` or missing CSP reaches the output | `scripts/check-dist.mjs` |
 | Deploy-target guard | A live page can't silently become a dead static file on a host without a server | `integrations/deploy-target.mjs` |
 | Supply chain | Exact versions, no install scripts, audit on every verify, 14-day age rule | `.npmrc`, `package.json` |
@@ -83,6 +87,12 @@ When a feature needs to loosen a rule (for example Stripe needs `https://js.stri
   probes 404; `DELETE` 405; forged cross-site POST 403; 1 MB body 413. Every response
   carried HSTS, CSP, nosniff and frame-deny headers.
 - `npm audit`: 0 vulnerabilities. `astro check`: 0 errors.
+
+## Every form uses the gatekeeper
+
+Any live endpoint that accepts input must go through `guardForm()` (or the same steps in the
+same order). Never call `request.text()`, `request.json()` or `request.formData()` directly on
+untrusted input. `npm test` proves the gates hold; add a test for every new form.
 
 ## Before every launch
 

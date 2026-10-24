@@ -1,6 +1,7 @@
 ---
 // Metadata for every page. Unlike the Rise version, `image` is optional: a page without
 // one falls back to the site default instead of crashing the build.
+import { SITE_ENV } from 'astro:env/server';
 import { site } from '../config/site';
 
 interface Props {
@@ -23,7 +24,7 @@ const imageUrl = new URL(image, Astro.site);
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
-{noindex && <meta name="robots" content="noindex, nofollow" />}
+{(noindex || SITE_ENV !== 'production') && <meta name="robots" content="noindex, nofollow" />}
 
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="sitemap" href="/sitemap-index.xml" />

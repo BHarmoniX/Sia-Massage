@@ -15,12 +15,14 @@
     "preview": "node ./node_modules/astro/bin/astro.mjs preview",
     "check": "node ./node_modules/astro/bin/astro.mjs check",
     "audit": "npm audit --audit-level=moderate",
-    "verify": "npm run check && npm run audit && npm run build",
+    "verify": "npm run guard && npm run check && npm test && npm run audit && npm run build",
     "start": "node server/node.mjs",
     "setup": "git config core.hooksPath .githooks",
     "guard": "node scripts/guard-base-repo.mjs",
     "new-client": "node scripts/new-client.mjs",
-    "update-base": "git fetch upstream && git merge upstream/main"
+    "update-base": "git fetch upstream && git merge upstream/main",
+    "test": "node --test \"tests/**/*.test.ts\"",
+    "scan-headers": "node scripts/scan-headers.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

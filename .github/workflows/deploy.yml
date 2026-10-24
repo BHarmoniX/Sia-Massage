@@ -1,0 +1,111 @@
+# Deploys CLIENT sites to Cloudflare. Does nothing in the base repo (.illuminara-base).
+#
+#   pull request / any branch → private preview URL (noindex), for the client to approve
+#   push to main              → production, then a live security scan of the real site
+#
+# Needs, in the client repo's Settings → Secrets and variables → Actions:
+#   secrets:   CLOUDFLARE_API_TOKEN   (scoped token, see docs/CLOUDFLARE.md)
+#              CLOUDFLARE_ACCOUNT_ID
+#   variables: PRODUCTION_URL         e.g. https://www.samassage.com.au
+# Runtime secrets (TURNSTILE_SECRET_KEY etc.) live in Cloudflare, not here.
+name: Deploy
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write # to post the preview link on the pull request
+
+# Never run two deploys of the same branch at once; a newer push cancels an older preview.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      WRANGLER_SEND_METRICS: 'false'
+      DEPLOY_TARGET: cloudflare
+      SITE_ENV: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Skip in the base repository
+        id: mode
+        run: |
+          if [ -f .illuminara-base ]; then
+            echo "Base repository: nothing to deploy."
+            echo "client=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "client=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.mode.outputs.client == 'true'
+        with:
+          node-version: 24
+          cache: npm
+
+      - if: steps.mode.outputs.client == 'true'
+        run: npm ci --ignore-scripts
+
+      - name: Verify (type check, attack tests, audit, guarded build)
+        if: steps.mode.outputs.client == 'true'
+        run: npm run verify
+
+      - name: Deploy production
+        if: steps.mode.outputs.client == 'true' && env.SITE_ENV == 'production'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --no-install wrangler deploy --message "${GITHUB_SHA::7}"
+
+      - name: Scan production
+        if: steps.mode.outputs.client == 'true' && env.SITE_ENV == 'production'
+        env:
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+        run: |
+          sleep 20
+          npm run scan-headers -- "$PRODUCTION_URL"
+
+      - name: Deploy preview
+        id: preview
+        if: steps.mode.outputs.client == 'true' && env.SITE_ENV == 'preview'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          # Alias from the branch name: lowercase letters, numbers, dashes only.
+          ALIAS=$(printf '%s' "$BRANCH" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9-' '-' | cut -c1-40 | sed 's/-*$//')
+          npx --no-install wrangler versions upload --preview-alias "$ALIAS" --message "${GITHUB_SHA::7}" | tee upload.log
+          URL=$(grep -oE "https://${ALIAS}-[a-z0-9.-]+\.workers\.dev" upload.log | head -1)
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Scan preview
+        if: steps.preview.outputs.url != ''
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.url }}
+        run: |
+          sleep 10
+          npm run scan-headers -- "$PREVIEW_URL" --preview
+
+      - name: Post preview link
+        if: steps.preview.outputs.url != '' && github.event_name == 'pull_request'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.url }}
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body: `Preview for client approval (hidden from search engines):\n${process.env.PREVIEW_URL}`,
+            });

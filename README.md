@@ -13,6 +13,7 @@ standard.
 - **Hosts**: Cloudflare Pages (default), any Node host, or plain static hosting (Hostinger)
 - **No PHP**, ever
 - Security first: see [docs/SECURITY.md](docs/SECURITY.md). Plan: [docs/PLAN.md](docs/PLAN.md)
+- Deploying: [docs/CLOUDFLARE.md](docs/CLOUDFLARE.md)
 
 ## Base repository vs client repositories
 
@@ -55,7 +56,9 @@ After cloning this repo, run `npm ci` then `npm run setup` once (switches on the
 | `npm run build` | Build for `DEPLOY_TARGET` (default cloudflare), then run the security check |
 | `npm run build:static` | Plain files for Hostinger / Apache (upload `dist/`) |
 | `npm run build:node` / `npm run start` | Build and run on a Node host |
-| `npm run verify` | Type check + dependency audit + guarded build. Run before every deploy. |
+| `npm test` | Attack tests for the form gatekeeper |
+| `npm run scan-headers -- <url>` | Check a live site's security from the outside |
+| `npm run verify` | Guard + type check + tests + audit + guarded build. Runs on every push. |
 
 The scripts call Astro through `node ./node_modules/...` on purpose: the `:` in the
 `Website:App Builds` folder name breaks npm's usual way of finding tools.

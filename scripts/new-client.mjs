@@ -12,7 +12,7 @@
 //              land in the base. Get base improvements later with: npm run update-base
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, rmSync } from 'node:fs';
+import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -52,6 +52,11 @@ git(['remote', 'add', 'origin', clientRepo]);
 
 // Leaving base-repo mode: the client repo may hold design assets.
 rmSync(resolve(target, '.illuminara-base'));
+
+// Each client deploys under its own Cloudflare name, so sites can never overwrite each other.
+const wranglerPath = resolve(target, 'wrangler.jsonc');
+const wrangler = readFileSync(wranglerPath, 'utf8');
+writeFileSync(wranglerPath, wrangler.replace('"name": "illuminara-core-template"', `"name": "${folder}"`));
 git(['add', '-A']);
 git(['commit', '-m', `Start ${folder} from Illuminara Core base`]);
 git(['push', '-u', 'origin', 'main']);

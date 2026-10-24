@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { allowedOrigins, cspDirectives, maxBodyBytes } from './config/security.mjs';
@@ -12,6 +12,13 @@ import { site } from './src/config/site.ts';
 //   node                 → any Node host (VPS, Hostinger Node plan, Docker)
 //   static               → plain files only (Hostinger shared, any Apache host); no live pages
 const target = process.env.DEPLOY_TARGET ?? 'cloudflare';
+
+// Which copy of the site this build is. Anything but `production` is hidden from search
+// engines (noindex header, meta tag and robots.txt), so preview links never get listed.
+const siteEnv = process.env.SITE_ENV ?? 'development';
+if (!['production', 'preview', 'development'].includes(siteEnv)) {
+  throw new Error(`Unknown SITE_ENV "${siteEnv}". Use production, preview or development.`);
+}
 
 /** @param {string} name */
 async function adapterFor(name) {
@@ -59,7 +66,26 @@ export default defineConfig({
   // Shiki highlighting injects inline styles, which the CSP refuses. Prism works with it.
   markdown: { syntaxHighlight: 'prism' },
 
-  integrations: [deployTarget({ target }), sitemap(), securityHeaders()],
+  // Secrets are read on the server at runtime from the host's encrypted settings; they are
+  // never bundled into pages. Astro refuses to build if a secret is imported into browser code.
+  env: {
+    schema: {
+      SITE_ENV: envField.enum({
+        context: 'server',
+        access: 'public',
+        values: ['production', 'preview', 'development'],
+        default: 'development',
+      }),
+      TURNSTILE_SITE_KEY: envField.string({ context: 'client', access: 'public', optional: true }),
+      TURNSTILE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+    },
+  },
+
+  integrations: [
+    deployTarget({ target }),
+    sitemap(),
+    securityHeaders({ indexable: siteEnv === 'production' }),
+  ],
 
   vite: {
     plugins: [tailwindcss()],

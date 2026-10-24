@@ -1,6 +1,7 @@
 // Gatekeeper for pages that run live (`export const prerender = false`).
 // Pre-built pages get the same headers from the host via _headers / .htaccess.
 
+import { SITE_ENV } from 'astro:env/server';
 import { defineMiddleware } from 'astro:middleware';
 import { blockedPathPatterns, maxBodyBytes, securityHeaders } from '../config/security.mjs';
 
@@ -15,6 +16,7 @@ function withSecurityHeaders(response: Response): Response {
     }
     response.headers.set(name, value);
   }
+  if (SITE_ENV !== 'production') response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
   response.headers.delete('X-Powered-By');
   return response;
 }

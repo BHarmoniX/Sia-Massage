@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { SITE_ENV } from 'astro:env/server';
 import { site } from '../config/site';
 
 // Crawlers that collect pages to train AI models. Blocking them does not affect search
@@ -18,6 +19,12 @@ const AI_TRAINING_CRAWLERS = [
 ];
 
 export const GET: APIRoute = () => {
+  // Previews and local builds are never indexed.
+  if (SITE_ENV !== 'production') {
+    return new Response('User-agent: *\nDisallow: /\n', {
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    });
+  }
   const lines = ['User-agent: *', 'Allow: /', 'Disallow: /api/', ''];
   if (site.blockAiTrainingCrawlers) {
     for (const bot of AI_TRAINING_CRAWLERS) lines.push(`User-agent: ${bot}`, 'Disallow: /', '');

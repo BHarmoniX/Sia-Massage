@@ -5,6 +5,8 @@
 // Loosen a rule only per client, only when a feature needs it, and note why in the client's
 // docs/SECURITY-EXCEPTIONS.md.
 
+import { features } from './features.mjs';
+
 /**
  * Extra origins a client site is allowed to talk to. Empty by default: the site may only
  * load from itself. Modules add to these lists when they are switched on (for example the
@@ -21,6 +23,12 @@ export const allowedOrigins = {
   media: [],
   formAction: [],
 };
+
+// Origins opened by switched-on features (config/features.mjs). Exact hosts only.
+if (features.turnstile) {
+  allowedOrigins.script.push('https://challenges.cloudflare.com');
+  allowedOrigins.frame.push('https://challenges.cloudflare.com');
+}
 
 const list = (extra) => ["'self'", ...extra].join(' ');
 
