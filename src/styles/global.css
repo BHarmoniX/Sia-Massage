@@ -36,7 +36,7 @@
 
 /* Layout values (not colours, so not Tailwind theme tokens). */
 :root {
-  --header-height: 4.5rem;
+  --header-height: 4.95rem; /* 4.5rem + 10% */
 }
 
 @layer base {
@@ -144,9 +144,10 @@ header.site-header[data-site-header][data-site-header]::before {
     var(--ear-l) left bottom / var(--fit) var(--fit) no-repeat,
     var(--ear-r) right bottom / var(--fit) var(--fit) no-repeat;
 }
-/* The glass edge, like the footer's: one even 1px line along the whole bottom of the header,
-   straight across and running on, unbroken, round both curves to the sides of the screen.
-   (The curves are drawn as true 1px strokes so they match the straight line exactly.) */
+/* The glass edge, like the footer's: a pale 1px rim on the boundary with a soft 2px band of
+   light just inside it, along the whole bottom of the header, straight across and running
+   on, unbroken, round both curves to the sides of the screen. (The curves are drawn as true
+   strokes so they match the straight edge exactly.) */
 header.site-header[data-site-header][data-site-header]::after {
   --fit: 43.2px;
   content: '';
@@ -154,9 +155,22 @@ header.site-header[data-site-header][data-site-header]::after {
   inset: 0 0 calc(var(--fit) * -1) 0;
   pointer-events: none;
   background:
-    linear-gradient(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.55)) center calc(100% - var(--fit) + 1px) / calc(100% - var(--fit) * 2) 1px no-repeat,
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 43.2 43.2'%3E%3Cpath d='M43.2 .5A42.7 42.7 0 0 0 .5 43.2' fill='none' stroke='%23fff' stroke-opacity='.55'/%3E%3C/svg%3E") left bottom / var(--fit) var(--fit) no-repeat,
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 43.2 43.2'%3E%3Cpath d='M0 .5A42.7 42.7 0 0 1 42.7 43.2' fill='none' stroke='%23fff' stroke-opacity='.55'/%3E%3C/svg%3E") right bottom / var(--fit) var(--fit) no-repeat;
+    linear-gradient(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.55)) center calc(100% - var(--fit)) / calc(100% - var(--fit) * 2) 1px no-repeat,
+    linear-gradient(rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.22)) center calc(100% - var(--fit) - 1px) / calc(100% - var(--fit) * 2) 2px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 43.2 46.2'%3E%3Cpath d='M43.2 2.5A43.7 43.7 0 0 0 -.5 46.2' fill='none' stroke='%23fff' stroke-opacity='.55' stroke-width='1'/%3E%3Cpath d='M43.2 1A45.2 45.2 0 0 0 -2 46.2' fill='none' stroke='%23fff' stroke-opacity='.22' stroke-width='2'/%3E%3C/svg%3E") left bottom / var(--fit) calc(var(--fit) + 3px) no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 43.2 46.2'%3E%3Cpath d='M0 2.5A43.7 43.7 0 0 1 43.7 46.2' fill='none' stroke='%23fff' stroke-opacity='.55' stroke-width='1'/%3E%3Cpath d='M0 1A45.2 45.2 0 0 1 45.2 46.2' fill='none' stroke='%23fff' stroke-opacity='.22' stroke-width='2'/%3E%3C/svg%3E") right bottom / var(--fit) calc(var(--fit) + 3px) no-repeat;
+}
+/* Header text scaled with the taller header (+10%). */
+header.site-header[data-site-header] .site-header__wordmark {
+  font-size: 1.5125rem;
+}
+header.site-header[data-site-header] .site-header__link,
+header.site-header[data-site-header] .site-header__sheet-link {
+  font-size: 1.03rem;
+}
+header.site-header[data-site-header] .site-header__cta {
+  padding: 0.66rem 1.43rem;
+  font-size: 0.9625rem;
 }
 /* Pages start below the fixed header, except where the first section (the home hero) makes
    its own room, so the page can run up behind the glass. */
