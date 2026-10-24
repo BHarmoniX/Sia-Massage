@@ -1,7 +1,12 @@
-# Illuminara Core
+# Illuminara Core — client websites main code base
 
-A secure, production-ready base for Illuminara client websites. Each client gets a new
-front-end design; the security, deployment and Illuminara footer stay standard.
+This is the main adaptable code base for the majority of client builds. This code base is to
+be updated and improved over time to create a dependable, secure and optimised foundation to
+design the clients front-ends on. It must be pushed/pulled to each individual client
+repositories before starting a client site.
+
+Each client gets a new front-end design; the security, deployment and Illuminara footer stay
+standard.
 
 - **Astro 7**, TypeScript (strictest), Tailwind CSS 4
 - **Static, hybrid or fully dynamic**: pages are pre-built unless they opt into running live
