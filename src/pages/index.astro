@@ -3,6 +3,7 @@
 // Photography: Unsplash (free licence); artwork: The Met Open Access (public domain).
 // Full credits in docs/CREDITS.md.
 import Section from '../components/layout/Section.astro';
+import AmbientVideo from '../components/media/AmbientVideo.astro';
 import Img from '../components/media/Img.astro';
 import InkLandscape from '../client/InkLandscape.astro';
 import OnePageLayout from '../layouts/OnePageLayout.astro';
@@ -14,8 +15,10 @@ import hotStones from '../client/photos/hot-stones.jpg';
 import herbalCompress from '../client/photos/herbal-compress.jpg';
 import oilMassage from '../client/photos/oil-massage.jpg';
 import bambooPath from '../client/photos/bamboo-path.jpg';
-import towelCandles from '../client/photos/towel-candles.jpg';
-import mossyRocks from '../client/photos/mossy-rocks.jpg';
+import bambooBasin from '../client/photos/bamboo-basin.jpg';
+import mossWaterfall from '../client/photos/moss-waterfall.jpg';
+import mossRiver from '../client/photos/moss-river.jpg';
+import rainPoster from '../client/photos/rain-leaves-poster.jpg';
 import autumnScroll from '../client/art/streams-mountains-autumn-mist.jpg';
 
 const { business } = site;
@@ -153,6 +156,16 @@ const faqs = [
     </div>
   </Section>
 
+  <!-- ───────────── Rain: a breathing pause ───────────── -->
+  <section class="sia-rain" aria-label="Rain falling on green leaves">
+    <AmbientVideo src="/video/sia-rain-leaves.mp4" poster={rainPoster} class="sia-rain__video" />
+    <div class="sia-rain__veil" aria-hidden="true"></div>
+    <figure class="sia-rain__card glass-3d crystal" data-reveal>
+      <span class="font-han" lang="zh-Hans" aria-hidden="true">雨</span>
+      <blockquote>Listen to the rain.<br />Let the water carry the day away.</blockquote>
+    </figure>
+  </section>
+
   <!-- ───────────── A handscroll unrolls as you scroll ───────────── -->
   <section class="sia-scroll" aria-label="Streams and Mountains in Autumn Mist, a Chinese handscroll">
     <div class="sia-scroll__frame scroll-pan-frame">
@@ -182,7 +195,7 @@ const faqs = [
   <Section id="treatments" labelledby="treatments-title" class="sia-treatments">
     <div class="sia-treatments__backdrop" aria-hidden="true">
       <div class="scroll-drift h-full">
-        <Img src={bambooLight} alt="" sizes="100vw" class="h-full w-full object-cover" />
+        <Img src={mossRiver} alt="" sizes="100vw" class="h-full w-full object-cover" />
       </div>
     </div>
     <div class="sia-treatments__grid">
@@ -206,7 +219,7 @@ const faqs = [
       <ul class="sia-menu" role="list">
         {
           treatments.map((t) => (
-            <li class="sia-menu__card glass-3d crystal" data-treatment={t.image} tabindex="0" data-reveal>
+            <li class="sia-menu__card sia-moss-glass glass-3d crystal" data-treatment={t.image} tabindex="0" data-reveal>
               <h3>
                 {t.name}
                 <span class="font-han" lang="zh-Hans">{t.zh}</span>
@@ -236,6 +249,7 @@ const faqs = [
     <div class="sia-visit__stage" aria-hidden="true">
       <div class="sia-visit__door">
         <Img src={bambooPath} alt="" sizes="100vw" class="h-full w-full object-cover" />
+        <div class="sia-visit__rain"></div>
       </div>
       <p class="sia-visit__threshold">
         <span class="font-han" lang="zh-Hans">入</span>
@@ -248,7 +262,7 @@ const faqs = [
         {
           journey.map((j) => (
             <li class="sia-visit__card notch-host" data-tilt data-reveal>
-              <div class="sia-visit__panel glass-3d crystal notch">
+              <div class="sia-visit__panel sia-moss-glass glass-3d crystal notch">
                 <h3>{j.title}</h3>
                 <p>{j.text}</p>
               </div>
@@ -266,7 +280,7 @@ const faqs = [
   <Section id="faq" labelledby="faq-title" class="sia-faq">
     <div class="sia-faq__grid">
       <figure class="sia-faq__image img-reveal">
-        <Img src={towelCandles} alt="Rolled white towel, candles and a reed diffuser on a pale table" sizes="(min-width: 1024px) 38vw, 100vw" class="h-full w-full object-cover" />
+        <Img src={bambooBasin} alt="Water running from a bamboo spout into a mossy stone basin" sizes="(min-width: 1024px) 38vw, 100vw" class="h-full w-full object-cover" />
       </figure>
       <div>
         <h2 id="faq-title" class="sia-heading" data-reveal>Before you arrive</h2>
@@ -290,7 +304,7 @@ const faqs = [
   <!-- ───────────── Contact: a jigsaw booking card on moss and water ───────────── -->
   <Section id="contact" labelledby="contact-title" class="sia-contact">
     <div class="sia-contact__bg" aria-hidden="true">
-      <Img src={mossyRocks} alt="" sizes="100vw" class="h-full w-full object-cover" />
+      <Img src={mossWaterfall} alt="" sizes="100vw" class="h-full w-full object-cover sia-contact__falls" />
     </div>
     <div class="sia-contact__inner">
       <div class="jigsaw notch-host sia-contact__card" data-reveal>
@@ -329,6 +343,22 @@ const faqs = [
 <style is:global>
   .font-han {
     font-family: var(--font-han);
+  }
+  /* Sia's signature card finish: moss glass (translucent dark-moss frosted crystal). */
+  .sia-moss-glass,
+  .sia-moss-glass.glass-3d {
+    --glass-tint: rgb(47 61 42 / 0.82);
+    --color-text: #f3efe4;
+    --color-muted: #d6dbc9;
+    --color-subtle: #b3bca4;
+    --color-accent: #c3d1a6;
+    --color-accent-strong: #dbe6c2;
+    color: var(--color-text);
+  }
+  .sia-moss-glass.crystal {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.25),
+      0 24px 44px -24px rgb(20 28 18 / 0.75);
   }
   /* Deep moss sections: the same components, re-toned by tokens. */
   .sia-tone-moss {
@@ -552,6 +582,52 @@ const faqs = [
     }
   }
 
+  /* ── Rain interlude ── */
+  .sia-rain {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: clamp(26rem, 70vh, 44rem);
+    overflow: hidden;
+    isolation: isolate;
+    background: #2a3726;
+  }
+  .sia-rain__video {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .sia-rain__veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, #222d1c 0%, rgb(34 45 28 / 0) 22%, rgb(34 45 28 / 0) 75%, #f6f3ec 100%),
+      radial-gradient(60% 60% at 50% 50%, rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.3));
+  }
+  .sia-rain__card {
+    --glass-tint: rgb(246 243 236 / 0.55);
+    --glass-blur: 14px;
+    margin: 0 1.5rem;
+    padding: 2.5rem 3rem;
+    text-align: center;
+  }
+  .sia-rain__card span {
+    font-size: 2.5rem;
+    color: var(--color-accent-strong);
+  }
+  .sia-rain__card blockquote {
+    margin-top: 0.75rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    line-height: 1.3;
+    color: var(--color-text);
+  }
+
   /* ── Handscroll band ── */
   .sia-scroll {
     padding: 2rem 0 3rem;
@@ -599,8 +675,8 @@ const faqs = [
     position: absolute;
     inset: 0;
     z-index: -1;
-    opacity: 0.55;
-    mix-blend-mode: multiply;
+    opacity: 0.5;
+    mix-blend-mode: luminosity;
   }
   .sia-treatments__grid {
     display: grid;
@@ -642,7 +718,6 @@ const faqs = [
     gap: 1rem;
   }
   .sia-menu__card {
-    --glass-tint: rgb(251 249 244 / 0.7);
     --glass-blur: 22px;
     display: flex;
     flex-direction: column;
@@ -770,6 +845,27 @@ const faqs = [
     transform-origin: 50% 70%;
     will-change: transform;
   }
+  /* Soft rain over the bamboo path, falling once you are inside. */
+  .sia-visit__rain {
+    position: absolute;
+    inset: -20% 0 0;
+    background-image:
+      repeating-linear-gradient(100deg, transparent 0 46px, rgb(255 255 255 / 0.16) 46px 47px, transparent 47px 90px),
+      repeating-linear-gradient(100deg, transparent 0 71px, rgb(255 255 255 / 0.1) 71px 72px, transparent 72px 130px);
+    background-size: 100% 220px, 100% 300px;
+    opacity: calc(var(--open) * 0.8);
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sia-visit__rain {
+      animation: sia-rain-fall 0.9s linear infinite;
+    }
+  }
+  @keyframes sia-rain-fall {
+    to {
+      background-position: -40px 220px, -55px 300px;
+    }
+  }
   .sia-visit__door::after {
     content: '';
     position: absolute;
@@ -820,7 +916,6 @@ const faqs = [
     transition-duration: 120ms;
   }
   .sia-visit__panel {
-    --glass-tint: #f6f3ec;
     --glass-blur: 16px;
     height: 100%;
     padding: 3rem 1.75rem 2rem;
@@ -950,15 +1045,18 @@ const faqs = [
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgb(246 243 236 / 0.9), rgb(241 238 229 / 0.97) 70%);
+    background: linear-gradient(180deg, rgb(38 50 31 / 0.35), rgb(38 50 31 / 0.15) 50%, rgb(241 238 229 / 0.9) 100%);
   }
   .sia-contact__inner {
     max-width: 52rem;
     margin: 0 auto;
     padding: 7rem 1.25rem;
   }
+  .sia-contact__falls {
+    object-position: 50% 35%;
+  }
   .sia-contact__card {
-    --jigsaw-field: #f1eee5;
+    --jigsaw-field: #ece8de;
     --jigsaw-piece-w: min(100%, 36rem);
     --jigsaw-piece-h: 5.5rem;
   }

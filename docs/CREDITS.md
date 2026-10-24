@@ -17,8 +17,12 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 | hot-stones.jpg | https://unsplash.com/photos/SMwCQZWayj0 |
 | herbal-compress.jpg | https://unsplash.com/photos/YeekhTXpTgY |
 | oil-massage.jpg | https://unsplash.com/photos/cU53ZFBr3lk |
-| mossy-rocks.jpg | https://unsplash.com/photos/9AekDW5da34 |
-| towel-candles.jpg | https://unsplash.com/photos/W7AyAs7azHc |
+| mossy-rocks.jpg (unused) | https://unsplash.com/photos/9AekDW5da34 |
+| towel-candles.jpg (unused) | https://unsplash.com/photos/W7AyAs7azHc |
+| bamboo-basin.jpg | https://unsplash.com/photos/OqxFh3pBTa4 |
+| moss-waterfall.jpg | https://unsplash.com/photos/A_-cJ3PmB2o |
+| moss-river.jpg | https://unsplash.com/photos/ALrCdq-ui_Q |
+| round-window.jpg (unused, reserved) | https://unsplash.com/photos/s2UiS34ftf8 |
 
 ## Artwork — The Metropolitan Museum of Art, Open Access (public domain, CC0)
 
@@ -42,3 +46,9 @@ Alternatives shortlisted 2026-10-24 (human-made, calm, Asian-infused ambient/ele
 - *Organic Electronica / Cinnamon* by BerryDeep (2:21) — https://pixabay.com/music/electronic-organic-electronicacinnamon-623561/
 
 AI-generated tracks were excluded on purpose: a brand sound should be human-made.
+
+## Video — Pixabay Content License (free commercial use)
+
+| File | Source |
+|---|---|
+| public/video/sia-rain-leaves.mp4 (+ src/client/photos/rain-leaves-poster.jpg) | Rain on leaves — https://pixabay.com/videos/plants-leaves-foliage-rain-water-152800/ (tiny rendition, 4.8 MB) |
