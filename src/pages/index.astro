@@ -251,23 +251,40 @@ const faqs = [
       <div class="sia-visit__door">
         <Img src={bambooPath} alt="" sizes="100vw" class="h-full w-full object-cover" />
       </div>
-      <div class="sia-visit__frame">
-        <svg class="sia-visit__frame-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path class="sia-visit__frame-outer" d="M0 100 V30 A50 30 0 0 1 100 30 V100" />
-          <path class="sia-visit__frame-beads" d="M3.2 100 V30.4 A46.8 27.6 0 0 1 96.8 30.4 V100" />
-          <path class="sia-visit__frame-inner" d="M6 100 V30.8 A44 25.6 0 0 1 94 30.8 V100" />
-        </svg>
-        <!-- Ruyi cloud scroll at the crown -->
-        <svg class="sia-visit__crown" viewBox="-60 -34 120 44">
-          <path d="M-52 4 C-52 -14 -30 -18 -24 -6 C-22 -20 -4 -26 0 -10 C4 -26 22 -20 24 -6 C30 -18 52 -14 52 4" />
-          <path d="M-52 4 C-52 12 -40 14 -34 8 M52 4 C52 12 40 14 34 8" />
-          <path d="M-14 -2 C-10 -12 10 -12 14 -2" />
-          <circle cx="0" cy="2" r="3.2" />
-        </svg>
-        <!-- Fret knots where the arch springs -->
-        <svg class="sia-visit__knot sia-visit__knot--left" viewBox="0 0 24 24"><path d="M4 4 H20 V20 H8 V8 H16 V16 H12" /></svg>
-        <svg class="sia-visit__knot sia-visit__knot--right" viewBox="0 0 24 24"><path d="M20 4 H4 V20 H16 V8 H8 V16 H12" /></svg>
-      </div>
+      <!-- Ornate frame. Its geometry is set by the doorway script from the same numbers
+           that cut the arch, so frame and opening are always exactly the same shape. -->
+      <svg class="sia-visit__frame" data-frame>
+        <path class="sia-frame__outer" data-band="18" />
+        <path id="sia-fret-path" class="sia-frame__guide" data-band="10.5" />
+        <text class="sia-frame__fret" lang="zh-Hans">
+          <textPath href="#sia-fret-path">{'回'.repeat(360)}</textPath>
+        </text>
+        <path class="sia-frame__main" data-band="3.5" />
+        <path class="sia-frame__inner" data-band="-5" />
+
+        <g class="sia-frame__ornament" data-ornament="crown">
+          <path class="sia-frame__wing" d="M-24 -6 C-42 -2 -58 -12 -54 -25 C-51 -35 -38 -34 -40 -24 M24 -6 C42 -2 58 -12 54 -25 C51 -35 38 -34 40 -24" />
+          <path class="sia-frame__ruyi" d="M0 -46 C-15 -46 -22 -33 -15 -24 C-26 -26 -33 -12 -24 -5 C-15 2 -6 -2 0 -9 C6 -2 15 2 24 -5 C33 -12 26 -26 15 -24 C22 -33 15 -46 0 -46 Z" />
+          <circle class="sia-frame__pearl" cx="0" cy="-27" r="5" />
+          <path class="sia-frame__wing" d="M-6 -36 C-3 -32 3 -32 6 -36" />
+        </g>
+        <g class="sia-frame__ornament" data-ornament="bracket-left">
+          <path class="sia-frame__ruyi" d="M0 0 H40 C30 5 26 14 31 23 C21 20 12 25 10 35 C4 25 0 14 0 0 Z" />
+          <path class="sia-frame__wing" d="M10 9 C17 6 23 11 20 17" />
+        </g>
+        <g class="sia-frame__ornament" data-ornament="bracket-right">
+          <path class="sia-frame__ruyi" d="M0 0 H-40 C-30 5 -26 14 -31 23 C-21 20 -12 25 -10 35 C-4 25 0 14 0 0 Z" />
+          <path class="sia-frame__wing" d="M-10 9 C-17 6 -23 11 -20 17" />
+        </g>
+        <g class="sia-frame__ornament" data-ornament="plinth-left">
+          <path class="sia-frame__ruyi" d="M-16 0 V-14 H-11 V-26 H11 V-14 H16 V0 Z" />
+          <path class="sia-frame__wing" d="M-11 -14 H11" />
+        </g>
+        <g class="sia-frame__ornament" data-ornament="plinth-right">
+          <path class="sia-frame__ruyi" d="M-16 0 V-14 H-11 V-26 H11 V-14 H16 V0 Z" />
+          <path class="sia-frame__wing" d="M-11 -14 H11" />
+        </g>
+      </svg>
       <p class="sia-visit__threshold">
         <span class="font-han" lang="zh-Hans">入</span>
         <span class="sia-visit__threshold-text">Step inside</span>
@@ -847,7 +864,7 @@ const faqs = [
     position: absolute;
     inset: 0;
     clip-path: inset(
-      calc(var(--closed) * 18%) calc(var(--closed) * 32%) 0 calc(var(--closed) * 32%)
+      calc(var(--closed) * 24%) calc(var(--closed) * 32%) 0 calc(var(--closed) * 32%)
         round calc(var(--closed) * 50%) calc(var(--closed) * 50%) 0 0 / calc(var(--closed) * 30%)
         calc(var(--closed) * 30%) 0 0
     );
@@ -865,79 +882,63 @@ const faqs = [
     background: linear-gradient(180deg, rgb(20 28 18 / 0.5), rgb(20 28 18 / 0.15) 45%, rgb(20 28 18 / 0.55));
     opacity: var(--open);
   }
-  /* Ornate frame: antique gold double line with beads, ruyi cloud crown, fret knots.
-     Sits exactly around the closed arch and fades as you step through. */
+  /* Ornate frame: gilded moulding (bold band + fine lines), a 回 key-fret border, a ruyi
+     cloud crown, cloud-scroll brackets and stepped plinths, all in antique gold. */
   .sia-visit__frame {
-    --frame-gold: #cdb87f;
-    --frame-pad: 14px;
-    position: absolute;
-    top: calc(18% - var(--frame-pad));
-    bottom: 0;
-    left: calc(32% - var(--frame-pad));
-    right: calc(32% - var(--frame-pad));
-    opacity: calc(1 - var(--open) * 3);
-    pointer-events: none;
-  }
-  .sia-visit__frame-lines {
+    --gold: #c9b06a;
+    --gold-deep: #9c8446;
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     overflow: visible;
+    pointer-events: none;
     fill: none;
   }
-  .sia-visit__frame-outer,
-  .sia-visit__frame-inner {
-    stroke: var(--frame-gold);
-    stroke-width: 1.5;
-    vector-effect: non-scaling-stroke;
+  .sia-frame__outer {
+    stroke: var(--gold);
+    stroke-width: 1.6;
   }
-  .sia-visit__frame-inner {
-    stroke-width: 1;
-    opacity: 0.7;
+  .sia-frame__main {
+    stroke: var(--gold);
+    stroke-width: 6;
+    filter: drop-shadow(0 1px 0 rgb(0 0 0 / 0.35));
   }
-  .sia-visit__frame-beads {
-    stroke: var(--frame-gold);
-    stroke-width: 2.5;
-    stroke-linecap: round;
-    stroke-dasharray: 0 9;
-    vector-effect: non-scaling-stroke;
+  .sia-frame__inner {
+    stroke: var(--gold);
+    stroke-width: 1.2;
     opacity: 0.85;
   }
-  .sia-visit__crown {
-    position: absolute;
-    top: -26px;
-    left: 50%;
-    width: 120px;
-    transform: translateX(-50%);
-    overflow: visible;
-    fill: none;
-    stroke: var(--frame-gold);
-    stroke-width: 2;
-    stroke-linecap: round;
-  }
-  .sia-visit__crown circle {
-    fill: var(--frame-gold);
+  .sia-frame__guide {
     stroke: none;
   }
-  .sia-visit__knot {
-    position: absolute;
-    top: 30%;
-    width: 22px;
-    height: 22px;
-    fill: none;
-    stroke: var(--frame-gold);
-    stroke-width: 2;
+  .sia-frame__fret {
+    font-family: var(--font-han);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    fill: var(--gold);
+    dominant-baseline: central;
   }
-  .sia-visit__knot--left {
-    left: -11px;
+  .sia-frame__ruyi {
+    fill: color-mix(in oklab, var(--gold) 28%, #26321f);
+    stroke: var(--gold);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
   }
-  .sia-visit__knot--right {
-    right: -11px;
+  .sia-frame__wing {
+    stroke: var(--gold);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+  .sia-frame__pearl {
+    fill: var(--gold);
+  }
+  .sia-frame__ornament {
+    transition: opacity 200ms linear;
   }
   .sia-visit__threshold {
     position: absolute;
-    top: calc(18% - 5.4rem);
+    top: max(0.75rem, calc(24% - 8rem));
     left: 50%;
     display: flex;
     align-items: baseline;
@@ -1190,23 +1191,81 @@ const faqs = [
 </style>
 
 <script>
-  // Doorway: map scroll position to --open (0 = arch standing on the page, 1 = inside).
+  // Doorway: scroll position → how far you have stepped in (0 = arch on the page, 1 =
+  // inside). The arch's geometry is computed here once per frame and drives both the
+  // photograph's opening (clip-path) and every line of the ornate frame, so they are always
+  // exactly the same shape and grow together.
   const doorway = document.querySelector<HTMLElement>('[data-doorway]');
-  if (doorway && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const stage = doorway?.querySelector<HTMLElement>('.sia-visit__stage');
+  const door = doorway?.querySelector<HTMLElement>('.sia-visit__door');
+  const frameSvg = doorway?.querySelector<SVGSVGElement>('[data-frame]');
+
+  if (doorway && stage && door && frameSvg) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const bands = Array.from(frameSvg.querySelectorAll<SVGPathElement>('[data-band]'));
+    const ornament = (name: string) =>
+      frameSvg.querySelector<SVGGElement>(`[data-ornament="${name}"]`)!;
+    const crown = ornament('crown');
+    const brackets = [ornament('bracket-left'), ornament('bracket-right')];
+    const plinths = [ornament('plinth-left'), ornament('plinth-right')];
+
+    // Arch outline: straight posts, elliptical shoulders, a flat run between them
+    // (zero-length when the shoulders meet at the crown).
+    const archPath = (x0: number, x1: number, y0: number, y1: number, rx: number, ry: number) =>
+      `M${x0} ${y1} L${x0} ${y0 + ry} A${rx} ${ry} 0 0 1 ${x0 + rx} ${y0} ` +
+      `L${x1 - rx} ${y0} A${rx} ${ry} 0 0 1 ${x1} ${y0 + ry} L${x1} ${y1}`;
+
     let queued = false;
     const update = () => {
       queued = false;
       const top = doorway.getBoundingClientRect().top;
-      const open = Math.min(1, Math.max(0, -top / (window.innerHeight * 0.65)));
+      const open = reduced ? 1 : Math.min(1, Math.max(0, -top / (window.innerHeight * 0.65)));
       doorway.style.setProperty('--open', open.toFixed(3));
-    };
-    update();
-    addEventListener('scroll', () => {
-      if (!queued) {
-        queued = true;
-        requestAnimationFrame(update);
+
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      const closed = 1 - open;
+      const x0 = w * 0.32 * closed;
+      const x1 = w - x0;
+      const y0 = h * 0.24 * closed;
+      const y1 = h;
+      const rx = (x1 - x0) * 0.5 * closed;
+      const ry = (y1 - y0) * 0.3 * closed;
+
+      door.style.clipPath =
+        open >= 1 ? 'none' : `path("${archPath(x0, x1, y0, y1, rx, ry)} L${x0} ${y1} Z")`;
+
+      // Each band runs parallel to the opening at a fixed distance (negative = inside).
+      for (const band of bands) {
+        const d = Number(band.dataset.band);
+        band.setAttribute(
+          'd',
+          archPath(x0 - d, x1 + d, y0 - d, y1 + 30, rx > 0 ? rx + d : 0, ry > 0 ? ry + d : 0),
+        );
       }
-    }, { passive: true });
+
+      // Ornaments scale with the arch and fade as you pass through it.
+      const s = Math.min(1.6, Math.max(0.6, (x1 - x0) / 340));
+      const fade = String(Math.max(0, 1 - open * 2.2));
+      crown.setAttribute('transform', `translate(${w / 2} ${y0 - 18}) scale(${s})`);
+      brackets[0]!.setAttribute('transform', `translate(${x0 + 3} ${y0 + ry}) scale(${s})`);
+      brackets[1]!.setAttribute('transform', `translate(${x1 - 3} ${y0 + ry}) scale(${s})`);
+      plinths[0]!.setAttribute('transform', `translate(${x0 - 7} ${y1}) scale(${s})`);
+      plinths[1]!.setAttribute('transform', `translate(${x1 + 7} ${y1}) scale(${s})`);
+      for (const g of [crown, ...brackets, ...plinths]) g.style.opacity = fade;
+    };
+
+    update();
+    addEventListener(
+      'scroll',
+      () => {
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
     addEventListener('resize', update, { passive: true });
   }
 
