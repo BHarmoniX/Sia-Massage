@@ -387,6 +387,97 @@
   border-top-right-radius: 0;
 }
 
+/* ── Crystal: frosted glass with a prismatic edge and a sweeping light facet ──────
+
+  <div class="glass-3d crystal">…</div>
+  The hairline edge catches colour like cut crystal; on hover a band of light sweeps
+  across the surface. Works on any background (photos look best).
+*/
+
+.crystal {
+  isolation: isolate;
+  background-image:
+    linear-gradient(115deg, transparent 38%, color-mix(in oklab, white 42%, transparent) 48%,
+      transparent 58%),
+    linear-gradient(135deg, color-mix(in oklab, white 34%, transparent), transparent 42%),
+    linear-gradient(color-mix(in oklab, var(--glass-tint, var(--color-surface)) 58%, transparent),
+      color-mix(in oklab, var(--glass-tint, var(--color-surface)) 58%, transparent));
+  background-size: 260% 100%, 100% 100%, 100% 100%;
+  background-position: 130% 0, 0 0, 0 0;
+  background-repeat: no-repeat;
+  transition:
+    background-position 1.4s var(--depth-ease),
+    transform var(--depth-speed) var(--depth-ease),
+    box-shadow var(--depth-speed) var(--depth-ease);
+}
+.crystal:hover {
+  background-position: -30% 0, 0 0, 0 0;
+}
+/* Prismatic hairline edge (a 1px ring masked out of a conic gradient). */
+.crystal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 210deg,
+    color-mix(in oklab, white 85%, transparent),
+    color-mix(in oklab, #bfe8dc 70%, transparent),
+    color-mix(in oklab, white 10%, transparent),
+    color-mix(in oklab, #e9d8f5 65%, transparent),
+    color-mix(in oklab, #d6e8fb 70%, transparent),
+    color-mix(in oklab, white 85%, transparent)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+/* ── Jigsaw cut-outs: a true circular opening in a card's edge ────────────────────
+
+  <li class="notch-host">
+    <div class="glass-3d crystal notch">…</div>        opening at the top centre
+    <span class="notch-piece glass-3d crystal">一</span> the fitted piece in the opening
+  </li>
+
+  Tune: --notch-r (opening radius), --notch-x / --notch-y (position, e.g. 100% 0 for the
+  top-right corner), --notch-gap (air gap around the piece, default 0.25rem).
+  The opening is real: whatever is behind the card shows through it.
+*/
+
+.notch-host {
+  --notch-r: 1.9rem;
+  --notch-x: 50%;
+  --notch-y: 0%;
+  --notch-gap: 0.25rem;
+  position: relative;
+}
+.notch {
+  -webkit-mask: radial-gradient(circle var(--notch-r) at var(--notch-x) var(--notch-y),
+      transparent calc(var(--notch-r) - 0.5px), #000 var(--notch-r));
+  mask: radial-gradient(circle var(--notch-r) at var(--notch-x) var(--notch-y),
+      transparent calc(var(--notch-r) - 0.5px), #000 var(--notch-r));
+}
+.notch-piece {
+  position: absolute;
+  left: var(--notch-x);
+  top: var(--notch-y);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: calc((var(--notch-r) - var(--notch-gap)) * 2);
+  height: calc((var(--notch-r) - var(--notch-gap)) * 2);
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+}
+
 /* Reduced motion: keep the light and depth styling, drop movement. */
 @media (prefers-reduced-motion: reduce) {
   .card-3d,
