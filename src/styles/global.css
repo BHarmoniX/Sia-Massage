@@ -348,6 +348,8 @@ html.sia-capture header.site-header[data-site-header][data-site-header] {
 html.sia-capture .sia-visit__stage {
   position: relative !important;
   top: 0 !important;
+}
+
 /* ── Capture guard (see src/scripts/capture-guard.ts) ─────────────────────────────────────
    During a full-page screenshot of a live site: the page content and header are hidden (the
    layout keeps its size), the Illuminara footer shows only its blank frosted glass, and the
