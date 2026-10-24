@@ -28,11 +28,9 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 
 | File (src/client/art) | Work |
 |---|---|
-| streams-mountains-autumn-mist.jpg | Bian Wenyu, *Streams and Mountains in Autumn Mist*, 1634, handscroll, ink on paper. Met object 49095. Cropped to remove the mounting. |
 | summer-mountains.jpg (unused) | Qu Ding, *Summer Mountains*, ca. 1050, handscroll. Met object 39915. |
 | mountain-market-clearing-mist.jpg (unused) | Xia Gui, *Mountain Market, Clearing Mist*, early 13th century, album leaf. Met object 36005. |
 
-The handscroll is credited on the page beneath the scroll band (good practice, not required).
 
 ## Music — Pixabay Content License (free commercial use, no attribution required)
 

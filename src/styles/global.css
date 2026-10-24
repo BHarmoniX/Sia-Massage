@@ -85,16 +85,22 @@
   top: 1rem;
 }
 
-/* Sia: the footer is a deep moss band; the base footer follows these tokens unchanged. */
+/* Sia: footer palette; the base footer follows these tokens unchanged. */
 .ill-footer {
-  --color-bg: #2f3d2a;
-  --color-surface: #384833;
-  --color-border: #4a5c42;
-  --color-text: #f3efe4;
-  --color-muted: #d6dac8;
-  --color-subtle: #a9b39b;
-  --color-accent: #c3d1a6;
-  --color-accent-strong: #dae5c1;
+  /* Sia: the footer is frosted sage glass (like the header) with dark moss text. */
+  --color-bg: #d6dfc8;
+  --color-surface: #d6dfc8;
+  --color-border: rgb(255 255 255 / 0.5);
+  --color-text: #27322a;
+  --color-muted: #3f4c3d;
+  --color-subtle: #55624f;
+  --color-accent: #5c7a4c;
+  --color-accent-strong: #46613a;
+  --footer-glass: rgb(218 226 205 / 0.9);
+  --footer-glass-deep: rgb(196 208 178 / 0.94);
+  /* No colour block: the contact section's waterfall runs behind the footer glass, and the
+     jigsaw cut-out shows the photograph through it. */
+  --footer-field: transparent;
 }
 
 /* Sia: the header is fixed in place on every browser and frosted sage glass from the very top
@@ -117,6 +123,126 @@ header.site-header[data-site-header][data-site-header] {
 }
 body {
   padding-top: var(--header-height);
+}
+
+/* Sia: the footer runs nearly edge to edge (a slim gap at the sides) and sits flush on the
+   bottom of the page, with square bottom corners. (The tag in each selector outranks the base
+   footer's own styles.) */
+footer.ill-footer {
+  padding-inline: 0.3rem;
+  padding-bottom: 0;
+}
+/* Keep the legal line inside the piece's inner glass line, under its own fine rule. */
+footer.ill-footer {
+  --footer-piece-h: 6.7rem;
+}
+footer.ill-footer .ill-footer__piece {
+  padding-bottom: 1.35rem;
+}
+footer.ill-footer .ill-footer__stage {
+  max-width: none;
+}
+footer.ill-footer .ill-footer__glass,
+footer.ill-footer .ill-footer__glass.ill-footer__glass--piece {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-width: 0;
+}
+
+/* Sia footer details on the sage glass: buttons in deeper sage recesses, and crisp
+   dark text (a light edge below instead of the base footer's dark etch, which smudges dark
+   text). The tag in each selector outranks the base footer's own styles. */
+footer.ill-footer .ill-footer__contact a,
+footer.ill-footer .ill-footer__contact span,
+footer.ill-footer .ill-footer__legal,
+footer.ill-footer .ill-footer__tagline {
+  color: #24301f;
+  font-weight: 450;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.4);
+}
+footer.ill-footer .ill-footer__contact a:hover {
+  color: #46613a;
+}
+footer.ill-footer .ill-footer__etch-icon {
+  color: #3f5634;
+  filter: none;
+}
+footer.ill-footer .ill-footer__menu,
+footer.ill-footer .ill-footer__well {
+  background: #aebd98;
+  box-shadow:
+    inset 0 3px 7px rgb(39 50 42 / 0.35),
+    inset 0 -1px 0 rgb(255 255 255 / 0.45);
+}
+/* Menu buttons: frosted white glass with dark moss text. */
+footer.ill-footer .ill-footer__pill {
+  color: #27322a;
+  background: linear-gradient(170deg, rgb(255 255 255 / 0.62), rgb(255 255 255 / 0.28) 70%, rgb(255 255 255 / 0.36));
+  backdrop-filter: blur(10px) saturate(1.3);
+  -webkit-backdrop-filter: blur(10px) saturate(1.3);
+  box-shadow:
+    0 2px 6px rgb(20 28 18 / 0.2),
+    inset 0 1px 0 rgb(255 255 255 / 0.85),
+    inset 0 0 0 1px rgb(255 255 255 / 0.5);
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.4);
+}
+footer.ill-footer .ill-footer__pill:hover,
+footer.ill-footer .ill-footer__menu[open] .ill-footer__pill {
+  color: #46613a;
+  box-shadow:
+    0 0 18px rgb(255 255 255 / 0.45),
+    0 2px 6px rgb(20 28 18 / 0.2),
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    inset 0 0 0 1px rgb(255 255 255 / 0.65);
+}
+/* Social buttons: the moss green of the "Call to book" button. */
+footer.ill-footer .ill-footer__social {
+  color: #f6f3ec;
+  background: linear-gradient(170deg, #6d8c5b, #4f6b41);
+  box-shadow:
+    0 2px 6px rgb(20 28 18 / 0.35),
+    inset 0 1px 0 rgb(255 255 255 / 0.22);
+}
+footer.ill-footer a.ill-footer__social:hover,
+footer.ill-footer a.ill-footer__social:focus-visible {
+  color: #ffffff;
+  box-shadow:
+    0 0 18px rgb(92 122 76 / 0.5),
+    0 2px 6px rgb(20 28 18 / 0.35),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
+}
+footer.ill-footer .ill-footer__social-icon {
+  filter: none;
+}
+
+/* Sia: the light (ghost) buttons are frosted glass. The blur gives a button its own layer, so
+   its carved hole is drawn as a recessed ring around the glass rather than a patch behind it. */
+.btn-3d.btn-3d--ghost {
+  --btn-text: #27322a;
+  background:
+    radial-gradient(110px circle at var(--mx) var(--my), rgb(255 255 255 / calc(var(--btn-hl) * 0.45)), transparent 60%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.14) 65%, rgb(255 255 255 / 0.24));
+  backdrop-filter: blur(8px) saturate(1.6);
+  -webkit-backdrop-filter: blur(8px) saturate(1.6);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    inset 0 0 0 1px rgb(255 255 255 / 0.55),
+    0 6px 14px -8px rgb(39 50 42 / 0.35);
+}
+.btn-3d.btn-3d--ghost:hover,
+.btn-3d.btn-3d--ghost:focus-visible {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.95),
+    inset 0 0 0 1px rgb(255 255 255 / 0.7),
+    0 8px 18px -8px rgb(39 50 42 / 0.35),
+    0 0 22px -4px rgb(255 255 255 / 0.6);
+}
+.btn-3d.btn-3d--ghost::after {
+  background: none;
+  border: var(--hole-gap) solid color-mix(in oklab, var(--color-bg) 80%, black);
+  border-top-color: color-mix(in oklab, var(--color-bg) 68%, black);
+  border-bottom-color: color-mix(in oklab, var(--color-bg) 88%, black);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.3);
 }
 
 body {

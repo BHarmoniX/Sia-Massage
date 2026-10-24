@@ -19,7 +19,6 @@ import bambooBasin from '../client/photos/bamboo-basin.jpg';
 import mossWaterfall from '../client/photos/moss-waterfall.jpg';
 import mossRiver from '../client/photos/moss-river.jpg';
 import rainPoster from '../client/photos/rain-leaves-poster.jpg';
-import autumnScroll from '../client/art/streams-mountains-autumn-mist.jpg';
 
 const { business } = site;
 const phone = business.phone!;
@@ -181,11 +180,8 @@ const faqs = [
     </figure>
   </section>
 
-  <!-- ───────────── A handscroll unrolls as you scroll ───────────── -->
-  <section class="sia-scroll" aria-label="Streams and Mountains in Autumn Mist, a Chinese handscroll">
-    <div class="sia-scroll__frame scroll-pan-frame">
-      <Img src={autumnScroll} alt="Ink landscape of misty mountains, willows and a fisherman’s boat, painted on paper" sizes="200vw" widths={[1200, 2000]} class="scroll-pan sia-scroll__img" />
-    </div>
+  <!-- ───────────── Colour break: moss washes from the rain into the treatments ───────────── -->
+  <section class="sia-scroll" aria-hidden="true">
     <svg class="sia-colourbreak" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id="sia-break-a" x1="0" x2="1" y1="0" y2="0">
@@ -520,6 +516,9 @@ const faqs = [
   /* ── Hero ── */
   .sia-hero {
     position: relative;
+    /* Its own layer stack, so the buttons' carved holes (drawn just behind each button) sit
+       above the hero's background rather than under it. */
+    isolation: isolate;
     overflow: hidden;
     min-height: calc(100dvh - var(--header-height));
     /* A gentle sage tone instead of plain paper: deeper toward the land, lighter up high. */
@@ -823,7 +822,7 @@ const faqs = [
     inset: 0;
     z-index: -1;
     background:
-      linear-gradient(180deg, #222d1c 0%, rgb(34 45 28 / 0) 22%, rgb(34 45 28 / 0) 75%, #f6f3ec 100%),
+      linear-gradient(180deg, #222d1c 0%, rgb(34 45 28 / 0) 22%, rgb(34 45 28 / 0) 75%, #26321f 100%),
       radial-gradient(60% 60% at 50% 50%, rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.3));
   }
   .sia-rain__card {
@@ -846,20 +845,10 @@ const faqs = [
     color: var(--color-text);
   }
 
-  /* ── Handscroll band ── */
+  /* ── Colour break band ── */
   .sia-scroll {
-    padding: 2rem 0 3rem;
-  }
-  .sia-scroll__frame {
-    height: clamp(16rem, 42vh, 26rem);
-    border-block: 1px solid var(--color-border);
-    background: #ece5d6;
-  }
-  .sia-scroll__img {
-    --pan-width: 210%;
-    --pan-ratio: 2.1;
-    width: var(--pan-width);
-    filter: sepia(0.15) saturate(0.8);
+    /* Runs straight from the rain above into the treatments' sage below: no paper gaps. */
+    background: #e3e8d9;
   }
   /* Stylised colour break: layered moss-to-sage ink washes that drip from the scroll. */
   .sia-colourbreak {
@@ -1199,10 +1188,14 @@ const faqs = [
     padding: 3rem 1.75rem 2rem;
     text-align: center;
   }
-  .sia-visit__card .notch-piece {
+  /* The same deep moss as the contact card's 约 (this section's own accent is pale sage). */
+  .sia-visit__card .notch-piece.glass-3d.crystal {
     --glass-tint: #f6f3ec;
-    font-size: 1.5rem;
-    color: var(--color-accent-strong);
+    font-size: 1.9rem;
+    color: #46613a;
+    /* Nearly opaque over the dark section, so it reads like the contact card's light seal. */
+    background: rgb(246 243 236 / 0.9);
+    background-image: none;
   }
   .sia-visit__card h3 {
     font-family: var(--font-display);
@@ -1309,10 +1302,14 @@ const faqs = [
   }
 
   /* ── Contact: jigsaw on moss ── */
+  /* The contact section reaches down behind the footer (its height is measured below), so
+     the waterfall continues under the footer's glass. */
   .sia-contact {
     position: relative;
     isolation: isolate;
     overflow: hidden;
+    padding-bottom: var(--sia-footer-h, 14rem);
+    margin-bottom: calc(-1 * var(--sia-footer-h, 14rem));
   }
   .sia-contact__bg {
     position: absolute;
@@ -1323,7 +1320,7 @@ const faqs = [
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgb(38 50 31 / 0.35), rgb(38 50 31 / 0.15) 50%, rgb(241 238 229 / 0.9) 100%);
+    background: linear-gradient(180deg, rgb(38 50 31 / 0.35), rgb(38 50 31 / 0.15) 45%, rgb(38 50 31 / 0.4) 100%);
   }
   .sia-contact__inner {
     max-width: 52rem;
@@ -1406,6 +1403,16 @@ const faqs = [
 </style>
 
 <script>
+  // The contact section's waterfall runs behind the footer: keep the overlap equal to the
+  // footer's height as it changes with the screen size.
+  const footerEl = document.querySelector<HTMLElement>('.ill-footer');
+  if (footerEl) {
+    const setFooterHeight = () =>
+      document.documentElement.style.setProperty('--sia-footer-h', `${footerEl.offsetHeight}px`);
+    setFooterHeight();
+    new ResizeObserver(setFooterHeight).observe(footerEl);
+  }
+
   // Doorway: scroll position → how far you have stepped in (0 = arch standing in the wall,
   // 1 = through it). One geometry draws the photograph's opening and both border lines, so
   // they are always the same shape; stepping in scales it about the ground at the centre.
