@@ -25,7 +25,18 @@
   --glow-accent: 0 0 24px color-mix(in oklab, var(--color-accent) 35%, transparent);
 }
 
+/* Layout values (not colours, so not Tailwind theme tokens). */
+:root {
+  --header-height: 4.5rem;
+}
+
 @layer base {
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
   html {
     color-scheme: dark;
     background: var(--color-bg);

@@ -1,0 +1,25 @@
+---
+// Layout for one-page sites (and the separate pages around them, such as legal pages):
+// the standard header with section navigation and scroll-spy, plus the Illuminara footer.
+// Multi-page sites use the same header; the scroll-spy simply finds no sections.
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  hideFooter?: boolean;
+}
+---
+
+<BaseLayout {...Astro.props}>
+  <slot name="head" slot="head" />
+  <SiteHeader slot="header" />
+  <slot />
+</BaseLayout>
+
+<script>
+  import '../scripts/one-page.ts';
+</script>

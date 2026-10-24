@@ -1,7 +1,7 @@
 ---
 // Standard developer-credit page on every client site, linked from the footer's
 // "Digital Services" menu. Content comes from src/config/studio.ts (base-owned).
-import BaseLayout from '../layouts/BaseLayout.astro';
+import OnePageLayout from '../layouts/OnePageLayout.astro';
 import { site } from '../config/site';
 import { studio } from '../config/studio';
 
@@ -25,7 +25,7 @@ const services = [
 ];
 ---
 
-<BaseLayout
+<OnePageLayout
   title={`Digital services by ${studio.name}`}
   description={`${site.name}'s website was designed and built by ${studio.name}.`}
 >
@@ -68,4 +68,4 @@ const services = [
       }
     </div>
   </section>
-</BaseLayout>
+</OnePageLayout>

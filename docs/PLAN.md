@@ -89,7 +89,9 @@ Hostinger supported for static sites with a hardened `.htaccess`.
 3. ✅ Illuminara footer + client config + design tokens — done 2026-10-24. Merged Sa + Rise
    layout, config-driven (contact, hours, logo, social, menus), Digital Services credit page,
    ABN checksum, works without JS, keyboard accessible, verified desktop + mobile.
-4. Page shells + legal templates
+4. Page shells + legal templates — one-page shell done 2026-10-24 (header, mobile menu,
+   scroll-spy, Section; verified desktop + mobile). Hostinger SSH deploy route added.
+   Legal templates next.
 5. Experience modules
 6. Business modules
 7. Rebuild Sa Massage on the base as the first client, in a NEW repo (decided 2026-10-24).

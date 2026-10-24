@@ -1,0 +1,271 @@
+---
+// Standard site header: brand, navigation, optional call-to-action. Styled only with design
+// tokens, so each client's look comes from its tokens (or a client can replace this file).
+// The mobile menu is a native <details> element: it works without JavaScript.
+// On one-page sites, '#section' links become '/#section' on every other page.
+
+import { site } from '../../config/site';
+
+const onHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+const resolve = (href: string) => (href.startsWith('#') && !onHome ? `/${href}` : href);
+
+const links = site.nav.map((l) => ({ ...l, href: resolve(l.href) }));
+const cta = site.cta ? { ...site.cta, href: resolve(site.cta.href) } : undefined;
+---
+
+<header class="site-header" data-site-header>
+  <div class="site-header__bar">
+    <a href="/" class="site-header__brand" aria-label={`${site.name} home`}>
+      {
+        site.logo ? (
+          <img
+            src={site.logo.src}
+            alt=""
+            width={site.logo.width}
+            height={site.logo.height}
+            class="site-header__logo"
+            fetchpriority="high"
+          />
+        ) : (
+          <span class="site-header__wordmark">{site.name}</span>
+        )
+      }
+    </a>
+
+    <nav class="site-header__nav" aria-label="Main">
+      <ul role="list">
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} class="site-header__link" data-nav-link>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      {cta && <a href={cta.href} class="site-header__cta">{cta.label}</a>}
+    </nav>
+
+    <details class="site-header__mobile" data-mobile-menu>
+      <summary class="site-header__toggle" aria-label="Menu">
+        <span class="site-header__toggle-bars" aria-hidden="true"></span>
+      </summary>
+      <nav class="site-header__sheet" aria-label="Main (mobile)">
+        <ul role="list">
+          {
+            links.map((l) => (
+              <li>
+                <a href={l.href} class="site-header__sheet-link" data-nav-link>
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        {cta && <a href={cta.href} class="site-header__cta site-header__cta--block">{cta.label}</a>}
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color 300ms ease,
+      border-color 300ms ease,
+      backdrop-filter 300ms ease;
+  }
+  .site-header[data-scrolled] {
+    background: color-mix(in oklab, var(--color-bg) 82%, transparent);
+    border-bottom-color: var(--color-border);
+    backdrop-filter: blur(12px);
+  }
+
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    max-width: 80rem;
+    height: var(--header-height);
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .site-header__logo {
+    height: calc(var(--header-height) - 1.75rem);
+    width: auto;
+  }
+  .site-header__wordmark {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    letter-spacing: 0.04em;
+    color: var(--color-text);
+  }
+
+  .site-header__nav {
+    display: none;
+    align-items: center;
+    gap: 2rem;
+  }
+  .site-header__nav ul {
+    display: flex;
+    gap: 1.75rem;
+  }
+
+  .site-header__link,
+  .site-header__sheet-link {
+    position: relative;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+    transition: color 200ms ease;
+  }
+  .site-header__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35rem;
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transition: transform 300ms ease;
+  }
+  .site-header__link:hover,
+  .site-header__link[aria-current],
+  .site-header__sheet-link[aria-current] {
+    color: var(--color-text);
+  }
+  .site-header__link:hover::after,
+  .site-header__link[aria-current]::after {
+    transform: scaleX(1);
+  }
+
+  .site-header__cta {
+    display: inline-block;
+    padding: 0.55rem 1.25rem;
+    border-radius: 9999px;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition:
+      box-shadow 200ms ease,
+      background-color 200ms ease;
+  }
+  .site-header__cta:hover {
+    background: var(--color-accent-strong);
+    box-shadow: var(--glow-accent);
+  }
+  .site-header__cta--block {
+    display: block;
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .site-header__toggle {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .site-header__toggle::-webkit-details-marker {
+    display: none;
+  }
+  .site-header__toggle-bars,
+  .site-header__toggle-bars::before,
+  .site-header__toggle-bars::after {
+    display: block;
+    width: 1.375rem;
+    height: 1.5px;
+    background: var(--color-text);
+    transition: transform 250ms ease;
+  }
+  .site-header__toggle-bars {
+    position: relative;
+  }
+  .site-header__toggle-bars::before,
+  .site-header__toggle-bars::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+  .site-header__toggle-bars::before {
+    top: -6px;
+  }
+  .site-header__toggle-bars::after {
+    top: 6px;
+  }
+  .site-header__mobile[open] .site-header__toggle-bars {
+    background: transparent;
+  }
+  .site-header__mobile[open] .site-header__toggle-bars::before {
+    transform: translateY(6px) rotate(45deg);
+  }
+  .site-header__mobile[open] .site-header__toggle-bars::after {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .site-header__sheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--header-height);
+    padding: 1.25rem 1.5rem 1.75rem;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .site-header__sheet ul {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .site-header__sheet-link {
+    display: block;
+    padding: 0.6rem 0;
+    font-size: 1.0625rem;
+  }
+
+  @media (min-width: 768px) {
+    .site-header__nav {
+      display: flex;
+    }
+    .site-header__mobile {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const menu = document.querySelector<HTMLDetailsElement>('[data-mobile-menu]');
+
+  // Solid background once the page scrolls away from the top.
+  if (header) {
+    const update = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }
+
+  // Close the mobile menu after choosing a link, on Escape, or on outside click.
+  if (menu) {
+    menu.addEventListener('click', (e) => {
+      if (e.target instanceof HTMLAnchorElement) menu.open = false;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (menu.open && e.target instanceof Node && !menu.contains(e.target)) menu.open = false;
+    });
+  }
+</script>
