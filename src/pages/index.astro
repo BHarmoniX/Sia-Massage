@@ -117,27 +117,29 @@ const faqs = [
 
     <div class="sia-hero__grid">
       <div class="sia-hero__copy" data-reveal>
-        <span class="sia-hero__seal font-han" lang="zh-Hans" aria-hidden="true">静</span>
         <h1 id="hero-title" class="sia-display">
           Sia<br /><em>Massage</em>
         </h1>
         <p class="sia-hero__lede">
           Traditional Asian relaxation massage in a quiet room, with unhurried hands. An hour that belongs only to you.
         </p>
-        <div class="sia-hero__actions">
-          <a href="#contact" class="btn-3d">Book a treatment</a>
-          <a href="#treatments" class="btn-3d sia-btn-white">See the menu</a>
+        <div class="sia-hero__cta-group">
+          <div class="sia-hero__actions">
+            <a href="#contact" class="btn-3d">Book a treatment</a>
+            <a href="#treatments" class="btn-3d sia-btn-white">See the menu</a>
+          </div>
+          <p class="sia-hero__hours">{business.hours}</p>
         </div>
-        <p class="sia-hero__hours">{business.hours}</p>
       </div>
 
       <div class="sia-hero__gate-wrap" data-reveal>
         <div class="sia-moongate" data-tilt>
           <div class="sia-moongate__face">
             <InkLandscape class="absolute inset-0 h-full w-full" />
+            <!-- 静息, "quiet rest": inscribed on the scene like a painting's calligraphy. -->
+            <span class="sia-hero__rest font-han" lang="zh-Hans" aria-hidden="true"><span>静</span><span>息</span></span>
           </div>
         </div>
-        <span class="sia-hero__rest font-han" aria-hidden="true">息</span>
       </div>
     </div>
 
@@ -641,20 +643,6 @@ const faqs = [
       top: -2.1rem;
     }
   }
-  .sia-hero__seal {
-    position: absolute;
-    left: 0;
-    top: 0.4rem;
-    display: none;
-    font-size: 1.6rem;
-    color: var(--color-accent);
-    writing-mode: vertical-rl;
-  }
-  @media (min-width: 640px) {
-    .sia-hero__seal {
-      display: block;
-    }
-  }
   .sia-hero__lede {
     max-width: 28rem;
     margin-top: 2rem;
@@ -667,8 +655,15 @@ const faqs = [
     gap: 0.9rem;
     margin-top: 2.5rem;
   }
+  /* The buttons and the opening hours as one group, the hours centred beneath the buttons. */
+  .sia-hero__cta-group {
+    display: grid;
+    width: fit-content;
+    max-width: 100%;
+  }
   .sia-hero__hours {
     margin-top: 1.75rem;
+    text-align: center;
     font-size: 0.8125rem;
     letter-spacing: 0.12em;
     color: var(--color-subtle);
@@ -715,15 +710,30 @@ const faqs = [
       inset 2px 3px 3px rgb(39 50 42 / 0.4),
       inset -10px -14px 24px rgb(255 255 255 / 0.35);
   }
+  /* 静息, "quiet rest": read top to bottom, centred low in the moon scene, pale and faint:
+     静 in the middle of the lighter green hill, 息 in the middle of the darkest hill below it
+     (positions match those hills in the scene, so they hold at any size). Clear of the sun,
+     the clouds and the birds; it stays still as the scene moves. */
   .sia-hero__rest {
     position: absolute;
-    right: -0.5rem;
-    bottom: 1.5rem;
-    font-size: clamp(6rem, 12vw, 9rem);
+    inset: 0;
+    z-index: 1;
+    font-size: clamp(1.9rem, 3.3vw, 3rem);
     line-height: 1;
-    color: color-mix(in oklab, var(--color-accent) 16%, transparent);
+    color: rgb(214 223 200 / 0.5);
     pointer-events: none;
     user-select: none;
+  }
+  .sia-hero__rest > span {
+    position: absolute;
+    left: 50%;
+    translate: -50% -50%;
+  }
+  .sia-hero__rest > span:first-child {
+    top: 82%;
+  }
+  .sia-hero__rest > span:last-child {
+    top: 94%;
   }
 
   /* ── Philosophy: photograph + crystal card ── */
