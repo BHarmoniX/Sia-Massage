@@ -1,13 +1,21 @@
-# Deploys CLIENT sites to Cloudflare. Does nothing in the base repo (.illuminara-base).
+# Deploys CLIENT sites. Does nothing in the base repo (.illuminara-base), and waits quietly
+# until the chosen host is connected.
 #
-#   pull request / any branch → private preview URL (noindex), for the client to approve
-#   push to main              → production, then a live security scan of the real site
+# Host is chosen per client repo with the variable DEPLOY_HOST:
+#   cloudflare (default)  pull request / branch → private preview URL (noindex)
+#                         main                  → production
+#   hostinger             branch                → staging folder (noindex), if configured
+#                         main                  → production (plain files, hardened .htaccess)
+# Every deploy is followed by a live security scan of the real site.
 #
-# Needs, in the client repo's Settings → Secrets and variables → Actions:
-#   secrets:   CLOUDFLARE_API_TOKEN   (scoped token, see docs/CLOUDFLARE.md)
-#              CLOUDFLARE_ACCOUNT_ID
-#   variables: PRODUCTION_URL         e.g. https://www.samassage.com.au
-# Runtime secrets (TURNSTILE_SECRET_KEY etc.) live in Cloudflare, not here.
+# Settings → Secrets and variables → Actions in the client repo (see docs/CLOUDFLARE.md,
+# docs/HOSTINGER.md):
+#   all:        variable PRODUCTION_URL           e.g. https://www.siamassage.com.au
+#   cloudflare: secrets  CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+#   hostinger:  secrets  HOSTINGER_SSH_HOST, HOSTINGER_SSH_USER, HOSTINGER_SSH_KEY,
+#                        HOSTINGER_KNOWN_HOSTS
+#               variables HOSTINGER_SSH_PORT (65002), HOSTINGER_PATH,
+#                        optional HOSTINGER_STAGING_PATH + STAGING_URL
 name: Deploy
 
 on:
@@ -30,27 +38,35 @@ jobs:
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       WRANGLER_SEND_METRICS: 'false'
-      DEPLOY_TARGET: cloudflare
+      DEPLOY_HOST: ${{ vars.DEPLOY_HOST || 'cloudflare' }}
+      DEPLOY_TARGET: ${{ vars.DEPLOY_HOST == 'hostinger' && 'static' || 'cloudflare' }}
       SITE_ENV: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'production' || 'preview' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - name: Skip in the base repo, or until Cloudflare is connected
+      - name: Decide what to deploy
         id: mode
         env:
-          HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+          HAS_CLOUDFLARE: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+          HAS_HOSTINGER: ${{ secrets.HOSTINGER_SSH_KEY != '' && secrets.HOSTINGER_KNOWN_HOSTS != '' }}
+          HAS_STAGING: ${{ vars.HOSTINGER_STAGING_PATH != '' }}
         run: |
-          if [ -f .illuminara-base ]; then
-            echo "Base repository: nothing to deploy."
-            echo "client=false" >> "$GITHUB_OUTPUT"
-          elif [ "$HAS_TOKEN" != "true" ]; then
-            echo "::notice::Cloudflare not connected yet (no CLOUDFLARE_API_TOKEN secret). Skipping deploy; see docs/CLOUDFLARE.md section C."
-            echo "client=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "client=true" >> "$GITHUB_OUTPUT"
-          fi
+          skip() { echo "$1"; echo "client=false" >> "$GITHUB_OUTPUT"; exit 0; }
+          [ -f .illuminara-base ] && skip "Base repository: nothing to deploy."
+          case "$DEPLOY_HOST" in
+            cloudflare)
+              [ "$HAS_CLOUDFLARE" = "true" ] || skip "::notice::Cloudflare not connected yet. Skipping deploy (docs/CLOUDFLARE.md section C)." ;;
+            hostinger)
+              [ "$HAS_HOSTINGER" = "true" ] || skip "::notice::Hostinger not connected yet. Skipping deploy (docs/HOSTINGER.md)."
+              if [ "$SITE_ENV" = "preview" ]; then
+                [ "$GITHUB_EVENT_NAME" = "push" ] || skip "Hostinger staging deploys from branch pushes only."
+                [ "$HAS_STAGING" = "true" ] || skip "::notice::No Hostinger staging folder set (HOSTINGER_STAGING_PATH). Verified only."
+              fi ;;
+            *) echo "::error::Unknown DEPLOY_HOST '$DEPLOY_HOST' (use cloudflare or hostinger)"; exit 1 ;;
+          esac
+          echo "client=true" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         if: steps.mode.outputs.client == 'true'
@@ -65,24 +81,18 @@ jobs:
         if: steps.mode.outputs.client == 'true'
         run: npm run verify
 
-      - name: Deploy production
-        if: steps.mode.outputs.client == 'true' && env.SITE_ENV == 'production'
+      # ── Cloudflare ────────────────────────────────────────────────────────────────
+
+      - name: Deploy production (Cloudflare)
+        if: steps.mode.outputs.client == 'true' && env.DEPLOY_HOST == 'cloudflare' && env.SITE_ENV == 'production'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: npx --no-install wrangler deploy --message "${GITHUB_SHA::7}"
 
-      - name: Scan production
-        if: steps.mode.outputs.client == 'true' && env.SITE_ENV == 'production'
-        env:
-          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
-        run: |
-          sleep 20
-          npm run scan-headers -- "$PRODUCTION_URL"
-
-      - name: Deploy preview
-        id: preview
-        if: steps.mode.outputs.client == 'true' && env.SITE_ENV == 'preview'
+      - name: Deploy preview (Cloudflare)
+        id: cf_preview
+        if: steps.mode.outputs.client == 'true' && env.DEPLOY_HOST == 'cloudflare' && env.SITE_ENV == 'preview'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -94,19 +104,66 @@ jobs:
           URL=$(grep -oE "https://${ALIAS}-[a-z0-9.-]+\.workers\.dev" upload.log | head -1)
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
-      - name: Scan preview
-        if: steps.preview.outputs.url != ''
+      # ── Hostinger (SSH key + pinned server fingerprint; never an FTP password) ──────
+
+      - name: Deploy (Hostinger)
+        id: hostinger
+        if: steps.mode.outputs.client == 'true' && env.DEPLOY_HOST == 'hostinger'
         env:
-          PREVIEW_URL: ${{ steps.preview.outputs.url }}
+          SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
+          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
+          SSH_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.HOSTINGER_KNOWN_HOSTS }}
+          SSH_PORT: ${{ vars.HOSTINGER_SSH_PORT || '65002' }}
+          PROD_PATH: ${{ vars.HOSTINGER_PATH }}
+          STAGING_PATH: ${{ vars.HOSTINGER_STAGING_PATH }}
+          STAGING_URL: ${{ vars.STAGING_URL }}
+        run: |
+          set -euo pipefail
+          [ -n "$PROD_PATH" ] || { echo "::error::HOSTINGER_PATH is not set"; exit 1; }
+          PROD_PATH=${PROD_PATH%/}; STAGING_PATH=${STAGING_PATH%/}
+          if [ "$SITE_ENV" = "production" ]; then TARGET_PATH=$PROD_PATH; else TARGET_PATH=$STAGING_PATH; fi
+          FILTERS=(--filter='P .well-known/acme-challenge/' --filter='P .user.ini')
+          # Hostinger puts subdomains (e.g. staging.) inside the main site's folder. Never let
+          # a production upload delete them.
+          if [ -n "$STAGING_PATH" ] && [[ "$STAGING_PATH" == "$PROD_PATH"/* ]]; then
+            FILTERS+=(--filter="P /${STAGING_PATH#"$PROD_PATH"/}/")
+          fi
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          install -m 600 /dev/null ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          trap 'rm -f ~/.ssh/deploy_key' EXIT
+          # --delete keeps the server an exact copy of the build (no stale or planted files),
+          # but protects certificate checks and Hostinger's own PHP settings file.
+          rsync -az --delete "${FILTERS[@]}" \
+            -e "ssh -i $HOME/.ssh/deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes -o BatchMode=yes" \
+            dist/ "$SSH_USER@$SSH_HOST:$TARGET_PATH/"
+          if [ "$SITE_ENV" = "preview" ]; then echo "url=$STAGING_URL" >> "$GITHUB_OUTPUT"; fi
+
+      # ── Live security scan of what was just deployed ────────────────────────────────
+
+      - name: Scan production
+        if: steps.mode.outputs.client == 'true' && env.SITE_ENV == 'production'
+        env:
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+        run: |
+          sleep 20
+          npm run scan-headers -- "$PRODUCTION_URL"
+
+      - name: Scan preview
+        if: steps.cf_preview.outputs.url != '' || steps.hostinger.outputs.url != ''
+        env:
+          PREVIEW_URL: ${{ steps.cf_preview.outputs.url || steps.hostinger.outputs.url }}
         run: |
           sleep 10
           npm run scan-headers -- "$PREVIEW_URL" --preview
 
       - name: Post preview link
-        if: steps.preview.outputs.url != '' && github.event_name == 'pull_request'
+        if: steps.cf_preview.outputs.url != '' && github.event_name == 'pull_request'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
-          PREVIEW_URL: ${{ steps.preview.outputs.url }}
+          PREVIEW_URL: ${{ steps.cf_preview.outputs.url }}
         with:
           script: |
             await github.rest.issues.createComment({

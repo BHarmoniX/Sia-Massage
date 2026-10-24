@@ -13,7 +13,7 @@ standard.
 - **Hosts**: Cloudflare Pages (default), any Node host, or plain static hosting (Hostinger)
 - **No PHP**, ever
 - Security first: see [docs/SECURITY.md](docs/SECURITY.md). Plan: [docs/PLAN.md](docs/PLAN.md)
-- Deploying: [docs/CLOUDFLARE.md](docs/CLOUDFLARE.md)
+- Deploying: [docs/CLOUDFLARE.md](docs/CLOUDFLARE.md) or [docs/HOSTINGER.md](docs/HOSTINGER.md) (set `DEPLOY_HOST`)
 
 ## Base repository vs client repositories
 
@@ -89,6 +89,9 @@ scripts/new-client.mjs     creates a client repo from the base
 src/config/site.ts         the per-client settings file (contact, hours, logo, social, footer menus)
 src/config/studio.ts       Illuminara Creative Studio credit (base-owned)
 src/components/footer/     the standard Illuminara footer
+src/components/layout/     header (nav, mobile menu, CTA) and Section for one-page sites
+src/layouts/OnePageLayout  header + scroll-spy + footer; use for every page
+src/scripts/one-page.ts    highlights the section in view, keeps the address shareable
 src/middleware.ts          gatekeeper for live pages
 src/layouts, components    page shell and head tags
 src/pages                  pages, robots.txt, security.txt, /api/health

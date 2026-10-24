@@ -19,8 +19,15 @@ import FooterIcon from './FooterIcon.astro';
 
 const { business, logo, social, nav, footerMenus } = site;
 
+// '#section' links on a one-page site must point back to the home page from other pages.
+const onHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+const quickLinks = nav.map((l) => ({
+  ...l,
+  href: l.href.startsWith('#') && !onHome ? `/${l.href}` : l.href,
+}));
+
 const menus = [
-  ...(nav.length > 0 ? [{ title: 'Quick Links', links: nav }] : []),
+  ...(quickLinks.length > 0 ? [{ title: 'Quick Links', links: quickLinks }] : []),
   ...footerMenus,
   { title: studio.footerMenuTitle, links: [{ label: studio.creditLabel, href: studio.page }] },
 ];

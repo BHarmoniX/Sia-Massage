@@ -77,7 +77,13 @@ export const siteSchema = z.object({
   social: z
     .array(z.object({ platform: z.enum(SOCIAL_PLATFORMS), href: z.url({ protocol: /^https$/ }) }))
     .default([]),
+  /**
+   * Header navigation. On a one-page site use section anchors ('#services'); the header
+   * turns them into '/#services' on other pages (legal pages) automatically.
+   */
   nav: z.array(link).default([]),
+  /** Header call-to-action button, e.g. { label: 'Book now', href: '#contact' }. */
+  cta: link.optional(),
   /**
    * Footer fold-out menus, in order. Nav links appear as "Quick Links" automatically, and
    * the Illuminara "Digital Services" credit is always added last.
@@ -109,7 +115,12 @@ export const site: Site = siteSchema.parse({
     hours: 'Open 7 days 9am–5pm',
   },
   social: [{ platform: 'facebook', href: 'https://www.facebook.com/' }],
-  nav: [{ label: 'Home', href: '/' }],
+  nav: [
+    { label: 'About', href: '#about' },
+    { label: 'Services', href: '#services' },
+    { label: 'Contact', href: '#contact' },
+  ],
+  cta: { label: 'Get in touch', href: '#contact' },
   footerMenus: [
     {
       title: 'Legal & Privacy',

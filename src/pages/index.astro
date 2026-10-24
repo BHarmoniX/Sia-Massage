@@ -1,12 +1,32 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+// Base demo of a one-page site. Each client replaces this page with its own sections and
+// design; the header links, scroll-spy and footer keep working unchanged.
+import Section from '../components/layout/Section.astro';
+import OnePageLayout from '../layouts/OnePageLayout.astro';
 import { site } from '../config/site';
+
+const demo = [
+  { id: 'about', title: 'About' },
+  { id: 'services', title: 'Services' },
+  { id: 'contact', title: 'Contact' },
+];
 ---
 
-<BaseLayout>
-  <section class="mx-auto flex min-h-dvh max-w-3xl flex-col justify-center gap-6 px-4 py-24">
+<OnePageLayout>
+  <section class="mx-auto flex min-h-[calc(100dvh-var(--header-height))] max-w-3xl flex-col justify-center gap-6 px-4">
     <p class="text-sm tracking-widest text-accent uppercase">{site.tagline}</p>
-    <h1 class="text-4xl font-semibold sm:text-6xl">{site.name}</h1>
-    <p class="max-w-prose text-lg opacity-80">{site.description}</p>
+    <h1 class="font-display text-4xl sm:text-6xl">{site.name}</h1>
+    <p class="max-w-prose text-lg text-muted">{site.description}</p>
   </section>
-</BaseLayout>
+
+  {
+    demo.map((d) => (
+      <Section id={d.id} labelledby={`${d.id}-title`} class="border-t border-border">
+        <div class="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-4 py-24">
+          <h2 id={`${d.id}-title`} class="font-display text-3xl">{d.title}</h2>
+          <p class="mt-4 text-muted">Placeholder section. Each client designs its own.</p>
+        </div>
+      </Section>
+    ))
+  }
+</OnePageLayout>
