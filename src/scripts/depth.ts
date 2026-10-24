@@ -1,6 +1,7 @@
 // Drives the depth module (src/styles/depth.css) from the pointer:
 //   .btn-3d          light follows the pointer across the button
-//   [data-tilt]      tilts toward the pointer, glare follows it, [data-depth] children drift
+//   [data-tilt]      tilts toward the pointer; [data-depth] children drift
+//   [data-glow]      a tinted light follows the pointer across the surface
 // Updates CSS custom properties only (via CSSOM, which the CSP allows), batched per frame.
 // Mouse/trackpad only: touch screens keep the static depth and lighting. Off entirely for
 // visitors who prefer reduced motion.
@@ -29,7 +30,6 @@ function apply({ el, x, y }: Pending) {
   const max = parseFloat(getComputedStyle(el).getPropertyValue('--depth-tilt')) || 8;
   el.style.setProperty('--rx', `${((0.5 - fy) * max * 2).toFixed(2)}deg`);
   el.style.setProperty('--ry', `${((fx - 0.5) * max * 2).toFixed(2)}deg`);
-  el.style.setProperty('--glare', '1');
   el.setAttribute('data-tilting', '');
 
   for (const layer of el.querySelectorAll<HTMLElement | SVGElement>('[data-depth]')) {
@@ -42,7 +42,6 @@ function apply({ el, x, y }: Pending) {
 function reset(el: HTMLElement) {
   el.style.setProperty('--rx', '0deg');
   el.style.setProperty('--ry', '0deg');
-  el.style.setProperty('--glare', '0');
   el.removeAttribute('data-tilting');
   for (const layer of el.querySelectorAll<HTMLElement | SVGElement>('[data-depth]')) {
     layer.style.setProperty('--px', '0');
