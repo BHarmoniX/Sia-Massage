@@ -19,7 +19,13 @@ function apply({ el, x, y }: Pending) {
   el.style.setProperty('--mx', `${(fx * 100).toFixed(1)}%`);
   el.style.setProperty('--my', `${(fy * 100).toFixed(1)}%`);
 
-  if (!el.hasAttribute('data-tilt') || reducedMotion.matches) return;
+  // A glowing element inside a tilting one: light the inner surface, tilt the outer.
+  const tilter = el.hasAttribute('data-tilt') ? el : el.closest<HTMLElement>('[data-tilt]');
+  if (!tilter || reducedMotion.matches) return;
+  if (tilter !== el) {
+    apply({ el: tilter, x, y });
+    return;
+  }
   const max = parseFloat(getComputedStyle(el).getPropertyValue('--depth-tilt')) || 8;
   el.style.setProperty('--rx', `${((0.5 - fy) * max * 2).toFixed(2)}deg`);
   el.style.setProperty('--ry', `${((fx - 0.5) * max * 2).toFixed(2)}deg`);
@@ -45,7 +51,7 @@ function reset(el: HTMLElement) {
 }
 
 function onMove(event: PointerEvent) {
-  const el = (event.target as Element | null)?.closest<HTMLElement>('.btn-3d, [data-tilt]');
+  const el = (event.target as Element | null)?.closest<HTMLElement>('.btn-3d, [data-tilt], [data-glow]');
   if (!el) return;
   pending = { el, x: event.clientX, y: event.clientY };
   if (!frame) {
