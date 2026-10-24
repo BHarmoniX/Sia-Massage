@@ -2,7 +2,7 @@
 // `npm run new-client` renames the worker for each client; never deploy under this name.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "illuminara-core-template",
+  "name": "sia-massage",
   "compatibility_date": "2026-10-06",
 
   // Preview deployments get their own *.workers.dev URLs for client approval.

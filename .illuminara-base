@@ -1,4 +1,0 @@
-This file marks the Illuminara Core BASE repository.
-While it exists, scripts/guard-base-repo.mjs refuses commits containing client work
-(branding, images, video, audio, 3D, fonts, client details).
-scripts/new-client.mjs deletes it in each new client repository. Never delete it here.
