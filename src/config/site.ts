@@ -101,6 +101,20 @@ export const siteSchema = z.object({
   footerMenus: z
     .array(z.object({ title: z.string().min(1), links: z.array(link).min(1) }))
     .default([]),
+  /**
+   * Ambient brand music: a floating play/pause button. The track lives in /public/audio
+   * and must be licensed for commercial use. Omit to switch the feature off.
+   */
+  audio: z
+    .object({
+      src: z.string().regex(/^\/audio\/[\w.-]+\.(mp3|m4a|ogg|webm)$/, 'Put the track in /public/audio'),
+      title: z.string().default('Background music'),
+      /** 0–1. Kept low by default: atmosphere, not a soundtrack. */
+      volume: z.number().min(0).max(1).default(0.25),
+      /** Start softly on the visitor's first tap/click/keypress, unless they paused it before. */
+      autoStart: z.boolean().default(true),
+    })
+    .optional(),
   /** Who to contact about a security problem (published in /.well-known/security.txt). */
   securityContact: z.email(),
   /** Block AI training crawlers in robots.txt. Search engines are still allowed. */

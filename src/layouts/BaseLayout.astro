@@ -1,6 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import IlluminaraFooter from '../components/footer/IlluminaraFooter.astro';
+import AmbientAudio from '../components/media/AmbientAudio.astro';
 import { site } from '../config/site';
 import '../styles/global.css';
 
@@ -29,6 +30,7 @@ const { hideFooter = false, ...props } = Astro.props;
       <slot />
     </main>
     {!hideFooter && <IlluminaraFooter />}
+    <AmbientAudio />
   </body>
 </html>
 

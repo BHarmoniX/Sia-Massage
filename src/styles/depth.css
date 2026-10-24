@@ -270,6 +270,91 @@
   will-change: transform;
 }
 
+/* ── 3D glass surface ─────────────────────────────────────────────────────────────
+
+  <div class="glass-3d">…</div>   frosted, translucent panel with a lit top edge and depth.
+  Tune with --glass-tint (base colour) and --glass-blur.
+*/
+
+.glass-3d {
+  --glass-tint: var(--color-surface);
+  --glass-blur: 18px;
+  position: relative;
+  border-radius: var(--radius-card, 1rem);
+  border: 1px solid color-mix(in oklab, white 45%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in oklab, white 30%, transparent), transparent 42%),
+    color-mix(in oklab, var(--glass-tint) 62%, transparent);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 65%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, black 6%, transparent),
+    0 24px 48px -28px color-mix(in oklab, var(--color-text) 45%, transparent);
+}
+
+/* ── Jigsaw: a glass card with a fitted companion piece ──────────────────────────
+
+  <div class="jigsaw">
+    <div class="jigsaw__main glass-3d">…</div>
+    <div class="jigsaw__piece glass-3d">…</div>   slots into a cut-out along the bottom
+  </div>
+
+  The cut-out shows the surface the card sits on (--jigsaw-field, default the page) and
+  keeps the signature 0.25rem air gap. Variants: .jigsaw--end (piece at the bottom right).
+*/
+
+.jigsaw {
+  --jigsaw-field: var(--color-bg);
+  --jigsaw-gap: 0.25rem;
+  --jigsaw-piece-w: 62%;
+  --jigsaw-piece-h: 4.25rem;
+  --jigsaw-radius: 1.4rem;
+  position: relative;
+}
+.jigsaw__main {
+  position: relative;
+  padding-bottom: calc(var(--jigsaw-piece-h) + 1.25rem);
+}
+.jigsaw__main::before {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: calc(var(--jigsaw-piece-w) + var(--jigsaw-gap) * 2);
+  height: calc(var(--jigsaw-piece-h) + var(--jigsaw-gap) + 1px);
+  transform: translateX(-50%);
+  border-radius: calc(var(--jigsaw-radius) + var(--jigsaw-gap)) calc(var(--jigsaw-radius) + var(--jigsaw-gap)) 0 0;
+  background: var(--jigsaw-field);
+  box-shadow: inset 0 0.5rem 1rem color-mix(in oklab, black 7%, transparent);
+  z-index: 1;
+}
+.jigsaw__piece {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: var(--jigsaw-piece-w);
+  height: var(--jigsaw-piece-h);
+  padding: 0 1.1rem;
+  transform: translateX(-50%);
+  border-radius: var(--jigsaw-radius) var(--jigsaw-radius) var(--radius-card, 1rem) var(--radius-card, 1rem);
+}
+.jigsaw--end .jigsaw__main::before,
+.jigsaw--end .jigsaw__piece {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+.jigsaw--end .jigsaw__main::before {
+  right: calc(var(--jigsaw-gap) * -1);
+  border-top-right-radius: 0;
+}
+
 /* Reduced motion: keep the light and depth styling, drop movement. */
 @media (prefers-reduced-motion: reduce) {
   .card-3d,
