@@ -405,15 +405,15 @@ const faqs = [
     </div>
   </Section>
 
-  <!-- ───────────── Contact: a jigsaw booking card on moss and water ───────────── -->
+  <!-- ───────────── Contact: a glass booking card on moss and water ───────────── -->
   <Section id="contact" labelledby="contact-title" class="sia-contact">
     <div class="sia-contact__bg" aria-hidden="true">
       <Img src={mossWaterfall} alt="" sizes="100vw" class="h-full w-full object-cover sia-contact__falls" />
     </div>
     <div class="sia-contact__inner">
-      <div class="jigsaw notch-host sia-contact__card" data-reveal>
+      <div class="notch-host sia-contact__card" data-reveal>
         <span class="notch-piece glass-3d crystal font-han sia-contact__seal" aria-hidden="true" lang="zh-Hans">约</span>
-        <div class="jigsaw__main glass-3d notch" data-glow>
+        <div class="sia-contact__panel glass-3d notch" data-glow>
           <h2 id="contact-title" class="sia-heading">Your hour of calm awaits</h2>
           <dl class="sia-contact__details">
             <div>
@@ -427,17 +427,18 @@ const faqs = [
               <dd>{business.hours}</dd>
             </div>
             <div>
-              <dt>Write</dt>
+              <dt>Phone</dt>
+              <dd><a href={telHref(phone)}>{formatAuPhone(phone)}</a></dd>
+            </div>
+            <div>
+              <dt>Email</dt>
               <dd><a href={`mailto:${business.email}`}>{business.email}</a></dd>
             </div>
           </dl>
-        </div>
-        <div class="jigsaw__piece glass-3d crystal">
-          <a href={telHref(phone)} class="sia-contact__phone">{formatAuPhone(phone)}</a>
-          <span class="sia-contact__actions">
+          <div class="sia-contact__actions">
             <a href={telHref(phone)} class="btn-3d">Call to book</a>
-            <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="btn-3d btn-3d--ghost">Directions</a>
-          </span>
+            <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="btn-3d sia-btn-sage">Directions</a>
+          </div>
         </div>
       </div>
     </div>
@@ -1301,7 +1302,7 @@ const faqs = [
     }
   }
 
-  /* ── Contact: jigsaw on moss ── */
+  /* ── Contact: glass booking card on moss ── */
   /* The contact section reaches down behind the footer (its height is measured below), so
      the waterfall continues under the footer's glass. */
   .sia-contact {
@@ -1330,15 +1331,10 @@ const faqs = [
   .sia-contact__falls {
     object-position: 50% 35%;
   }
-  .sia-contact__card {
-    --jigsaw-field: #ece8de;
-    --jigsaw-piece-w: min(100%, 36rem);
-    --jigsaw-piece-h: 5.5rem;
-  }
-  .sia-contact__card .jigsaw__main {
+  .sia-contact__panel.glass-3d {
     --glass-tint: #f6f3ec;
-    padding: 3.75rem 2rem calc(var(--jigsaw-piece-h) + 2.25rem);
-    border-radius: 1.75rem 1.75rem 1rem 1rem;
+    padding: 3.75rem 2rem 2.75rem;
+    border-radius: 3rem;
     text-align: center;
   }
   .sia-contact__card {
@@ -1356,9 +1352,16 @@ const faqs = [
   }
   .sia-contact__details dt {
     font-size: 0.75rem;
+    font-weight: 550;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--color-subtle);
+    color: #3f5634;
+  }
+  /* A sage green button (dark text), for a calm second choice beside the moss one. */
+  .btn-3d.sia-btn-sage {
+    --btn-face: #b9c8a4;
+    --btn-text: #27322a;
+    --btn-shine: white;
   }
   .sia-contact__details dd {
     margin-top: 0.25rem;
@@ -1369,35 +1372,17 @@ const faqs = [
     text-decoration-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
     text-underline-offset: 4px;
   }
-  .sia-contact__card .jigsaw__piece {
-    --glass-tint: #f6f3ec;
-  }
-  .sia-contact__phone {
-    font-family: var(--font-display);
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    white-space: nowrap;
-  }
   .sia-contact__actions {
     display: flex;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 0.75rem;
+    margin-top: 2.25rem;
   }
-  .sia-contact__actions .btn-3d {
-    padding: 0.65rem 1.1rem;
-    font-size: 0.8125rem;
-  }
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     .sia-contact__details {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  @media (max-width: 560px) {
-    .sia-contact__card {
-      --jigsaw-piece-h: 8.5rem;
-    }
-    .sia-contact__card .jigsaw__piece {
-      flex-direction: column;
-      justify-content: center;
-      gap: 0.75rem;
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 1.75rem;
     }
   }
 </style>
