@@ -2,6 +2,7 @@
 // SIA MASSAGE: one-page site. Prices, treatments and copy marked MOCK are placeholders.
 // Photography: Unsplash (free licence); artwork: The Met Open Access (public domain).
 // Full credits in docs/CREDITS.md.
+import ScrollCue from '../components/layout/ScrollCue.astro';
 import Section from '../components/layout/Section.astro';
 import AmbientVideo from '../components/media/AmbientVideo.astro';
 import Img from '../components/media/Img.astro';
@@ -130,9 +131,7 @@ const faqs = [
       </div>
     </div>
 
-    <a href="#philosophy" class="sia-scroll-cue" aria-label="Scroll to philosophy">
-      <span aria-hidden="true"></span>
-    </a>
+    <ScrollCue href="#philosophy" label="Scroll to our philosophy" />
   </section>
 
   <!-- ───────────── Philosophy: photograph and crystal card, side by side ───────────── -->
@@ -449,6 +448,15 @@ const faqs = [
     overflow: hidden;
     min-height: calc(100dvh - var(--header-height));
   }
+  /* The scroll cue only makes sense when the hero fits one screen (wide layouts). */
+  .sia-hero .scroll-cue {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    .sia-hero .scroll-cue {
+      display: block;
+    }
+  }
   .sia-hero__bamboo {
     position: absolute;
     inset: 0 0 0 auto;
@@ -537,32 +545,6 @@ const faqs = [
     color: color-mix(in oklab, var(--color-accent) 16%, transparent);
     pointer-events: none;
     user-select: none;
-  }
-  .sia-scroll-cue {
-    position: absolute;
-    left: 50%;
-    bottom: 1.5rem;
-    width: 1px;
-    height: 3.5rem;
-    background: color-mix(in oklab, var(--color-accent) 25%, transparent);
-    overflow: hidden;
-  }
-  .sia-scroll-cue span {
-    position: absolute;
-    inset: 0;
-    background: var(--color-accent);
-    transform: translateY(-100%);
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .sia-scroll-cue span {
-      animation: sia-cue 2.6s ease-in-out infinite;
-    }
-  }
-  @keyframes sia-cue {
-    60%,
-    100% {
-      transform: translateY(100%);
-    }
   }
 
   /* ── Philosophy: photograph + crystal card ── */
