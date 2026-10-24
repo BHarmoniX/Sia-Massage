@@ -1204,7 +1204,7 @@ const faqs = [
 
       // No sill: the photo fades into the moss toward the foot of the doorway, while the
       // gold posts stay solid and end squarely at ground level, set into the ground.
-      const fade = open >= 1 ? 'none' : `linear-gradient(to bottom, #000 ${n(base - 1.1 * A)}px, transparent ${n(base)}px)`;
+      const fade = open >= 1 ? 'none' : `linear-gradient(to bottom, #000 ${n(base - 0.45 * A)}px, rgb(0 0 0 / 0.35) ${n(base)}px)`;
       door.style.maskImage = fade;
       door.style.setProperty('-webkit-mask-image', fade);
 
