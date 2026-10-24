@@ -132,7 +132,7 @@ export const site: Site = siteSchema.parse({
   name: 'Sia Massage',
   tagline: 'Find your stillness',
   description:
-    'Traditional Asian massage in a calm, quiet space. Relaxation, remedial and reflexology treatments to restore body and mind.',
+    'Traditional Asian relaxation massage in a calm, quiet space. Unhurried treatments to rest the body and quiet the mind.',
   url: 'https://www.siamassage.com.au', // MOCK: confirm the real domain
   business: {
     legalName: 'Sia Massage', // MOCK: registered business or company name

@@ -11,8 +11,7 @@ import { formatAuPhone, site, telHref } from '../config/site';
 
 import bambooLight from '../client/photos/bamboo-light.jpg';
 import teaTable from '../client/photos/tea-table.jpg';
-import hotStones from '../client/photos/hot-stones.jpg';
-import herbalCompress from '../client/photos/herbal-compress.jpg';
+import towelCandles from '../client/photos/towel-candles.jpg';
 import oilMassage from '../client/photos/oil-massage.jpg';
 import bambooPath from '../client/photos/bamboo-path.jpg';
 import bambooBasin from '../client/photos/bamboo-basin.jpg';
@@ -29,55 +28,57 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
 )}`;
 
 // Pictures the treatment menu crossfades between as you move through it.
+// Pictures the menu crossfades between as you move through it.
 const treatmentImages = {
   oil: { src: oilMassage, alt: 'Therapist pouring warm oil before a relaxation massage' },
-  stones: { src: hotStones, alt: 'Hands placing smooth heated stones along a client’s back' },
-  herbal: { src: herbalCompress, alt: 'Warm herbal compress balls pressed along the shoulders' },
+  calm: { src: towelCandles, alt: 'Rolled towel, candles and a reed diffuser in soft light' },
+  tea: { src: teaTable, alt: 'Tea set laid out on a long wooden table' },
+  water: { src: bambooBasin, alt: 'Water running from a bamboo spout into a stone basin' },
 } as const;
 
-// MOCK: treatments and prices
+// Sia offers relaxation massage only. MOCK: options, durations and prices.
 const treatments = [
   {
-    name: 'Relaxation massage',
+    name: 'A quiet pause',
+    zh: '片刻',
+    image: 'oil',
+    text: 'Back, neck and shoulders. Thirty minutes to set the day down.',
+    prices: [['30 min', '$55']],
+  },
+  {
+    name: 'Classic relaxation',
     zh: '放松',
     image: 'oil',
-    text: 'Long, unhurried strokes with warm oil that quiet a busy mind.',
-    prices: [['30 min', '$55'], ['60 min', '$90'], ['90 min', '$130']],
+    text: 'Full body, long flowing strokes with warm oil. Our most loved hour.',
+    prices: [['60 min', '$90']],
   },
   {
-    name: 'Remedial massage',
-    zh: '理疗',
-    image: 'oil',
-    text: 'Deeper, focused work for stiff necks, tight shoulders and aching backs.',
-    prices: [['60 min', '$100'], ['90 min', '$145']],
+    name: 'Deep relaxation',
+    zh: '静养',
+    image: 'calm',
+    text: 'Unhurried, full body, with time to drift somewhere quiet.',
+    prices: [['90 min', '$130']],
   },
   {
-    name: 'Hot stone massage',
-    zh: '热石',
-    image: 'stones',
-    text: 'Heated basalt stones sink warmth deep into tired muscles.',
-    prices: [['75 min', '$125']],
+    name: 'The Sia ritual',
+    zh: '仪式',
+    image: 'tea',
+    text: 'Our longest: full body, scalp and feet, finished with warm tea.',
+    prices: [['120 min', '$170']],
   },
   {
-    name: 'Herbal compress',
-    zh: '药包',
-    image: 'herbal',
-    text: 'Steamed pouches of ginger, lemongrass and camphor, pressed along the body.',
-    prices: [['60 min', '$105']],
+    name: 'Together',
+    zh: '同享',
+    image: 'calm',
+    text: 'Side-by-side relaxation massage for two, in the same quiet room.',
+    prices: [['60 min', '$180'], ['90 min', '$260']],
   },
   {
-    name: 'Foot reflexology',
-    zh: '足疗',
-    image: 'herbal',
-    text: 'Pressure-point therapy on the feet, the traditional way back to balance.',
-    prices: [['45 min', '$70'], ['60 min', '$85']],
-  },
-  {
-    name: 'Head, neck & shoulders',
-    zh: '头颈',
-    image: 'stones',
-    text: 'Thirty minutes that undo a week at the desk.',
-    prices: [['30 min', '$55']],
+    name: 'Gift of calm',
+    zh: '礼物',
+    image: 'water',
+    text: 'A voucher for any treatment, beautifully presented.',
+    prices: [['From', '$55']],
   },
 ] as const;
 
@@ -93,7 +94,7 @@ const faqs = [
   { q: 'Do I need to book ahead?', a: 'Booking is best, especially evenings and weekends. Walk-ins are welcome whenever a therapist is free.' },
   { q: 'What should I wear?', a: 'Come as you are. You undress only to your comfort, and stay covered with fresh towels throughout.' },
   { q: 'How early should I arrive?', a: 'Five to ten minutes before your time, so you can settle in and tell us about any health concerns.' },
-  { q: 'Can I claim a health fund rebate?', a: 'Rebates may be available for remedial massage with eligible funds. Ask us when you book.' },
+  { q: 'Do you offer remedial or deep tissue massage?', a: 'We specialise in relaxation massage only, so every visit is about rest. Firmer pressure is always welcome on request.' },
   { q: 'Is massage safe during pregnancy?', a: 'Please let us know when booking and we will suggest the treatments that suit you.' },
 ];
 ---
@@ -112,7 +113,7 @@ const faqs = [
           Sia<br /><em>Massage</em>
         </h1>
         <p class="sia-hero__lede">
-          Traditional Asian massage in a quiet room, with unhurried hands. An hour that belongs only to you.
+          Traditional Asian relaxation massage in a quiet room, with unhurried hands. An hour that belongs only to you.
         </p>
         <div class="sia-hero__actions">
           <a href="#contact" class="btn-3d">Book a treatment</a>
@@ -143,7 +144,7 @@ const faqs = [
         </div>
       </figure>
 
-      <div class="sia-philosophy__card glass-3d crystal" data-reveal>
+      <div class="sia-philosophy__card glass-3d crystal" data-glow data-reveal>
         <p class="sia-kicker font-han" lang="zh-Hans">静心 <span>a quiet heart</span></p>
         <h2 id="philosophy-title" class="sia-heading">A quiet place to return to yourself</h2>
         <p>
@@ -160,7 +161,7 @@ const faqs = [
   <section class="sia-rain" aria-label="Rain falling on green leaves">
     <AmbientVideo src="/video/sia-rain-leaves.mp4" poster={rainPoster} class="sia-rain__video" />
     <div class="sia-rain__veil" aria-hidden="true"></div>
-    <figure class="sia-rain__card glass-3d crystal" data-reveal>
+    <figure class="sia-rain__card glass-3d crystal float" data-glow data-reveal>
       <span class="font-han" lang="zh-Hans" aria-hidden="true">雨</span>
       <blockquote>Listen to the rain.<br />Let the water carry the day away.</blockquote>
     </figure>
@@ -200,8 +201,8 @@ const faqs = [
     </div>
     <div class="sia-treatments__grid">
       <header class="sia-treatments__head" data-reveal>
-        <h2 id="treatments-title" class="sia-heading">The menu</h2>
-        <p>Every treatment is tailored to you on the day.<br />Prices in AUD, GST inclusive.</p>
+        <h2 id="treatments-title" class="sia-heading">Relaxation massage</h2>
+        <p>One treatment, perfected. Choose your time; we tailor the pressure to you on the day.<br />Prices in AUD, GST inclusive.</p>
       </header>
 
       <div class="sia-treatments__visual" data-reveal>
@@ -219,7 +220,7 @@ const faqs = [
       <ul class="sia-menu" role="list">
         {
           treatments.map((t) => (
-            <li class="sia-menu__card sia-moss-glass glass-3d crystal" data-treatment={t.image} tabindex="0" data-reveal>
+            <li class="sia-menu__card sia-moss-glass glass-3d crystal float" data-treatment={t.image} tabindex="0" data-glow data-reveal>
               <h3>
                 {t.name}
                 <span class="font-han" lang="zh-Hans">{t.zh}</span>
@@ -249,7 +250,23 @@ const faqs = [
     <div class="sia-visit__stage" aria-hidden="true">
       <div class="sia-visit__door">
         <Img src={bambooPath} alt="" sizes="100vw" class="h-full w-full object-cover" />
-        <div class="sia-visit__rain"></div>
+      </div>
+      <div class="sia-visit__frame">
+        <svg class="sia-visit__frame-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path class="sia-visit__frame-outer" d="M0 100 V30 A50 30 0 0 1 100 30 V100" />
+          <path class="sia-visit__frame-beads" d="M3.2 100 V30.4 A46.8 27.6 0 0 1 96.8 30.4 V100" />
+          <path class="sia-visit__frame-inner" d="M6 100 V30.8 A44 25.6 0 0 1 94 30.8 V100" />
+        </svg>
+        <!-- Ruyi cloud scroll at the crown -->
+        <svg class="sia-visit__crown" viewBox="-60 -34 120 44">
+          <path d="M-52 4 C-52 -14 -30 -18 -24 -6 C-22 -20 -4 -26 0 -10 C4 -26 22 -20 24 -6 C30 -18 52 -14 52 4" />
+          <path d="M-52 4 C-52 12 -40 14 -34 8 M52 4 C52 12 40 14 34 8" />
+          <path d="M-14 -2 C-10 -12 10 -12 14 -2" />
+          <circle cx="0" cy="2" r="3.2" />
+        </svg>
+        <!-- Fret knots where the arch springs -->
+        <svg class="sia-visit__knot sia-visit__knot--left" viewBox="0 0 24 24"><path d="M4 4 H20 V20 H8 V8 H16 V16 H12" /></svg>
+        <svg class="sia-visit__knot sia-visit__knot--right" viewBox="0 0 24 24"><path d="M20 4 H4 V20 H16 V8 H8 V16 H12" /></svg>
       </div>
       <p class="sia-visit__threshold">
         <span class="font-han" lang="zh-Hans">入</span>
@@ -261,8 +278,8 @@ const faqs = [
       <ol class="sia-visit__cards" role="list">
         {
           journey.map((j) => (
-            <li class="sia-visit__card notch-host" data-tilt data-reveal>
-              <div class="sia-visit__panel sia-moss-glass glass-3d crystal notch">
+            <li class="sia-visit__card notch-host float" data-tilt data-reveal>
+              <div class="sia-visit__panel sia-moss-glass glass-3d crystal notch" data-glow>
                 <h3>{j.title}</h3>
                 <p>{j.text}</p>
               </div>
@@ -309,7 +326,7 @@ const faqs = [
     <div class="sia-contact__inner">
       <div class="jigsaw notch-host sia-contact__card" data-reveal>
         <span class="notch-piece glass-3d crystal font-han sia-contact__seal" aria-hidden="true" lang="zh-Hans">约</span>
-        <div class="jigsaw__main glass-3d notch">
+        <div class="jigsaw__main glass-3d notch" data-glow>
           <h2 id="contact-title" class="sia-heading">Your hour of calm awaits</h2>
           <dl class="sia-contact__details">
             <div>
@@ -356,9 +373,7 @@ const faqs = [
     color: var(--color-text);
   }
   .sia-moss-glass.crystal {
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.25),
-      0 24px 44px -24px rgb(20 28 18 / 0.75);
+    box-shadow: 0 24px 44px -24px rgb(20 28 18 / 0.75);
   }
   /* Deep moss sections: the same components, re-toned by tokens. */
   .sia-tone-moss {
@@ -706,8 +721,8 @@ const faqs = [
     opacity: 0;
     transform: scale(1.06);
     transition:
-      opacity 900ms var(--depth-ease),
-      transform 1400ms var(--depth-ease);
+      opacity 550ms var(--depth-ease),
+      transform 1200ms var(--depth-ease);
   }
   .sia-treatments__img.is-active {
     opacity: 1;
@@ -724,9 +739,7 @@ const faqs = [
     padding: 1.5rem 1.5rem 1.25rem;
     cursor: default;
     outline: none;
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.8),
-      0 18px 36px -24px rgb(39 50 42 / 0.55);
+    box-shadow: 0 18px 36px -24px rgb(39 50 42 / 0.55);
     transition:
       transform 500ms var(--depth-ease),
       box-shadow 500ms var(--depth-ease),
@@ -736,9 +749,9 @@ const faqs = [
   .sia-menu__card:focus-visible {
     transform: translateY(-4px);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.9),
       0 28px 48px -24px rgb(39 50 42 / 0.6),
-      0 0 0 1px color-mix(in oklab, var(--color-accent) 35%, transparent);
+      0 0 0 1px color-mix(in oklab, var(--color-accent) 35%, transparent),
+      0 0 34px -8px color-mix(in oklab, var(--color-accent) 50%, transparent);
   }
   .sia-menu__card h3 {
     display: flex;
@@ -818,8 +831,8 @@ const faqs = [
   }
   .sia-visit__stage {
     position: sticky;
-    top: 0;
-    height: 100dvh;
+    top: var(--header-height);
+    height: calc(100dvh - var(--header-height));
     overflow: hidden;
     z-index: 0;
     background: radial-gradient(40% 55% at 50% 70%, rgb(195 209 166 / 0.16), transparent 70%);
@@ -834,7 +847,7 @@ const faqs = [
     position: absolute;
     inset: 0;
     clip-path: inset(
-      calc(var(--closed) * 12%) calc(var(--closed) * 32%) 0 calc(var(--closed) * 32%)
+      calc(var(--closed) * 18%) calc(var(--closed) * 32%) 0 calc(var(--closed) * 32%)
         round calc(var(--closed) * 50%) calc(var(--closed) * 50%) 0 0 / calc(var(--closed) * 30%)
         calc(var(--closed) * 30%) 0 0
     );
@@ -845,27 +858,6 @@ const faqs = [
     transform-origin: 50% 70%;
     will-change: transform;
   }
-  /* Soft rain over the bamboo path, falling once you are inside. */
-  .sia-visit__rain {
-    position: absolute;
-    inset: -20% 0 0;
-    background-image:
-      repeating-linear-gradient(100deg, transparent 0 46px, rgb(255 255 255 / 0.16) 46px 47px, transparent 47px 90px),
-      repeating-linear-gradient(100deg, transparent 0 71px, rgb(255 255 255 / 0.1) 71px 72px, transparent 72px 130px);
-    background-size: 100% 220px, 100% 300px;
-    opacity: calc(var(--open) * 0.8);
-    pointer-events: none;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .sia-visit__rain {
-      animation: sia-rain-fall 0.9s linear infinite;
-    }
-  }
-  @keyframes sia-rain-fall {
-    to {
-      background-position: -40px 220px, -55px 300px;
-    }
-  }
   .sia-visit__door::after {
     content: '';
     position: absolute;
@@ -873,9 +865,79 @@ const faqs = [
     background: linear-gradient(180deg, rgb(20 28 18 / 0.5), rgb(20 28 18 / 0.15) 45%, rgb(20 28 18 / 0.55));
     opacity: var(--open);
   }
+  /* Ornate frame: antique gold double line with beads, ruyi cloud crown, fret knots.
+     Sits exactly around the closed arch and fades as you step through. */
+  .sia-visit__frame {
+    --frame-gold: #cdb87f;
+    --frame-pad: 14px;
+    position: absolute;
+    top: calc(18% - var(--frame-pad));
+    bottom: 0;
+    left: calc(32% - var(--frame-pad));
+    right: calc(32% - var(--frame-pad));
+    opacity: calc(1 - var(--open) * 3);
+    pointer-events: none;
+  }
+  .sia-visit__frame-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    fill: none;
+  }
+  .sia-visit__frame-outer,
+  .sia-visit__frame-inner {
+    stroke: var(--frame-gold);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .sia-visit__frame-inner {
+    stroke-width: 1;
+    opacity: 0.7;
+  }
+  .sia-visit__frame-beads {
+    stroke: var(--frame-gold);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 0 9;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.85;
+  }
+  .sia-visit__crown {
+    position: absolute;
+    top: -26px;
+    left: 50%;
+    width: 120px;
+    transform: translateX(-50%);
+    overflow: visible;
+    fill: none;
+    stroke: var(--frame-gold);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .sia-visit__crown circle {
+    fill: var(--frame-gold);
+    stroke: none;
+  }
+  .sia-visit__knot {
+    position: absolute;
+    top: 30%;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: var(--frame-gold);
+    stroke-width: 2;
+  }
+  .sia-visit__knot--left {
+    left: -11px;
+  }
+  .sia-visit__knot--right {
+    right: -11px;
+  }
   .sia-visit__threshold {
     position: absolute;
-    top: 3%;
+    top: calc(18% - 5.4rem);
     left: 50%;
     display: flex;
     align-items: baseline;
@@ -1157,9 +1219,16 @@ const faqs = [
         img.classList.toggle('is-active', img.dataset.treatmentImg === key);
       }
     };
+    // Change only once the pointer rests on a card, so sweeping across the grid
+    // doesn't blend several pictures together.
+    let dwell = 0;
     for (const item of document.querySelectorAll<HTMLElement>('[data-treatment]')) {
       const key = item.dataset.treatment;
-      item.addEventListener('pointerenter', () => show(key));
+      item.addEventListener('pointerenter', () => {
+        clearTimeout(dwell);
+        dwell = window.setTimeout(() => show(key), 180);
+      });
+      item.addEventListener('pointerleave', () => clearTimeout(dwell));
       item.addEventListener('focusin', () => show(key));
       item.addEventListener('click', () => show(key));
     }
