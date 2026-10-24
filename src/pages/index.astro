@@ -1412,7 +1412,18 @@ const faqs = [
     root.classList.add('sia-capture');
     root.style.setProperty('--sia-vh', `${window.innerHeight}px`);
     for (const el of document.querySelectorAll('[data-reveal], .img-reveal')) el.classList.add('is-visible');
-    for (const img of document.querySelectorAll('img')) img.loading = 'eager';
+    // Load and prepare every photo up front, then say so in the tab title: wait for
+    // "✓ Ready to capture" before taking the screenshot.
+    const images = Array.from(document.querySelectorAll('img'));
+    for (const img of images) {
+      img.loading = 'eager';
+      img.decoding = 'sync';
+    }
+    const title = document.title;
+    document.title = `Loading photos… · ${title}`;
+    Promise.allSettled(images.map((img) => img.decode())).then(() => {
+      document.title = `✓ Ready to capture · ${title}`;
+    });
   }
 
   // The contact section's waterfall runs behind the footer: keep the overlap equal to the
