@@ -53,10 +53,14 @@ if (brokenLegal.length > 0) {
 
 // '#section' links on a one-page site must point back to the home page from other pages.
 const onHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
-const quickLinks = nav.map((l) => ({
-  ...l,
-  href: l.href.startsWith('#') && !onHome ? `/${l.href}` : l.href,
-}));
+const quickLinks = [
+  // "Home" returns to the top of the home page (the hero): a smooth scroll when already there.
+  ...(nav.length > 0 ? [{ label: 'Home', href: onHome ? '#main' : '/' }] : []),
+  ...nav.map((l) => ({
+    ...l,
+    href: l.href.startsWith('#') && !onHome ? `/${l.href}` : l.href,
+  })),
+];
 
 const menus = [
   ...(quickLinks.length > 0 ? [{ title: 'Quick Links', links: quickLinks }] : []),
