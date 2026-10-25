@@ -260,7 +260,7 @@ const faqs = [
         <Img src={bambooPath} alt="" sizes="100vw" class="h-full w-full object-cover" />
       </div>
       <!-- A gateway: the outline of the client's stone arch (crown mirrored exactly, posts
-           extended to doorway height), traced by a gold line and an even fine line. No sill: the
+           extended to doorway height), traced by a sage line and an even fine line. No sill: the
            photo fades into the moss at the foot, while the posts end squarely in the ground. Either side, carved and gilded into the wall, a couplet read right
            to left: 身体放松 · 心自宁静, "a relaxed body creates a calm mind". The doorway script
            draws everything from one geometry. -->
@@ -338,13 +338,13 @@ const faqs = [
         <path class="sia-arch__line sia-arch__line--outer" data-line="44" />
         <path class="sia-arch__line sia-arch__cap" data-caps />
         <defs>
-          <linearGradient id="sia-foot-gold" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0" stop-color="#e3d3a2" />
-            <stop offset="0.55" stop-color="#c9b27a" />
-            <stop offset="1" stop-color="#9c8551" />
+          <linearGradient id="sia-foot-sage" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#dfe5d4" />
+            <stop offset="0.55" stop-color="#b9c8a4" />
+            <stop offset="1" stop-color="#8ea775" />
           </linearGradient>
         </defs>
-        <!-- Gold feet: the arch's tip curve, turned over, flaring each leg into the ground. -->
+        <!-- Sage feet: the arch's tip curve, turned over, flaring each leg into the ground. -->
         <path class="sia-arch__feet" data-feet />
         <!-- Braces: the arch's tip curve, right way up, from each outer foot to the inner line. -->
         <path class="sia-arch__line sia-arch__brace" data-braces />
@@ -1075,7 +1075,7 @@ const faqs = [
     background: linear-gradient(180deg, rgb(20 28 18 / 0.5), rgb(20 28 18 / 0.15) 45%, rgb(20 28 18 / 0.55));
     opacity: var(--open);
   }
-  /* Frosted glass filling the band between the two gold lines; the photo runs underneath it,
+  /* Frosted glass filling the band between the two sage lines; the photo runs underneath it,
      so the path shows through softly blurred. */
   .sia-visit__glass {
     position: absolute;
@@ -1096,7 +1096,7 @@ const faqs = [
   }
   .sia-arch__line {
     fill: none;
-    stroke: #d2bf8c;
+    stroke: #b9c8a4; /* sage */
     stroke-width: 3;
     stroke-linejoin: round;
     stroke-linecap: butt;
@@ -1122,8 +1122,8 @@ const faqs = [
     stroke: rgb(16 10 5 / 0.65);
   }
   .sia-arch__feet {
-    fill: url(#sia-foot-gold);
-    stroke: #d2bf8c;
+    fill: url(#sia-foot-sage);
+    stroke: #b9c8a4; /* sage */
     stroke-width: 1;
     stroke-linejoin: round;
   }
@@ -1140,7 +1140,7 @@ const faqs = [
   .sia-arch__line--outer {
     stroke-width: 2;
   }
-  /* Characters carved into the wall and gilded: a dark cut edge above, gold within. */
+  /* Characters carved into the wall: a dark cut edge above, sage within. */
   .sia-carving text {
     font-family: var(--font-han);
     font-size: 40px;
@@ -1152,7 +1152,7 @@ const faqs = [
     transform: translate(-1.2px, -1.4px);
   }
   .sia-carving__gilt {
-    fill: #c9b47c;
+    fill: #b9c8a4; /* sage, from the palette */
     filter: drop-shadow(0 1px 0 rgb(255 255 255 / 0.12));
   }
   .sia-visit__threshold {
@@ -1483,7 +1483,7 @@ const faqs = [
     // extended so the doorway is about 1.5× as tall as it is wide. `d` grows the shape evenly
     // outward (a true offset, so the lobes' points stay crisp on every frame line).
     const CROWN = 0.73; // crown height, × A (from the reference)
-    const TIP = 0.652; // proportions of the gold feet and braces' tip curve
+    const TIP = 0.652; // proportions of the sage feet and braces' tip curve
     const APEX = 3.0; // total height, × A
     const SHOULDER = APEX - CROWN;
     const BAND = 44; // glass: inner panel 11px + outer panel 33px (3× as wide)
@@ -1642,7 +1642,7 @@ const faqs = [
         'd',
         `M${n(cx - A - BAND)} ${n(base)} H${n(cx - A - INNER)} M${n(cx + A + INNER)} ${n(base)} H${n(cx + A + BAND)}`,
       );
-      // Each foot: a gold plinth across the leg, its two sides the arch's tip curve rotated
+      // Each foot: a sage plinth across the leg, its two sides the arch's tip curve rotated
       // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
       const fh = 0.085 * A;
       const fw = ((0.17 * A) / TIP) * 0.35;
@@ -1672,7 +1672,7 @@ const faqs = [
       for (const line of lines) line.setAttribute('d', arch(cx, base, A, Number(line.dataset.line), false));
 
       // No sill: the photo fades into the moss toward the foot of the doorway, while the
-      // gold posts stay solid and end squarely at ground level, set into the ground.
+      // sage posts stay solid and end squarely at ground level, set into the ground.
       const fade = open >= 1 ? 'none' : `linear-gradient(to bottom, ${FADE.map(([t, a]) => `rgb(0 0 0 / ${a}) ${n(base - (1 - t) * 1.35 * A)}px`).join(', ')})`;
       door.style.maskImage = fade;
       door.style.setProperty('-webkit-mask-image', fade);
