@@ -334,19 +334,6 @@ body:has(.legal, .ill-studio) {
     0 18px 36px -24px rgb(39 50 42 / 0.35);
 }
 
-/* Studio page cards: light moss glass (the moss of the buttons), with cream text and pale
-   sage headings. */
-body .ill-studio .ill-studio__card {
-  --ill-deep: rgb(92 122 76);
-  --ill-sky: #e2ebcf;
-  --ill-mist: #f6f3ec;
-  --color-muted: #eef0e4;
-  --color-accent: #c3d1a6;
-  --color-on-accent: #27322a;
-  color: #f6f3ec;
-  box-shadow: 0 24px 44px -24px rgb(39 50 42 / 0.55);
-}
-
 /* ── BUILD-TIME CAPTURE MODE (remove before launch) ──────────────────────────────────────
    Active only with ?capture in the address (see the script in src/pages/index.astro). Shows
    everything at once and keeps full-screen sections at the real window's height, so
