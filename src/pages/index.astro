@@ -329,10 +329,13 @@ const faqs = [
         <path class="sia-timber" data-timber />
         <path class="sia-timber__edge sia-timber__edge--lit" data-timber-edge="lit" />
         <path class="sia-timber__edge sia-timber__edge--shade" data-timber-edge="shade" />
-        <!-- The doorway's edge, and the seam where the narrow inner glass panel meets the wide
-             outer one. -->
-        <path class="sia-arch__line" data-line="0" />
-        <path class="sia-arch__line sia-arch__line--seam" data-line="10" />
+        <!-- A thin timber frame on the doorway's edge, then the narrow inner glass panel
+             between two sage lines, meeting the wide outer panel. -->
+        <path class="sia-timber" data-timber-inner />
+        <path class="sia-timber__edge sia-timber__edge--lit" data-timber-inner-edge="lit" />
+        <path class="sia-timber__edge sia-timber__edge--shade" data-timber-inner-edge="shade" />
+        <path class="sia-arch__line" data-line="4" />
+        <path class="sia-arch__line sia-arch__line--seam" data-line="9" />
         <path class="sia-arch__line sia-arch__line--outer" data-line="44" />
         <path class="sia-arch__line sia-arch__cap" data-caps />
         <defs>
@@ -1486,6 +1489,7 @@ const faqs = [
     const SHOULDER = APEX - CROWN;
     const BAND = 44; // glass: inner panel 11px + outer panel 33px (3× as wide)
     const TIMBER = 12; // timber frame outside the glass
+    const INNER = 4; // thin timber frame on the doorway's edge, inside the glass
     const EDGE = BAND + TIMBER; // the gateway's outside edge
 
     // The left half of the crown in units of A: x from the centre (−1 = the post), y above
@@ -1628,11 +1632,15 @@ const faqs = [
       const timberPath = `${arch(cx, base, A, EDGE, true)} ${arch(cx, base, A, BAND, true)}`;
       archFrame.querySelector('[data-timber]')?.setAttribute('d', timberPath);
       archFrame.querySelector('[data-timber-edge="lit"]')?.setAttribute('d', arch(cx, base, A, BAND + 1.5, false));
-      archFrame.querySelector('[data-timber-edge="shade"]')?.setAttribute('d', arch(cx, base, A, EDGE - 0.5, false));      door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A, BAND, true)}")`;
+      archFrame.querySelector('[data-timber-edge="shade"]')?.setAttribute('d', arch(cx, base, A, EDGE - 0.5, false));
+      // Thin inner timber on the doorway's edge, lit on the opening side.
+      archFrame.querySelector('[data-timber-inner]')?.setAttribute('d', `${arch(cx, base, A, INNER, true)} ${arch(cx, base, A)}`);
+      archFrame.querySelector('[data-timber-inner-edge="lit"]')?.setAttribute('d', arch(cx, base, A, 0.5, false));
+      archFrame.querySelector('[data-timber-inner-edge="shade"]')?.setAttribute('d', arch(cx, base, A, INNER - 0.5, false));      door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A, BAND, true)}")`;
       const caps = archFrame.querySelector<SVGPathElement>('[data-caps]');
       caps?.setAttribute(
         'd',
-        `M${n(cx - A - BAND)} ${n(base)} H${n(cx - A)} M${n(cx + A)} ${n(base)} H${n(cx + A + BAND)}`,
+        `M${n(cx - A - BAND)} ${n(base)} H${n(cx - A - INNER)} M${n(cx + A + INNER)} ${n(base)} H${n(cx + A + BAND)}`,
       );
       // Each foot: a sage plinth across the leg, its two sides the arch's tip curve rotated
       // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
@@ -1647,7 +1655,7 @@ const faqs = [
         ?.setAttribute('d', foot(cx - A - EDGE, cx - A) + ' ' + foot(cx + A, cx + A + EDGE));
       // Braces: from the foot of the arch's outer line, the tip curve the right way up (rising
       // upright, turning level) until it meets the thick inner line. Crown proportions.
-      const bw = BAND; // ends at the line on the doorway's edge
+      const bw = BAND - INNER; // ends at the inner timber
       const bh = bw * TIP;
       const by = base - fh;
       const brace = (tip: number, dir: number) => {
