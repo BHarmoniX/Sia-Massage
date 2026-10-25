@@ -311,6 +311,29 @@ body {
   line-height: 1.7;
 }
 
+/* Sia's palette on the separate pages (legal pages and the studio page): the hero's soft
+   sage wash behind everything (running on behind the see-through footer), and frosted sage
+   glass for their boxes and cards instead of the base's plain surfaces. */
+body:has(.legal, .ill-studio) {
+  background:
+    radial-gradient(120% 70% at 75% 100%, rgb(196 210 176 / 0.55), transparent 70%),
+    radial-gradient(80% 60% at 0% 0%, rgb(255 253 246 / 0.7), transparent 70%),
+    linear-gradient(180deg, #f1f1e7, #e6ebdc);
+  background-attachment: fixed;
+}
+:is(.legal, .ill-studio) {
+  --color-surface: rgb(214 223 200 / 0.62);
+  --color-border: rgb(255 255 255 / 0.55);
+  --color-accent: #46613a;
+}
+:is(.legal__toc, .ill-studio__card) {
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    0 18px 36px -24px rgb(39 50 42 / 0.35);
+}
+
 /* ── BUILD-TIME CAPTURE MODE (remove before launch) ──────────────────────────────────────
    Active only with ?capture in the address (see the script in src/pages/index.astro). Shows
    everything at once and keeps full-screen sections at the real window's height, so
