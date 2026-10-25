@@ -15,8 +15,8 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 | tea-table.jpg | https://unsplash.com/photos/dPUWgZLsOk8 |
 | tea-leaves.jpg | https://unsplash.com/photos/Qaor6nxikUM |
 | hot-stones.jpg | https://unsplash.com/photos/SMwCQZWayj0 |
-| herbal-compress.jpg | https://unsplash.com/photos/YeekhTXpTgY |
-| oil-massage.jpg | https://unsplash.com/photos/cU53ZFBr3lk |
+| herbal-compress.jpg (unused) | https://unsplash.com/photos/YeekhTXpTgY |
+| oil-massage.jpg (unused, replaced: colours too bright) | https://unsplash.com/photos/cU53ZFBr3lk |
 | mossy-rocks.jpg (unused) | https://unsplash.com/photos/9AekDW5da34 |
 | towel-candles.jpg (unused) | https://unsplash.com/photos/W7AyAs7azHc |
 | bamboo-basin.jpg | https://unsplash.com/photos/OqxFh3pBTa4 |
@@ -50,3 +50,9 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | File | Source |
 |---|---|
 | public/video/sia-rain-leaves.mp4 (+ src/client/photos/rain-leaves-poster.jpg) | Rain on leaves — https://pixabay.com/videos/plants-leaves-foliage-rain-water-152800/ (tiny rendition, 4.8 MB) |
+
+## Photography: Pexels (free to use, Pexels licence)
+
+| File (src/client/photos) | Source |
+|---|---|
+| therapist-linen.jpg (treatments photo) | https://www.pexels.com/photo/a-massage-therapist-7233264/ |

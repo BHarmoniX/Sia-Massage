@@ -13,7 +13,7 @@ import { formatAuPhone, site, telHref } from '../config/site';
 import bambooLight from '../client/photos/bamboo-light.jpg';
 import teaTable from '../client/photos/tea-table.jpg';
 import towelCandles from '../client/photos/towel-candles.jpg';
-import oilMassage from '../client/photos/oil-massage.jpg';
+import therapistLinen from '../client/photos/therapist-linen.jpg';
 import bambooPath from '../client/photos/bamboo-path.jpg';
 import bambooBasin from '../client/photos/bamboo-basin.jpg';
 import mossWaterfall from '../client/photos/moss-waterfall.jpg';
@@ -30,7 +30,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
 // Pictures the treatment menu crossfades between as you move through it.
 // Pictures the menu crossfades between as you move through it.
 const treatmentImages = {
-  oil: { src: oilMassage, alt: 'Therapist pouring warm oil before a relaxation massage' },
+  oil: { src: therapistLinen, alt: 'A therapist in a linen uniform giving a slow relaxation massage in soft daylight' },
   calm: { src: towelCandles, alt: 'Rolled towel, candles and a reed diffuser in soft light' },
   tea: { src: teaTable, alt: 'Tea set laid out on a long wooden table' },
   water: { src: bambooBasin, alt: 'Water running from a bamboo spout into a stone basin' },
@@ -364,7 +364,7 @@ const faqs = [
         {
           journey.map((j) => (
             <li class="sia-visit__card notch-host float" data-tilt data-reveal>
-              <div class="sia-visit__panel sia-moss-glass glass-3d crystal notch" data-glow>
+              <div class="sia-visit__panel glass-3d crystal notch" data-glow>
                 <h3>{j.title}</h3>
                 <p>{j.text}</p>
               </div>
@@ -906,6 +906,8 @@ const faqs = [
   .sia-treatments__img {
     position: absolute;
     inset: 0;
+    /* A gentle grade so every photo here sits in the site's soft, organic palette. */
+    filter: saturate(0.82) sepia(0.08);
     opacity: 0;
     transform: scale(1.06);
     transition:
@@ -1178,20 +1180,33 @@ const faqs = [
   .sia-visit__card[data-tilting] {
     transition-duration: 120ms;
   }
+  /* Rice-paper glass cards with dark moss text (the section around them is deep moss). */
+  .sia-visit__panel.glass-3d {
+    --glass-tint: #f6f3ec;
+    --color-text: #27322a;
+    --color-muted: #3f4c3d;
+    --color-subtle: #55624f;
+    --color-accent: #5c7a4c;
+    --color-accent-strong: #46613a;
+    color: var(--color-text);
+    box-shadow: 0 24px 44px -24px rgb(20 28 18 / 0.6);
+    /* One see-through layer only (like the contact card): the crystal finish would add a
+       second, making the cards nearly solid. */
+    background-image: none;
+  }
   .sia-visit__panel {
-    --glass-blur: 16px;
+    --glass-blur: 18px;
     height: 100%;
     padding: 3rem 1.75rem 2rem;
     text-align: center;
   }
-  /* The same deep moss as the contact card's 约 (this section's own accent is pale sage). */
+  /* Moss numeral circles with pale sage characters, set into the rice-paper cards. */
   .sia-visit__card .notch-piece.glass-3d.crystal {
-    --glass-tint: #f6f3ec;
     font-size: 1.9rem;
-    color: #46613a;
-    /* Nearly opaque over the dark section, so it reads like the contact card's light seal. */
-    background: rgb(246 243 236 / 0.9);
+    color: #dbe6c2;
+    background: rgb(70 92 58 / 0.95);
     background-image: none;
+    border-color: rgb(255 255 255 / 0.3);
   }
   .sia-visit__card h3 {
     font-family: var(--font-display);
@@ -1229,8 +1244,12 @@ const faqs = [
     margin: 0 auto;
     padding: 6rem 1.5rem;
   }
+  /* The same soft sage wash as the hero. */
   .sia-faq {
-    background: linear-gradient(180deg, #ede7da, #e6dfcf);
+    background:
+      radial-gradient(120% 70% at 75% 100%, rgb(196 210 176 / 0.55), transparent 70%),
+      radial-gradient(80% 60% at 0% 0%, rgb(255 253 246 / 0.7), transparent 70%),
+      linear-gradient(180deg, #f1f1e7, #e6ebdc);
   }
   .sia-faq__image {
     aspect-ratio: 3 / 2;
@@ -1326,16 +1345,8 @@ const faqs = [
   .sia-contact__falls {
     object-position: 50% 35%;
   }
-  /* Moss glass, like the treatment and visit cards: dark moss with cream text. */
   .sia-contact__panel.glass-3d {
-    --glass-tint: rgb(47 61 42 / 0.82);
-    --color-text: #f3efe4;
-    --color-muted: #d6dbc9;
-    --color-subtle: #b3bca4;
-    --color-accent: #c3d1a6;
-    --color-accent-strong: #dbe6c2;
-    color: var(--color-text);
-    box-shadow: 0 24px 44px -24px rgb(20 28 18 / 0.75);
+    --glass-tint: #f6f3ec;
     padding: 3.75rem 2rem 2.75rem;
     border-radius: 3rem;
     text-align: center;
@@ -1358,7 +1369,7 @@ const faqs = [
     font-weight: 550;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #c3d1a6;
+    color: #3f5634;
   }
   /* A white button (dark moss text), for a calm second choice beside the moss one. */
   .btn-3d.sia-btn-white {
@@ -1381,11 +1392,6 @@ const faqs = [
     text-decoration: underline;
     text-decoration-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
     text-underline-offset: 4px;
-  }
-  /* On the moss card, "Call to book" keeps its usual moss green (not the card's pale accent). */
-  .sia-contact__actions .btn-3d:not(.sia-btn-sage) {
-    --btn-face: #5c7a4c;
-    --btn-text: #f6f3ec;
   }
   .sia-contact__actions {
     display: flex;
