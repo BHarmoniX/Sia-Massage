@@ -14,6 +14,8 @@ const sections = [
   { id: 'rights', title: 'Your consumer rights' },
   { id: 'website', title: 'Using this website' },
   { id: 'content', title: 'Content and design' },
+  { id: 'attribution', title: 'Attribution' },
+  { id: 'ai', title: 'Use of AI' },
   { id: 'liability', title: 'Liability' },
   { id: 'law', title: 'Governing law' },
   { id: 'contact', title: 'Contact' },
@@ -108,6 +110,71 @@ const sections = [
     <a href={studio.page}>{studio.footerMenuTitle}</a>). None of it may be copied, reproduced or
     reused, including for training or prompting AI systems, without written permission.
   </p>
+
+  <h2 id="attribution">Attribution</h2>
+  <p>
+    {info.name}'s website was designed and built by <a href={studio.page}>{studio.name}</a>.
+    {info.legal.attribution.length > 0 &&
+      ' It also uses the following work by others, each under the licence shown. We credit them because it is the right thing to do, even where a licence does not require it.'}
+  </p>
+  {
+    info.legal.attribution.length > 0 && (
+      <ul>
+        {info.legal.attribution.map((a) => (
+          <li>
+            <strong>{a.work}</strong>: {a.href ? <a href={a.href} rel="noopener noreferrer">{a.credit}</a> : a.credit}
+            {` (${a.licence})`}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  <p>If you believe we've used your work without the right credit or permission, please contact us and we'll fix it promptly.</p>
+
+  <h2 id="ai">Use of AI</h2>
+  <p>We believe in being open about artificial intelligence (AI):</p>
+  <ul>
+    {
+      info.legal.ai.builtWithAI && (
+        <li>
+          <strong>Building this website.</strong> {studio.name} uses AI-assisted tools in parts of
+          its design and development work. Every page, image choice and line of wording is directed,
+          reviewed and approved by people.
+        </li>
+      )
+    }
+    {
+      info.legal.ai.aiImagery ? (
+        <li>
+          <strong>Images.</strong> Some illustrations on this site are created with AI tools; they are
+          credited as such above. Photographs of people and places are real.
+        </li>
+      ) : (
+        <li>
+          <strong>Images.</strong> The photographs and artwork on this site are real, licensed work by
+          the people credited above. None are AI-generated.
+        </li>
+      )
+    }
+    {
+      info.legal.ai.aiChat && (
+        <li>
+          <strong>Chat assistant.</strong> The chat on this site is automated and can make mistakes.
+          It is not a substitute for advice from our team, and please don't share health or payment
+          details in it.
+        </li>
+      )
+    }
+    <li>
+      <strong>Your information.</strong> How we treat personal information around AI tools is set out
+      in our <a href="/privacy-policy#ai">Privacy Policy</a>.
+    </li>
+    <li>
+      <strong>AI training.</strong> The content and design of this site may not be collected, scraped
+      or used to train or prompt AI systems without our written permission.
+      {info.blocksAiCrawlers && ' Our site settings ask AI training crawlers not to collect it.'}
+    </li>
+  </ul>
 
   <h2 id="liability">Liability</h2>
   <p>

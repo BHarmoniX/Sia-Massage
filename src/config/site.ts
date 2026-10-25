@@ -141,6 +141,35 @@ export const siteSchema = z.object({
       privacyContact: z.email().optional(),
       /** True if the business sells gift vouchers (adds the voucher terms). */
       giftVouchers: z.boolean().default(false),
+      /**
+       * Credits for third-party photos, music, video and fonts, shown in the Attribution
+       * section of the Terms (good practice even where a licence doesn't require it).
+       */
+      attribution: z
+        .array(
+          z.object({
+            /** What it is and where it's used, e.g. 'Photograph: bamboo path (Your visit)'. */
+            work: z.string().min(1),
+            /** Creator or library, e.g. 'Unsplash' or 'diepthanhdk via Pixabay'. */
+            credit: z.string().min(1),
+            licence: z.string().min(1),
+            href: z.url({ protocol: /^https$/ }).optional(),
+          }),
+        )
+        .default([]),
+      /** How AI is involved, for the "Use of AI" sections. Keep this honest and current. */
+      ai: z
+        .object({
+          /** The site's design and code were developed with AI-assisted tools (human-directed). */
+          builtWithAI: z.boolean().default(true),
+          /** Some imagery on the site is AI-generated (it should then be credited as such). */
+          aiImagery: z.boolean().default(false),
+          /** The site has an automated chat assistant. */
+          aiChat: z.boolean().default(false),
+          /** Personal information is processed with AI tools (business-grade, no training). */
+          customerDataInAI: z.boolean().default(false),
+        })
+        .default({ builtWithAI: true, aiImagery: false, aiChat: false, customerDataInAI: false }),
       /** Physical access to the premises, for the Accessibility page, if known. */
       premisesAccess: z.string().optional(),
       /** Cancellation Policy page (Client Care). */

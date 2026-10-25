@@ -16,6 +16,7 @@ const sections = [
   { id: 'website', title: 'This website' },
   { id: 'use', title: 'How we use it' },
   { id: 'share', title: 'Who we share it with' },
+  { id: 'ai', title: 'AI and your information' },
   { id: 'security', title: 'Storage and security' },
   { id: 'access', title: 'Access and correction' },
   { id: 'complaints', title: 'Questions and complaints' },
@@ -136,6 +137,28 @@ const sections = [
     Some of these providers may store or process information outside Australia, including on
     secure cloud servers overseas. When that happens we take reasonable steps to make sure they
     protect it in line with the Australian Privacy Principles.
+  </p>
+
+  <h2 id="ai">AI and your information</h2>
+  {
+    info.legal.ai.customerDataInAI ? (
+      <p>
+        We use a small number of business-grade AI tools to help run our business (for example, to
+        help draft replies). We only use services that keep your information confidential and do not
+        use it to train their AI models, and{health && ' we never put health information into them, and'}
+        a person always reviews the result.
+      </p>
+    ) : (
+      <p>
+        We do not put your personal{health && ' or health'} information into AI tools such as
+        chatbots or AI writing assistants.
+      </p>
+    )
+  }
+  <p>
+    No decisions about you are made by automated means: your bookings and {info.services} are always
+    handled by people.
+    {info.legal.ai.aiChat && ' The chat assistant on this site is automated, so please don\'t share health or payment details in it.'}
   </p>
 
   <h2 id="security">Storage and security</h2>
