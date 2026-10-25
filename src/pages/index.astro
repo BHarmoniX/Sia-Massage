@@ -333,7 +333,8 @@ const faqs = [
         <path class="sia-timber" data-timber-inner />
         <path class="sia-timber__edge sia-timber__edge--lit" data-timber-inner-edge="lit" />
         <path class="sia-timber__edge sia-timber__edge--shade" data-timber-inner-edge="shade" />
-        <path class="sia-arch__line sia-arch__line--seam" data-line="11" />
+        <!-- Where the narrow inner and wide outer glass panels join (1 : 3 across the glass). -->
+        <path class="sia-arch__line sia-arch__line--seam" data-line="18.5" />
         <path class="sia-arch__line sia-arch__line--outer" data-line="44" />
         <path class="sia-arch__line sia-arch__cap" data-caps />
         <defs>
@@ -1487,7 +1488,7 @@ const faqs = [
     const SHOULDER = APEX - CROWN;
     const BAND = 44; // glass: inner panel 11px + outer panel 33px (3× as wide)
     const TIMBER = 12; // timber frame outside the glass
-    const INNER = 10; // timber on the doorway's edge, inside the glass (up to the seam at 11)
+    const INNER = 10; // timber on the doorway's edge, inside the glass
     const EDGE = BAND + TIMBER; // the gateway's outside edge
 
     // The left half of the crown in units of A: x from the centre (−1 = the post), y above
@@ -1639,7 +1640,7 @@ const faqs = [
       const caps = archFrame.querySelector<SVGPathElement>('[data-caps]');
       caps?.setAttribute(
         'd',
-        `M${n(cx - A - BAND)} ${n(base)} H${n(cx - A)} M${n(cx + A)} ${n(base)} H${n(cx + A + BAND)}`,
+        `M${n(cx - A - BAND)} ${n(base)} H${n(cx - A - INNER)} M${n(cx + A + INNER)} ${n(base)} H${n(cx + A + BAND)}`,
       );
       // Each foot: a gold plinth across the leg, its two sides the arch's tip curve rotated
       // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
@@ -1654,7 +1655,7 @@ const faqs = [
         ?.setAttribute('d', foot(cx - A - EDGE, cx - A) + ' ' + foot(cx + A, cx + A + EDGE));
       // Braces: from the foot of the arch's outer line, the tip curve the right way up (rising
       // upright, turning level) until it meets the thick inner line. Crown proportions.
-      const bw = BAND;
+      const bw = BAND - INNER; // ends at the inner timber
       const bh = bw * TIP;
       const by = base - fh;
       const brace = (tip: number, dir: number) => {
