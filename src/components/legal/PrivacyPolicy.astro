@@ -1,0 +1,167 @@
+---
+// Privacy Policy, aligned with the Privacy Act 1988 (Cth) and the Australian Privacy
+// Principles (APPs). It describes what this website actually does (see the notes on
+// browser storage and hosting logs); keep it in step if a site adds analytics or forms.
+import { features } from '../../../config/features.mjs';
+import ContactBlock from './ContactBlock.astro';
+import LegalPage from './LegalPage.astro';
+import { info } from './legal-info';
+
+const health = info.legal.collectsHealthInfo;
+const sections = [
+  { id: 'about', title: 'About this policy' },
+  { id: 'collect', title: 'What we collect' },
+  ...(health ? [{ id: 'health', title: 'Health information' }] : []),
+  { id: 'how', title: 'How we collect it' },
+  { id: 'website', title: 'This website' },
+  { id: 'use', title: 'How we use it' },
+  { id: 'share', title: 'Who we share it with' },
+  { id: 'security', title: 'Storage and security' },
+  { id: 'access', title: 'Access and correction' },
+  { id: 'complaints', title: 'Questions and complaints' },
+];
+---
+
+<LegalPage
+  title="Privacy Policy"
+  description={`How ${info.name} collects, uses and protects your personal information.`}
+  sections={sections}
+>
+  <h2 id="about">About this policy</h2>
+  <p>
+    {info.legalName} ("we", "us") respects your privacy. This policy explains how we handle
+    personal information under the <em>Privacy Act 1988</em> (Cth) and the Australian Privacy
+    Principles. It covers our {info.services}, our communications with you and this website.
+  </p>
+
+  <h2 id="collect">What we collect</h2>
+  <p>We only collect what we need to look after you. This may include:</p>
+  <ul>
+    <li>your name, phone number and email address;</li>
+    <li>details of your {info.services}: dates, times, preferences and payment records;</li>
+    {health && <li>health information relevant to your {info.service} (see below);</li>}
+    <li>anything you choose to tell us when you contact us.</li>
+  </ul>
+  <p>
+    You may deal with us anonymously or under a pseudonym where that's practical, for example
+    when asking a general question. We'll need your name and contact details to make a booking.
+  </p>
+
+  {
+    health && (
+      <>
+        <h2 id="health">Health information</h2>
+        <p>
+          Before your first {info.service}, and from time to time after, we ask about your health:
+          injuries, conditions, medications, pregnancy and anything else that affects how we can
+          safely care for you. Under the Privacy Act this is <strong>sensitive information</strong>,
+          and we handle it with extra care:
+        </p>
+        <ul>
+          <li>we only collect it with your consent, and only what is relevant to your care;</li>
+          <li>
+            it is seen only by the {info.practitioners} who look after you and the people who manage
+            your records;
+          </li>
+          <li>we never use it for marketing, and never sell or trade it;</li>
+          <li>
+            we keep it for as long as we need it to care for you and to meet our legal obligations,
+            then destroy it securely.
+          </li>
+        </ul>
+        <p>
+          You don't have to share health information, but if you don't, we may not be able to
+          provide a {info.service} safely.
+        </p>
+      </>
+    )
+  }
+
+  <h2 id="how">How we collect it</h2>
+  <p>
+    Usually directly from you: in person, by phone, by email or through a booking or message. If
+    someone else books for you (for example, as a gift), we'll collect your details from them and
+    confirm them with you.
+  </p>
+
+  <h2 id="website">This website</h2>
+  <p>We keep this website private by design:</p>
+  <ul>
+    <li><strong>No tracking or advertising cookies</strong>, and no analytics profiling of visitors.</li>
+    <li>
+      If you use the music button, your choice (on or off) is saved <strong>in your own browser</strong>
+      so the site remembers it. It never leaves your device, and you can clear it at any time in your
+      browser settings.
+    </li>
+    <li>
+      Our hosting provider keeps short-term technical logs (such as IP addresses and the pages
+      requested) to keep the site secure and working. Where we limit repeated requests to stop abuse,
+      visitor addresses are scrambled first, so the original address is not kept.
+    </li>
+    {
+      features.turnstile && (
+        <li>
+          Forms on this site use Cloudflare Turnstile to block spam. It checks your browser without
+          tracking you across other sites; see Cloudflare's privacy policy for details.
+        </li>
+      )
+    }
+    <li>
+      Links to other services (such as maps or social media) take you to sites with their own
+      privacy policies.
+    </li>
+  </ul>
+
+  <h2 id="use">How we use it</h2>
+  <ul>
+    <li>to book, provide and follow up your {info.services};</li>
+    {health && <li>to make sure each {info.service} is safe and suitable for you;</li>}
+    <li>to reply to your questions and send appointment reminders;</li>
+    <li>to keep business, tax and legal records;</li>
+    <li>to keep our website and systems secure.</li>
+  </ul>
+  <p>
+    We'll only send you news or offers if you ask for them, and every message will tell you how to
+    stop.
+  </p>
+
+  <h2 id="share">Who we share it with</h2>
+  <p>
+    We don't sell, rent or trade personal information. We share it only when needed with trusted
+    service providers who help us run the business (such as booking, payment, email and website
+    hosting services), when you ask us to, or when the law requires it (including to prevent a
+    serious threat to someone's life, health or safety).
+  </p>
+  <p>
+    Some of these providers may store or process information outside Australia, including on
+    secure cloud servers overseas. When that happens we take reasonable steps to make sure they
+    protect it in line with the Australian Privacy Principles.
+  </p>
+
+  <h2 id="security">Storage and security</h2>
+  <p>
+    We protect personal information from misuse, loss and unauthorised access with secure systems,
+    limited access and up-to-date software. This website is served over an encrypted connection with
+    strict security settings. When we no longer need information, we destroy it or remove anything
+    that identifies you.
+  </p>
+
+  <h2 id="access">Access and correction</h2>
+  <p>
+    You can ask to see the personal information we hold about you, or ask us to correct it, at any
+    time. We'll respond within 30 days. In rare cases the law allows us to refuse; if so, we'll tell
+    you why.
+  </p>
+
+  <h2 id="complaints">Questions and complaints</h2>
+  <p>
+    If you have a question or a concern about your privacy, please contact us first. We'll look into
+    it and reply within 30 days.
+  </p>
+  <ContactBlock privacy />
+  <p>
+    If you're not satisfied with our response, you can contact the Office of the Australian
+    Information Commissioner at <a href="https://www.oaic.gov.au" rel="noopener noreferrer">oaic.gov.au</a>
+    or on 1300 363 992.
+  </p>
+</LegalPage>

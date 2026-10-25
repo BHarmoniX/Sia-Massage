@@ -1,0 +1,74 @@
+---
+// Code of Conduct (Client Care), built only when `legal.codeOfConduct` is set. Written for
+// hands-on treatment businesses: professional, respectful and strictly non-sexual.
+import ContactBlock from './ContactBlock.astro';
+import LegalPage from './LegalPage.astro';
+import { info } from './legal-info';
+
+const { minimumAge } = info.legal.codeOfConduct!;
+const sections = [
+  { id: 'our-promise', title: 'Our promise to you' },
+  { id: 'consent', title: 'Your comfort and consent' },
+  { id: 'your-part', title: 'What we ask of you' },
+  { id: 'zero-tolerance', title: 'Zero tolerance' },
+  { id: 'minors', title: 'Younger clients' },
+  { id: 'concerns', title: 'Raising a concern' },
+];
+---
+
+<LegalPage
+  title="Code of Conduct"
+  description={`The standards of care and respect at ${info.name}.`}
+  sections={sections}
+>
+  <p>
+    {info.name} is a calm, safe, professional space. This code sets out what you can expect from us
+    and what we ask of every client, so everyone feels respected.
+  </p>
+
+  <h2 id="our-promise">Our promise to you</h2>
+  <ul>
+    <li>Every {info.service} is professional and <strong>strictly non-sexual</strong>.</li>
+    <li>Our {info.practitioners} are trained, courteous and respectful of your privacy and dignity.</li>
+    <li>We'll explain what to expect and answer your questions before we begin.</li>
+    <li>What you tell us stays confidential (see our <a href="/privacy-policy">Privacy Policy</a>).</li>
+  </ul>
+
+  <h2 id="consent">Your comfort and consent</h2>
+  <ul>
+    <li>You undress only to the level you're comfortable with, and you stay covered with towels throughout.</li>
+    <li>Only the area being worked on is uncovered, and only with your agreement.</li>
+    <li>
+      You can ask for a change, a pause or to stop at any time, and you'll never be asked to explain why.
+    </li>
+    <li>You're welcome to request a {info.practitioner} you'd feel most comfortable with, where available.</li>
+  </ul>
+
+  <h2 id="your-part">What we ask of you</h2>
+  <ul>
+    <li>Treat our {info.practitioners} and other clients with courtesy and respect.</li>
+    <li>Keep conversation and behaviour appropriate to a professional setting.</li>
+    <li>Arrive on time and without being affected by alcohol or drugs.</li>
+    <li>Respect the quiet of the space: please keep phones on silent.</li>
+  </ul>
+
+  <h2 id="zero-tolerance">Zero tolerance</h2>
+  <p>
+    Any sexual comment, request, gesture or behaviour, and any harassment, intimidation or
+    discrimination, will end the {info.service} immediately. The full price will be charged, we may
+    refuse future bookings, and where appropriate we will report it to the police.
+  </p>
+
+  <h2 id="minors">Younger clients</h2>
+  <p>
+    Clients under {minimumAge} are welcome with the written consent of a parent or guardian, who must
+    stay with them throughout the {info.service}.
+  </p>
+
+  <h2 id="concerns">Raising a concern</h2>
+  <p>
+    If anything during your visit didn't feel right, please tell us. You can speak to us in person or
+    get in touch privately. Every concern is taken seriously and handled confidentially.
+  </p>
+  <ContactBlock />
+</LegalPage>

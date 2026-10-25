@@ -1,0 +1,65 @@
+---
+// Cancellation Policy (Client Care), built only when `legal.cancellation` is set.
+import ContactBlock from './ContactBlock.astro';
+import LegalPage from './LegalPage.astro';
+import { info } from './legal-info';
+
+const c = info.legal.cancellation!;
+const sections = [
+  { id: 'changes', title: 'Changing or cancelling' },
+  { id: 'late-cancel', title: 'Late cancellations' },
+  { id: 'no-show', title: 'Missed appointments' },
+  { id: 'arriving-late', title: 'Arriving late' },
+  { id: 'our-side', title: 'If we need to change' },
+  { id: 'contact', title: 'How to let us know' },
+];
+---
+
+<LegalPage
+  title="Cancellation Policy"
+  description={`How to change or cancel a booking with ${info.name}.`}
+  sections={sections}
+>
+  <p>
+    Each {info.service} time is held just for you, often with a {info.practitioner} set aside. When a
+    booking is missed at short notice, that time usually can't be offered to someone else. This
+    policy keeps things fair for every client.
+  </p>
+
+  <h2 id="changes">Changing or cancelling</h2>
+  <p>
+    You're welcome to change or cancel at no charge with at least
+    <strong>{c.noticeHours} hours' notice</strong>.
+  </p>
+
+  <h2 id="late-cancel">Late cancellations</h2>
+  <p>
+    If you cancel or change with less than {c.noticeHours} hours' notice, a late cancellation fee of
+    <strong>{c.lateCancelFee}</strong> may apply.
+  </p>
+
+  <h2 id="no-show">Missed appointments</h2>
+  <p>
+    If you don't arrive and haven't let us know, a fee of <strong>{c.noShowFee}</strong> may apply.
+  </p>
+
+  <h2 id="arriving-late">Arriving late</h2>
+  <p>
+    Please arrive a few minutes early. If you're running late, let us know. We'll do our best, but
+    if you arrive more than {c.graceMinutes} minutes late your {info.service} may need to be shortened
+    so the next client isn't kept waiting, and the full price will still apply.
+  </p>
+
+  <h2 id="our-side">If we need to change</h2>
+  <p>
+    If we ever need to move or cancel your booking, we'll tell you as early as we can and offer
+    another time or a full refund of anything you've paid.
+  </p>
+  <p>
+    We understand that illness and emergencies happen. If you're unwell, please stay home and let us
+    know: we'll always consider waiving a fee in genuine circumstances.
+  </p>
+
+  <h2 id="contact">How to let us know</h2>
+  <ContactBlock />
+</LegalPage>

@@ -1,0 +1,193 @@
+---
+// Shared layout for every legal page: a calm reading column in the site's own colours and
+// fonts, a short contents list, the last-updated date, and the publication gate (a page
+// that hasn't been reviewed shows a draft banner in previews and can't go live).
+import { SITE_ENV } from 'astro:env/server';
+import OnePageLayout from '../../layouts/OnePageLayout.astro';
+import { site } from '../../config/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Section headings, for the contents list. Each needs a matching <h2 id> in the page. */
+  sections: { id: string; title: string }[];
+}
+
+const { title, description, sections } = Astro.props;
+const legal = site.legal!;
+
+if (SITE_ENV === 'production' && !legal.reviewed) {
+  throw new Error(
+    `Legal page "${title}" has not been reviewed. Have the wording checked, then set ` +
+      '`legal.reviewed: true` in src/config/site.ts before a production build.',
+  );
+}
+
+const updated = new Date(`${legal.updated}T00:00:00`).toLocaleDateString(site.locale, {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<OnePageLayout title={title} description={description}>
+  <article class="legal">
+    <a href="/" class="legal__back">← Back to {site.name}</a>
+
+    {
+      !legal.reviewed && (
+        <p class="legal__draft" role="note">
+          Draft template: this page has not yet been reviewed by {site.business.legalName}. It is
+          shown in previews only and will not go live until it has been checked.
+        </p>
+      )
+    }
+
+    <header class="legal__head">
+      <p class="legal__kicker">{site.name}</p>
+      <h1>{title}</h1>
+      <p class="legal__updated">Last updated {updated}</p>
+    </header>
+
+    {
+      sections.length > 2 && (
+        <nav class="legal__toc" aria-label="On this page">
+          <p>On this page</p>
+          <ol>
+            {sections.map((s) => (
+              <li>
+                <a href={`#${s.id}`}>{s.title}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+
+    <div class="legal__body">
+      <slot />
+    </div>
+  </article>
+</OnePageLayout>
+
+<style>
+  .legal {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem;
+    line-height: 1.75;
+  }
+  .legal__back {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    transition: color 200ms ease;
+  }
+  .legal__back:hover {
+    color: var(--color-accent);
+  }
+  .legal__draft {
+    margin-top: 1.5rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px dashed color-mix(in oklab, var(--color-accent) 60%, transparent);
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    background: color-mix(in oklab, var(--color-accent) 8%, transparent);
+  }
+  .legal__head {
+    margin-top: 2.5rem;
+  }
+  .legal__kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  .legal__head h1 {
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    line-height: 1.1;
+  }
+  .legal__updated {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-subtle);
+  }
+  .legal__toc {
+    margin-top: 2.5rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    background: color-mix(in oklab, var(--color-surface) 60%, transparent);
+  }
+  .legal__toc p {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-subtle);
+  }
+  .legal__toc ol {
+    margin-top: 0.5rem;
+    padding-left: 1.25rem;
+    list-style: decimal;
+    columns: 2 16rem;
+    column-gap: 2rem;
+    font-size: 0.9375rem;
+  }
+  .legal__toc a {
+    color: var(--color-muted);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    text-underline-offset: 3px;
+  }
+  .legal__toc a:hover {
+    color: var(--color-accent);
+  }
+  .legal__body {
+    margin-top: 2.5rem;
+    color: var(--color-muted);
+  }
+  .legal__body :global(h2) {
+    margin-top: 2.75rem;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    line-height: 1.25;
+    color: var(--color-text);
+    scroll-margin-top: calc(var(--header-height) + 1.5rem);
+  }
+  .legal__body :global(h3) {
+    margin-top: 1.5rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+  .legal__body :global(p),
+  .legal__body :global(ul),
+  .legal__body :global(ol) {
+    margin-top: 0.9rem;
+  }
+  .legal__body :global(ul) {
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+  .legal__body :global(ol) {
+    padding-left: 1.25rem;
+    list-style: decimal;
+  }
+  .legal__body :global(li + li) {
+    margin-top: 0.35rem;
+  }
+  .legal__body :global(a) {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--color-accent) 45%, transparent);
+    text-underline-offset: 3px;
+  }
+  .legal__body :global(a:hover) {
+    color: var(--color-accent);
+  }
+  .legal__body :global(strong) {
+    font-weight: 500;
+    color: var(--color-text);
+  }
+</style>

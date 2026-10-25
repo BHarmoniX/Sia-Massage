@@ -115,6 +115,55 @@ export const siteSchema = z.object({
       autoStart: z.boolean().default(true),
     })
     .optional(),
+  /**
+   * Legal pages (src/pages/[legal].astro). Privacy, Terms and Accessibility are always
+   * built; the Client Care pages are built only when their settings are present. The
+   * wording is a well-researched Australian template, not legal advice: have it reviewed,
+   * then set `reviewed: true`. Until then previews show a draft banner and a production
+   * build refuses to go live.
+   */
+  legal: z
+    .object({
+      /** Date the policies were last revised, e.g. '2026-10-25'. */
+      updated: z.iso.date(),
+      /** Set true once the business (ideally with a lawyer) has reviewed every page. */
+      reviewed: z.boolean().default(false),
+      /** What the business calls its service and the person who provides it. */
+      serviceNoun: z.string().default('appointment'),
+      practitioner: z.string().default('staff member'),
+      /**
+       * True when clients share health details (e.g. massage, beauty, fitness). Under the
+       * Privacy Act health service providers are covered regardless of turnover, and health
+       * information is "sensitive information" with stricter rules.
+       */
+      collectsHealthInfo: z.boolean().default(false),
+      /** Who handles privacy requests and complaints. Defaults to the business email. */
+      privacyContact: z.email().optional(),
+      /** True if the business sells gift vouchers (adds the voucher terms). */
+      giftVouchers: z.boolean().default(false),
+      /** Physical access to the premises, for the Accessibility page, if known. */
+      premisesAccess: z.string().optional(),
+      /** Cancellation Policy page (Client Care). */
+      cancellation: z
+        .object({
+          noticeHours: z.number().int().positive(),
+          lateCancelFee: z.string(),
+          noShowFee: z.string(),
+          /** How late a client can be before the session is shortened or forfeited. */
+          graceMinutes: z.number().int().nonnegative().default(10),
+        })
+        .optional(),
+      /** Health & Safety page (Client Care). */
+      healthSafety: z.boolean().default(false),
+      /** Code of Conduct page (Client Care). */
+      codeOfConduct: z
+        .object({
+          /** Minimum age to book alone; younger clients need a parent or guardian present. */
+          minimumAge: z.number().int().positive().default(18),
+        })
+        .optional(),
+    })
+    .optional(),
   /** Who to contact about a security problem (published in /.well-known/security.txt). */
   securityContact: z.email(),
   /** Block AI training crawlers in robots.txt. Search engines are still allowed. */
@@ -181,6 +230,25 @@ export const site: Site = siteSchema.parse({
     src: '/audio/sia-rain-meditation.mp3',
     title: 'Sia ambient music',
     volume: 0.22,
+  },
+  // Legal pages (/privacy-policy, /terms-conditions, /accessibility and the three Client Care
+  // pages). MOCK policy choices: confirm with the owner, have the wording reviewed, then set
+  // reviewed: true (a production build refuses until then).
+  legal: {
+    updated: '2026-10-25',
+    reviewed: false,
+    serviceNoun: 'treatment',
+    practitioner: 'therapist',
+    collectsHealthInfo: true,
+    giftVouchers: true, // "Gift of calm" vouchers on the menu
+    cancellation: {
+      noticeHours: 24, // MOCK
+      lateCancelFee: '50% of the treatment price', // MOCK
+      noShowFee: 'the full treatment price', // MOCK
+      graceMinutes: 10, // MOCK
+    },
+    healthSafety: true,
+    codeOfConduct: { minimumAge: 18 }, // MOCK
   },
   securityContact: 'hello@siamassage.com.au', // MOCK
 });

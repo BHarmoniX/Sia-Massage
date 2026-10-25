@@ -1,0 +1,83 @@
+---
+// Health & Safety (Client Care), built only when `legal.healthSafety` is true. Written for
+// hands-on treatment businesses (massage, beauty, wellness).
+import ContactBlock from './ContactBlock.astro';
+import LegalPage from './LegalPage.astro';
+import { info } from './legal-info';
+
+const sections = [
+  { id: 'before', title: 'Before your visit' },
+  { id: 'tell-us', title: 'Please tell us' },
+  { id: 'during', title: 'During your treatment' },
+  { id: 'hygiene', title: 'Hygiene and comfort' },
+  { id: 'not-medical', title: 'Not medical treatment' },
+  { id: 'contact', title: 'Questions' },
+];
+---
+
+<LegalPage
+  title="Health & Safety"
+  description={`How ${info.name} keeps every ${info.service} safe and comfortable.`}
+  sections={sections}
+>
+  <p>
+    Your wellbeing comes first. These simple steps help us make every {info.service} safe, comfortable
+    and right for you.
+  </p>
+
+  <h2 id="before">Before your visit</h2>
+  <ul>
+    <li>
+      On your first visit we'll ask a few health questions. Your answers are private (see our
+      <a href="/privacy-policy">Privacy Policy</a>) and help your {info.practitioner} care for you safely.
+    </li>
+    <li>
+      If you're unwell, have a fever, or have something that could pass to others, please reschedule.
+      We'll waive any late-change fee.
+    </li>
+    <li>Please avoid a heavy meal or alcohol just before your {info.service}.</li>
+  </ul>
+
+  <h2 id="tell-us">Please tell us</h2>
+  <p>Let your {info.practitioner} know before you start, and whenever something changes, if you:</p>
+  <ul>
+    <li>are pregnant, or think you may be;</li>
+    <li>have a recent injury, surgery, swelling, or broken or irritated skin;</li>
+    <li>have a heart condition, high or low blood pressure, diabetes, epilepsy or a blood clotting condition;</li>
+    <li>take medication that thins the blood or affects sensation;</li>
+    <li>have allergies or sensitivities (for example, to oils, nuts or fragrance);</li>
+    <li>have any condition your doctor has advised you about.</li>
+  </ul>
+  <p>
+    Sometimes we may suggest adjusting your {info.service}, or ask that you check with your doctor
+    first. This is always for your safety.
+  </p>
+
+  <h2 id="during">During your treatment</h2>
+  <ul>
+    <li>Tell us at any time if you'd like more or less pressure, or if anything is uncomfortable.</li>
+    <li>You can ask to pause or stop at any time, for any reason.</li>
+    <li>
+      Your {info.practitioner} may adjust or stop a {info.service} if they believe continuing isn't
+      safe for you.
+    </li>
+  </ul>
+
+  <h2 id="hygiene">Hygiene and comfort</h2>
+  <ul>
+    <li>Fresh, clean linen and towels for every client.</li>
+    <li>Hands, surfaces and equipment are cleaned between every {info.service}.</li>
+    <li>Products are chosen with care; ask us if you'd like to know what's used.</li>
+  </ul>
+
+  <h2 id="not-medical">Not medical treatment</h2>
+  <p>
+    Our {info.services} are for relaxation and wellbeing. They are not a substitute for medical
+    diagnosis or treatment. If you have a health concern, please see your doctor or another qualified
+    health professional.
+  </p>
+
+  <h2 id="contact">Questions</h2>
+  <p>We're happy to talk through any concerns before you book.</p>
+  <ContactBlock />
+</LegalPage>

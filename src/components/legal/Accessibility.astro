@@ -1,0 +1,69 @@
+---
+// Accessibility statement. The features listed are built into the Illuminara base; if a
+// client site adds something that changes them, update this page to match.
+import ContactBlock from './ContactBlock.astro';
+import LegalPage from './LegalPage.astro';
+import { info } from './legal-info';
+
+const sections = [
+  { id: 'commitment', title: 'Our commitment' },
+  { id: 'features', title: 'What we have done' },
+  { id: 'limits', title: 'Known limitations' },
+  ...(info.legal.premisesAccess ? [{ id: 'premises', title: 'Visiting us' }] : []),
+  { id: 'help', title: 'Getting help' },
+];
+---
+
+<LegalPage
+  title="Accessibility"
+  description={`How ${info.name} makes its website and services accessible to everyone.`}
+  sections={sections}
+>
+  <h2 id="commitment">Our commitment</h2>
+  <p>
+    We want everyone to be able to find out about {info.name} and book with us easily. This website
+    aims to meet the <strong>Web Content Accessibility Guidelines (WCAG) 2.2, level AA</strong>, the
+    standard recognised in Australia, and we keep improving it.
+  </p>
+
+  <h2 id="features">What we have done</h2>
+  <ul>
+    <li>Every page can be used with a keyboard alone, with a visible focus outline and a "Skip to content" link.</li>
+    <li>Pages use clear headings and landmarks, so screen readers can move around them easily.</li>
+    <li>Images that carry meaning have text descriptions; decorative ones are hidden from screen readers.</li>
+    <li>Text and buttons are designed for strong contrast and can be enlarged with your browser's zoom.</li>
+    <li>
+      If your device is set to <strong>reduce motion</strong>, the site's animations and moving
+      effects are calmed or switched off.
+    </li>
+    <li>Background music never plays until you choose it, and the music button can be used with a keyboard.</li>
+    <li>Phone numbers and email addresses are links, so you can call or write with one tap.</li>
+  </ul>
+
+  <h2 id="limits">Known limitations</h2>
+  <p>
+    Some parts of the site, such as decorative animations and photographs, are visual by nature. They
+    are never needed to find information or to book. If anything on the site gets in your way,
+    please tell us and we'll fix it or help another way.
+  </p>
+
+  {
+    info.legal.premisesAccess && (
+      <>
+        <h2 id="premises">Visiting us</h2>
+        <p>{info.legal.premisesAccess}</p>
+      </>
+    )
+  }
+
+  <h2 id="help">Getting help</h2>
+  <p>
+    If you have trouble using this website or need information in another format, contact us and
+    we'll be glad to help, including taking your booking by phone or email.
+  </p>
+  <ContactBlock />
+  <p>
+    If you're not satisfied with our response, you can contact the Australian Human Rights Commission
+    at <a href="https://humanrights.gov.au" rel="noopener noreferrer">humanrights.gov.au</a>.
+  </p>
+</LegalPage>

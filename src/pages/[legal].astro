@@ -1,0 +1,29 @@
+---
+// Legal pages, built from the templates in src/components/legal and the `legal` settings in
+// src/config/site.ts. Only the pages a site has switched on are built.
+import Accessibility from '../components/legal/Accessibility.astro';
+import CancellationPolicy from '../components/legal/CancellationPolicy.astro';
+import CodeOfConduct from '../components/legal/CodeOfConduct.astro';
+import HealthSafety from '../components/legal/HealthSafety.astro';
+import PrivacyPolicy from '../components/legal/PrivacyPolicy.astro';
+import TermsConditions from '../components/legal/TermsConditions.astro';
+import { legalPages } from '../components/legal/legal-info';
+import { site } from '../config/site';
+
+export function getStaticPaths() {
+  return site.legal ? legalPages().map((legal) => ({ params: { legal } })) : [];
+}
+
+const pages = {
+  'privacy-policy': PrivacyPolicy,
+  'terms-conditions': TermsConditions,
+  accessibility: Accessibility,
+  'cancellation-policy': CancellationPolicy,
+  'health-safety': HealthSafety,
+  'code-of-conduct': CodeOfConduct,
+} as const;
+
+const Page = pages[Astro.params.legal as keyof typeof pages];
+---
+
+<Page />
