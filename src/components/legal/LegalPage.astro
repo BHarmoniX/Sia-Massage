@@ -32,7 +32,7 @@ const updated = new Date(`${legal.updated}T00:00:00`).toLocaleDateString(site.lo
 
 <OnePageLayout title={title} description={description}>
   <article class="legal">
-    <a href="/" class="legal__back">← Back to {site.name}</a>
+    <a href="/" class="legal__back" data-back-link>← Back to {site.name}</a>
 
     {
       !legal.reviewed && (
@@ -69,6 +69,10 @@ const updated = new Date(`${legal.updated}T00:00:00`).toLocaleDateString(site.lo
     </div>
   </article>
 </OnePageLayout>
+
+<script>
+  import '../../scripts/back-link.ts';
+</script>
 
 <style>
   .legal {

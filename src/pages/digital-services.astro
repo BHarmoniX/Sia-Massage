@@ -32,7 +32,7 @@ const services = [
 >
   <div class="ill-studio">
   <section class="ill-studio__inner">
-    <a href="/" class="ill-studio__back">← Back to {site.name}</a>
+    <a href="/" class="ill-studio__back" data-back-link>← Back to {site.name}</a>
 
     <p class="ill-studio__kicker">Digital services</p>
     <h1>{studio.name}</h1>
@@ -81,6 +81,10 @@ const services = [
   </section>
   </div>
 </OnePageLayout>
+
+<script>
+  import '../scripts/back-link.ts';
+</script>
 
 <style>
   /* The studio page follows the client site's own colours (its tokens), like every page. */
