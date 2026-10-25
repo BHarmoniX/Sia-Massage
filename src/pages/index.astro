@@ -781,10 +781,18 @@ const faqs = [
     font-size: 1.5rem;
   }
   @media (min-width: 1024px) {
+    /* Fits one screen below the header: the photo's height follows the screen (and it sits
+       against the card, which overlaps its edge), while the card keeps its size. */
     .sia-philosophy__grid {
       grid-template-columns: 1fr 1fr;
       gap: 0;
-      padding: 8rem 3rem;
+      min-height: calc(100dvh - var(--header-height));
+      padding: 3.5rem 3rem;
+    }
+    .sia-philosophy__tea {
+      justify-self: end;
+      height: min(calc(100dvh - var(--header-height) - 7rem), 47.5rem);
+      max-width: 100%;
     }
     /* The card overlaps the photograph's edge by a fixed, deliberate amount. */
     .sia-philosophy__card {

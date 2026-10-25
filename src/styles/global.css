@@ -338,6 +338,12 @@ html.sia-capture .sia-hero__grid {
 html.sia-capture .sia-visit__stage {
   height: calc(var(--sia-vh) - var(--header-height)) !important;
 }
+html.sia-capture .sia-philosophy__grid {
+  min-height: calc(var(--sia-vh) - var(--header-height)) !important;
+}
+html.sia-capture .sia-philosophy__tea {
+  height: min(calc(var(--sia-vh) - var(--header-height) - 7rem), 47.5rem) !important;
+}
 html.sia-capture .sia-visit__inner {
   margin-top: calc(var(--sia-vh) * 0.3) !important;
 }
