@@ -22,6 +22,8 @@ const legal: NonNullable<Site['legal']> = site.legal ?? {
   collectsHealthInfo: false,
   giftVouchers: false,
   healthSafety: false,
+  attribution: [],
+  ai: { builtWithAI: true, aiImagery: false, aiChat: false, customerDataInAI: false },
 };
 
 export const info = {
@@ -42,6 +44,8 @@ export const info = {
   practitioner: legal.practitioner,
   practitioners: `${legal.practitioner}s`,
   legal,
+  /** Whether robots.txt asks AI training crawlers to stay away. */
+  blocksAiCrawlers: site.blockAiTrainingCrawlers,
 };
 
 /** The pages a site builds: the first three always, Client Care only when configured. */
