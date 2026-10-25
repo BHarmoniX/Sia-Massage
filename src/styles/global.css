@@ -334,6 +334,19 @@ body:has(.legal, .ill-studio) {
     0 18px 36px -24px rgb(39 50 42 / 0.35);
 }
 
+/* Studio page cards: Sia's moss glass (as on the treatment cards), with cream text and pale
+   sage headings. */
+body .ill-studio .ill-studio__card {
+  --ill-deep: rgb(47 61 42);
+  --ill-sky: #c3d1a6;
+  --ill-mist: #f3efe4;
+  --color-muted: #d6dbc9;
+  --color-accent: #c3d1a6;
+  --color-on-accent: #27322a;
+  color: #f3efe4;
+  box-shadow: 0 24px 44px -24px rgb(20 28 18 / 0.75);
+}
+
 /* ── BUILD-TIME CAPTURE MODE (remove before launch) ──────────────────────────────────────
    Active only with ?capture in the address (see the script in src/pages/index.astro). Shows
    everything at once and keeps full-screen sections at the real window's height, so
