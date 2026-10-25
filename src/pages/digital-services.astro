@@ -95,7 +95,14 @@ const services = [
     --ill-sky: #deebf1;
     min-height: calc(100dvh - var(--header-height));
     color: var(--ill-mist);
-    background: linear-gradient(135deg, var(--ill-obsidian) 0%, var(--ill-deep) 25%, var(--ill-ocean) 60%, var(--ill-sea) 100%);
+  }
+  /* The gradient covers the whole page, running on behind the footer to the very bottom, and
+     the footer's own background is see-through here so the gradient shows through it. */
+  :global(body:has(.ill-studio)) {
+    background: linear-gradient(135deg, #000000 0%, #061e29 25%, #1d546d 60%, #5f9598 100%);
+  }
+  :global(body:has(.ill-studio) .ill-footer) {
+    --footer-field: transparent;
   }
   .ill-studio__inner {
     max-width: 64rem;
