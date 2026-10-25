@@ -5,6 +5,7 @@ import OnePageLayout from '../layouts/OnePageLayout.astro';
 import { site } from '../config/site';
 import { studio } from '../config/studio';
 
+
 const services = [
   {
     title: 'Website design & development',
@@ -29,57 +30,162 @@ const services = [
   title={`Digital services by ${studio.name}`}
   description={`${site.name}'s website was designed and built by ${studio.name}.`}
 >
-  <section class="mx-auto max-w-4xl px-4 py-20 sm:px-6">
-    <a href="/" class="text-sm text-muted transition-colors hover:text-accent">← Back to {site.name}</a>
+  <div class="ill-studio">
+  <section class="ill-studio__inner">
+    <a href="/" class="ill-studio__back">← Back to {site.name}</a>
 
-    <p class="mt-10 text-sm tracking-widest text-accent uppercase">Digital services</p>
-    <h1 class="mt-2 font-display text-4xl sm:text-5xl">{studio.name}</h1>
-    <p class="mt-4 max-w-2xl text-lg text-muted">{studio.tagline}.</p>
+    <p class="ill-studio__kicker">Digital services</p>
+    <h1>{studio.name}</h1>
+    <p class="ill-studio__tagline">{studio.tagline}.</p>
 
-    <ul class="mt-12 grid gap-4 sm:grid-cols-2" role="list">
+    <ul class="ill-studio__grid" role="list">
       {
         services.map((s) => (
-          <li class="rounded-(--radius-card) border border-border bg-surface p-6">
-            <h2 class="font-display text-xl text-accent">{s.title}</h2>
-            <p class="mt-2 text-sm leading-relaxed text-muted">{s.text}</p>
+          <li class="ill-studio__card">
+            <h2>{s.title}</h2>
+            <p>{s.text}</p>
           </li>
         ))
       }
     </ul>
 
-    <div class="mt-12 rounded-(--radius-card) border border-border bg-surface-raised p-8">
-      <h2 class="font-display text-2xl">About this website</h2>
-      <p class="mt-3 text-muted">
+    <div class="ill-studio__card ill-studio__panel">
+      <h2>About this website</h2>
+      <p>
         The {site.name} website was designed and developed by {studio.name}, built on a
         security-first foundation: strict content security policy, protected forms, and hosting
         hardened against automated attacks.
       </p>
       {
         studio.email && (
-          <p class="mt-6">
-            <a
-              href={`mailto:${studio.email}`}
-              class="inline-block rounded-full bg-accent px-6 py-3 font-medium text-on-accent transition-shadow hover:shadow-(--glow-accent)"
-            >
-              Enquire about a website
-            </a>
+          <p class="ill-studio__cta">
+            <a href={`mailto:${studio.email}`}>Enquire about a website</a>
           </p>
         )
       }
     </div>
 
-    <div class="mt-6 rounded-(--radius-card) border border-border bg-surface p-8">
-      <h2 class="font-display text-2xl">Design rights</h2>
-      <p class="mt-3 text-muted">
+    <div class="ill-studio__card ill-studio__panel">
+      <h2>Design rights</h2>
+      <p>
         {studio.designCredit}. The design, layout, graphics, interface components (including
         the Illuminara footer) and code of this website are the work of {studio.name} and are
         protected by copyright. They may not be copied, reproduced, adapted or reused, in whole
         or in part, including for training or prompting AI systems, without written permission
         from {studio.name}.
       </p>
-      <p class="mt-3 text-muted">
+      <p>
         The business's own content (its name, logo, text and photographs) belongs to {site.name}.
       </p>
     </div>
   </section>
+  </div>
 </OnePageLayout>
+
+<style>
+  /* Illuminara's own palette (from the original studio page on Sa Massage). This page always
+     uses it, whatever the client site's colours. Set here in CSS (not inline) so it works
+     under the strict content security policy. */
+  .ill-studio {
+    --ill-obsidian: #000000;
+    --ill-deep: #061e29;
+    --ill-ocean: #1d546d;
+    --ill-sea: #5f9598;
+    --ill-mist: #f3f4f4;
+    --ill-sky: #deebf1;
+    min-height: calc(100dvh - var(--header-height));
+    color: var(--ill-mist);
+    background: linear-gradient(135deg, var(--ill-obsidian) 0%, var(--ill-deep) 25%, var(--ill-ocean) 60%, var(--ill-sea) 100%);
+  }
+  .ill-studio__inner {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 6rem;
+  }
+  .ill-studio__back {
+    font-size: 0.875rem;
+    color: var(--ill-sea);
+    filter: brightness(1.35);
+    transition: opacity 200ms ease;
+  }
+  .ill-studio__back:hover {
+    opacity: 0.75;
+  }
+  .ill-studio__kicker {
+    margin-top: 2.5rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ill-sky);
+    opacity: 0.8;
+  }
+  .ill-studio h1 {
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    line-height: 1.1;
+    color: var(--ill-mist);
+  }
+  .ill-studio__tagline {
+    margin-top: 1rem;
+    max-width: 40rem;
+    font-size: 1.125rem;
+    color: color-mix(in oklab, var(--ill-mist) 80%, transparent);
+  }
+  .ill-studio__grid {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+  @media (min-width: 640px) {
+    .ill-studio__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .ill-studio__card {
+    padding: 1.75rem;
+    border: 1px solid color-mix(in oklab, var(--ill-sky) 18%, transparent);
+    border-radius: 1.1rem;
+    background: color-mix(in oklab, var(--ill-deep) 85%, transparent);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    transition:
+      transform 300ms ease,
+      border-color 300ms ease;
+  }
+  .ill-studio__card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--ill-sky) 32%, transparent);
+  }
+  .ill-studio__card h2 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--ill-sky);
+  }
+  .ill-studio__card p {
+    margin-top: 0.6rem;
+    line-height: 1.7;
+    color: color-mix(in oklab, var(--ill-mist) 85%, transparent);
+  }
+  .ill-studio__panel {
+    margin-top: 1.5rem;
+    padding: 2rem;
+  }
+  .ill-studio__panel h2 {
+    color: var(--ill-mist);
+    font-size: 1.6rem;
+  }
+  .ill-studio__cta a {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.85rem 1.75rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    color: var(--ill-deep);
+    background: var(--ill-sky);
+    transition: box-shadow 300ms ease;
+  }
+  .ill-studio__cta a:hover {
+    box-shadow: 0 6px 22px color-mix(in oklab, var(--ill-sky) 35%, transparent);
+  }
+</style>
