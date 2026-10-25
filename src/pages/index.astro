@@ -329,7 +329,10 @@ const faqs = [
         <path class="sia-timber" data-timber />
         <path class="sia-timber__edge sia-timber__edge--lit" data-timber-edge="lit" />
         <path class="sia-timber__edge sia-timber__edge--shade" data-timber-edge="shade" />
-        <path class="sia-arch__line" data-line="0" />
+        <!-- Inner timber on the doorway's edge, in the same wood as the outer frame. -->
+        <path class="sia-timber" data-timber-inner />
+        <path class="sia-timber__edge sia-timber__edge--lit" data-timber-inner-edge="lit" />
+        <path class="sia-timber__edge sia-timber__edge--shade" data-timber-inner-edge="shade" />
         <path class="sia-arch__line sia-arch__line--seam" data-line="11" />
         <path class="sia-arch__line sia-arch__line--outer" data-line="44" />
         <path class="sia-arch__line sia-arch__cap" data-caps />
@@ -1474,28 +1477,123 @@ const faqs = [
     const n = (v: number) => v.toFixed(1);
 
     // The gateway outline: posts at cx ± A from the threshold (y = base) up to the crown.
-    // The crown is the reference stone arch's, mirrored exactly; the posts are extended so the
-    // doorway is about 1.5× as tall as it is wide. `d` grows the shape evenly outward.
-    const CROWN = 0.652; // crown height, × A (from the reference)
+    // The crown is the client's cusped arch: on each side three rounded lobes meeting in
+    // sharp points, rising to an onion tip at the top (mirrored exactly). The posts are
+    // extended so the doorway is about 1.5× as tall as it is wide. `d` grows the shape evenly
+    // outward (a true offset, so the lobes' points stay crisp on every frame line).
+    const CROWN = 0.73; // crown height, × A (from the reference)
+    const TIP = 0.652; // proportions of the gold feet and braces' tip curve
     const APEX = 3.0; // total height, × A
     const SHOULDER = APEX - CROWN;
     const BAND = 44; // glass: inner panel 11px + outer panel 33px (3× as wide)
     const TIMBER = 12; // timber frame outside the glass
+    const INNER = 10; // timber on the doorway's edge, inside the glass (up to the seam at 11)
     const EDGE = BAND + TIMBER; // the gateway's outside edge
+
+    // The left half of the crown in units of A: x from the centre (−1 = the post), y above
+    // the shoulder. Lobes are arcs between their points, bulging outward; the last rises in an
+    // ogee to the tip.
+    const crownLeft: [number, number][] = (() => {
+      const pts: [number, number][] = [[-1, 0]];
+      const cusps: [number, number, number][] = [
+        // [x, y, bulge of the lobe that ends here]
+        [-0.972, 0.077, 0.03],
+        [-0.843, 0.25, 0.06],
+        [-0.704, 0.487, 0.08],
+        [-0.172, 0.598, 0.12],
+      ];
+      let [px, py] = pts[0];
+      for (const [x, y, bulge] of cusps) {
+        const mx = (px + x) / 2;
+        const my = (py + y) / 2;
+        const len = Math.hypot(x - px, y - py);
+        // Outward is to the left of travel (up the post, over the top): (−dy, dx) in these units.
+        const qx = mx - ((y - py) / len) * bulge * 2;
+        const qy = my + ((x - px) / len) * bulge * 2;
+        for (let i = 1; i <= 18; i++) {
+          const t = i / 18;
+          pts.push([
+            (1 - t) ** 2 * px + 2 * (1 - t) * t * qx + t * t * x,
+            (1 - t) ** 2 * py + 2 * (1 - t) * t * qy + t * t * y,
+          ]);
+        }
+        [px, py] = [x, y];
+      }
+      // Ogee: from the last point, swelling out and drawing in to the tip at the centre.
+      const og: [number, number][] = [[px, py], [-0.1, 0.645], [-0.025, 0.665], [0, CROWN]];
+      for (let i = 1; i <= 22; i++) {
+        const t = i / 22;
+        const a = (1 - t) ** 3, b = 3 * (1 - t) ** 2 * t, c = 3 * (1 - t) * t * t, e = t ** 3;
+        pts.push([
+          a * og[0][0] + b * og[1][0] + c * og[2][0] + e * og[3][0],
+          a * og[0][1] + b * og[1][1] + c * og[2][1] + e * og[3][1],
+        ]);
+      }
+      return pts;
+    })();
+
+    // Grows a polyline outward by d, as a band of even width would: every edge moves out along
+    // its normal (outer corners rounded), then any point that ends up closer than d to the
+    // original shape is dropped. What is left is the true outline, with crisp points where the
+    // lobes meet and no loops where a tight inward curve is offset past its own radius.
+    const offset = (P: [number, number][], d: number): [number, number][] => {
+      if (d === 0) return P;
+      const raw: [number, number][] = [];
+      let prev: { tx: number; ty: number } | null = null;
+      for (let i = 0; i < P.length - 1; i++) {
+        const [ax, ay] = P[i];
+        const [bx, by] = P[i + 1];
+        const len = Math.hypot(bx - ax, by - ay);
+        if (len < 1e-6) continue;
+        const tx = (bx - ax) / len, ty = (by - ay) / len;
+        const nx = ty, ny = -tx; // outward (left of travel, screen coordinates)
+        if (prev && prev.tx * ty - prev.ty * tx > 1e-9) {
+          // Outer corner: a small arc about the original point.
+          const a0 = Math.atan2(-prev.tx, prev.ty);
+          let da = Math.atan2(-tx, ty) - a0;
+          while (da > Math.PI) da -= 2 * Math.PI;
+          while (da < -Math.PI) da += 2 * Math.PI;
+          const steps = Math.ceil(Math.abs(da) / 0.15);
+          for (let k = 1; k < steps; k++) {
+            const a = a0 + (da * k) / steps;
+            raw.push([ax + Math.cos(a) * d, ay + Math.sin(a) * d]);
+          }
+        }
+        // Long edges (the posts) get extra samples so trimming has points to keep.
+        const parts = Math.max(1, Math.ceil(len / 6));
+        for (let k = 0; k <= parts; k++) {
+          const t = k / parts;
+          raw.push([ax + (bx - ax) * t + nx * d, ay + (by - ay) * t + ny * d]);
+        }
+        prev = { tx, ty };
+      }
+      // Keep only points a full d from the original shape.
+      const near = (x: number, y: number) => {
+        let best = Infinity;
+        for (let i = 0; i < P.length - 1; i++) {
+          const [ax, ay] = P[i];
+          const [bx, by] = P[i + 1];
+          const vx = bx - ax, vy = by - ay;
+          const l2 = vx * vx + vy * vy || 1;
+          const t = Math.max(0, Math.min(1, ((x - ax) * vx + (y - ay) * vy) / l2));
+          const dx = x - (ax + vx * t), dy = y - (ay + vy * t);
+          const dd = dx * dx + dy * dy;
+          if (dd < best) best = dd;
+        }
+        return Math.sqrt(best);
+      };
+      return raw.filter(([x, y]) => near(x, y) > d - 0.05);
+    };
+
     const arch = (cx: number, base: number, A: number, d = 0, closed = d === 0) => {
-      const L = cx - A - d;
-      const R = cx + A + d;
       const sy = base - SHOULDER * A;
-      const ay = base - APEX * A - d;
-      const c1y = base - (SHOULDER + 0.36) * A - d * 0.6;
-      const c2x = 0.448 * A + d * 0.4;
-      const c2y = base - (SHOULDER + 0.588) * A - d;
-      return (
-        `M${n(L)} ${n(base)} L${n(L)} ${n(sy)} ` +
-        `C${n(L)} ${n(c1y)} ${n(cx - c2x)} ${n(c2y)} ${n(cx)} ${n(ay)} ` +
-        `C${n(cx + c2x)} ${n(c2y)} ${n(R)} ${n(c1y)} ${n(R)} ${n(sy)} ` +
-        `L${n(R)} ${n(base)}` + (closed ? ' Z' : '')
-      );
+      const left = crownLeft.map(([u, v]) => [cx + u * A, sy - v * A] as [number, number]);
+      const right = crownLeft
+        .slice(0, -1)
+        .reverse()
+        .map(([u, v]) => [cx - u * A, sy - v * A] as [number, number]);
+      const P = offset([[cx - A, base], ...left, ...right, [cx + A, base]], d);
+      return `M${P.map(([x, y]) => `${n(x)} ${n(y)}`).join(' L')}` + (closed ? ' Z' : '');
     };
     // Eased fade at the foot of the doorway: [position 0→1, opacity], smoothstep from 1 to 0,
     // so the photo melts into the moss with no visible edge at the ground.
@@ -1533,6 +1631,10 @@ const faqs = [
       archFrame.querySelector('[data-timber]')?.setAttribute('d', timberPath);
       archFrame.querySelector('[data-timber-edge="lit"]')?.setAttribute('d', arch(cx, base, A, BAND + 1.5, false));
       archFrame.querySelector('[data-timber-edge="shade"]')?.setAttribute('d', arch(cx, base, A, EDGE - 0.5, false));
+      // Inner timber: from the doorway's edge out to the seam, lit on the opening side.
+      archFrame.querySelector('[data-timber-inner]')?.setAttribute('d', `${arch(cx, base, A, INNER, true)} ${arch(cx, base, A)}`);
+      archFrame.querySelector('[data-timber-inner-edge="lit"]')?.setAttribute('d', arch(cx, base, A, 0.75, false));
+      archFrame.querySelector('[data-timber-inner-edge="shade"]')?.setAttribute('d', arch(cx, base, A, INNER - 0.5, false));
       door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A, BAND, true)}")`;
       const caps = archFrame.querySelector<SVGPathElement>('[data-caps]');
       caps?.setAttribute(
@@ -1542,7 +1644,7 @@ const faqs = [
       // Each foot: a gold plinth across the leg, its two sides the arch's tip curve rotated
       // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
       const fh = 0.085 * A;
-      const fw = ((0.17 * A) / CROWN) * 0.35;
+      const fw = ((0.17 * A) / TIP) * 0.35;
       const foot = (x0: number, x1: number) =>
         `M${n(x0 - fw)} ${n(base)} C${n(x0 - 0.552 * fw)} ${n(base - 0.098 * fh)} ${n(x0)} ${n(base - 0.448 * fh)} ${n(x0)} ${n(base - fh)} ` +
         `L${n(x1)} ${n(base - fh)} ` +
@@ -1553,7 +1655,7 @@ const faqs = [
       // Braces: from the foot of the arch's outer line, the tip curve the right way up (rising
       // upright, turning level) until it meets the thick inner line. Crown proportions.
       const bw = BAND;
-      const bh = bw * CROWN;
+      const bh = bw * TIP;
       const by = base - fh;
       const brace = (tip: number, dir: number) => {
         const x = (k: number) => n(tip + dir * k * bw);
