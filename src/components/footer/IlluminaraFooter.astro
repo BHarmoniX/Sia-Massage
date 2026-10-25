@@ -18,6 +18,7 @@ import { SITE_ENV } from 'astro:env/server';
 import { formatAuPhone, site, telHref } from '../../config/site';
 import { studio } from '../../config/studio';
 import FooterIcon from './FooterIcon.astro';
+import { legalPages } from '../legal/legal-info';
 
 const { business, logo, social, nav, footerMenus } = site;
 
@@ -27,6 +28,26 @@ if (SITE_ENV === 'production' && pending.length > 0) {
   throw new Error(
     `Footer: ${pending.map((s) => s.platform).join(', ')} profile link(s) are still placeholders. ` +
       'Add the real URLs in src/config/site.ts (social) or remove them before a production build.',
+  );
+}
+
+// Every footer link to a legal page must point at a page this site actually builds.
+const LEGAL_SLUGS = [
+  'privacy-policy',
+  'terms-conditions',
+  'accessibility',
+  'cancellation-policy',
+  'health-safety',
+  'code-of-conduct',
+];
+const built = site.legal ? legalPages() : [];
+const brokenLegal = footerMenus
+  .flatMap((m) => m.links)
+  .filter((l) => LEGAL_SLUGS.includes(l.href.replace(/^\//, '')) && !built.includes(l.href.replace(/^\//, '')));
+if (brokenLegal.length > 0) {
+  throw new Error(
+    `Footer links to legal page(s) this site doesn't build: ${brokenLegal.map((l) => l.href).join(', ')}. ` +
+      'Add the matching `legal` settings in src/config/site.ts, or remove the links.',
   );
 }
 

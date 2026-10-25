@@ -1,0 +1,17 @@
+---
+// "How to contact us" details, used at the end of several legal pages.
+import { info } from './legal-info';
+
+interface Props {
+  /** Use the privacy contact address instead of the general one. */
+  privacy?: boolean;
+}
+const email = Astro.props.privacy ? info.privacyEmail : info.email;
+---
+
+<ul>
+  <li><strong>Business:</strong> {info.legalName}{info.abn && ` (ABN ${info.abn})`}</li>
+  {email && <li><strong>Email:</strong> <a href={`mailto:${email}`}>{email}</a></li>}
+  {info.phone && <li><strong>Phone:</strong> <a href={info.phoneHref}>{info.phone}</a></li>}
+  {info.address && <li><strong>Address:</strong> {info.address}</li>}
+</ul>

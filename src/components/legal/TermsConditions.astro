@@ -1,0 +1,127 @@
+---
+// Terms & Conditions for a service business. Consumer guarantees under the Australian
+// Consumer Law cannot be excluded, so the wording preserves them.
+import { studio } from '../../config/studio';
+import ContactBlock from './ContactBlock.astro';
+import LegalPage from './LegalPage.astro';
+import { info } from './legal-info';
+
+const sections = [
+  { id: 'about', title: 'About these terms' },
+  { id: 'bookings', title: 'Bookings' },
+  { id: 'prices', title: 'Prices and payment' },
+  ...(info.legal.giftVouchers ? [{ id: 'vouchers', title: 'Gift vouchers' }] : []),
+  { id: 'rights', title: 'Your consumer rights' },
+  { id: 'website', title: 'Using this website' },
+  { id: 'content', title: 'Content and design' },
+  { id: 'liability', title: 'Liability' },
+  { id: 'law', title: 'Governing law' },
+  { id: 'contact', title: 'Contact' },
+];
+---
+
+<LegalPage
+  title="Terms & Conditions"
+  description={`The terms for booking with ${info.name} and using this website.`}
+  sections={sections}
+>
+  <h2 id="about">About these terms</h2>
+  <p>
+    These terms apply when you book a {info.service} with {info.legalName}
+    {info.abn && ` (ABN ${info.abn})`} or use this website. By booking or using the site, you agree
+    to them. We may update them from time to time; the date at the top shows the latest version.
+  </p>
+
+  <h2 id="bookings">Bookings</h2>
+  <ul>
+    <li>Bookings can be made by phone, by email or in person, and are confirmed when we accept them.</li>
+    <li>
+      Please give us accurate contact details so we can confirm or change your {info.service} if
+      needed.
+    </li>
+    {
+      info.legal.cancellation && (
+        <li>
+          Changes and cancellations are covered by our <a href="/cancellation-policy">Cancellation Policy</a>.
+        </li>
+      )
+    }
+    {
+      info.legal.healthSafety && (
+        <li>
+          Please read our <a href="/health-safety">Health &amp; Safety</a> information before your
+          first visit.
+        </li>
+      )
+    }
+    {
+      info.legal.codeOfConduct && (
+        <li>
+          Every visit is subject to our <a href="/code-of-conduct">Code of Conduct</a>.
+        </li>
+      )
+    }
+  </ul>
+
+  <h2 id="prices">Prices and payment</h2>
+  <p>
+    Prices are in Australian dollars and include GST. We may change prices from time to time, but the
+    price confirmed when you book is the price you pay. Payment is due at the time of your
+    {info.service} unless we agree otherwise.
+  </p>
+
+  {
+    info.legal.giftVouchers && (
+      <>
+        <h2 id="vouchers">Gift vouchers</h2>
+        <p>
+          Gift vouchers can be used for the {info.service} or value shown on them. Under Australian
+          law, a gift voucher is valid for at least three years from the date it is bought, and the
+          expiry date is printed on it. Vouchers can't be exchanged for cash, and we can't replace a
+          lost voucher unless we can verify the purchase.
+        </p>
+      </>
+    )
+  }
+
+  <h2 id="rights">Your consumer rights</h2>
+  <p>
+    Our {info.services} come with guarantees that cannot be excluded under the Australian Consumer
+    Law, including that they will be provided with due care and skill. Nothing in these terms limits
+    those rights. If something isn't right, please tell us so we can make it right.
+  </p>
+
+  <h2 id="website">Using this website</h2>
+  <p>
+    You may use this website for your own personal, non-commercial purposes. Please don't misuse it:
+    for example, by trying to break its security, overload it, or copy it with automated tools. We
+    keep the information on the site accurate and current, but it is general information only and may
+    change without notice. Links to other websites are provided for convenience; we are not
+    responsible for their content.
+  </p>
+
+  <h2 id="content">Content and design</h2>
+  <p>
+    The text, photographs, logo and branding of {info.name} belong to {info.legalName} or are used
+    with permission. The website's design, layout, graphics, interface components and code are the
+    work of {studio.name} and are protected by copyright (see
+    <a href={studio.page}>{studio.footerMenuTitle}</a>). None of it may be copied, reproduced or
+    reused, including for training or prompting AI systems, without written permission.
+  </p>
+
+  <h2 id="liability">Liability</h2>
+  <p>
+    To the extent the law allows, and except for the consumer guarantees above, we are not liable for
+    indirect or consequential loss arising from your use of this website. Where our liability can be
+    limited, it is limited to supplying the {info.service} again or refunding what you paid for it.
+  </p>
+
+  <h2 id="law">Governing law</h2>
+  <p>
+    These terms are governed by the laws of {info.stateName}, Australia, and you and we agree to the
+    jurisdiction of its courts.
+  </p>
+
+  <h2 id="contact">Contact</h2>
+  <ContactBlock />
+</LegalPage>
