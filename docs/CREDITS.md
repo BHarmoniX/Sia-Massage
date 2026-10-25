@@ -1,6 +1,6 @@
 # Image credits — Sia Massage
 
-All images are licensed for commercial use. Photos are provisional until original
+All images are licensed for commercial use. The public list of credits is in src/config/site.ts (legal.attribution), shown under Attribution in the Terms; keep both in step. Photos are provisional until original
 photography (OpenArt or a shoot of Sia's premises) replaces them.
 
 ## Photographs — Unsplash License (free commercial use, no attribution required)
@@ -13,12 +13,12 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 | bamboo-path.jpg | https://unsplash.com/photos/Um769ucDvd4 |
 | bamboo-dark.jpg (unused) | https://unsplash.com/photos/eobySVu7nN4 |
 | tea-table.jpg | https://unsplash.com/photos/dPUWgZLsOk8 |
-| tea-leaves.jpg | https://unsplash.com/photos/Qaor6nxikUM |
-| hot-stones.jpg | https://unsplash.com/photos/SMwCQZWayj0 |
+| tea-leaves.jpg (unused) | https://unsplash.com/photos/Qaor6nxikUM |
+| hot-stones.jpg (unused) | https://unsplash.com/photos/SMwCQZWayj0 |
 | herbal-compress.jpg (unused) | https://unsplash.com/photos/YeekhTXpTgY |
 | oil-massage.jpg (unused, replaced: colours too bright) | https://unsplash.com/photos/cU53ZFBr3lk |
 | mossy-rocks.jpg (unused) | https://unsplash.com/photos/9AekDW5da34 |
-| towel-candles.jpg (unused) | https://unsplash.com/photos/W7AyAs7azHc |
+| towel-candles.jpg | https://unsplash.com/photos/W7AyAs7azHc |
 | bamboo-basin.jpg | https://unsplash.com/photos/OqxFh3pBTa4 |
 | moss-waterfall.jpg | https://unsplash.com/photos/A_-cJ3PmB2o |
 | moss-river.jpg | https://unsplash.com/photos/ALrCdq-ui_Q |

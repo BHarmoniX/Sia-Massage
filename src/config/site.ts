@@ -278,6 +278,22 @@ export const site: Site = siteSchema.parse({
     },
     healthSafety: true,
     codeOfConduct: { minimumAge: 18 }, // MOCK
+    // Shown under "Attribution" in the Terms. Keep in step with docs/CREDITS.md.
+    attribution: [
+      { work: 'Photograph: bamboo leaves in soft light (welcome)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/FguFp1l5X0E' },
+      { work: 'Photograph: tea table (philosophy)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/dPUWgZLsOk8' },
+      { work: 'Video: rain on leaves (rain interlude)', credit: 'Pixabay', licence: 'Pixabay Content License', href: 'https://pixabay.com/videos/plants-leaves-foliage-rain-water-152800/' },
+      { work: 'Photograph: therapist in linen (treatments)', credit: 'Pexels', licence: 'Pexels License', href: 'https://www.pexels.com/photo/a-massage-therapist-7233264/' },
+      { work: 'Photograph: towel and candles (treatments)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/W7AyAs7azHc' },
+      { work: 'Photograph: mossy stream (treatments background)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/ALrCdq-ui_Q' },
+      { work: 'Photograph: bamboo path (your visit)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/Um769ucDvd4' },
+      { work: 'Photograph: bamboo water basin (FAQ and treatments)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/OqxFh3pBTa4' },
+      { work: 'Photograph: moss waterfall (contact)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/A_-cJ3PmB2o' },
+      { work: 'Music: Rain Meditation (background music)', credit: 'diepthanhdk via Pixabay', licence: 'Pixabay Content License', href: 'https://pixabay.com/music/meditationspiritual-rain-meditation-450575/' },
+      { work: 'Illustration: moon-window ink landscape, clouds and birds (welcome)', credit: 'Illuminara Creative Studio, drawn in code with AI-assisted tools', licence: 'Original artwork' },
+      { work: 'Typefaces: Cormorant Garamond (Christian Thalmann) and Jost (Owen Earl)', credit: 'Fontsource', licence: 'SIL Open Font License', href: 'https://fontsource.org' },
+    ],
+    ai: { builtWithAI: true, aiImagery: false, aiChat: false, customerDataInAI: false },
   },
   securityContact: 'hello@siamassage.com.au', // MOCK
 });
