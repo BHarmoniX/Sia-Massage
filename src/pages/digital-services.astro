@@ -83,26 +83,14 @@ const services = [
 </OnePageLayout>
 
 <style>
-  /* Illuminara's own palette (from the original studio page on Sa Massage). This page always
-     uses it, whatever the client site's colours. Set here in CSS (not inline) so it works
-     under the strict content security policy. */
+  /* The studio page follows the client site's own colours (its tokens), like every page. */
   .ill-studio {
-    --ill-obsidian: #000000;
-    --ill-deep: #061e29;
-    --ill-ocean: #1d546d;
-    --ill-sea: #5f9598;
-    --ill-mist: #f3f4f4;
-    --ill-sky: #deebf1;
+    --ill-mist: var(--color-text);
+    --ill-sky: var(--color-accent);
+    --ill-sea: var(--color-accent);
+    --ill-deep: var(--color-surface);
     min-height: calc(100dvh - var(--header-height));
-    color: var(--ill-mist);
-  }
-  /* The gradient covers the whole page, running on behind the footer to the very bottom, and
-     the footer's own background is see-through here so the gradient shows through it. */
-  :global(body:has(.ill-studio)) {
-    background: linear-gradient(135deg, #000000 0%, #061e29 25%, #1d546d 60%, #5f9598 100%);
-  }
-  :global(body:has(.ill-studio) .ill-footer) {
-    --footer-field: transparent;
+    color: var(--color-text);
   }
   .ill-studio__inner {
     max-width: 64rem;
@@ -111,8 +99,7 @@ const services = [
   }
   .ill-studio__back {
     font-size: 0.875rem;
-    color: var(--ill-sea);
-    filter: brightness(1.35);
+    color: var(--color-muted);
     transition: opacity 200ms ease;
   }
   .ill-studio__back:hover {
@@ -137,7 +124,7 @@ const services = [
     margin-top: 1rem;
     max-width: 40rem;
     font-size: 1.125rem;
-    color: color-mix(in oklab, var(--ill-mist) 80%, transparent);
+    color: var(--color-muted);
   }
   .ill-studio__grid {
     display: grid;
@@ -172,7 +159,7 @@ const services = [
   .ill-studio__card p {
     margin-top: 0.6rem;
     line-height: 1.7;
-    color: color-mix(in oklab, var(--ill-mist) 85%, transparent);
+    color: var(--color-muted);
   }
   .ill-studio__panel {
     margin-top: 1.5rem;
@@ -188,8 +175,8 @@ const services = [
     padding: 0.85rem 1.75rem;
     border-radius: 9999px;
     font-weight: 500;
-    color: var(--ill-deep);
-    background: var(--ill-sky);
+    color: var(--color-on-accent);
+    background: var(--color-accent);
     transition: box-shadow 300ms ease;
   }
   .ill-studio__cta a:hover {
