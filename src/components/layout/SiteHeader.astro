@@ -9,7 +9,12 @@ import { site } from '../../config/site';
 const onHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
 const resolve = (href: string) => (href.startsWith('#') && !onHome ? `/${href}` : href);
 
-const links = site.nav.map((l) => ({ ...l, href: resolve(l.href) }));
+// "Home" leads the menu: back to the top of the home page (the hero), a smooth scroll when
+// already there.
+const links = [
+  ...(site.nav.length > 0 ? [{ label: 'Home', href: onHome ? '#main' : '/' }] : []),
+  ...site.nav.map((l) => ({ ...l, href: resolve(l.href) })),
+];
 const cta = site.cta ? { ...site.cta, href: resolve(site.cta.href) } : undefined;
 ---
 
