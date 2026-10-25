@@ -712,13 +712,14 @@ const faqs = [
   }
   /* 静息, "quiet rest": read top to bottom, centred low in the moon scene, pale and faint:
      静 on the rice paddies between the hill and the river, 息 on the dark hill below it
-     (positions match those hills in the scene, so they hold at any size). Clear of the sun,
-     the clouds and the birds; it stays still as the scene moves. */
+     (positions and size both follow the moon window, so they fit the same spot at any
+     screen size). Clear of the sun, the clouds and the birds; it stays still as the scene
+     moves. */
   .sia-hero__rest {
     position: absolute;
     inset: 0;
     z-index: 1;
-    font-size: clamp(1.6rem, 2.8vw, 2.55rem);
+    container-type: size;
     line-height: 1;
     color: rgb(214 223 200 / 0.5);
     pointer-events: none;
@@ -726,6 +727,8 @@ const faqs = [
   }
   .sia-hero__rest > span {
     position: absolute;
+    /* A share of the moon window's width, so 静 always fits between the hill and the river. */
+    font-size: 4.5cqw;
     left: 50%;
     translate: -50% -50%;
   }
