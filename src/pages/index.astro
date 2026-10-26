@@ -1870,8 +1870,28 @@ const faqs = [
       const poly = leafPoly(cx, base, A, side);
       const b1 = 0.075 * A;
       const b2 = b1 + Math.max(3, 0.022 * A);
+      const cut = (pts: [number, number][], y: number, keepAbove: boolean) => {
+        const keep = (p: [number, number]) => (keepAbove ? p[1] <= y : p[1] >= y);
+        const out: [number, number][] = [];
+        for (let i = 0; i < pts.length; i++) {
+          const p = pts[i]!;
+          const q = pts[(i + 1) % pts.length]!;
+          if (keep(p)) out.push(p);
+          if (keep(p) !== keep(q)) {
+            const f = (y - p[1]) / (q[1] - p[1]);
+            out.push([p[0] + (q[0] - p[0]) * f, y]);
+          }
+        }
+        return out;
+      };
       const bead1 = pathOf(inset(poly, b1));
-      const bead2 = pathOf(inset(poly, b2));
+      // The inner bead boxes the panels in: its vertical lines turn 90° and run straight across
+      // the leaf just below the crown, leaving a separate crown panel above (a top rail between).
+      const sy = base - SHOULDER * A;
+      const boxTop = sy + 0.02 * A;
+      const g = 0.05 * A;
+      const ring2 = inset(poly, b2);
+      const bead2 = `${pathOf(cut(ring2, boxTop, false))} ${pathOf(cut(ring2, boxTop - g, true))}`;
       const bead1Lit = pathOf(inset(poly, b1 + 1));
       const hx = cx - m * 0.17 * A;
       const hy = base - 1.25 * A;
@@ -1879,7 +1899,6 @@ const faqs = [
       const xOuter = cx - m * (A - b1);
       const xInner = cx - m * (0.6 + b1);
       const rail = `M${n(xOuter)} ${n(railY)} H${n(xInner)} M${n(xOuter)} ${n(railY + b2 - b1)} H${n(xInner)}`;
-      const sy = base - SHOULDER * A;
       const strap = (y: number) => {
         const x0 = cx - m * A;
         const x1 = cx - m * (A - 0.26 * A);
@@ -1896,21 +1915,8 @@ const faqs = [
       const boss = hy - 0.04 * A;
       // Raised panels: the field inside the beads, above and below the rail, each bevelled.
       const field = inset(poly, b2 + 2);
-      const cut = (pts: [number, number][], y: number, keepAbove: boolean) => {
-        const keep = (p: [number, number]) => (keepAbove ? p[1] <= y : p[1] >= y);
-        const out: [number, number][] = [];
-        for (let i = 0; i < pts.length; i++) {
-          const p = pts[i]!;
-          const q = pts[(i + 1) % pts.length]!;
-          if (keep(p)) out.push(p);
-          if (keep(p) !== keep(q)) {
-            const f = (y - p[1]) / (q[1] - p[1]);
-            out.push([p[0] + (q[0] - p[0]) * f, y]);
-          }
-        }
-        return out;
-      };
-      const panelTop = cut(field, railY - 3, true);
+      const panelTop = cut(cut(field, railY - 3, true), boxTop + 2, false);
+      const panelCrown = cut(field, boxTop - g - 2, true);
       const panelBottom = cut(field, railY + (b2 - b1) + 3, false);
       const shadow = (svg: string, dx: number, dy: number) =>
         `<g transform="translate(${n(dx)} ${n(dy)})" filter="url(#sia-shadow-small)" opacity="0.7">${svg}</g>`;
@@ -1953,6 +1959,7 @@ const faqs = [
         // Raised panels standing out of the frame of the leaf.
         `<g filter="url(#sia-bevel-panel)">${board(pathOf(panelTop))}</g>` +
         `<g filter="url(#sia-bevel-panel)">${board(pathOf(panelBottom))}</g>` +
+        `<g filter="url(#sia-bevel-panel)">${board(pathOf(panelCrown))}</g>` +
         // Carved bead: dark cut with a lit edge, then a second fine bead inside it.
         `<path d="${bead1}" fill="none" stroke="rgb(16 10 5 / 0.7)" stroke-width="1.6" />` +
         `<path d="${bead1Lit}" fill="none" stroke="rgb(214 178 128 / 0.25)" stroke-width="0.8" />` +
