@@ -341,7 +341,7 @@ const faqs = [
         <path class="sia-arch__line sia-arch__line--outer sia-arch__line--moss" data-line="48.4" />
         <!-- Timber feet: the arch's tip curve, turned over, flaring each leg into the ground. -->
         <path class="sia-arch__feet" data-feet />
-        <path class="sia-arch__line sia-arch__foot-line" data-foot-line />
+        <path class="sia-arch__line sia-arch__foot-line sia-arch__line--moss" data-foot-line />
         <!-- Braces: the arch's tip curve, right way up, from each outer foot to the inner line. -->
         <path class="sia-arch__line sia-arch__brace" data-braces />
         <g class="sia-carving" data-couplet="right" lang="zh-Hans" role="img" aria-label="身体放松: a relaxed body">
@@ -1132,13 +1132,14 @@ const faqs = [
   .sia-arch__line--outer {
     stroke-width: 2;
   }
-  /* The thick lines bordering the timber, in moss; the fine lines stay sage. */
+  /* The outline bordering the timber (both thick lines and the lines across the feet) in
+     moss; the fine lines stay sage. */
   .sia-arch__line--moss {
     stroke: #5c7a4c;
   }
   /* Across the top of each timber foot, joining the design lines. */
   .sia-arch__foot-line {
-    stroke-width: 1.5;
+    stroke-width: 2; /* same as the outer line it joins */
     stroke-linecap: round;
   }
   /* Characters carved into the wall: a dark cut edge above, sage within. */
