@@ -1249,6 +1249,14 @@ const faqs = [
   }
   /* The leaf's thickness, seen along its meeting edge as it swings: a face turned back from
      the edge into the doorway. */
+  /* The back face of a leaf, set back by its thickness (placed by the script). */
+  .sia-visit__leaf-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
   /* One short face of the top edge's thickness (placed and shaded by the script). */
   .sia-visit__leaf-rim {
     position: absolute;
@@ -1909,12 +1917,12 @@ const faqs = [
         `<circle cx="${n(hx)}" cy="${n(hy)}" r="${n(0.078 * A)}" fill="#000" />` +
         `<circle cx="${n(hx)}" cy="${n(boss + ring)}" r="${n(ring)}" fill="none" stroke="#000" stroke-width="${n(0.017 * A)}" />`;
       const lift = Math.max(1.5, 0.012 * A);
-      // The board photo, one tile per leaf width, its repeat hidden behind the rail; the
-      // right leaf mirrored so the two don't match board for board.
+      // The board photo, one tile covering the whole leaf (stretched along the grain, so no
+      // seam shows); the right leaf mirrored so the two don't match board for board.
       const tileW = A;
-      const tileH = A * 1.5;
+      const tileH = APEX * A + 4;
       const x0 = side === 'left' ? cx - A : cx;
-      const y0 = railY + (b2 - b1) / 2 - Math.ceil((railY - (base - APEX * A)) / tileH) * tileH;
+      const y0 = base - APEX * A - 2;
       const flip = side === 'right' ? ` transform="translate(${n(tileW)} 0) scale(-1 1)"` : '';
       const tile = (id: string, filter: string) =>
         `<pattern id="${id}-${side}" patternUnits="userSpaceOnUse" x="${n(x0)}" y="${n(y0)}" width="${n(tileW)}" height="${n(tileH)}">` +
@@ -2012,7 +2020,14 @@ const faqs = [
               [leaves.left, 'left'],
               [leaves.right, 'right'],
             ] as const) {
-              leaf.querySelectorAll('.sia-visit__leaf-rim').forEach((el) => el.remove());
+              leaf.querySelectorAll('.sia-visit__leaf-rim, .sia-visit__leaf-back').forEach((el) => el.remove());
+              // The back face: the leaf's shape again, set back by its thickness, closing the
+              // edge so the door reads as one solid piece.
+              const back = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+              back.setAttribute('class', 'sia-visit__leaf-back');
+              back.innerHTML = `<path d="${pathOf(leafPoly(cx, base, A, side))}" fill="#3a5131" stroke="rgb(16 22 12 / 0.7)" stroke-width="1.2" />`;
+              back.style.transform = `translateZ(${n(-T)}px)`;
+              leaf.insertBefore(back, leaf.firstChild);
               const crown = leafPoly(cx, base, A, side).slice(1, -1);
               const pts = crown.filter((_, i) => i % 2 === 0 || i === crown.length - 1);
               for (let i = 0; i < pts.length - 1; i++) {
