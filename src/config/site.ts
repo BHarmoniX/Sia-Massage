@@ -284,6 +284,7 @@ export const site: Site = siteSchema.parse({
       { work: 'Photograph: tea table (philosophy)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/dPUWgZLsOk8' },
       { work: 'Video: rain on leaves (rain interlude)', credit: 'Pixabay', licence: 'Pixabay Content License', href: 'https://pixabay.com/videos/plants-leaves-foliage-rain-water-152800/' },
       { work: 'Photograph: therapist in linen (treatments)', credit: 'Pexels', licence: 'Pexels License', href: 'https://www.pexels.com/photo/a-massage-therapist-7233264/' },
+      { work: 'Photograph: cracked painted boards (doorway doors)', credit: 'Pexels', licence: 'Pexels License', href: 'https://www.pexels.com/photo/1456301/' },
       { work: 'Photograph: towel and candles (treatments)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/W7AyAs7azHc' },
       { work: 'Photograph: mossy stream (treatments background)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/ALrCdq-ui_Q' },
       { work: 'Photograph: bamboo path (your visit)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/Um769ucDvd4' },

@@ -19,6 +19,12 @@ import bambooBasin from '../client/photos/bamboo-basin.jpg';
 import mossWaterfall from '../client/photos/moss-waterfall.jpg';
 import mossRiver from '../client/photos/moss-river.jpg';
 import rainPoster from '../client/photos/rain-leaves-poster.jpg';
+import doorTexture from '../client/photos/door-texture.jpg';
+import { getImage } from 'astro:assets';
+
+// The doorway's doors: real boards in cracked, weathered paint (turned upright, tinted moss in
+// the page). Compressed to WebP at build time.
+const doorTextureImg = await getImage({ src: doorTexture, width: 542, format: 'webp', quality: 74 });
 
 const { business } = site;
 const phone = business.phone!;
@@ -299,7 +305,7 @@ const faqs = [
       <!-- Doors: the opening inside the inner timber, split down the centre into two solid
            timber leaves hinged on the posts. They swing in to reveal the path before the gateway
            opens around you. Drawn by the doorway script from the same geometry. -->
-      <div class="sia-visit__doors" data-doors>
+      <div class="sia-visit__doors" data-doors data-door-texture={doorTextureImg.src}>
         <div class="sia-visit__leaf" data-leaf="left"><svg class="sia-visit__leaf-svg"></svg><div class="sia-visit__leaf-edge"></div></div>
         <div class="sia-visit__leaf" data-leaf="right"><svg class="sia-visit__leaf-svg"></svg><div class="sia-visit__leaf-edge"></div></div>
       </div>
@@ -329,7 +335,7 @@ const faqs = [
           <filter id="sia-bevel-door" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="relief" />
             <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="grainHeight" />
-            <feComposite in="relief" in2="grainHeight" operator="arithmetic" k2="1" k3="0.6" result="surface" />
+            <feComposite in="relief" in2="grainHeight" operator="arithmetic" k2="1" k3="0.15" result="surface" />
             <feDiffuseLighting in="surface" surfaceScale="5" diffuseConstant="1.2" lighting-color="#fff" result="diffuse">
               <feDistantLight azimuth="225" elevation="50" />
             </feDiffuseLighting>
@@ -344,7 +350,7 @@ const faqs = [
           <filter id="sia-bevel-panel" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="relief" />
             <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="grainHeight" />
-            <feComposite in="relief" in2="grainHeight" operator="arithmetic" k2="1" k3="0.6" result="surface" />
+            <feComposite in="relief" in2="grainHeight" operator="arithmetic" k2="1" k3="0.15" result="surface" />
             <feDiffuseLighting in="surface" surfaceScale="6" diffuseConstant="1.18" lighting-color="#fff" result="diffuse">
               <feDistantLight azimuth="225" elevation="52" />
             </feDiffuseLighting>
@@ -440,6 +446,18 @@ const faqs = [
               <ellipse rx="4.5" ry="14" fill="url(#sia-knot)" />
             </g>
           </pattern>
+          <!-- Door cracks: only the photo's darkest cracks and joints, as deep moss. -->
+          <filter id="sia-door-cracks" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values="0 0 0 0 0.05  0 0 0 0 0.07  0 0 0 0 0.04  -1.8 -3.5 -0.6 0 2.6" />
+          </filter>
+          <filter id="sia-door-moss" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values="0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0 0 0 1 0" />
+            <feComponentTransfer>
+              <feFuncR type="table" tableValues="0.07 0.2 0.36 0.7" />
+              <feFuncG type="table" tableValues="0.1 0.28 0.47 0.77" />
+              <feFuncB type="table" tableValues="0.06 0.17 0.3 0.62" />
+            </feComponentTransfer>
+          </filter>
           <clipPath id="sia-wall-clip" clipPathUnits="userSpaceOnUse">
             <path data-wall-clip clip-rule="evenodd" />
           </clipPath>
@@ -1234,9 +1252,18 @@ const faqs = [
   .sia-visit__leaf-edge {
     position: absolute;
     background:
-      linear-gradient(90deg, rgb(255 230 190 / 0.12), transparent 30%, rgb(0 0 0 / 0.35)),
-      linear-gradient(180deg, #3b2616, #2a1a0e 60%, #1e130a);
+      linear-gradient(90deg, rgb(220 230 200 / 0.12), transparent 30%, rgb(0 0 0 / 0.4)),
+      linear-gradient(180deg, #34452b, #26331f 60%, #1b2416);
     backface-visibility: hidden;
+  }
+  /* Door paint layers (drawn by the script): the board pattern blended in lightly, and a faint
+     layer of cracks. */
+  .sia-door-grain {
+    mix-blend-mode: soft-light;
+    opacity: 0.32;
+  }
+  .sia-door-cracks {
+    opacity: 0.16;
   }
   .sia-visit__leaf-svg {
     display: block;
@@ -1875,12 +1902,30 @@ const faqs = [
         `<circle cx="${n(hx)}" cy="${n(hy)}" r="${n(0.078 * A)}" fill="#000" />` +
         `<circle cx="${n(hx)}" cy="${n(boss + ring)}" r="${n(ring)}" fill="none" stroke="#000" stroke-width="${n(0.017 * A)}" />`;
       const lift = Math.max(1.5, 0.012 * A);
+      // The board photo, one tile per leaf width, its repeat hidden behind the rail; the
+      // right leaf mirrored so the two don't match board for board.
+      const tileW = A;
+      const tileH = A * 1.5;
+      const x0 = side === 'left' ? cx - A : cx;
+      const y0 = railY + (b2 - b1) / 2 - Math.ceil((railY - (base - APEX * A)) / tileH) * tileH;
+      const flip = side === 'right' ? ` transform="translate(${n(tileW)} 0) scale(-1 1)"` : '';
+      const tile = (id: string, filter: string) =>
+        `<pattern id="${id}-${side}" patternUnits="userSpaceOnUse" x="${n(x0)}" y="${n(y0)}" width="${n(tileW)}" height="${n(tileH)}">` +
+        `<image href="${doorTexture}" width="${n(tileW)}" height="${n(tileH)}" preserveAspectRatio="none" filter="url(#${filter})"${flip} /></pattern>`;
+      const wood = `<defs>${tile('sia-door-grain', 'sia-door-grain')}${tile('sia-door-cracks', 'sia-door-cracks')}</defs>`;
+      // Painted board: moss paint, the board pattern blended in lightly, then faint cracks.
+      const board = (d: string) =>
+        `<path d="${d}" fill="#4b673f" />` +
+        `<path d="${d}" fill="url(#sia-door-grain-${side})" class="sia-door-grain" />` +
+        `<path d="${d}" fill="url(#sia-door-cracks-${side})" class="sia-door-cracks" />`;
       return (
-        // The leaf: solid timber, its edges rounded by the light.
-        `<path d="${pathOf(poly)}" fill="url(#sia-wood)" filter="url(#sia-bevel-door)" />` +
+        // The leaf: moss-painted boards (the photo spans the leaf, so its joints make the
+        // planks), edges rounded by the light.
+        wood +
+        `<g filter="url(#sia-bevel-door)">${board(pathOf(poly))}</g>` +
         // Raised panels standing out of the frame of the leaf.
-        `<path d="${pathOf(panelTop)}" fill="url(#sia-wood)" filter="url(#sia-bevel-panel)" />` +
-        `<path d="${pathOf(panelBottom)}" fill="url(#sia-wood)" filter="url(#sia-bevel-panel)" />` +
+        `<g filter="url(#sia-bevel-panel)">${board(pathOf(panelTop))}</g>` +
+        `<g filter="url(#sia-bevel-panel)">${board(pathOf(panelBottom))}</g>` +
         // Carved bead: dark cut with a lit edge, then a second fine bead inside it.
         `<path d="${bead1}" fill="none" stroke="rgb(16 10 5 / 0.7)" stroke-width="1.6" />` +
         `<path d="${bead1Lit}" fill="none" stroke="rgb(214 178 128 / 0.25)" stroke-width="0.8" />` +
@@ -1898,6 +1943,7 @@ const faqs = [
       );
     };
     const doors = doorway.querySelector<HTMLElement>('[data-doors]');
+    const doorTexture = doors?.dataset.doorTexture ?? '';
     const leaves = {
       left: doorway.querySelector<HTMLElement>('[data-leaf="left"]'),
       right: doorway.querySelector<HTMLElement>('[data-leaf="right"]'),
