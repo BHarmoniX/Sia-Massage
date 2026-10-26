@@ -339,7 +339,6 @@ const faqs = [
         <!-- A fine design line a third of the way across the wide outer panel. -->
         <path class="sia-arch__line sia-arch__line--seam" data-line="23.3" data-to-brace />
         <path class="sia-arch__line sia-arch__line--outer" data-line="44" />
-        <path class="sia-arch__line sia-arch__cap" data-caps />
         <!-- Timber feet: the arch's tip curve, turned over, flaring each leg into the ground. -->
         <path class="sia-arch__feet" data-feet />
         <!-- Braces: the arch's tip curve, right way up, from each outer foot to the inner line. -->
@@ -1097,11 +1096,6 @@ const faqs = [
     stroke-linejoin: round;
     stroke-linecap: butt;
   }
-  /* Joins the two lines across the foot of each post, closing the frame as one piece. */
-  .sia-arch__cap {
-    stroke-width: 2;
-    stroke-linecap: square;
-  }
   .sia-timber {
     fill: url(#sia-wood);
     fill-rule: evenodd;
@@ -1634,12 +1628,8 @@ const faqs = [
       // Thin inner timber on the doorway's edge, lit on the opening side.
       archFrame.querySelector('[data-timber-inner]')?.setAttribute('d', `${arch(cx, base, A, INNER, true)} ${arch(cx, base, A)}`);
       archFrame.querySelector('[data-timber-inner-edge="lit"]')?.setAttribute('d', arch(cx, base, A, 0.5, false));
-      archFrame.querySelector('[data-timber-inner-edge="shade"]')?.setAttribute('d', arch(cx, base, A, INNER - 0.5, false));      door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A, BAND, true)}")`;
-      const caps = archFrame.querySelector<SVGPathElement>('[data-caps]');
-      caps?.setAttribute(
-        'd',
-        `M${n(cx - A - BAND)} ${n(base)} H${n(cx - A - INNER)} M${n(cx + A + INNER)} ${n(base)} H${n(cx + A + BAND)}`,
-      );
+      archFrame.querySelector('[data-timber-inner-edge="shade"]')?.setAttribute('d', arch(cx, base, A, INNER - 0.5, false));
+      door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A, BAND, true)}")`;
       // Each foot: a timber plinth across the leg, its two sides the arch's tip curve rotated
       // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
       const fh = 0.085 * A;
