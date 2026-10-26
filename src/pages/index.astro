@@ -334,16 +334,18 @@ const faqs = [
         <path class="sia-timber" data-timber-inner />
         <path class="sia-timber__edge sia-timber__edge--lit" data-timber-inner-edge="lit" />
         <path class="sia-timber__edge sia-timber__edge--shade" data-timber-inner-edge="shade" />
-        <path class="sia-arch__line sia-arch__line--moss" data-line="8" />
         <path class="sia-arch__line sia-arch__line--seam" data-line="13" />
         <!-- A fine design line a third of the way across the wide outer panel. -->
         <path class="sia-arch__line sia-arch__line--seam" data-line="23.3" data-to-brace />
-        <path class="sia-arch__line sia-arch__line--outer sia-arch__line--moss" data-line="48.4" />
         <!-- Timber feet: the arch's tip curve, turned over, flaring each leg into the ground. -->
         <path class="sia-arch__feet" data-feet />
-        <path class="sia-arch__line sia-arch__foot-line sia-arch__line--moss" data-foot-line />
         <!-- Braces: the arch's tip curve, right way up, from each outer foot to the inner line. -->
         <path class="sia-arch__line sia-arch__brace" data-braces />
+        <!-- The moss outline, drawn last so it runs unbroken over the braces where they meet it:
+             both thick lines (down to the top of each foot) and the lines across the feet. -->
+        <path class="sia-arch__line sia-arch__line--moss" data-line="8" data-to-foot />
+        <path class="sia-arch__line sia-arch__line--outer sia-arch__line--moss" data-line="48.4" data-to-foot />
+        <path class="sia-arch__line sia-arch__foot-line sia-arch__line--moss" data-foot-line />
         <g class="sia-carving" data-couplet="right" lang="zh-Hans" role="img" aria-label="身体放松: a relaxed body">
           <text class="sia-carving__cut" x="0" y="0"><tspan x="0" y="0.0em">身</tspan><tspan x="0" y="1.3em">体</tspan><tspan x="0" y="2.6em">放</tspan><tspan x="0" y="3.9em">松</tspan></text>
           <text class="sia-carving__gilt" x="0" y="0"><tspan x="0" y="0.0em">身</tspan><tspan x="0" y="1.3em">体</tspan><tspan x="0" y="2.6em">放</tspan><tspan x="0" y="3.9em">松</tspan></text>
@@ -1690,7 +1692,11 @@ const faqs = [
       };
       for (const line of lines) {
         const d = Number(line.dataset.line);
-        const foot = line.hasAttribute('data-to-brace') ? braceMeet(d) : base;
+        const foot = line.hasAttribute('data-to-brace')
+          ? braceMeet(d)
+          : line.hasAttribute('data-to-foot')
+            ? base - fh
+            : base;
         line.setAttribute('d', arch(cx, base, A, d, false, foot));
       }
 
