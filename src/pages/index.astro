@@ -2018,8 +2018,12 @@ const faqs = [
           const key = `${n(cx)},${n(base)},${n(A)}`;
           if (key !== leafKey) {
             leafKey = key;
-            leaves.left.firstElementChild!.innerHTML = leafSvg(cx, base, A, 'left');
-            leaves.right.firstElementChild!.innerHTML = leafSvg(cx, base, A, 'right');
+            // Redraw each leaf's face by name (the back face is also a child of the leaf).
+            const face = (leaf: HTMLElement) => leaf.querySelector<SVGSVGElement>('.sia-visit__leaf-svg');
+            const faceL = face(leaves.left);
+            const faceR = face(leaves.right);
+            if (faceL) faceL.innerHTML = leafSvg(cx, base, A, 'left');
+            if (faceR) faceR.innerHTML = leafSvg(cx, base, A, 'right');
             // The top edge's thickness: along each leaf's crown (lobes and tip), a strip of
             // faces turned back into the doorway, each shaded by how it faces the light.
             const T = Math.max(7, 0.09 * A);
