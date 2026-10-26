@@ -367,7 +367,7 @@ const faqs = [
             <feGaussianBlur stdDeviation="6" />
           </filter>
           <filter id="sia-shadow-edge" x="-10%" y="-10%" width="120%" height="120%">
-            <feGaussianBlur stdDeviation="3.5" />
+            <feGaussianBlur stdDeviation="1.8" />
           </filter>
           <filter id="sia-shadow-small" x="-30%" y="-30%" width="160%" height="160%">
             <feGaussianBlur stdDeviation="1.4" />
@@ -1332,13 +1332,14 @@ const faqs = [
   .sia-frame-shadow {
     fill: rgb(8 12 6 / 0.7);
   }
+  /* Just a fine shadow where the glass meets the timber, so it stays clear. */
   .sia-glass-shade {
     fill: none;
-    stroke: rgb(10 14 8 / 0.55);
-    stroke-width: 12;
+    stroke: rgb(10 14 8 / 0.3);
+    stroke-width: 5;
   }
   .sia-glass-shade--inner {
-    stroke-width: 9;
+    stroke-width: 4;
   }
   /* A planed edge: light catching the inside of the timber, shadow on the outside. */
   .sia-timber__edge {
