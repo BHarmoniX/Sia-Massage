@@ -256,6 +256,38 @@ const faqs = [
        moments rise over the scene. -->
   <Section id="visit" labelledby="visit-title" class="sia-visit sia-tone-moss" data-doorway>
     <div class="sia-visit__stage" aria-hidden="true">
+      <!-- The wall the doorway is set into: moss plaster with soft trowelled relief and a fine
+           grain, lit from the top left like the frame. -->
+      <svg class="sia-visit__wall" preserveAspectRatio="none">
+        <defs>
+          <filter id="sia-plaster" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="4" seed="8" result="trowel" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="21" result="grain" />
+            <feComposite in="trowel" in2="grain" operator="arithmetic" k2="1" k3="0.18" result="relief" />
+            <feDiffuseLighting in="relief" surfaceScale="2.6" diffuseConstant="0.7" lighting-color="#ffffff" result="lit">
+              <feDistantLight azimuth="225" elevation="58" />
+            </feDiffuseLighting>
+            <!-- Light and shade on the relief, mapped into the moss: flat plaster is #26321f. -->
+            <feColorMatrix in="lit" type="matrix" values="0.5 0 0 0 -0.146  0.5 0 0 0 -0.099  0.5 0 0 0 -0.173  0 0 0 0 1" />
+          </filter>
+          <radialGradient id="sia-wall-glow" cx="0.5" cy="0.7" r="0.5">
+            <stop offset="0" stop-color="#c3d1a6" stop-opacity="0.16" />
+            <stop offset="1" stop-color="#c3d1a6" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="sia-wall-light" cx="0.28" cy="0.12" r="0.9">
+            <stop offset="0" stop-color="#5c7a4c" stop-opacity="0.3" />
+            <stop offset="1" stop-color="#5c7a4c" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="sia-wall-shade" cx="0.8" cy="1" r="0.9">
+            <stop offset="0" stop-color="#080c06" stop-opacity="0.5" />
+            <stop offset="1" stop-color="#080c06" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width="100%" height="100%" filter="url(#sia-plaster)" />
+        <rect width="100%" height="100%" fill="url(#sia-wall-light)" />
+        <rect width="100%" height="100%" fill="url(#sia-wall-shade)" />
+        <rect width="100%" height="100%" fill="url(#sia-wall-glow)" />
+      </svg>
       <div class="sia-visit__door">
         <Img src={bambooPath} alt="" sizes="100vw" class="h-full w-full object-cover" />
       </div>
@@ -268,12 +300,93 @@ const faqs = [
            timber leaves hinged on the posts. They swing in to reveal the path before the gateway
            opens around you. Drawn by the doorway script from the same geometry. -->
       <div class="sia-visit__doors" data-doors>
-        <div class="sia-visit__leaf" data-leaf="left"><svg class="sia-visit__leaf-svg"></svg></div>
-        <div class="sia-visit__leaf" data-leaf="right"><svg class="sia-visit__leaf-svg"></svg></div>
+        <div class="sia-visit__leaf" data-leaf="left"><svg class="sia-visit__leaf-svg"></svg><div class="sia-visit__leaf-edge"></div></div>
+        <div class="sia-visit__leaf" data-leaf="right"><svg class="sia-visit__leaf-svg"></svg><div class="sia-visit__leaf-edge"></div></div>
       </div>
       <div class="sia-visit__glass" data-glass></div>
       <svg class="sia-visit__frame" data-frame>
         <defs>
+          <!-- 3D lighting for timber: the shape's own edges, softened, become its relief, lit
+               from the top left (a sheen on the upper edges, shade on the lower ones). One for
+               the frame's narrow timbers, a softer, deeper one for the door leaves, and one for
+               the raised door panels. -->
+          <filter id="sia-bevel" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2.4" result="relief" />
+            <feDiffuseLighting in="relief" surfaceScale="3.5" diffuseConstant="1.25" lighting-color="#fff" result="diffuse">
+              <feDistantLight azimuth="225" elevation="48" />
+            </feDiffuseLighting>
+            <feSpecularLighting in="relief" surfaceScale="3.5" specularConstant="0.55" specularExponent="16" lighting-color="#f1dcb8" result="sheen">
+              <feDistantLight azimuth="225" elevation="40" />
+            </feSpecularLighting>
+            <feComposite in="SourceGraphic" in2="diffuse" operator="arithmetic" k1="1" result="lit" />
+            <feComposite in="sheen" in2="SourceAlpha" operator="in" result="sheenIn" />
+            <feComposite in="sheenIn" in2="lit" operator="arithmetic" k2="0.55" k3="1" result="out" />
+            <feComposite in="out" in2="SourceAlpha" operator="in" />
+          </filter>
+          <filter id="sia-bevel-door" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="relief" />
+            <feDiffuseLighting in="relief" surfaceScale="5" diffuseConstant="1.2" lighting-color="#fff" result="diffuse">
+              <feDistantLight azimuth="225" elevation="50" />
+            </feDiffuseLighting>
+            <feSpecularLighting in="relief" surfaceScale="5" specularConstant="0.5" specularExponent="14" lighting-color="#f1dcb8" result="sheen">
+              <feDistantLight azimuth="225" elevation="38" />
+            </feSpecularLighting>
+            <feComposite in="SourceGraphic" in2="diffuse" operator="arithmetic" k1="1" result="lit" />
+            <feComposite in="sheen" in2="SourceAlpha" operator="in" result="sheenIn" />
+            <feComposite in="sheenIn" in2="lit" operator="arithmetic" k2="0.5" k3="1" result="out" />
+            <feComposite in="out" in2="SourceAlpha" operator="in" />
+          </filter>
+          <filter id="sia-bevel-panel" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="relief" />
+            <feDiffuseLighting in="relief" surfaceScale="6" diffuseConstant="1.18" lighting-color="#fff" result="diffuse">
+              <feDistantLight azimuth="225" elevation="52" />
+            </feDiffuseLighting>
+            <feSpecularLighting in="relief" surfaceScale="6" specularConstant="0.4" specularExponent="12" lighting-color="#f1dcb8" result="sheen">
+              <feDistantLight azimuth="225" elevation="40" />
+            </feSpecularLighting>
+            <feComposite in="SourceGraphic" in2="diffuse" operator="arithmetic" k1="1" result="lit" />
+            <feComposite in="sheen" in2="SourceAlpha" operator="in" result="sheenIn" />
+            <feComposite in="sheenIn" in2="lit" operator="arithmetic" k2="0.45" k3="1" result="out" />
+            <feComposite in="out" in2="SourceAlpha" operator="in" />
+          </filter>
+          <!-- Soft shadows: the frame on the wall, the timber on the glass, the rings on the doors. -->
+          <filter id="sia-shadow-soft" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur stdDeviation="6" />
+          </filter>
+          <filter id="sia-shadow-edge" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur stdDeviation="3.5" />
+          </filter>
+          <filter id="sia-shadow-small" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="1.4" />
+          </filter>
+          <clipPath id="sia-glass-clip" clipPathUnits="userSpaceOnUse">
+            <path data-glass-clip clip-rule="evenodd" />
+          </clipPath>
+          <!-- Metal for the door hardware: dark iron with a soft sheen; sage rings, lit above. -->
+          <radialGradient id="sia-iron" cx="0.38" cy="0.32" r="0.75">
+            <stop offset="0" stop-color="#5a6650" />
+            <stop offset="0.45" stop-color="#2c3427" />
+            <stop offset="1" stop-color="#161b13" />
+          </radialGradient>
+          <linearGradient id="sia-iron-strap" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#4a5541" />
+            <stop offset="0.5" stop-color="#262d21" />
+            <stop offset="1" stop-color="#141912" />
+          </linearGradient>
+          <linearGradient id="sia-ring" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#eef2e6" />
+            <stop offset="0.4" stop-color="#b9c8a4" />
+            <stop offset="1" stop-color="#5c7a4c" />
+          </linearGradient>
+          <!-- A leaf turning away from the light darkens toward its free edge. -->
+          <linearGradient id="sia-leaf-shade-left" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#000" stop-opacity="0.15" />
+            <stop offset="1" stop-color="#000" stop-opacity="0.75" />
+          </linearGradient>
+          <linearGradient id="sia-leaf-shade-right" x1="1" y1="0" x2="0" y2="0">
+            <stop offset="0" stop-color="#000" stop-opacity="0.15" />
+            <stop offset="1" stop-color="#000" stop-opacity="0.75" />
+          </linearGradient>
           <!-- Timber: dark walnut with colour drift, growth lines and fine grain, plus a few
                natural knots, all rendered once into a tile and repeated. -->
           <filter id="sia-wood-drift" x="0" y="0" width="100%" height="100%">
@@ -331,7 +444,19 @@ const faqs = [
               <ellipse rx="4.4" ry="12" fill="url(#sia-knot)" />
             </g>
           </pattern>
+          <clipPath id="sia-wall-clip" clipPathUnits="userSpaceOnUse">
+            <path data-wall-clip clip-rule="evenodd" />
+          </clipPath>
         </defs>
+        <!-- The frame stands proud of the wall: its shadow falls on the wall below and right. -->
+        <g clip-path="url(#sia-wall-clip)">
+          <path class="sia-frame-shadow" data-frame-shadow filter="url(#sia-shadow-soft)" />
+        </g>
+        <!-- The glass is set back in the frame: the timber shades both edges of it. -->
+        <g clip-path="url(#sia-glass-clip)">
+          <path class="sia-glass-shade" data-glass-shade="outer" filter="url(#sia-shadow-edge)" />
+          <path class="sia-glass-shade sia-glass-shade--inner" data-glass-shade="inner" filter="url(#sia-shadow-edge)" />
+        </g>
         <!-- Timber frame around the glass: the structural support, same arch geometry. -->
         <path class="sia-timber" data-timber />
         <path class="sia-timber__edge sia-timber__edge--lit" data-timber-edge="lit" />
@@ -1052,7 +1177,11 @@ const faqs = [
     height: calc(100dvh - var(--header-height));
     overflow: hidden;
     z-index: 0;
-    background: radial-gradient(40% 55% at 50% 70%, rgb(195 209 166 / 0.16), transparent 70%);
+    /* The wall's light: brighter toward the top left, falling off into shade. */
+    background:
+      radial-gradient(40% 55% at 50% 70%, rgb(195 209 166 / 0.16), transparent 70%),
+      radial-gradient(90% 90% at 28% 12%, rgb(92 122 76 / 0.28), transparent 70%),
+      radial-gradient(120% 100% at 80% 100%, rgb(8 12 6 / 0.45), transparent 65%);
   }
   .sia-visit {
     background: linear-gradient(180deg, #222d1c, #26321f 40%, #1f2a1a);
@@ -1082,6 +1211,14 @@ const faqs = [
     background: linear-gradient(180deg, rgb(20 28 18 / 0.5), rgb(20 28 18 / 0.15) 45%, rgb(20 28 18 / 0.55));
     opacity: var(--open);
   }
+  /* The wall: moss plaster with a soft relief, lit from the top left. */
+  .sia-visit__wall {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
   /* The two door leaves. Each fills the stage (its drawing uses the stage's own coordinates)
      and turns about its hinge; the script sets the angle, hinge and eye point. */
   .sia-visit__doors {
@@ -1093,7 +1230,17 @@ const faqs = [
   .sia-visit__leaf {
     position: absolute;
     inset: 0;
+    transform-style: preserve-3d;
     will-change: transform;
+  }
+  /* The leaf's thickness, seen along its meeting edge as it swings: a face turned back from
+     the edge into the doorway. */
+  .sia-visit__leaf-edge {
+    position: absolute;
+    background:
+      linear-gradient(90deg, rgb(255 230 190 / 0.12), transparent 30%, rgb(0 0 0 / 0.35)),
+      linear-gradient(180deg, #3b2616, #2a1a0e 60%, #1e130a);
+    backface-visibility: hidden;
   }
   .sia-visit__leaf-svg {
     display: block;
@@ -1130,6 +1277,18 @@ const faqs = [
   .sia-timber {
     fill: url(#sia-wood);
     fill-rule: evenodd;
+    filter: url(#sia-bevel);
+  }
+  .sia-frame-shadow {
+    fill: rgb(8 12 6 / 0.7);
+  }
+  .sia-glass-shade {
+    fill: none;
+    stroke: rgb(10 14 8 / 0.55);
+    stroke-width: 12;
+  }
+  .sia-glass-shade--inner {
+    stroke-width: 9;
   }
   /* A planed edge: light catching the inside of the timber, shadow on the outside. */
   .sia-timber__edge {
@@ -1145,6 +1304,7 @@ const faqs = [
   /* Timber feet, in the frame's wood, with the same dark planed edge. */
   .sia-arch__feet {
     fill: url(#sia-wood);
+    filter: url(#sia-bevel);
     stroke: rgb(16 10 5 / 0.65);
     stroke-width: 1;
     stroke-linejoin: round;
@@ -1677,30 +1837,68 @@ const faqs = [
         const r = 0.009 * A;
         const rx = (k: number) => n(x0 + (x1 - x0) * k);
         return (
-          `<path d="M${n(x0)} ${n(y - t / 2)} H${n(x1)} Q ${n(x1 + (x1 - x0) * 0.12)} ${n(y)} ${n(x1)} ${n(y + t / 2)} H${n(x0)} Z" fill="#1f261b" stroke="rgb(185 200 164 / 0.35)" stroke-width="0.6" />` +
-          `<circle cx="${rx(0.35)}" cy="${n(y)}" r="${n(r)}" fill="#b9c8a4" />` +
-          `<circle cx="${rx(0.75)}" cy="${n(y)}" r="${n(r)}" fill="#b9c8a4" />`
+          `<path d="M${n(x0)} ${n(y - t / 2)} H${n(x1)} Q ${n(x1 + (x1 - x0) * 0.12)} ${n(y)} ${n(x1)} ${n(y + t / 2)} H${n(x0)} Z" fill="url(#sia-iron-strap)" stroke="rgb(185 200 164 / 0.3)" stroke-width="0.6" />` +
+          `<circle cx="${rx(0.35)}" cy="${n(y)}" r="${n(r)}" fill="url(#sia-ring)" />` +
+          `<circle cx="${rx(0.75)}" cy="${n(y)}" r="${n(r)}" fill="url(#sia-ring)" />`
         );
       };
       const ring = 0.07 * A;
       const boss = hy - 0.04 * A;
+      // Raised panels: the field inside the beads, above and below the rail, each bevelled.
+      const field = inset(poly, b2 + 2);
+      const cut = (pts: [number, number][], y: number, keepAbove: boolean) => {
+        const keep = (p: [number, number]) => (keepAbove ? p[1] <= y : p[1] >= y);
+        const out: [number, number][] = [];
+        for (let i = 0; i < pts.length; i++) {
+          const p = pts[i]!;
+          const q = pts[(i + 1) % pts.length]!;
+          if (keep(p)) out.push(p);
+          if (keep(p) !== keep(q)) {
+            const f = (y - p[1]) / (q[1] - p[1]);
+            out.push([p[0] + (q[0] - p[0]) * f, y]);
+          }
+        }
+        return out;
+      };
+      const panelTop = cut(field, railY - 3, true);
+      const panelBottom = cut(field, railY + (b2 - b1) + 3, false);
+      const shadow = (svg: string, dx: number, dy: number) =>
+        `<g transform="translate(${n(dx)} ${n(dy)})" filter="url(#sia-shadow-small)" opacity="0.7">${svg}</g>`;
+      const strapShape = (y: number) => {
+        const x0 = cx - m * A;
+        const x1 = cx - m * (A - 0.26 * A);
+        const t = 0.042 * A;
+        return `<path d="M${n(x0)} ${n(y - t / 2)} H${n(x1)} Q ${n(x1 + (x1 - x0) * 0.12)} ${n(y)} ${n(x1)} ${n(y + t / 2)} H${n(x0)} Z" fill="#000" />`;
+      };
+      const ringPull =
+        `<circle cx="${n(hx)}" cy="${n(hy)}" r="${n(0.078 * A)}" fill="url(#sia-iron)" stroke="#5c7a4c" stroke-width="${n(0.012 * A)}" />` +
+        `<circle cx="${n(hx)}" cy="${n(hy)}" r="${n(0.05 * A)}" fill="none" stroke="#b9c8a4" stroke-opacity="0.45" stroke-width="${n(0.006 * A)}" />` +
+        `<circle cx="${n(hx)}" cy="${n(boss + ring)}" r="${n(ring)}" fill="none" stroke="url(#sia-ring)" stroke-width="${n(0.017 * A)}" />` +
+        `<circle cx="${n(hx)}" cy="${n(boss)}" r="${n(0.022 * A)}" fill="url(#sia-ring)" stroke="#46613a" stroke-width="${n(0.005 * A)}" />`;
+      const ringShadow =
+        `<circle cx="${n(hx)}" cy="${n(hy)}" r="${n(0.078 * A)}" fill="#000" />` +
+        `<circle cx="${n(hx)}" cy="${n(boss + ring)}" r="${n(ring)}" fill="none" stroke="#000" stroke-width="${n(0.017 * A)}" />`;
+      const lift = Math.max(1.5, 0.012 * A);
       return (
-        `<path d="${pathOf(poly)}" fill="url(#sia-wood)" />` +
+        // The leaf: solid timber, its edges rounded by the light.
+        `<path d="${pathOf(poly)}" fill="url(#sia-wood)" filter="url(#sia-bevel-door)" />` +
+        // Raised panels standing out of the frame of the leaf.
+        `<path d="${pathOf(panelTop)}" fill="url(#sia-wood)" filter="url(#sia-bevel-panel)" />` +
+        `<path d="${pathOf(panelBottom)}" fill="url(#sia-wood)" filter="url(#sia-bevel-panel)" />` +
         // Carved bead: dark cut with a lit edge, then a second fine bead inside it.
-        `<path d="${bead1}" fill="none" stroke="rgb(16 10 5 / 0.6)" stroke-width="1.4" />` +
-        `<path d="${bead1Lit}" fill="none" stroke="rgb(214 178 128 / 0.22)" stroke-width="0.8" />` +
-        `<path d="${bead2}" fill="none" stroke="rgb(16 10 5 / 0.45)" stroke-width="1" />` +
-        `<path d="${rail}" fill="none" stroke="rgb(16 10 5 / 0.55)" stroke-width="1.2" />` +
-        // Outer edge: a dark arris, and light catching the meeting edge.
-        `<path d="${pathOf(poly)}" fill="none" stroke="rgb(16 10 5 / 0.75)" stroke-width="1.2" />` +
+        `<path d="${bead1}" fill="none" stroke="rgb(16 10 5 / 0.7)" stroke-width="1.6" />` +
+        `<path d="${bead1Lit}" fill="none" stroke="rgb(214 178 128 / 0.25)" stroke-width="0.8" />` +
+        `<path d="${bead2}" fill="none" stroke="rgb(16 10 5 / 0.5)" stroke-width="1" />` +
+        `<path d="${rail}" fill="none" stroke="rgb(16 10 5 / 0.6)" stroke-width="1.3" />` +
+        `<path d="${pathOf(poly)}" fill="none" stroke="rgb(16 10 5 / 0.8)" stroke-width="1.2" />` +
+        // Strap hinges and the ring pull, in iron and sage, each casting a small shadow.
+        shadow(strapShape(sy + 0.3 * A) + strapShape(base - 0.5 * A), lift * 0.7, lift) +
         strap(sy + 0.3 * A) +
         strap(base - 0.5 * A) +
-        // Ring pull: an iron rose with a sage rim and boss, the ring hanging from the boss.
-        `<circle cx="${n(hx)}" cy="${n(hy)}" r="${n(0.078 * A)}" fill="#232a1f" stroke="#5c7a4c" stroke-width="${n(0.012 * A)}" />` +
-        `<circle cx="${n(hx)}" cy="${n(hy)}" r="${n(0.05 * A)}" fill="none" stroke="#b9c8a4" stroke-opacity="0.55" stroke-width="${n(0.006 * A)}" />` +
-        `<circle cx="${n(hx)}" cy="${n(boss + ring + 0.006 * A)}" r="${n(ring)}" fill="none" stroke="rgb(0 0 0 / 0.45)" stroke-width="${n(0.017 * A)}" />` +
-        `<circle cx="${n(hx)}" cy="${n(boss + ring)}" r="${n(ring)}" fill="none" stroke="#b9c8a4" stroke-width="${n(0.016 * A)}" />` +
-        `<circle cx="${n(hx)}" cy="${n(boss)}" r="${n(0.02 * A)}" fill="#b9c8a4" stroke="#5c7a4c" stroke-width="${n(0.006 * A)}" />`
+        shadow(ringShadow, lift, lift * 1.6) +
+        ringPull +
+        // Shade that deepens as the leaf turns away from the light (set while it swings).
+        `<path d="${pathOf(poly)}" fill="url(#sia-leaf-shade-${side})" opacity="0" data-shade />`
       );
     };
     const doors = doorway.querySelector<HTMLElement>('[data-doors]');
@@ -1766,9 +1964,29 @@ const faqs = [
           leaves.right.style.transformOrigin = `${n(cx + A)}px 0`;
           leaves.left.style.transform = `rotateY(${n(angle)}deg)`;
           leaves.right.style.transform = `rotateY(${n(-angle)}deg)`;
-          // The inside of each leaf falls into shadow as it turns away from the light.
-          const shade = String(1 - 0.45 * Math.sin((angle * Math.PI) / 180));
-          leaves.left.style.filter = leaves.right.style.filter = `brightness(${shade})`;
+          // Each leaf falls into shade as it turns away from the light.
+          const shadeOpacity = String(Math.sin((angle * Math.PI) / 180) * 0.85);
+          for (const leaf of [leaves.left, leaves.right]) {
+            leaf.querySelector('[data-shade]')?.setAttribute('opacity', shadeOpacity);
+          }
+          // The meeting edges' thickness: a face set back from each free edge into the doorway.
+          const T = Math.max(6, 0.07 * A);
+          const topY = base - APEX * A;
+          const edgeL = leaves.left.lastElementChild as HTMLElement | null;
+          const edgeR = leaves.right.lastElementChild as HTMLElement | null;
+          if (edgeL && edgeR) {
+            for (const [el, x, origin, turn] of [
+              [edgeL, cx - 0.6, 'left', 90],
+              [edgeR, cx + 0.6 - T, 'right', -90],
+            ] as const) {
+              el.style.left = `${n(x)}px`;
+              el.style.top = `${n(topY)}px`;
+              el.style.width = `${n(T)}px`;
+              el.style.height = `${n(base - topY)}px`;
+              el.style.transformOrigin = `${origin} center`;
+              el.style.transform = `rotateY(${turn}deg)`;
+            }
+          }
         }
       }
 
@@ -1781,6 +1999,24 @@ const faqs = [
       archFrame.querySelector('[data-timber-inner]')?.setAttribute('d', `${arch(cx, base, A, INNER, true)} ${arch(cx, base, A)}`);
       archFrame.querySelector('[data-timber-inner-edge="lit"]')?.setAttribute('d', arch(cx, base, A, 0.5, false));
       archFrame.querySelector('[data-timber-inner-edge="shade"]')?.setAttribute('d', arch(cx, base, A, INNER - 0.5, false));
+      // Depth: the frame's shadow on the wall (outside the frame only), and the timber's
+      // shadow along both edges of the glass (inside the glass only).
+      const outline = arch(cx, base, A, EDGE, true);
+      archFrame
+        .querySelector('[data-wall-clip]')
+        ?.setAttribute('d', `M-5000 -5000 H${n(w + 5000)} V${n(h + 5000)} H-5000 Z ${outline}`);
+      const lift = Math.max(3, A * 0.035);
+      archFrame
+        .querySelector('[data-frame-shadow]')
+        ?.setAttribute('d', outline);
+      archFrame
+        .querySelector('[data-frame-shadow]')
+        ?.setAttribute('transform', `translate(${n(lift * 0.7)} ${n(lift)})`);
+      archFrame
+        .querySelector('[data-glass-clip]')
+        ?.setAttribute('d', `${arch(cx, base, A, BAND, true)} ${arch(cx, base, A, INNER, true)}`);
+      archFrame.querySelector('[data-glass-shade="outer"]')?.setAttribute('d', arch(cx, base, A, BAND, false));
+      archFrame.querySelector('[data-glass-shade="inner"]')?.setAttribute('d', arch(cx, base, A, INNER, false));
       door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A, BAND, true)}")`;
       // Each foot: a timber plinth across the leg, its two sides the arch's tip curve rotated
       // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
