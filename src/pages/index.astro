@@ -2380,17 +2380,17 @@ const faqs = [
                 else continue;
                 if (x1 - x0 < unit * 0.12) continue;
               }
-              const rise = unit * (0.025 + rnd() * 0.035); // a little proud of the paving
-              const tilt = unit * (rnd() - 0.5) * 0.03;
-              const face = unit * (0.03 + rnd() * 0.02); // visible front face
+              const rise = unit * (0.006 + rnd() * 0.009); // only a fraction proud, each a touch different
+              const tilt = unit * (rnd() - 0.5) * 0.006;
+              const face = unit * (0.012 + rnd() * 0.006); // a sliver of front face
               const yT0 = base - rise - tilt;
               const yT1 = base - rise + tilt;
-              const yMid = (yT0 + yT1) / 2 - unit * rnd() * 0.012;
+              const yMid = (yT0 + yT1) / 2 - unit * rnd() * 0.003;
               const top = `M${n(x0)} ${n(yT0 + 1.5)} Q${n(x0)} ${n(yT0)} ${n(x0 + 2)} ${n(yT0)} Q${n((x0 + x1) / 2)} ${n(yMid)} ${n(x1 - 2)} ${n(yT1)} Q${n(x1)} ${n(yT1)} ${n(x1)} ${n(yT1 + 1.5)}`;
               const shape = `${top} L${n(x1 - 0.5)} ${n(base + face)} L${n(x0 + 0.5)} ${n(base + face)} Z`;
               out +=
                 // shadow cast onto the paving in front, the stone, its shaded face, a lit top edge
-                `<path d="M${n(x0)} ${n(base + face)} L${n(x1)} ${n(base + face)} L${n(x1 + 2)} ${n(base + face + unit * 0.035)} L${n(x0 + 2)} ${n(base + face + unit * 0.035)} Z" fill="rgb(6 9 4 / 0.35)" />` +
+                `<path d="M${n(x0)} ${n(base + face)} L${n(x1)} ${n(base + face)} L${n(x1 + 1)} ${n(base + face + unit * 0.015)} L${n(x0 + 1)} ${n(base + face + unit * 0.015)} Z" fill="rgb(6 9 4 / 0.3)" />` +
                 `<path d="${shape}" fill="url(#sia-edge-stone)" stroke="rgb(8 10 6 / 0.7)" stroke-width="1" />` +
                 `<path d="M${n(x0 + 0.5)} ${n(base + face * 0.15)} L${n(x1 - 0.5)} ${n(base + face * 0.15)} L${n(x1 - 0.5)} ${n(base + face)} L${n(x0 + 0.5)} ${n(base + face)} Z" fill="rgb(6 9 4 / 0.42)" />` +
                 `<path d="${top}" fill="none" stroke="rgb(235 240 225 / 0.35)" stroke-width="1" />`;
