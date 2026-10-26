@@ -64,6 +64,6 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | --- | --- |
 | frame-walnut.jpg (doorway arch frame timber) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | door-iron.jpg (doorway door hardware: hinges, rivets, ring pulls) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
-| ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
+| ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile, relief lighting added) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | wall-plaster.jpg (doorway wall: moss lime plaster, darkened and mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
-| garden-bamboo-a.webp, garden-bamboo-b.webp (courtyard bamboo in stone troughs, canopy leaning toward the door, cut out) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
+| garden-bamboo-a.webp, garden-bamboo-b.webp (courtyard tall airy bamboo in round carved stone pots, cut out) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
