@@ -66,5 +66,4 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | door-iron.jpg (doorway door hardware: hinges, rivets, ring pulls) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | wall-plaster.jpg (doorway wall: moss lime plaster, darkened and mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
-| garden-bamboo-a.webp, garden-bamboo-b.webp (courtyard bamboo in stone troughs, cut out) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
-| garden-pond.webp (courtyard lotus pond with lion-head spout, cut out) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
+| garden-bamboo-a.webp, garden-bamboo-b.webp (courtyard bamboo in stone troughs, canopy leaning toward the door, cut out) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
