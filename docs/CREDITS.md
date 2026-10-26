@@ -57,3 +57,9 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 |---|---|
 | therapist-linen.jpg (treatments photo) | https://www.pexels.com/photo/a-massage-therapist-7233264/ |
 | door-boards-left.jpg, door-boards-right.jpg (doorway doors: weathered hardwood, turned upright, cut into boards, oiled timber tone) | https://www.pexels.com/photo/129721/ |
+
+## Generated imagery (original, made for this site)
+
+| File | Source |
+| --- | --- |
+| frame-walnut.jpg (doorway arch frame timber) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
