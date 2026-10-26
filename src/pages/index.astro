@@ -1249,11 +1249,18 @@ const faqs = [
   }
   /* The leaf's thickness, seen along its meeting edge as it swings: a face turned back from
      the edge into the doorway. */
+  /* One short face of the top edge's thickness (placed and shaded by the script). */
+  .sia-visit__leaf-rim {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: 0 0;
+  }
   .sia-visit__leaf-edge {
     position: absolute;
     background:
       linear-gradient(90deg, rgb(220 230 200 / 0.12), transparent 30%, rgb(0 0 0 / 0.4)),
-      linear-gradient(180deg, #34452b, #26331f 60%, #1b2416);
+      linear-gradient(180deg, #4b673f, #3a5131 60%, #2c3d25);
     backface-visibility: hidden;
   }
   /* Door paint layers (drawn by the script): the board pattern blended in lightly, and a faint
@@ -1998,10 +2005,40 @@ const faqs = [
             leafKey = key;
             leaves.left.firstElementChild!.innerHTML = leafSvg(cx, base, A, 'left');
             leaves.right.firstElementChild!.innerHTML = leafSvg(cx, base, A, 'right');
+            // The top edge's thickness: along each leaf's crown (lobes and tip), a strip of
+            // faces turned back into the doorway, each shaded by how it faces the light.
+            const T = Math.max(7, 0.09 * A);
+            for (const [leaf, side] of [
+              [leaves.left, 'left'],
+              [leaves.right, 'right'],
+            ] as const) {
+              leaf.querySelectorAll('.sia-visit__leaf-rim').forEach((el) => el.remove());
+              const crown = leafPoly(cx, base, A, side).slice(1, -1);
+              const pts = crown.filter((_, i) => i % 2 === 0 || i === crown.length - 1);
+              for (let i = 0; i < pts.length - 1; i++) {
+                const [px, py] = pts[i]!;
+                const [qx, qy] = pts[i + 1]!;
+                const len = Math.hypot(qx - px, qy - py);
+                if (len < 0.5) continue;
+                const tx = (qx - px) / len, ty = (qy - py) / len;
+                // Outward normal (the leaf is traced clockwise) against light from the top left.
+                const lit = 0.55 + 0.45 * ((ty * -1 + -tx * -1) / Math.SQRT2);
+                const c = (v: number) => Math.round(Math.min(255, v * lit));
+                const face = document.createElement('div');
+                face.className = 'sia-visit__leaf-rim';
+                face.style.width = `${n(len + 0.8)}px`;
+                face.style.height = `${n(T)}px`;
+                face.style.background = `linear-gradient(180deg, rgb(${c(92)} ${c(122)} ${c(76)}), rgb(${c(52)} ${c(70)} ${c(44)}))`;
+                face.style.transform = `translate(${n(px)}px, ${n(py)}px) rotate(${Math.atan2(ty, tx).toFixed(4)}rad) rotateX(-90deg)`;
+                leaf.appendChild(face);
+              }
+            }
           }
           const e = swing * swing * (3 - 2 * swing);
           const angle = 100 * e;
-          doors.style.perspectiveOrigin = `${n(cx)}px ${n(base - APEX * A * 0.45)}px`;
+          // Eye point high in the doorway, so the doors' top edges show their thickness as
+          // they swing.
+          doors.style.perspectiveOrigin = `${n(cx)}px ${n(base - APEX * A * 0.85)}px`;
           leaves.left.style.transformOrigin = `${n(cx - A)}px 0`;
           leaves.right.style.transformOrigin = `${n(cx + A)}px 0`;
           leaves.left.style.transform = `rotateY(${n(angle)}deg)`;
@@ -2012,10 +2049,10 @@ const faqs = [
             leaf.querySelector('[data-shade]')?.setAttribute('opacity', shadeOpacity);
           }
           // The meeting edges' thickness: a face set back from each free edge into the doorway.
-          const T = Math.max(6, 0.07 * A);
+          const T = Math.max(7, 0.09 * A);
           const topY = base - APEX * A;
-          const edgeL = leaves.left.lastElementChild as HTMLElement | null;
-          const edgeR = leaves.right.lastElementChild as HTMLElement | null;
+          const edgeL = leaves.left.querySelector<HTMLElement>('.sia-visit__leaf-edge');
+          const edgeR = leaves.right.querySelector<HTMLElement>('.sia-visit__leaf-edge');
           if (edgeL && edgeR) {
             for (const [el, x, origin, turn] of [
               [edgeL, cx - 0.6, 'left', 90],
