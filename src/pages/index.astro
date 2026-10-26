@@ -1782,8 +1782,8 @@ const faqs = [
     // Bamboo (as drawn, leaning right; the right-hand one is mirrored): `trough` is the
     // pot's centre across the picture, `over` the point under the leaning canopy where its
     // couplet sits, `canopy` how far down the picture that part of the canopy reaches.
-    { el: garden?.querySelector<HTMLElement>('[data-prop="bamboo-left"]'), side: -1, forward: 0.42, ratio: 1667 / 900, trough: 0.29, over: 0.68, canopy: 0.4 },
-    { el: garden?.querySelector<HTMLElement>('[data-prop="bamboo-right"]'), side: 1, forward: 0.36, ratio: 1665 / 900, trough: 0.3, over: 0.62, canopy: 0.42 },
+    { el: garden?.querySelector<HTMLElement>('[data-prop="bamboo-left"]'), side: -1, forward: 0.7, ratio: 1667 / 900, trough: 0.29, over: 0.68, canopy: 0.4 },
+    { el: garden?.querySelector<HTMLElement>('[data-prop="bamboo-right"]'), side: 1, forward: 0.64, ratio: 1665 / 900, trough: 0.3, over: 0.62, canopy: 0.42 },
   ];
 
   if (doorway && stage && door && archFrame) {
@@ -2362,7 +2362,7 @@ const faqs = [
           if (!p.el) continue;
           // Straight bamboo beside each couplet, its canopy leaning out over the characters
           // toward the door: sized so the canopy clears the couplet's top.
-          const foot0 = base0 + Math.min(p.forward * A0, (h - base0) * 0.75);
+          const foot0 = base0 + Math.min(p.forward * A0, (h - base0) * 0.85);
           const yTop0 = base0 - SHOULDER * A0 + size * 0.4;
           const cTop0 = yTop0 - size * 0.6 - A0 * 0.05;
           // Tall: at least up to the top of the scene, and enough that the canopy clears the couplet.
