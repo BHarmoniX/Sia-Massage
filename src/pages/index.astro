@@ -1918,7 +1918,8 @@ const faqs = [
         `<circle cx="${n(hx)}" cy="${n(hy)}" r="${n(0.078 * A)}" fill="#000" />` +
         `<circle cx="${n(hx)}" cy="${n(boss + ring)}" r="${n(ring)}" fill="none" stroke="#000" stroke-width="${n(0.017 * A)}" />`;
       const lift = Math.max(1.5, 0.012 * A);
-      // The leaf's board sheet (moss-stained hardwood, six vertical boards) spans the leaf.
+      // The leaf's board sheet (moss-stained hardwood, six vertical boards, their joints part of
+      // the wood) spans the leaf.
       const tileW = A;
       const tileH = APEX * A + 4;
       const x0 = side === 'left' ? cx - A : cx;
@@ -1927,15 +1928,6 @@ const faqs = [
         `<defs><pattern id="sia-door-wood-${side}" patternUnits="userSpaceOnUse" x="${n(x0)}" y="${n(y0)}" width="${n(tileW)}" height="${n(tileH)}">` +
         `<image href="${doorSheets[side]}" width="${n(tileW)}" height="${n(tileH)}" preserveAspectRatio="none" /></pattern></defs>`;
       const board = (d: string) => `<path d="${d}" fill="url(#sia-door-wood-${side})" />`;
-      // V-grooves at the board joints: shade on the wall facing away from the light, a hair of
-      // light on the wall facing it.
-      let grooves = '';
-      for (let k = 1; k < 6; k++) {
-        const x = x0 + (A * k) / 6;
-        grooves +=
-          `<path d="M${n(x)} ${n(y0)} V${n(base)}" stroke="rgb(10 14 8 / 0.75)" stroke-width="1.4" />` +
-          `<path d="M${n(x + 1.1)} ${n(y0)} V${n(base)}" stroke="rgb(205 220 175 / 0.22)" stroke-width="0.8" />`;
-      }
       return (
         // The leaf: moss-stained hardwood boards, edges rounded by the light.
         wood +
@@ -1944,8 +1936,6 @@ const faqs = [
         `<g filter="url(#sia-bevel-panel)">${board(pathOf(panelTop))}</g>` +
         `<g filter="url(#sia-bevel-panel)">${board(pathOf(panelBottom))}</g>` +
         `<g filter="url(#sia-bevel-panel)">${board(pathOf(panelCrown))}</g>` +
-        `<clipPath id="sia-leaf-clip-${side}"><path d="${pathOf(poly)}" /></clipPath>` +
-        `<g clip-path="url(#sia-leaf-clip-${side})">${grooves}</g>` +
         // Carved bead: dark cut with a lit edge, then a second fine bead inside it.
         `<path d="${bead1}" fill="none" stroke="rgb(16 10 5 / 0.7)" stroke-width="1.6" />` +
         `<path d="${bead1Lit}" fill="none" stroke="rgb(214 178 128 / 0.25)" stroke-width="0.8" />` +
