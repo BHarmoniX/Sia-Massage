@@ -1679,9 +1679,10 @@ const faqs = [
       archFrame
         .querySelector<SVGPathElement>('[data-braces]')
         ?.setAttribute('d', brace(cx - A - BAND, 1) + ' ' + brace(cx + A + BAND, -1));
-      // The same curve along its top side, touching the brace: from where it
-      // meets the outer moss line to the inner one.
+      // The same curve along its top side, touching the brace: from where it meets the outer
+      // moss line to where it meets the seam (the fine sage line beside the inner moss line).
       const FINE = 1.5; // half the brace (2px) + half the fine line (1px): touching
+      const SEAM = 13; // the seam line's distance out from the doorway's edge
       const braceFine = (tip: number, dir: number) => {
         const p1y = -0.552 * bh, p2x = 0.552 * bw * dir, p2y = -0.902 * bh, p3x = bw * dir, p3y = -bh;
         const pts: [number, number][] = [];
@@ -1697,15 +1698,22 @@ const faqs = [
           const nx = (dir * dy) / len, ny = (dir * -dx) / len;
           pts.push([x + nx * FINE, y + ny * FINE]);
         }
-        // Start where it crosses the outer line (x = 0 here), not beyond it.
-        let k = pts.findIndex(([x]) => x * dir >= 0);
-        if (k < 0) k = 0;
-        const out: [number, number][] = pts.slice(k);
-        const prev = pts[k - 1];
-        const first = pts[k];
-        if (prev && first) {
-          const f = -prev[0] / (first[0] - prev[0]);
-          out.unshift([0, prev[1] + (first[1] - prev[1]) * f]);
+        // Keep the part between the outer line (x = 0 here) and the seam, with exact end points.
+        const end = (BAND - SEAM) * dir;
+        const inside = (x: number) => x * dir >= 0 && x * dir <= end * dir;
+        const out: [number, number][] = [];
+        for (let i = 0; i < pts.length; i++) {
+          const p = pts[i]!;
+          const q = pts[i - 1];
+          if (q) {
+            for (const edge of [0, end]) {
+              if ((q[0] - edge) * (p[0] - edge) < 0) {
+                const f = (edge - q[0]) / (p[0] - q[0]);
+                out.push([edge, q[1] + (p[1] - q[1]) * f]);
+              }
+            }
+          }
+          if (inside(p[0])) out.push(p);
         }
         return `M${out.map(([x, y]) => `${n(tip + x)} ${n(by + y)}`).join(' L')}`;
       };
