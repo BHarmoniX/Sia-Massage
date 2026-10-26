@@ -306,16 +306,19 @@ const faqs = [
       <div class="sia-visit__glass" data-glass></div>
       <svg class="sia-visit__frame" data-frame>
         <defs>
-          <!-- 3D lighting for timber: the shape's own edges, softened, become its relief, lit
-               from the top left (a sheen on the upper edges, shade on the lower ones). One for
+          <!-- 3D lighting for timber: the shape's own edges, softened, become its relief, and the
+               grain adds a fine texture to the surface; lit from the top left with a soft satin
+               (oiled, not glossy) sheen. One for
                the frame's narrow timbers, a softer, deeper one for the door leaves, and one for
                the raised door panels. -->
           <filter id="sia-bevel" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2.4" result="relief" />
-            <feDiffuseLighting in="relief" surfaceScale="3.5" diffuseConstant="1.25" lighting-color="#fff" result="diffuse">
+            <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="grainHeight" />
+            <feComposite in="relief" in2="grainHeight" operator="arithmetic" k2="1" k3="0.6" result="surface" />
+            <feDiffuseLighting in="surface" surfaceScale="3.5" diffuseConstant="1.25" lighting-color="#fff" result="diffuse">
               <feDistantLight azimuth="225" elevation="48" />
             </feDiffuseLighting>
-            <feSpecularLighting in="relief" surfaceScale="3.5" specularConstant="0.55" specularExponent="16" lighting-color="#f1dcb8" result="sheen">
+            <feSpecularLighting in="surface" surfaceScale="3.5" specularConstant="0.16" specularExponent="5" lighting-color="#f1dcb8" result="sheen">
               <feDistantLight azimuth="225" elevation="40" />
             </feSpecularLighting>
             <feComposite in="SourceGraphic" in2="diffuse" operator="arithmetic" k1="1" result="lit" />
@@ -325,10 +328,12 @@ const faqs = [
           </filter>
           <filter id="sia-bevel-door" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="relief" />
-            <feDiffuseLighting in="relief" surfaceScale="5" diffuseConstant="1.2" lighting-color="#fff" result="diffuse">
+            <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="grainHeight" />
+            <feComposite in="relief" in2="grainHeight" operator="arithmetic" k2="1" k3="0.6" result="surface" />
+            <feDiffuseLighting in="surface" surfaceScale="5" diffuseConstant="1.2" lighting-color="#fff" result="diffuse">
               <feDistantLight azimuth="225" elevation="50" />
             </feDiffuseLighting>
-            <feSpecularLighting in="relief" surfaceScale="5" specularConstant="0.5" specularExponent="14" lighting-color="#f1dcb8" result="sheen">
+            <feSpecularLighting in="surface" surfaceScale="5" specularConstant="0.16" specularExponent="5" lighting-color="#f1dcb8" result="sheen">
               <feDistantLight azimuth="225" elevation="38" />
             </feSpecularLighting>
             <feComposite in="SourceGraphic" in2="diffuse" operator="arithmetic" k1="1" result="lit" />
@@ -338,10 +343,12 @@ const faqs = [
           </filter>
           <filter id="sia-bevel-panel" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
             <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="relief" />
-            <feDiffuseLighting in="relief" surfaceScale="6" diffuseConstant="1.18" lighting-color="#fff" result="diffuse">
+            <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="grainHeight" />
+            <feComposite in="relief" in2="grainHeight" operator="arithmetic" k2="1" k3="0.6" result="surface" />
+            <feDiffuseLighting in="surface" surfaceScale="6" diffuseConstant="1.18" lighting-color="#fff" result="diffuse">
               <feDistantLight azimuth="225" elevation="52" />
             </feDiffuseLighting>
-            <feSpecularLighting in="relief" surfaceScale="6" specularConstant="0.4" specularExponent="12" lighting-color="#f1dcb8" result="sheen">
+            <feSpecularLighting in="surface" surfaceScale="6" specularConstant="0.16" specularExponent="5" lighting-color="#f1dcb8" result="sheen">
               <feDistantLight azimuth="225" elevation="40" />
             </feSpecularLighting>
             <feComposite in="SourceGraphic" in2="diffuse" operator="arithmetic" k1="1" result="lit" />
@@ -387,61 +394,50 @@ const faqs = [
             <stop offset="0" stop-color="#000" stop-opacity="0.15" />
             <stop offset="1" stop-color="#000" stop-opacity="0.75" />
           </linearGradient>
-          <!-- Timber: dark walnut with colour drift, growth lines and fine grain, plus a few
-               natural knots, all rendered once into a tile and repeated. -->
-          <filter id="sia-wood-drift" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.03 0.005" numOctaves="2" seed="3" stitchTiles="stitch" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0.36  0 0 0 0 0.23  0 0 0 0 0.13  1.2 0 0 0 -0.48" />
+          <!-- Timber: oiled walnut. A large tile so it never visibly repeats: a warm brown base
+               with golden and deep heartwood zones drifting along the board, long straight grain
+               lines, lighter figure catching the light, fine open pores, and a single knot. -->
+          <filter id="sia-wood-warm" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.008 0.0012" numOctaves="3" seed="3" stitchTiles="stitch" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0.52  0 0 0 0 0.31  0 0 0 0 0.16  1.6 0 0 0 -0.72" />
           </filter>
-          <filter id="sia-wood-fine" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9 0.018" numOctaves="3" seed="11" stitchTiles="stitch" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0.05  0 0 0 0 0.03  0 0 0 0 0.01  2.2 0 0 0 -0.9" />
+          <filter id="sia-wood-heart" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.014 0.0016" numOctaves="3" seed="9" stitchTiles="stitch" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0.09  0 0 0 0 0.05  0 0 0 0 0.02  1.5 0 0 0 -0.66" />
           </filter>
-          <filter id="sia-wood-rings" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="turbulence" baseFrequency="0.16 0.006" numOctaves="2" seed="29" stitchTiles="stitch" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0.04  0 0 0 0 0.02  0 0 0 0 0.01  3 0 0 0 -0.5" />
+          <filter id="sia-wood-grain" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="turbulence" baseFrequency="0.11 0.0025" numOctaves="3" seed="29" stitchTiles="stitch" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0.07  0 0 0 0 0.035  0 0 0 0 0.015  3.2 0 0 0 -0.5" />
+          </filter>
+          <filter id="sia-wood-figure" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.06 0.0018" numOctaves="2" seed="5" stitchTiles="stitch" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0.76  0 0 0 0 0.54  0 0 0 0 0.32  2.2 0 0 0 -1.22" />
+          </filter>
+          <filter id="sia-wood-pores" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="1.4 0.035" numOctaves="2" seed="11" stitchTiles="stitch" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0.04  0 0 0 0 0.02  0 0 0 0 0.01  2.4 0 0 0 -1.02" />
           </filter>
           <radialGradient id="sia-knot">
-            <stop offset="0" stop-color="#120a04" />
-            <stop offset="0.55" stop-color="#22140a" />
-            <stop offset="1" stop-color="#3a2416" />
+            <stop offset="0" stop-color="#140b05" />
+            <stop offset="0.55" stop-color="#2a170b" />
+            <stop offset="1" stop-color="#43291a" />
           </radialGradient>
           <radialGradient id="sia-knot-halo">
-            <stop offset="0.35" stop-color="#6a4426" stop-opacity="0.7" />
+            <stop offset="0.35" stop-color="#6e4628" stop-opacity="0.65" />
             <stop offset="1" stop-color="#5a3a22" stop-opacity="0" />
           </radialGradient>
-          <pattern id="sia-wood" width="130" height="340" patternUnits="userSpaceOnUse">
-            <rect width="130" height="340" fill="#2f1e11" />
-            <rect width="130" height="340" filter="url(#sia-wood-drift)" />
-            <rect width="130" height="340" filter="url(#sia-wood-rings)" />
-            <rect width="130" height="340" filter="url(#sia-wood-fine)" />
-            <g transform="translate(22 46) rotate(-6)">
-              <ellipse rx="12.0" ry="22.0" fill="url(#sia-knot-halo)" />
-              <ellipse rx="8.8" ry="17.6" fill="none" stroke="#140b05" stroke-opacity="0.3" stroke-width="0.8" />
-              <ellipse rx="6.8" ry="14.9" fill="none" stroke="#140b05" stroke-opacity="0.4" stroke-width="0.7" />
-              <ellipse rx="5.2" ry="12.6" fill="none" stroke="#6b4628" stroke-opacity="0.5" stroke-width="0.6" />
-              <ellipse rx="4" ry="11" fill="url(#sia-knot)" />
-            </g>
-            <g transform="translate(92 160) rotate(5)">
-              <ellipse rx="15.0" ry="28.0" fill="url(#sia-knot-halo)" />
-              <ellipse rx="11.0" ry="22.4" fill="none" stroke="#140b05" stroke-opacity="0.3" stroke-width="0.8" />
-              <ellipse rx="8.5" ry="18.9" fill="none" stroke="#140b05" stroke-opacity="0.4" stroke-width="0.7" />
-              <ellipse rx="6.5" ry="16.1" fill="none" stroke="#6b4628" stroke-opacity="0.5" stroke-width="0.6" />
-              <ellipse rx="5" ry="14" fill="url(#sia-knot)" />
-            </g>
-            <g transform="translate(48 250) rotate(-2)">
-              <ellipse rx="10.2" ry="18.0" fill="url(#sia-knot-halo)" />
-              <ellipse rx="7.5" ry="14.4" fill="none" stroke="#140b05" stroke-opacity="0.3" stroke-width="0.8" />
-              <ellipse rx="5.8" ry="12.2" fill="none" stroke="#140b05" stroke-opacity="0.4" stroke-width="0.7" />
-              <ellipse rx="4.4" ry="10.3" fill="none" stroke="#6b4628" stroke-opacity="0.5" stroke-width="0.6" />
-              <ellipse rx="3.4" ry="9" fill="url(#sia-knot)" />
-            </g>
-            <g transform="translate(112 318) rotate(8)">
-              <ellipse rx="13.2" ry="24.0" fill="url(#sia-knot-halo)" />
-              <ellipse rx="9.7" ry="19.2" fill="none" stroke="#140b05" stroke-opacity="0.3" stroke-width="0.8" />
-              <ellipse rx="7.5" ry="16.2" fill="none" stroke="#140b05" stroke-opacity="0.4" stroke-width="0.7" />
-              <ellipse rx="5.7" ry="13.8" fill="none" stroke="#6b4628" stroke-opacity="0.5" stroke-width="0.6" />
-              <ellipse rx="4.4" ry="12" fill="url(#sia-knot)" />
+          <pattern id="sia-wood" width="280" height="960" patternUnits="userSpaceOnUse">
+            <rect width="280" height="960" fill="#3a2314" />
+            <rect width="280" height="960" filter="url(#sia-wood-warm)" />
+            <rect width="280" height="960" filter="url(#sia-wood-heart)" />
+            <rect width="280" height="960" filter="url(#sia-wood-figure)" />
+            <rect width="280" height="960" filter="url(#sia-wood-grain)" />
+            <rect width="280" height="960" filter="url(#sia-wood-pores)" />
+            <g transform="translate(196 640) rotate(4)">
+              <ellipse rx="13" ry="30" fill="url(#sia-knot-halo)" />
+              <ellipse rx="9" ry="23" fill="none" stroke="#140b05" stroke-opacity="0.28" stroke-width="0.8" />
+              <ellipse rx="6.5" ry="18" fill="none" stroke="#6b4628" stroke-opacity="0.45" stroke-width="0.6" />
+              <ellipse rx="4.5" ry="14" fill="url(#sia-knot)" />
             </g>
           </pattern>
           <clipPath id="sia-wall-clip" clipPathUnits="userSpaceOnUse">
