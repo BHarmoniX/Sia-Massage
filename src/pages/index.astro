@@ -1679,9 +1679,9 @@ const faqs = [
       archFrame
         .querySelector<SVGPathElement>('[data-braces]')
         ?.setAttribute('d', brace(cx - A - BAND, 1) + ' ' + brace(cx + A + BAND, -1));
-      // The same curve moved a little to its top side: parallel to the brace, from where it
+      // The same curve along its top side, touching the brace: from where it
       // meets the outer moss line to the inner one.
-      const FINE = 3.5;
+      const FINE = 1.5; // half the brace (2px) + half the fine line (1px): touching
       const braceFine = (tip: number, dir: number) => {
         const p1y = -0.552 * bh, p2x = 0.552 * bw * dir, p2y = -0.902 * bh, p3x = bw * dir, p3y = -bh;
         const pts: [number, number][] = [];
