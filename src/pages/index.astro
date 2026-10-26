@@ -1494,7 +1494,8 @@ const faqs = [
         [-0.704, 0.487, 0.08],
         [-0.172, 0.598, 0.12],
       ];
-      let [px, py] = pts[0];
+      let px = -1;
+      let py = 0;
       for (const [x, y, bulge] of cusps) {
         const mx = (px + x) / 2;
         const my = (py + y) / 2;
@@ -1512,14 +1513,11 @@ const faqs = [
         [px, py] = [x, y];
       }
       // Ogee: from the last point, swelling out and drawing in to the tip at the centre.
-      const og: [number, number][] = [[px, py], [-0.1, 0.645], [-0.025, 0.665], [0, CROWN]];
+      // Control points: (px, py) → (−0.1, 0.645) → (−0.025, 0.665) → (0, CROWN).
       for (let i = 1; i <= 22; i++) {
         const t = i / 22;
         const a = (1 - t) ** 3, b = 3 * (1 - t) ** 2 * t, c = 3 * (1 - t) * t * t, e = t ** 3;
-        pts.push([
-          a * og[0][0] + b * og[1][0] + c * og[2][0] + e * og[3][0],
-          a * og[0][1] + b * og[1][1] + c * og[2][1] + e * og[3][1],
-        ]);
+        pts.push([a * px + b * -0.1 + c * -0.025 + e * 0, a * py + b * 0.645 + c * 0.665 + e * CROWN]);
       }
       return pts;
     })();
@@ -1533,8 +1531,8 @@ const faqs = [
       const raw: [number, number][] = [];
       let prev: { tx: number; ty: number } | null = null;
       for (let i = 0; i < P.length - 1; i++) {
-        const [ax, ay] = P[i];
-        const [bx, by] = P[i + 1];
+        const [ax, ay] = P[i]!;
+        const [bx, by] = P[i + 1]!;
         const len = Math.hypot(bx - ax, by - ay);
         if (len < 1e-6) continue;
         const tx = (bx - ax) / len, ty = (by - ay) / len;
@@ -1563,8 +1561,8 @@ const faqs = [
       const near = (x: number, y: number) => {
         let best = Infinity;
         for (let i = 0; i < P.length - 1; i++) {
-          const [ax, ay] = P[i];
-          const [bx, by] = P[i + 1];
+          const [ax, ay] = P[i]!;
+          const [bx, by] = P[i + 1]!;
           const vx = bx - ax, vy = by - ay;
           const l2 = vx * vx + vy * vy || 1;
           const t = Math.max(0, Math.min(1, ((x - ax) * vx + (y - ay) * vy) / l2));
