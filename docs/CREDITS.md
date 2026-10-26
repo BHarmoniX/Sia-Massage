@@ -63,3 +63,4 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | File | Source |
 | --- | --- |
 | frame-walnut.jpg (doorway arch frame timber) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
+| door-iron.jpg (doorway door hardware: hinges, rivets, ring pulls) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
