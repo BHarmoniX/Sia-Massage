@@ -2329,7 +2329,8 @@ const faqs = [
       const size = Math.min(56, Math.max(28, A0 * 0.36));
       const show = room > size * 1.6 ? Math.max(0, 1 - open * 2.4) : 0;
       const k = (size / 40) * s;
-      const offset = A + EDGE + Math.min((cx - A0 - EDGE) * 0.5, A0 * 1.5) * s; // centred in the wall either side
+      // Close beside the doorway: a small gap (under half a character) between frame and text.
+      const offset = A + EDGE + size * 0.95 * s;
       const yTop = base - (SHOULDER * A) + size * 0.4 * s;
       couplets.right.setAttribute('transform', `translate(${n(cx + offset)} ${n(yTop)}) scale(${n(k)})`);
       couplets.left.setAttribute('transform', `translate(${n(cx - offset)} ${n(yTop)}) scale(${n(k)})`);
