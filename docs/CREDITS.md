@@ -56,4 +56,4 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | File (src/client/photos) | Source |
 |---|---|
 | therapist-linen.jpg (treatments photo) | https://www.pexels.com/photo/a-massage-therapist-7233264/ |
-| door-boards-left.jpg, door-boards-right.jpg (doorway doors: weathered hardwood, turned upright, cut into boards and stained moss) | https://www.pexels.com/photo/129721/ |
+| door-boards-left.jpg, door-boards-right.jpg (doorway doors: weathered hardwood, turned upright, cut into boards, oiled timber tone) | https://www.pexels.com/photo/129721/ |

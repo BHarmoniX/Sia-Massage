@@ -23,7 +23,7 @@ import doorBoardsLeft from '../client/photos/door-boards-left.jpg';
 import doorBoardsRight from '../client/photos/door-boards-right.jpg';
 import { getImage } from 'astro:assets';
 
-// The doorway's doors: moss-stained hardwood boards, one sheet per leaf, cut from a real
+// The doorway's doors: natural oiled hardwood boards, one sheet per leaf, cut from a real
 // hardwood photo turned so its grain runs up the boards (each board a different part of it).
 // Compressed to WebP at build time.
 const doorLeftImg = await getImage({ src: doorBoardsLeft, width: 600, format: 'webp', quality: 80 });
@@ -1270,8 +1270,8 @@ const faqs = [
     /* Grain along the edge's length, light on the front arris, shade toward the back sheet. */
     background:
       repeating-linear-gradient(90deg, rgb(0 0 0 / 0.14) 0 1px, transparent 1px 3px),
-      linear-gradient(90deg, rgb(220 230 200 / 0.12), transparent 30%, rgb(0 0 0 / 0.4)),
-      linear-gradient(180deg, #4b673f, #3a5131 60%, #2c3d25);
+      linear-gradient(90deg, rgb(240 220 190 / 0.12), transparent 30%, rgb(0 0 0 / 0.4)),
+      linear-gradient(180deg, #7a5536, #5e4029 60%, #4a3220);
     backface-visibility: hidden;
   }
   .sia-visit__leaf-svg {
@@ -1918,7 +1918,7 @@ const faqs = [
         `<circle cx="${n(hx)}" cy="${n(hy)}" r="${n(0.078 * A)}" fill="#000" />` +
         `<circle cx="${n(hx)}" cy="${n(boss + ring)}" r="${n(ring)}" fill="none" stroke="#000" stroke-width="${n(0.017 * A)}" />`;
       const lift = Math.max(1.5, 0.012 * A);
-      // The leaf's board sheet (moss-stained hardwood, six vertical boards, their joints part of
+      // The leaf's board sheet (oiled natural hardwood, six vertical boards, their joints part of
       // the wood) spans the leaf.
       const tileW = A;
       const tileH = APEX * A + 4;
@@ -1929,7 +1929,7 @@ const faqs = [
         `<image href="${doorSheets[side]}" width="${n(tileW)}" height="${n(tileH)}" preserveAspectRatio="none" /></pattern></defs>`;
       const board = (d: string) => `<path d="${d}" fill="url(#sia-door-wood-${side})" />`;
       return (
-        // The leaf: moss-stained hardwood boards, edges rounded by the light.
+        // The leaf: natural hardwood boards, edges rounded by the light.
         wood +
         `<g filter="url(#sia-bevel-door)">${board(pathOf(poly))}</g>` +
         // Raised panels standing out of the frame of the leaf.
@@ -2020,7 +2020,7 @@ const faqs = [
               // edge so the door reads as one solid piece.
               const back = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
               back.setAttribute('class', 'sia-visit__leaf-back');
-              back.innerHTML = `<path d="${pathOf(leafPoly(cx, base, A, side))}" fill="#3a5131" stroke="rgb(16 22 12 / 0.7)" stroke-width="1.2" />`;
+              back.innerHTML = `<path d="${pathOf(leafPoly(cx, base, A, side))}" fill="#4a3220" stroke="rgb(20 12 6 / 0.7)" stroke-width="1.2" />`;
               back.style.transform = `translateZ(${n(-T)}px)`;
               leaf.insertBefore(back, leaf.firstChild);
               const crown = leafPoly(cx, base, A, side).slice(1, -1);
@@ -2036,7 +2036,7 @@ const faqs = [
                 segLit.push(0.55 + 0.45 * ((-ty + tx) / Math.SQRT2));
               }
               const vLit = (i: number) => ((segLit[i - 1] ?? segLit[i]!) + (segLit[i] ?? segLit[i - 1]!)) / 2;
-              const paint = (k: number) => `rgb(${Math.round(Math.min(255, 84 * k))} ${Math.round(Math.min(255, 112 * k))} ${Math.round(Math.min(255, 70 * k))})`;
+              const paint = (k: number) => `rgb(${Math.round(Math.min(255, 132 * k))} ${Math.round(Math.min(255, 92 * k))} ${Math.round(Math.min(255, 60 * k))})`;
               for (let i = 0; i < pts.length - 1; i++) {
                 const [px, py] = pts[i]!;
                 const [qx, qy] = pts[i + 1]!;
