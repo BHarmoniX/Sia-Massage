@@ -2718,7 +2718,9 @@ const faqs = [
         const iw = iw0 * s;
         const ih = ih0 * s;
         const left = cx - cx * s;
-        const top = pivotY + (0 - pivotY) * s;
+        // lifted a little, so its diagonal edge stands clear of the timber frame
+        const top0 = -ih0 * 0.14;
+        const top = pivotY + (top0 - pivotY) * s;
         ivy.style.display = 'block';
         ivy.style.left = `${n(left)}px`;
         ivy.style.top = `${n(top)}px`;
