@@ -1202,10 +1202,11 @@ const faqs = [
     );
     will-change: clip-path;
   }
+  /* The room photo is placed and sized by the doorway script (true scale behind the arch). */
   .sia-visit__door img {
-    transform: scale(calc(1.18 - var(--open) * 0.18));
-    transform-origin: 50% 70%;
-    will-change: transform;
+    position: absolute;
+    max-width: none;
+    object-fit: fill;
   }
   .sia-visit__door::after {
     content: '';
@@ -1789,6 +1790,7 @@ const faqs = [
   const archFrame = doorway?.querySelector<SVGSVGElement>('[data-frame]');
   const threshold = doorway?.querySelector<HTMLElement>('.sia-visit__threshold');
   const glass = doorway?.querySelector<HTMLElement>('[data-glass]');
+  const doorPhoto = doorway?.querySelector<HTMLImageElement>('.sia-visit__door img');
   const ground = doorway?.querySelector<HTMLElement>('[data-ground]');
   const groundPlane = ground?.firstElementChild as HTMLElement | null | undefined;
   const wallFoot = doorway?.querySelector<HTMLElement>('[data-wall-foot]');
@@ -2238,6 +2240,20 @@ const faqs = [
       archFrame.querySelector('[data-glass-shade="outer"]')?.setAttribute('d', arch(cx, base, A, BAND, false));
       archFrame.querySelector('[data-glass-shade="inner"]')?.setAttribute('d', arch(cx, base, A, INNER, false));
       door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A, BAND, true)}")`;
+      // The room behind the doors, at true scale: its floor starts at the threshold and its
+      // eye level (a third of the way down the photo) sits where a standing person's eyes would
+      // be in a doorway this size (opening ~1.6 m wide, so eye height ~2/3 of the way to the
+      // apex). It scales with the doorway as you walk in.
+      if (doorPhoto) {
+        const HZ = 0.335; // the photo's eye level, from its top
+        const eyeY = base - APEX * A * (1.6 / 2.4);
+        const ph = (base - eyeY) / (1 - HZ);
+        const pw = ph * (2200 / 1228);
+        doorPhoto.style.width = `${n(pw)}px`;
+        doorPhoto.style.height = `${n(ph)}px`;
+        doorPhoto.style.left = `${n(cx - pw / 2)}px`;
+        doorPhoto.style.top = `${n(base - ph)}px`;
+      }
       // Each foot: a timber plinth across the leg, its two sides the arch's tip curve rotated
       // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
       const fh = 0.085 * A;
