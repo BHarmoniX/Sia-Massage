@@ -32,6 +32,8 @@ import wallIvyLeft from '../client/photos/wall-ivy-left.webp';
 import wallIvyLeftShadow from '../client/photos/wall-ivy-left-shadow.webp';
 import wallIvyRight from '../client/photos/wall-ivy-right.webp';
 import wallIvyRightShadow from '../client/photos/wall-ivy-right-shadow.webp';
+import wallIvyTop from '../client/photos/wall-ivy-top.webp';
+import wallIvyTopShadow from '../client/photos/wall-ivy-top-shadow.webp';
 import wallPlaster from '../client/photos/wall-plaster.jpg';
 import gardenBambooA from '../client/photos/garden-bamboo-a.webp';
 import gardenBambooB from '../client/photos/garden-bamboo-b.webp';
@@ -56,6 +58,8 @@ const groundStoneImg = await getImage({ src: groundStone, width: 1000, format: '
 const ivyLeftImg = await getImage({ src: wallIvyLeft, width: 1100, format: 'webp', quality: 74 });
 const ivyRightImg = await getImage({ src: wallIvyRight, width: 1100, format: 'webp', quality: 74 });
 const ivyLeftShadowImg = await getImage({ src: wallIvyLeftShadow, width: 600, format: 'webp', quality: 70 });
+const ivyTopImg = await getImage({ src: wallIvyTop, width: 1400, format: 'webp', quality: 74 });
+const ivyTopShadowImg = await getImage({ src: wallIvyTopShadow, width: 900, format: 'webp', quality: 70 });
 const ivyRightShadowImg = await getImage({ src: wallIvyRightShadow, width: 600, format: 'webp', quality: 70 });
 const stepStoneImg = await getImage({ src: stepStone, width: 512, format: 'webp', quality: 80 });
 // The wall: an original moss lime-plaster texture generated for Sia (OpenArt), mirrored into a
@@ -337,6 +341,7 @@ const faqs = [
       <!-- Ivy clinging flat to the wall in the two top corners, its runners creeping along the top
            and toward the doorway, stopping short of it. A faint shadow on the plaster behind each. -->
       <div class="sia-visit__ivy" data-ivy="left"><img class="sia-visit__ivy-shadow" src={ivyLeftShadowImg.src} alt="" decoding="async" /><img src={ivyLeftImg.src} alt="" decoding="async" /></div>
+      <div class="sia-visit__ivy" data-ivy="top"><img class="sia-visit__ivy-shadow" src={ivyTopShadowImg.src} alt="" decoding="async" /><img src={ivyTopImg.src} alt="" decoding="async" /></div>
       <div class="sia-visit__ivy" data-ivy="right"><img class="sia-visit__ivy-shadow" src={ivyRightShadowImg.src} alt="" decoding="async" /><img src={ivyRightImg.src} alt="" decoding="async" /></div>
       <div class="sia-visit__door">
         <Img src={spaRoom} alt="" sizes="100vw" class="h-full w-full object-cover" />
@@ -1910,6 +1915,7 @@ const faqs = [
   const visitTitle = document.getElementById('visit-title');
   const ivyLeft = doorway?.querySelector<HTMLElement>('[data-ivy="left"]');
   const ivyRight = doorway?.querySelector<HTMLElement>('[data-ivy="right"]');
+  const ivyTop = doorway?.querySelector<HTMLElement>('[data-ivy="top"]');
   const ground = doorway?.querySelector<HTMLElement>('[data-ground]');
   const groundPlane = ground?.firstElementChild as HTMLElement | null | undefined;
   const wallFoot = doorway?.querySelector<HTMLElement>('[data-wall-foot]');
@@ -2748,6 +2754,24 @@ const faqs = [
           el.style.left = `${n(cx + (x0 - cx) * s)}px`;
           el.style.top = `${n(pivotY + (0 - pivotY) * s)}px`;
           el.style.opacity = fade;
+        }
+        // Joining the corners across the top: the same ivy's runner along the top, with a few strands
+        // draping down either side of 入, and a clear space kept around 入 and its line.
+        if (ivyTop) {
+          const tw = full * 0.9;
+          const x0 = cx - tw / 2;
+          const labelH = threshold?.offsetHeight ?? 62;
+          const labelMidY = archTop0 - 14 - labelH / 2;
+          const clear = `radial-gradient(${n((labelHalf + 14) * s)}px ${n((labelH / 2 + 4) * s)}px at ${n((cx - x0) * s)}px ${n((labelMidY + full * 0.012) * s)}px, transparent 0, transparent 70%, #000 100%)`;
+          ivyTop.style.display = 'block';
+          ivyTop.style.setProperty('mask-image', clear);
+          ivyTop.style.setProperty('-webkit-mask-image', clear);
+          ivyTop.style.width = `${n(tw * s)}px`;
+          ivyTop.style.left = `${n(cx + (x0 - cx) * s)}px`;
+          // hugging the very top edge (a little of the runner tucked above it)
+          const ty0 = -full * 0.012;
+          ivyTop.style.top = `${n(pivotY + (ty0 - pivotY) * s)}px`;
+          ivyTop.style.opacity = fade;
         }
       }
 
