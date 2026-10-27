@@ -322,15 +322,6 @@ const faqs = [
       <div class="sia-visit__ground" data-ground data-texture={groundStoneImg.src}><div class="sia-visit__ground-plane"></div></div>
       <!-- The foot of the wall, darkened where it meets the paving (damp, splash and shade). -->
       <div class="sia-visit__wall-foot" data-wall-foot></div>
-      <!-- The row of paving stones along the foot of the wall: uneven, slightly proud, laid by hand. -->
-      <svg class="sia-visit__edge" data-edge aria-hidden="true">
-        <defs>
-          <pattern id="sia-edge-stone" patternUnits="userSpaceOnUse" width="240" height="240">
-            <image href={groundStoneImg.src} width="240" height="240" preserveAspectRatio="none" />
-          </pattern>
-        </defs>
-        <g data-edge-stones></g>
-      </svg>
       <div class="sia-visit__door">
         <Img src={spaRoom} alt="" sizes="100vw" class="h-full w-full object-cover" />
       </div>
@@ -507,16 +498,22 @@ const faqs = [
           <text class="sia-carving__gilt" x="0" y="0"><tspan x="0" y="0.0em">心</tspan><tspan x="0" y="1.3em">自</tspan><tspan x="0" y="2.6em">宁</tspan><tspan x="0" y="3.9em">静</tspan></text>
         </g>
       </svg>
-      <!-- Threshold stones across the doorway, in front of the doors and frame: each a touch
-           proud, its corners rolling down into the grout, so paving and timber don't meet in a
-           ruled line. -->
+      <!-- The paving's raised edge, along the wall and across the threshold (in front of the doors
+           and frame): each stone lifts a fraction between its grout joints, so paving and wall or
+           timber don't meet in a ruled line. Drawn by the script, pinned to the paving's joints. -->
       <svg class="sia-visit__edge" data-threshold aria-hidden="true">
         <defs>
-          <!-- the paving's own stone colour, lit at the top edge, fading into the paving below -->
-          <linearGradient id="sia-sill-lift" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="rgb(132 136 112)" stop-opacity="0.95" />
-            <stop offset="0.55" stop-color="rgb(104 106 86)" stop-opacity="0.75" />
-            <stop offset="1" stop-color="rgb(90 92 72)" stop-opacity="0" />
+          <!-- the paving image itself, lined up by the script with the paving below, so each lift is
+               exactly the colour of the stone it belongs to -->
+          <pattern id="sia-sill-paving" patternUnits="userSpaceOnUse" width="240" height="240" data-sill-paving>
+            <image href={groundStoneImg.src} width="240" height="240" preserveAspectRatio="none" />
+          </pattern>
+          <!-- the paving's own shading near the wall (as .sia-visit__ground::after), darker at the sides -->
+          <linearGradient id="sia-sill-sides" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="0" data-sill-sides>
+            <stop offset="0" stop-color="rgb(8 12 6)" stop-opacity="0.45" />
+            <stop offset="0.3" stop-color="rgb(8 12 6)" stop-opacity="0" />
+            <stop offset="0.7" stop-color="rgb(8 12 6)" stop-opacity="0" />
+            <stop offset="1" stop-color="rgb(8 12 6)" stop-opacity="0.45" />
           </linearGradient>
           <filter id="sia-sill-soft" x="-5%" y="-60%" width="110%" height="220%"><feGaussianBlur stdDeviation="0.45" /></filter>
         </defs>
@@ -1296,7 +1293,7 @@ const faqs = [
     background:
       /* Where the paving meets the wall: a dark joint, then the stones nearest the wall in
          the wall's shade, easing out over the first row or two. */
-      linear-gradient(180deg, rgb(4 6 3 / 0.85) 0, rgb(4 6 3 / 0.5) 2px, rgb(6 9 4 / 0.32) 6%, rgb(6 9 4 / 0.12) 16%, transparent 30%),
+      linear-gradient(180deg, rgb(6 9 4 / 0.45) 0, rgb(6 9 4 / 0.4) 2px, rgb(6 9 4 / 0.32) 6%, rgb(6 9 4 / 0.12) 16%, transparent 30%),
       radial-gradient(60% 120% at 50% 0%, rgb(220 230 200 / 0.12), transparent 70%),
       linear-gradient(90deg, rgb(8 12 6 / 0.45), transparent 30%, transparent 70%, rgb(8 12 6 / 0.45));
   }
@@ -1330,12 +1327,12 @@ const faqs = [
     height: 100%;
     filter: none;
     opacity: 0.55;
-    transform: translate(10%, -0.6%);
+    transform: translate(22%, -0.6%);
     /* only the part falling on the wall: the paving below has the plant's own ground shadow */
     clip-path: inset(0 0 var(--wallcut, 0%) 0);
   }
   .sia-visit__prop--mirror img.sia-visit__prop-shadow {
-    transform: scaleX(-1) translate(-10%, -0.6%);
+    transform: scaleX(-1) translate(-22%, -0.6%);
   }
   /* Grounding: a tight dark contact right where the foot meets the stone (centred on the
      foot's bottom edge, so it runs under and just behind it), and a soft shadow cast away from
@@ -1354,13 +1351,19 @@ const faqs = [
     height: 2.2%;
     background: radial-gradient(closest-side, rgb(4 6 3 / 0.95), rgb(4 6 3 / 0.6) 60%, transparent);
   }
+  /* The pot's shadow on the paving: from its base back and to the right, to the foot of the
+     wall, where the shadow on the wall (.sia-visit__prop-shadow) carries on up. The script sets
+     the lean (--gskew) so it lands exactly under the wall shadow. */
   .sia-visit__prop::after {
-    left: calc(var(--sx, 50%) - var(--sw, 60%) * 0.35);
-    width: calc(var(--sw, 60%) * 1.9);
-    bottom: -1.6%;
-    height: 3.8%;
-    background: radial-gradient(closest-side, rgb(6 9 4 / 0.55), rgb(6 9 4 / 0.2) 60%, transparent);
-    filter: blur(2px);
+    left: calc(var(--sx, 50%) - 21%);
+    width: 42%;
+    bottom: 0;
+    height: var(--wallcut, 10%);
+    background: linear-gradient(0deg, rgb(4 7 3 / 0.55), rgb(4 7 3 / 0.4) 70%, rgb(4 7 3 / 0.3));
+    border-radius: 30% 30% 50% 50% / 25% 25% 45% 45%;
+    transform-origin: 50% 100%;
+    transform: skewX(var(--gskew, -30deg));
+    filter: blur(var(--gblur, 4px));
   }
   /* The two door leaves. Each fills the stage (its drawing uses the stage's own coordinates)
      and turns about its hinge; the script sets the angle, hinge and eye point. */
@@ -1536,8 +1539,14 @@ const faqs = [
     color: var(--color-accent);
     white-space: nowrap;
   }
+  /* 入, carved into the plaster like the couplets, lit from the upper left: the same muted
+     sage floor, the cut's upper-left edge in shade and its lower-right lip catching the light. */
   .sia-visit__threshold .font-han {
     font-size: 2rem;
+    color: rgb(124 142 106 / 0.9);
+    text-shadow:
+      -1px -1.2px 0.6px rgb(4 8 3 / 0.85),
+      0.8px 0.9px 0.4px rgb(214 226 192 / 0.45);
   }
   .sia-visit__threshold-text {
     font-family: var(--font-display);
@@ -1842,10 +1851,8 @@ const faqs = [
   const ground = doorway?.querySelector<HTMLElement>('[data-ground]');
   const groundPlane = ground?.firstElementChild as HTMLElement | null | undefined;
   const wallFoot = doorway?.querySelector<HTMLElement>('[data-wall-foot]');
-  const edge = doorway?.querySelector<SVGSVGElement>('[data-edge]');
-  const edgeStones = edge?.querySelector<SVGGElement>('[data-edge-stones]');
   const sill = doorway?.querySelector<SVGSVGElement>('[data-threshold]');
-  const thresholdStones = sill?.querySelector<SVGGElement>('[data-threshold-stones]');
+  const sillStones = sill?.querySelector<SVGGElement>('[data-threshold-stones]');
   let edgeKey = '';
   const garden = doorway?.querySelector<HTMLElement>('[data-garden]');
   // Each piece: where it stands (x from the doorway's centre, in doorway half-widths, past the
@@ -2432,90 +2439,75 @@ const faqs = [
         // Offset the tile so its mirror lines don't fall on the doorway's centre line.
         groundPlane.style.backgroundPosition = `${n(w * 2 - tile * 0.23)}px ${n(tile * 0.31)}px`;
         ground.style.opacity = String(Math.max(0, 1 - Math.max(0, open - 0.8) * 5));
-        // Edge stones along the wall: drawn once per size (they scale with the walk-in), with
-        // widths, rises and tilts from a fixed sequence so the row never shuffles.
-        if (edge && edgeStones) {
-          edge.style.opacity = ground.style.opacity;
-          const key = `${n(w)},${n(base)},${n(A)}`;
+        // The raised edge of the paving, along the wall and across the threshold. The paving's far
+        // edge lies flat in the screen (no perspective there), so each grout joint along it sits at
+        // an exact x: the tile's origin (cx - 0.23 tile, from the background offset above) plus the
+        // joint's place across the tile. Every lift runs joint to joint, sized by the tile, so it
+        // stays fixed to the paving as the gateway zooms.
+        if (sill && sillStones) {
+          sill.style.opacity = ground.style.opacity;
+          const key = `${n(w)},${n(base)},${n(tile)}`;
           if (key !== edgeKey) {
             edgeKey = key;
-            let seed = 11;
-            const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
-            const unit = A0 * s; // stone sizes follow the doorway's scale
-            const doorL = cx - A - EDGE + 2;
-            const doorR = cx + A + EDGE - 2;
-            let x = -unit * rnd();
-            let out = '';
-            while (x < w + unit) {
-              const bw = unit * (0.42 + rnd() * 0.38);
-              let x0 = x + 0.6;
-              let x1 = x + bw - 0.6;
-              x += bw;
-              // The threshold stays open: stones meet the frame on each side.
-              if (x1 > doorL && x0 < doorR) {
-                if (x0 < doorL) x1 = doorL;
-                else if (x1 > doorR) x0 = doorR;
-                else continue;
-                if (x1 - x0 < unit * 0.12) continue;
-              }
-              const rise = unit * (0.006 + rnd() * 0.009); // only a fraction proud, each a touch different
-              const tilt = unit * (rnd() - 0.5) * 0.006;
-              const face = unit * (0.012 + rnd() * 0.006); // a sliver of front face
-              const yT0 = base - rise - tilt;
-              const yT1 = base - rise + tilt;
-              const yMid = (yT0 + yT1) / 2 - unit * rnd() * 0.003;
-              const top = `M${n(x0)} ${n(yT0 + 1.5)} Q${n(x0)} ${n(yT0)} ${n(x0 + 2)} ${n(yT0)} Q${n((x0 + x1) / 2)} ${n(yMid)} ${n(x1 - 2)} ${n(yT1)} Q${n(x1)} ${n(yT1)} ${n(x1)} ${n(yT1 + 1.5)}`;
-              const shape = `${top} L${n(x1 - 0.5)} ${n(base + face)} L${n(x0 + 0.5)} ${n(base + face)} Z`;
-              out +=
-                // shadow cast onto the paving in front, the stone, its shaded face, a lit top edge
-                `<path d="M${n(x0)} ${n(base + face)} L${n(x1)} ${n(base + face)} L${n(x1 + 1)} ${n(base + face + unit * 0.015)} L${n(x0 + 1)} ${n(base + face + unit * 0.015)} Z" fill="rgb(6 9 4 / 0.3)" />` +
-                `<path d="${shape}" fill="url(#sia-edge-stone)" stroke="rgb(8 10 6 / 0.7)" stroke-width="1" />` +
-                `<path d="M${n(x0 + 0.5)} ${n(base + face * 0.15)} L${n(x1 - 0.5)} ${n(base + face * 0.15)} L${n(x1 - 0.5)} ${n(base + face)} L${n(x0 + 0.5)} ${n(base + face)} Z" fill="rgb(6 9 4 / 0.42)" />` +
-                `<path d="${top}" fill="none" stroke="rgb(235 240 225 / 0.35)" stroke-width="1" />`;
+            // Grout joints across the paving image, in the row of stones that meets the wall.
+            const JOINTS = [0.13, 0.2707, 0.4607, 0.5379, 0.7264, 0.8686];
+            const origin = cx - tile * 0.23;
+            const xs: number[] = [];
+            for (let k = Math.floor((0 - origin) / tile) - 1; k <= Math.ceil((w - origin) / tile); k++) {
+              for (const u of JOINTS) xs.push(origin + (k + u) * tile);
             }
-            edgeStones.innerHTML = out;
-
-            // Threshold: the paving itself lifts a fraction where it meets the timber. No stone is
-            // laid on top: each paver's edge rises a hair above the line in the paving's own colour,
-            // softly blurred into it, and its corners roll down into darker grout dips.
-            if (thresholdStones) {
-              let tSeed = 29;
-              const tr = () => ((tSeed = (tSeed * 9301 + 49297) % 233280) / 233280);
-              const soft = Math.max(0.4, unit * 0.003);
-              let t = '';
-              let tx = doorL - unit * 0.25 * tr();
-              while (tx < doorR) {
-                const bw = unit * (0.34 + tr() * 0.2);
-                const x0 = Math.max(doorL, tx);
-                const x1 = Math.min(doorR, tx + bw);
-                tx += bw;
-                if (x1 - x0 < unit * 0.08) continue;
-                const rise = unit * (0.004 + tr() * 0.004); // a fraction: no toe would catch on it
-                const yTop = base - rise;
-                const yMid = yTop - unit * tr() * 0.002;
-                const r0 = x0 > doorL + 0.5 ? Math.min((x1 - x0) * 0.12, unit * 0.035) : 0;
-                const r1 = x1 < doorR - 0.5 ? Math.min((x1 - x0) * 0.12, unit * 0.035) : 0;
-                const top =
-                  `M${n(x0)} ${n(base + rise)} ` +
-                  `C${n(x0)} ${n(yTop)} ${n(x0 + r0 * 0.3)} ${n(yTop)} ${n(x0 + r0)} ${n(yTop)} ` +
-                  `Q${n((x0 + x1) / 2)} ${n(yMid)} ${n(x1 - r1)} ${n(yTop)} ` +
-                  `C${n(x1 - r1 * 0.3)} ${n(yTop)} ${n(x1)} ${n(yTop)} ${n(x1)} ${n(base + rise)}`;
-                t +=
-                  // the lifted edge, in the paving's colour, fading down into the paving
-                  `<path d="${top} Z" fill="url(#sia-sill-lift)" filter="url(#sia-sill-soft)" />` +
-                  // light catching that edge from the upper left
-                  `<path d="${top}" fill="none" stroke="rgb(225 230 205 / 0.22)" stroke-width="${n(soft * 1.6)}" filter="url(#sia-sill-soft)" />`;
-                // a grout dip at each joint, sinking a little into the paving
-                if (r1 > 0) {
-                  const gx = x1;
-                  t += `<ellipse cx="${n(gx)}" cy="${n(base + unit * 0.004)}" rx="${n(Math.max(1, unit * 0.012))}" ry="${n(Math.max(1.2, unit * 0.016))}" fill="rgb(10 12 8 / 0.5)" filter="url(#sia-sill-soft)" />`;
-                }
-              }
-              thresholdStones.innerHTML = t;
+            // A steady per-stone value (so a stone keeps its height at every size).
+            const hash = (k: number) => {
+              const v = Math.sin(k * 127.1 + 311.7) * 43758.5453;
+              return v - Math.floor(v);
+            };
+            // Line the paving image up with the ground: same tile, same origin; its row at the wall
+            // line (0.69 down the tile, from the background offset) sits just under the lifts.
+            const pat = sill.querySelector<SVGPatternElement>('[data-sill-paving]');
+            const patImg = pat?.querySelector('image');
+            if (pat && patImg) {
+              pat.setAttribute('x', n(origin));
+              pat.setAttribute('y', n(base - tile * 0.695));
+              pat.setAttribute('width', n(tile));
+              pat.setAttribute('height', n(tile));
+              patImg.setAttribute('width', n(tile));
+              patImg.setAttribute('height', n(tile));
             }
+            sill.querySelector('[data-sill-sides]')?.setAttribute('x2', n(w));
+            const grout = Math.max(1, tile * 0.004);
+            const soft = Math.max(0.4, tile * 0.0012);
+            let t = '';
+            for (let i = 0; i < xs.length - 1; i++) {
+              const x0 = xs[i]! + grout;
+              const x1 = xs[i + 1]! - grout;
+              if (x1 < -20 || x0 > w + 20) continue;
+              const id = Math.round((xs[i]! - origin) / tile * 10000);
+              const hv = hash(id);
+              const rise = tile * (0.0016 + hv * 0.0016); // a fraction: no toe would catch on it
+              const yTop = base - rise;
+              const yMid = yTop - tile * hash(id + 7) * 0.0008;
+              const r = Math.min((x1 - x0) * 0.12, tile * 0.014);
+              const top =
+                `M${n(x0)} ${n(base + rise)} ` +
+                `C${n(x0)} ${n(yTop)} ${n(x0 + r * 0.3)} ${n(yTop)} ${n(x0 + r)} ${n(yTop)} ` +
+                `Q${n((x0 + x1) / 2)} ${n(yMid)} ${n(x1 - r)} ${n(yTop)} ` +
+                `C${n(x1 - r * 0.3)} ${n(yTop)} ${n(x1)} ${n(yTop)} ${n(x1)} ${n(base + rise)}`;
+              t +=
+                // the lifted edge: the stone itself, with the paving's shading near the wall
+                `<path d="${top} Z" fill="url(#sia-sill-paving)" />` +
+                `<path d="${top} Z" fill="rgb(6 9 4 / 0.42)" />` +
+                `<path d="${top} Z" fill="url(#sia-sill-sides)" />` +
+                // light catching that edge from the upper left
+                `<path d="${top}" fill="none" stroke="rgb(225 230 205 / 0.22)" stroke-width="${n(soft * 1.6)}" filter="url(#sia-sill-soft)" />`;
+            }
+            // a grout dip at each joint, sinking a little into the paving
+            for (const x of xs) {
+              if (x < -10 || x > w + 10) continue;
+              t += `<ellipse cx="${n(x)}" cy="${n(base + tile * 0.0015)}" rx="${n(Math.max(1, tile * 0.005))}" ry="${n(Math.max(1.2, tile * 0.006))}" fill="rgb(10 12 8 / 0.5)" filter="url(#sia-sill-soft)" />`;
+            }
+            sillStones.innerHTML = t;
           }
         }
-        if (sill) sill.style.opacity = ground.style.opacity;
         if (wallFoot) {
           const band = Math.max(10, A * 0.12);
           wallFoot.style.top = `${n(base - band)}px`;
@@ -2569,6 +2561,9 @@ const faqs = [
           p.el.style.setProperty('--sx', `${n((p.side < 0 ? p.trough : 1 - p.trough) * 100)}%`);
           p.el.style.setProperty('--sw', '22%');
           // Where the wall meets the paving, measured up from the plant's foot (the wall shadow stops there).
+          // The ground shadow's lean: across 22% of the picture's width over the ground to the wall.
+          p.el.style.setProperty('--gskew', `${n((-Math.atan((wid * 0.22) / Math.max(1, foot - base)) * 180) / Math.PI)}deg`);
+          p.el.style.setProperty('--gblur', `${n(Math.max(2, wid * 0.014))}px`);
           p.el.style.setProperty('--wallcut', `${n(Math.max(0, ((foot - base) / hgt) * 100 - 0.6))}%`);
         }
         garden.style.opacity = String(Math.max(0, 1 - Math.max(0, open - 0.6) * 4));
