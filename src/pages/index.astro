@@ -27,6 +27,7 @@ import doorBoardsRight from '../client/photos/door-boards-right-stained.jpg';
 import frameWalnut from '../client/photos/frame-walnut-stained.jpg';
 import doorIron from '../client/photos/door-iron.jpg';
 import groundStone from '../client/photos/ground-stone.jpg';
+import stepStone from '../client/photos/step-stone.jpg';
 import wallPlaster from '../client/photos/wall-plaster.jpg';
 import gardenBambooA from '../client/photos/garden-bamboo-a.webp';
 import gardenBambooB from '../client/photos/garden-bamboo-b.webp';
@@ -47,6 +48,7 @@ const doorIronImg = await getImage({ src: doorIron, width: 400, format: 'webp', 
 // The forecourt: an original mossy flagstone texture generated for Sia (OpenArt), mirrored
 // into a seamless tile.
 const groundStoneImg = await getImage({ src: groundStone, width: 1000, format: 'webp', quality: 76 });
+const stepStoneImg = await getImage({ src: stepStone, width: 512, format: 'webp', quality: 80 });
 // The wall: an original moss lime-plaster texture generated for Sia (OpenArt), mirrored into a
 // seamless tile.
 const wallPlasterImg = await getImage({ src: wallPlaster, width: 1200, format: 'webp', quality: 74 });
@@ -516,6 +518,21 @@ const faqs = [
             <stop offset="0.7" stop-color="rgb(8 12 6)" stop-opacity="0" />
             <stop offset="1" stop-color="rgb(8 12 6)" stop-opacity="0.45" />
           </linearGradient>
+          <!-- the stone step under the doorway: the same stone as the paving (a clean piece of one paver, tiled) -->
+          <pattern id="sia-step-stone" patternUnits="userSpaceOnUse" width="200" height="200" data-step-stone>
+            <image href={stepStoneImg.src} width="200" height="200" preserveAspectRatio="none" />
+          </pattern>
+          <linearGradient id="sia-step-ao" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="10" data-step-ao>
+            <stop offset="0" stop-color="rgb(4 6 3)" stop-opacity="0.55" />
+            <stop offset="0.35" stop-color="rgb(4 6 3)" stop-opacity="0.12" />
+            <stop offset="1" stop-color="rgb(235 238 225)" stop-opacity="0.06" />
+          </linearGradient>
+          <linearGradient id="sia-step-side" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="0" data-step-side>
+            <stop offset="0" stop-color="rgb(240 240 228)" stop-opacity="0.1" />
+            <stop offset="0.5" stop-color="rgb(240 240 228)" stop-opacity="0" />
+            <stop offset="1" stop-color="rgb(4 6 3)" stop-opacity="0.18" />
+          </linearGradient>
+          <filter id="sia-step-blur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2" data-step-blur /></filter>
           <filter id="sia-sill-soft" x="-5%" y="-60%" width="110%" height="220%"><feGaussianBlur stdDeviation="0.45" /></filter>
         </defs>
         <g data-threshold-stones></g>
@@ -2175,6 +2192,11 @@ const faqs = [
       const s = 1 + (sMax - 1) * open ** 1.4;
       const A = A0 * s;
       const base = pivotY + (base0 - pivotY) * s;
+      // The doorway stands on a stone step 40mm high (the doorway is 2.4m tall, so 1m = APEX·A/2.4):
+      // `base` is the step's top at the doorway, `floor` the paving one step lower.
+      const stepH = APEX * A * (0.04 / 2.4);
+      const stepH0 = APEX * A0 * (0.04 / 2.4);
+      const floor = base + stepH;
 
       // Doors: swing in on their hinges (eased), then fade as the gateway starts to open.
       if (doors && leaves.left && leaves.right) {
@@ -2442,10 +2464,11 @@ const faqs = [
         // room's floor recede to one horizon.
         const eye = Math.max(20, APEX * A * (1.6 / 2.4));
         const d = Math.max(400, eye * 5);
-        ground.style.top = `${n(base)}px`;
-        ground.style.height = `${n(Math.max(0, h - base) + 4)}px`;
+        ground.style.top = `${n(floor)}px`;
+        ground.style.height = `${n(Math.max(0, h - floor) + 4)}px`;
         ground.style.perspective = `${n(d)}px`;
-        ground.style.perspectiveOrigin = `${n(cx)}px ${n(-eye)}px`;
+        // the eye is 1.6m above the doorway's floor, so a step's height more above the paving
+        ground.style.perspectiveOrigin = `${n(cx)}px ${n(-(eye + stepH))}px`;
         const tile = Math.max(120, A * 2.6);
         groundPlane.style.left = `${n(cx - w * 2)}px`;
         groundPlane.style.width = `${n(w * 4)}px`;
@@ -2461,7 +2484,7 @@ const faqs = [
         // stays fixed to the paving as the gateway zooms.
         if (sill && sillStones) {
           sill.style.opacity = ground.style.opacity;
-          const key = `${n(w)},${n(base)},${n(tile)}`;
+          const key = `${n(w)},${n(floor)},${n(tile)}`;
           if (key !== edgeKey) {
             edgeKey = key;
             // Grout joints across the paving image, in the row of stones that meets the wall.
@@ -2482,7 +2505,7 @@ const faqs = [
             const patImg = pat?.querySelector('image');
             if (pat && patImg) {
               pat.setAttribute('x', n(origin));
-              pat.setAttribute('y', n(base - tile * 0.695));
+              pat.setAttribute('y', n(floor - tile * 0.695));
               pat.setAttribute('width', n(tile));
               pat.setAttribute('height', n(tile));
               patImg.setAttribute('width', n(tile));
@@ -2491,22 +2514,64 @@ const faqs = [
             sill.querySelector('[data-sill-sides]')?.setAttribute('x2', n(w));
             const grout = Math.max(1, tile * 0.004);
             const soft = Math.max(0.4, tile * 0.0012);
-            let t = '';
+            // The step: a slab 300mm deep across the doorway and frame (a little overhang each
+            // side), its top and front foreshortened by the paving's own perspective.
+            const m = (APEX * A) / 2.4;
+            const eyeH = eye + stepH;
+            const sc = d / (d - 0.3 * m);
+            const L = A + EDGE + 0.08 * m;
+            const yFB = floor + eyeH * (sc - 1); // front bottom edge, on the paving
+            const yFT = yFB - stepH * sc; // front top edge (the arris)
+            const xl0 = cx - L, xr0 = cx + L, xl1 = cx - L * sc, xr1 = cx + L * sc;
+            const P = (pts: number[][]) => `M${pts.map(([x, y]) => `${n(x!)} ${n(y!)}`).join(' L')} Z`;
+            const stonePat = sill.querySelector<SVGPatternElement>('[data-step-stone]');
+            const stoneImg = stonePat?.querySelector('image');
+            if (stonePat && stoneImg) {
+              const st = Math.max(120, A * 2.6) * 0.55; // large, so the tiled stone barely repeats
+              stonePat.setAttribute('x', n(cx - st * 0.37));
+              stonePat.setAttribute('y', n(base));
+              for (const el of [stonePat, stoneImg]) { el.setAttribute('width', n(st)); el.setAttribute('height', n(st)); }
+            }
+            sill.querySelector('[data-step-blur]')?.setAttribute('stdDeviation', n(Math.max(0.8, stepH * 0.35)));
+            const top = P([[xl0, base], [xr0, base], [xr1, yFT], [xl1, yFT]]);
+            const front = P([[xl1, yFT], [xr1, yFT], [xr1, yFB], [xl1, yFB]]);
+            let t =
+              // shadows on the paving, away from the upper-left light: under the front edge, and
+              // off the right-hand end
+              `<path d="${P([[xl1 + stepH * 0.3, yFB - 1], [xr1 + stepH * 0.6, yFB - 1], [xr1 + stepH * 1.4, yFB + stepH * 0.9], [xl1 + stepH * 1.1, yFB + stepH * 0.9]])}" fill="rgb(4 6 3 / 0.7)" filter="url(#sia-step-blur)" />` +
+              `<path d="${P([[xr0, floor], [xr1, yFB], [xr1 + stepH * 1.8 * sc, yFB], [xr0 + stepH * 1.8, floor]])}" fill="rgb(4 6 3 / 0.45)" filter="url(#sia-step-blur)" />` +
+              // the front face: the stone, turned a little from the light
+              `<path d="${front}" fill="url(#sia-step-stone)" />` +
+              `<path d="${front}" fill="rgb(10 14 8 / 0.5)" />` +
+              // the top: the stone in the light, shaded where it meets the wall and the doorway
+              `<path d="${top}" fill="url(#sia-step-stone)" />` +
+              `<path d="${top}" fill="rgb(10 14 8 / 0.14)" />` +
+              `<path d="${top}" fill="url(#sia-step-ao)" />` +
+              // across the whole step, lighter on the left (nearer the light)
+              `<path d="${top} ${front}" fill="url(#sia-step-side)" />` +
+              // a worn, lit arris along the front edge, and a dark joint under the front
+              `<path d="M${n(xl1)} ${n(yFT + 0.5)} L${n(xr1)} ${n(yFT + 0.5)}" stroke="rgb(236 238 224 / 0.4)" stroke-width="${n(Math.max(0.8, stepH * 0.12))}" />` +
+              `<path d="M${n(xl1)} ${n(yFB)} L${n(xr1)} ${n(yFB)}" stroke="rgb(4 6 3 / 0.6)" stroke-width="${n(Math.max(0.8, stepH * 0.1))}" />`;
+            const stepAo = sill.querySelector('[data-step-ao]');
+            if (stepAo) { stepAo.setAttribute('y1', n(base)); stepAo.setAttribute('y2', n(yFT)); }
+            const stepSide = sill.querySelector('[data-step-side]');
+            if (stepSide) { stepSide.setAttribute('x1', n(xl1)); stepSide.setAttribute('x2', n(xr1)); }
             for (let i = 0; i < xs.length - 1; i++) {
               const x0 = xs[i]! + grout;
               const x1 = xs[i + 1]! - grout;
               if (x1 < -20 || x0 > w + 20) continue;
+              if (x1 > xl0 && x0 < xr0) continue; // under the step
               const id = Math.round((xs[i]! - origin) / tile * 10000);
               const hv = hash(id);
               const rise = tile * (0.0016 + hv * 0.0016); // a fraction: no toe would catch on it
-              const yTop = base - rise;
+              const yTop = floor - rise;
               const yMid = yTop - tile * hash(id + 7) * 0.0008;
               const r = Math.min((x1 - x0) * 0.12, tile * 0.014);
               const top =
-                `M${n(x0)} ${n(base + rise)} ` +
+                `M${n(x0)} ${n(floor + rise)} ` +
                 `C${n(x0)} ${n(yTop)} ${n(x0 + r * 0.3)} ${n(yTop)} ${n(x0 + r)} ${n(yTop)} ` +
                 `Q${n((x0 + x1) / 2)} ${n(yMid)} ${n(x1 - r)} ${n(yTop)} ` +
-                `C${n(x1 - r * 0.3)} ${n(yTop)} ${n(x1)} ${n(yTop)} ${n(x1)} ${n(base + rise)}`;
+                `C${n(x1 - r * 0.3)} ${n(yTop)} ${n(x1)} ${n(yTop)} ${n(x1)} ${n(floor + rise)}`;
               t +=
                 // the lifted edge: the stone itself, with the paving's shading near the wall
                 `<path d="${top} Z" fill="url(#sia-sill-paving)" />` +
@@ -2518,14 +2583,15 @@ const faqs = [
             // a grout dip at each joint, sinking a little into the paving
             for (const x of xs) {
               if (x < -10 || x > w + 10) continue;
-              t += `<ellipse cx="${n(x)}" cy="${n(base + tile * 0.0015)}" rx="${n(Math.max(1, tile * 0.005))}" ry="${n(Math.max(1.2, tile * 0.006))}" fill="rgb(10 12 8 / 0.5)" filter="url(#sia-sill-soft)" />`;
+              if (x > xl0 - 2 && x < xr0 + 2) continue;
+              t += `<ellipse cx="${n(x)}" cy="${n(floor + tile * 0.0015)}" rx="${n(Math.max(1, tile * 0.005))}" ry="${n(Math.max(1.2, tile * 0.006))}" fill="rgb(10 12 8 / 0.5)" filter="url(#sia-sill-soft)" />`;
             }
             sillStones.innerHTML = t;
           }
         }
         if (wallFoot) {
           const band = Math.max(10, A * 0.12);
-          wallFoot.style.top = `${n(base - band)}px`;
+          wallFoot.style.top = `${n(floor - band)}px`;
           wallFoot.style.height = `${n(band)}px`;
           wallFoot.style.opacity = ground.style.opacity;
         }
@@ -2551,7 +2617,7 @@ const faqs = [
           if (!p.el) continue;
           // Straight bamboo beside each couplet, its canopy leaning out over the characters
           // toward the door: sized so the canopy clears the couplet's top.
-          const foot0 = base0 + Math.min(p.forward * A0, (h - base0) * 0.85);
+          const foot0 = base0 + stepH0 + Math.min(p.forward * A0, (h - base0 - stepH0) * 0.85);
           const yTop0 = base0 - SHOULDER * A0 + size * 0.4;
           const cTop0 = yTop0 - size * 0.6 - A0 * 0.05;
           // Tall, but the whole plant stays in view: up to just below the top of the scene.
@@ -2593,9 +2659,9 @@ const faqs = [
           p.el.style.setProperty('--sw', '22%');
           // Where the wall meets the paving, measured up from the plant's foot (the wall shadow stops there).
           // The ground shadow's lean: across 22% of the picture's width over the ground to the wall.
-          p.el.style.setProperty('--gskew', `${n((-Math.atan((wid * 0.22) / Math.max(1, foot - base)) * 180) / Math.PI)}deg`);
+          p.el.style.setProperty('--gskew', `${n((-Math.atan((wid * 0.22) / Math.max(1, foot - floor)) * 180) / Math.PI)}deg`);
           p.el.style.setProperty('--gblur', `${n(Math.max(2, wid * 0.014))}px`);
-          p.el.style.setProperty('--wallcut', `${n(Math.max(0, ((foot - base) / hgt) * 100 - 0.6))}%`);
+          p.el.style.setProperty('--wallcut', `${n(Math.max(0, ((foot - floor) / hgt) * 100 - 0.6))}%`);
         }
         garden.style.opacity = String(Math.max(0, 1 - Math.max(0, open - 0.6) * 4));
       }
