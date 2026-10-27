@@ -29,6 +29,8 @@ import groundStone from '../client/photos/ground-stone.jpg';
 import wallPlaster from '../client/photos/wall-plaster.jpg';
 import gardenBambooA from '../client/photos/garden-bamboo-a.webp';
 import gardenBambooB from '../client/photos/garden-bamboo-b.webp';
+import gardenBambooAShadow from '../client/photos/garden-bamboo-a-shadow.webp';
+import gardenBambooBShadow from '../client/photos/garden-bamboo-b-shadow.webp';
 import { getImage } from 'astro:assets';
 
 // The doorway's doors: natural oiled hardwood boards, one sheet per leaf, cut from a real
@@ -51,6 +53,9 @@ const wallPlasterImg = await getImage({ src: wallPlaster, width: 1200, format: '
 // carved stone pots, its tips leaning toward the door.
 const bambooAImg = await getImage({ src: gardenBambooA, width: 1000, format: 'webp', quality: 80 });
 const bambooBImg = await getImage({ src: gardenBambooB, width: 1000, format: 'webp', quality: 80 });
+// Each plant's shadow, pre-blurred (a live blur filter on the plants is too heavy to paint).
+const bambooAShadowImg = await getImage({ src: gardenBambooAShadow, width: 450, format: 'webp', quality: 70 });
+const bambooBShadowImg = await getImage({ src: gardenBambooBShadow, width: 450, format: 'webp', quality: 70 });
 
 const { business } = site;
 const phone = business.phone!;
@@ -344,6 +349,23 @@ const faqs = [
       <div class="sia-visit__glass" data-glass></div>
       <svg class="sia-visit__frame" data-frame>
         <defs>
+          <!-- Carved into the plaster, lit from the upper left: the cut's upper-left walls fall into
+               shade, its lower-right walls catch the light, and the floor sits a tone below the wall. -->
+          <filter id="sia-engrave" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+            <feOffset in="SourceAlpha" dx="1.5" dy="1.7" result="sh" />
+            <feComposite in="SourceAlpha" in2="sh" operator="out" result="shBand" />
+            <feGaussianBlur in="shBand" stdDeviation="0.55" result="shBlur" />
+            <feFlood flood-color="rgb(4 8 3)" flood-opacity="0.85" />
+            <feComposite in2="shBlur" operator="in" result="shadow" />
+            <feOffset in="SourceAlpha" dx="-1" dy="-1.1" result="hl" />
+            <feComposite in="SourceAlpha" in2="hl" operator="out" result="hlBand" />
+            <feGaussianBlur in="hlBand" stdDeviation="0.4" result="hlBlur" />
+            <feFlood flood-color="rgb(214 226 192)" flood-opacity="0.5" />
+            <feComposite in2="hlBlur" operator="in" result="light" />
+            <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="shadow" /><feMergeNode in="light" /></feMerge>
+          </filter>
+        </defs>
+        <defs>
           <!-- 3D lighting for timber: the shape's own edges, softened, become its relief, and the
                grain adds a fine texture to the surface; lit from the top left with a soft satin
                (oiled, not glossy) sheen. One for
@@ -479,22 +501,31 @@ const faqs = [
         <path class="sia-arch__line sia-arch__line--outer sia-arch__line--moss" data-line="48.4" data-to-foot />
         <path class="sia-arch__line sia-arch__foot-line sia-arch__line--moss" data-foot-line />
         <g class="sia-carving" data-couplet="right" lang="zh-Hans" role="img" aria-label="身体放松: a relaxed body">
-          <text class="sia-carving__cut" x="0" y="0"><tspan x="0" y="0.0em">身</tspan><tspan x="0" y="1.3em">体</tspan><tspan x="0" y="2.6em">放</tspan><tspan x="0" y="3.9em">松</tspan></text>
           <text class="sia-carving__gilt" x="0" y="0"><tspan x="0" y="0.0em">身</tspan><tspan x="0" y="1.3em">体</tspan><tspan x="0" y="2.6em">放</tspan><tspan x="0" y="3.9em">松</tspan></text>
         </g>
         <g class="sia-carving" data-couplet="left" lang="zh-Hans" role="img" aria-label="心自宁静: creates a calm mind">
-          <text class="sia-carving__cut" x="0" y="0"><tspan x="0" y="0.0em">心</tspan><tspan x="0" y="1.3em">自</tspan><tspan x="0" y="2.6em">宁</tspan><tspan x="0" y="3.9em">静</tspan></text>
           <text class="sia-carving__gilt" x="0" y="0"><tspan x="0" y="0.0em">心</tspan><tspan x="0" y="1.3em">自</tspan><tspan x="0" y="2.6em">宁</tspan><tspan x="0" y="3.9em">静</tspan></text>
         </g>
       </svg>
       <!-- Threshold stones across the doorway, in front of the doors and frame: each a touch
            proud, its corners rolling down into the grout, so paving and timber don't meet in a
            ruled line. -->
-      <svg class="sia-visit__edge" data-threshold aria-hidden="true"><g data-threshold-stones></g></svg>
+      <svg class="sia-visit__edge" data-threshold aria-hidden="true">
+        <defs>
+          <!-- the paving's own stone colour, lit at the top edge, fading into the paving below -->
+          <linearGradient id="sia-sill-lift" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="rgb(132 136 112)" stop-opacity="0.95" />
+            <stop offset="0.55" stop-color="rgb(104 106 86)" stop-opacity="0.75" />
+            <stop offset="1" stop-color="rgb(90 92 72)" stop-opacity="0" />
+          </linearGradient>
+          <filter id="sia-sill-soft" x="-5%" y="-60%" width="110%" height="220%"><feGaussianBlur stdDeviation="0.45" /></filter>
+        </defs>
+        <g data-threshold-stones></g>
+      </svg>
       <!-- The courtyard garden on the forecourt: bamboo either side of the doorway. -->
       <div class="sia-visit__garden" data-garden>
-        <div class="sia-visit__prop" data-prop="bamboo-left"><img src={bambooAImg.src} alt="" decoding="async" /></div>
-        <div class="sia-visit__prop sia-visit__prop--mirror" data-prop="bamboo-right"><img src={bambooBImg.src} alt="" decoding="async" /></div>
+        <div class="sia-visit__prop" data-prop="bamboo-left"><img class="sia-visit__prop-shadow" src={bambooAShadowImg.src} alt="" decoding="async" /><img src={bambooAImg.src} alt="" decoding="async" /></div>
+        <div class="sia-visit__prop sia-visit__prop--mirror" data-prop="bamboo-right"><img class="sia-visit__prop-shadow" src={bambooBShadowImg.src} alt="" decoding="async" /><img src={bambooBImg.src} alt="" decoding="async" /></div>
       </div>
       <p class="sia-visit__threshold">
         <span class="font-han" lang="zh-Hans">入</span>
@@ -1291,6 +1322,21 @@ const faqs = [
   .sia-visit__prop--mirror img {
     transform: scaleX(-1);
   }
+  /* The plant's shadow, thrown back and to the right onto the wall by the upper-left light. */
+  .sia-visit__prop img.sia-visit__prop-shadow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    height: 100%;
+    filter: none;
+    opacity: 0.55;
+    transform: translate(10%, -0.6%);
+    /* only the part falling on the wall: the paving below has the plant's own ground shadow */
+    clip-path: inset(0 0 var(--wallcut, 0%) 0);
+  }
+  .sia-visit__prop--mirror img.sia-visit__prop-shadow {
+    transform: scaleX(-1) translate(-10%, -0.6%);
+  }
   /* Grounding: a tight dark contact right where the foot meets the stone (centred on the
      foot's bottom edge, so it runs under and just behind it), and a soft shadow cast away from
      the light, to the right across the paving. */
@@ -1462,20 +1508,18 @@ const faqs = [
     stroke-width: 2; /* same as the outer line it joins */
     stroke-linecap: round;
   }
-  /* Characters carved into the wall: a dark cut edge above, sage within. */
+  /* Characters carved into the wall, lit from the upper left (see #sia-engrave): the cut's
+     floor a muted sage a tone below the plaster, shade along its upper-left walls, light on its
+     lower-right walls. */
   .sia-carving text {
     font-family: var(--font-han);
     font-size: 40px;
     text-anchor: middle;
     dominant-baseline: central;
   }
-  .sia-carving__cut {
-    fill: rgb(0 0 0 / 0.55);
-    transform: translate(-1.2px, -1.4px);
-  }
   .sia-carving__gilt {
-    fill: #b9c8a4; /* sage, from the palette */
-    filter: drop-shadow(0 1px 0 rgb(255 255 255 / 0.12));
+    fill: rgb(124 142 106 / 0.9);
+    filter: url(#sia-engrave);
   }
   .sia-visit__threshold {
     position: absolute;
@@ -2431,45 +2475,41 @@ const faqs = [
             }
             edgeStones.innerHTML = out;
 
-            // Threshold: stones laid across the doorway, a touch prouder than the wall row,
-            // with soft rounded corners that roll down into dark grout joints.
+            // Threshold: the paving itself lifts a fraction where it meets the timber. No stone is
+            // laid on top: each paver's edge rises a hair above the line in the paving's own colour,
+            // softly blurred into it, and its corners roll down into darker grout dips.
             if (thresholdStones) {
               let tSeed = 29;
               const tr = () => ((tSeed = (tSeed * 9301 + 49297) % 233280) / 233280);
-              const gap = Math.max(2, unit * 0.022);
-              const face = unit * 0.022;
+              const soft = Math.max(0.4, unit * 0.003);
               let t = '';
-              // grout: a dark joint along the line, seen between the rounded corners
-              t += `<path d="M${n(doorL)} ${n(base - unit * 0.004)} L${n(doorR)} ${n(base - unit * 0.004)} L${n(doorR)} ${n(base + face)} L${n(doorL)} ${n(base + face)} Z" fill="rgb(8 10 6 / 0.55)" />`;
               let tx = doorL - unit * 0.25 * tr();
               while (tx < doorR) {
                 const bw = unit * (0.34 + tr() * 0.2);
-                const x0 = Math.max(doorL, tx + gap / 2);
-                const x1 = Math.min(doorR, tx + bw - gap / 2);
+                const x0 = Math.max(doorL, tx);
+                const x1 = Math.min(doorR, tx + bw);
                 tx += bw;
                 if (x1 - x0 < unit * 0.08) continue;
-                const rise = unit * (0.02 + tr() * 0.012);
-                const tilt = unit * (tr() - 0.5) * 0.008;
-                const yT0 = base - rise - tilt;
-                const yT1 = base - rise + tilt;
-                const yMid = (yT0 + yT1) / 2 - unit * tr() * 0.004;
-                // rounded shoulders: open ends (against the frame) stay square
-                const r0 = x0 > doorL + 0.5 ? Math.min((x1 - x0) * 0.2, unit * 0.075) : 0;
-                const r1 = x1 < doorR - 0.5 ? Math.min((x1 - x0) * 0.2, unit * 0.075) : 0;
+                const rise = unit * (0.004 + tr() * 0.004); // a fraction: no toe would catch on it
+                const yTop = base - rise;
+                const yMid = yTop - unit * tr() * 0.002;
+                const r0 = x0 > doorL + 0.5 ? Math.min((x1 - x0) * 0.12, unit * 0.035) : 0;
+                const r1 = x1 < doorR - 0.5 ? Math.min((x1 - x0) * 0.12, unit * 0.035) : 0;
                 const top =
-                  `M${n(x0)} ${n(base)} ` +
-                  `C${n(x0)} ${n(yT0 + (base - yT0) * 0.25)} ${n(x0 + r0 * 0.3)} ${n(yT0)} ${n(x0 + r0)} ${n(yT0)} ` +
-                  `Q${n((x0 + x1) / 2)} ${n(yMid)} ${n(x1 - r1)} ${n(yT1)} ` +
-                  `C${n(x1 - r1 * 0.3)} ${n(yT1)} ${n(x1)} ${n(yT1 + (base - yT1) * 0.25)} ${n(x1)} ${n(base)}`;
-                const shape = `${top} L${n(x1 - r1 * 0.2)} ${n(base + face)} L${n(x0 + r0 * 0.2)} ${n(base + face)} Z`;
+                  `M${n(x0)} ${n(base + rise)} ` +
+                  `C${n(x0)} ${n(yTop)} ${n(x0 + r0 * 0.3)} ${n(yTop)} ${n(x0 + r0)} ${n(yTop)} ` +
+                  `Q${n((x0 + x1) / 2)} ${n(yMid)} ${n(x1 - r1)} ${n(yTop)} ` +
+                  `C${n(x1 - r1 * 0.3)} ${n(yTop)} ${n(x1)} ${n(yTop)} ${n(x1)} ${n(base + rise)}`;
                 t +=
-                  // a soft shadow onto the paving in front
-                  `<path d="M${n(x0)} ${n(base + face)} L${n(x1)} ${n(base + face)} L${n(x1 + 1)} ${n(base + face + unit * 0.02)} L${n(x0 + 1)} ${n(base + face + unit * 0.02)} Z" fill="rgb(6 9 4 / 0.28)" />` +
-                  `<path d="${shape}" fill="url(#sia-edge-stone)" stroke="rgb(8 10 6 / 0.65)" stroke-width="1" />` +
-                  // the front face falls into shade, darkest at the bottom
-                  `<path d="M${n(x0 + r0 * 0.15)} ${n(base + face * 0.1)} L${n(x1 - r1 * 0.15)} ${n(base + face * 0.1)} L${n(x1 - r1 * 0.2)} ${n(base + face)} L${n(x0 + r0 * 0.2)} ${n(base + face)} Z" fill="rgb(6 9 4 / 0.45)" />` +
-                  // light catching the rounded top, from the upper left
-                  `<path d="${top}" fill="none" stroke="rgb(235 240 225 / 0.38)" stroke-width="1" />`;
+                  // the lifted edge, in the paving's colour, fading down into the paving
+                  `<path d="${top} Z" fill="url(#sia-sill-lift)" filter="url(#sia-sill-soft)" />` +
+                  // light catching that edge from the upper left
+                  `<path d="${top}" fill="none" stroke="rgb(225 230 205 / 0.22)" stroke-width="${n(soft * 1.6)}" filter="url(#sia-sill-soft)" />`;
+                // a grout dip at each joint, sinking a little into the paving
+                if (r1 > 0) {
+                  const gx = x1;
+                  t += `<ellipse cx="${n(gx)}" cy="${n(base + unit * 0.004)}" rx="${n(Math.max(1, unit * 0.012))}" ry="${n(Math.max(1.2, unit * 0.016))}" fill="rgb(10 12 8 / 0.5)" filter="url(#sia-sill-soft)" />`;
+                }
               }
               thresholdStones.innerHTML = t;
             }
@@ -2528,6 +2568,8 @@ const faqs = [
           p.el.style.width = `${n(wid)}px`;
           p.el.style.setProperty('--sx', `${n((p.side < 0 ? p.trough : 1 - p.trough) * 100)}%`);
           p.el.style.setProperty('--sw', '22%');
+          // Where the wall meets the paving, measured up from the plant's foot (the wall shadow stops there).
+          p.el.style.setProperty('--wallcut', `${n(Math.max(0, ((foot - base) / hgt) * 100 - 0.6))}%`);
         }
         garden.style.opacity = String(Math.max(0, 1 - Math.max(0, open - 0.6) * 4));
       }
