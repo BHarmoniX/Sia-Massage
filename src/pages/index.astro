@@ -2358,7 +2358,9 @@ const faqs = [
       // The forecourt: a flat plane laid from the foot of the wall toward you, seen from eye
       // level in the doorway, so it widens and comes closer exactly as real ground does.
       if (ground && groundPlane) {
-        const eye = Math.max(20, base - pivotY);
+        // The same standing eye level as the room seen through the doorway, so the paving and the
+        // room's floor recede to one horizon.
+        const eye = Math.max(20, APEX * A * (1.6 / 2.4));
         const d = Math.max(400, eye * 5);
         ground.style.top = `${n(base)}px`;
         ground.style.height = `${n(Math.max(0, h - base) + 4)}px`;
