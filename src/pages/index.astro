@@ -51,7 +51,7 @@ const doorIronImg = await getImage({ src: doorIron, width: 400, format: 'webp', 
 // into a seamless tile.
 const groundStoneImg = await getImage({ src: groundStone, width: 1000, format: 'webp', quality: 76 });
 // Ivy climbing the wall: in from the top and both outer sides, arching around the doorway.
-const ivyImg = await getImage({ src: wallIvy, width: 2400, format: 'webp', quality: 80 });
+const ivyImg = await getImage({ src: wallIvy, width: 3000, format: 'webp', quality: 80 });
 const ivyShadowImg = await getImage({ src: wallIvyShadow, width: 1000, format: 'webp', quality: 70 });
 const stepStoneImg = await getImage({ src: stepStone, width: 512, format: 'webp', quality: 80 });
 // The wall: an original moss lime-plaster texture generated for Sia (OpenArt), mirrored into a
@@ -2709,12 +2709,13 @@ const faqs = [
       // (cut off there, so no leaves lie on the paving). Placed in the closed view and carried
       // with the walk-in, like the garden.
       if (ivy) {
-        const IVY_ASPECT = 2400 / 1340;
-        // Wider than the wall and lifted a little, so the outer growth runs off the edges and the
-        // open middle stands well clear of the arch and the couplets.
-        const iw0 = w * 1.3;
+        const IVY_ASPECT = 3000 / 1674;
+        // True to life: ivy leaves are 3–5cm. In the picture a leaf is about 1/100 of its width,
+        // and 1m on the wall is APEX·A0/2.4 px, so 4.5cm leaves need it 6.4·A0 wide. It always
+        // spans the full wall, so on very wide screens the leaves come out a little larger.
+        const iw0 = Math.max(w, 6.4 * A0);
         const ih0 = iw0 / IVY_ASPECT;
-        const top0 = -ih0 * 0.1;
+        const top0 = 0;
         const iw = iw0 * s;
         const ih = ih0 * s;
         const top = pivotY + (top0 - pivotY) * s;
