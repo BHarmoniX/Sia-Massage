@@ -2251,7 +2251,14 @@ const faqs = [
         const pw = ph * (2752 / 1536); // the photo's own proportions
         doorPhoto.style.width = `${n(pw)}px`;
         doorPhoto.style.height = `${n(ph)}px`;
-        const SHIFT = 0.06; // slide left a touch: we stand a step right of centre, so the side table shows
+        // Through the doorway we stand a step right of centre, so the side table shows.
+        // Walking in, the view eases until the man's face (0.375 across the photo)
+        // sits 10% in from the left, beside the cards, never uncovering an edge.
+        const DOORWAY_SHIFT = 0.06;
+        const cover = Math.max(0, 0.5 - w / (2 * pw));
+        const endShift = Math.min(cover, Math.max(-cover, (0.5 - 0.1) * (w / pw) - 0.125));
+        const k = clamp01((open - 0.3) / 0.7);
+        const SHIFT = DOORWAY_SHIFT + (endShift - DOORWAY_SHIFT) * k * k * (3 - 2 * k);
         doorPhoto.style.left = `${n(cx - pw * (0.5 + SHIFT))}px`;
         doorPhoto.style.top = `${n(base - ph)}px`;
       }
