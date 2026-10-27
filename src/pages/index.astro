@@ -1848,6 +1848,7 @@ const faqs = [
   const threshold = doorway?.querySelector<HTMLElement>('.sia-visit__threshold');
   const glass = doorway?.querySelector<HTMLElement>('[data-glass]');
   const doorPhoto = doorway?.querySelector<HTMLImageElement>('.sia-visit__door img');
+  const visitTitle = document.getElementById('visit-title');
   const ground = doorway?.querySelector<HTMLElement>('[data-ground]');
   const groundPlane = ground?.firstElementChild as HTMLElement | null | undefined;
   const wallFoot = doorway?.querySelector<HTMLElement>('[data-wall-foot]');
@@ -2312,11 +2313,21 @@ const faqs = [
         doorPhoto.style.width = `${n(pw)}px`;
         doorPhoto.style.height = `${n(ph)}px`;
         // Through the doorway we stand a step right of centre, so the side table shows.
-        // Walking in, the view eases until the man's face (0.375 across the photo)
-        // sits 10% in from the left, beside the cards, never uncovering an edge.
+        // Walking in, the view eases until the man's face (0.375 across the photo) sits just
+        // past the end of the "Four quiet moments" heading: the heading scrolls up over the
+        // still room, so beside it (never under it) the two can't cross. At least 10% in from
+        // the left, at most 62% (on a phone the heading spans the width), never uncovering an edge.
         const DOORWAY_SHIFT = 0.06;
+        let faceX = w * 0.1;
+        if (visitTitle) {
+          const words = document.createRange();
+          words.selectNodeContents(visitTitle);
+          const r = words.getBoundingClientRect();
+          if (r.width > 0) faceX = Math.max(faceX, r.right - stage.getBoundingClientRect().left + Math.max(44, w * 0.07));
+        }
+        faceX = Math.min(faceX, w * 0.62);
         const cover = Math.max(0, 0.5 - w / (2 * pw));
-        const endShift = Math.min(cover, Math.max(-cover, (0.5 - 0.1) * (w / pw) - 0.125));
+        const endShift = Math.min(cover, Math.max(-cover, (cx - faceX) / pw - 0.125));
         const k = clamp01((open - 0.3) / 0.7);
         const SHIFT = DOORWAY_SHIFT + (endShift - DOORWAY_SHIFT) * k * k * (3 - 2 * k);
         doorPhoto.style.left = `${n(cx - pw * (0.5 + SHIFT))}px`;
