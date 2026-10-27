@@ -2251,7 +2251,8 @@ const faqs = [
         const pw = ph * (2752 / 1536); // the photo's own proportions
         doorPhoto.style.width = `${n(pw)}px`;
         doorPhoto.style.height = `${n(ph)}px`;
-        doorPhoto.style.left = `${n(cx - pw / 2)}px`;
+        const SHIFT = 0.06; // slide left a touch: we stand a step right of centre, so the side table shows
+        doorPhoto.style.left = `${n(cx - pw * (0.5 + SHIFT))}px`;
         doorPhoto.style.top = `${n(base - ph)}px`;
       }
       // Each foot: a timber plinth across the leg, its two sides the arch's tip curve rotated
