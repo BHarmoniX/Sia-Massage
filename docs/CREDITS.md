@@ -67,4 +67,4 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile, relief lighting added) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | wall-plaster.jpg (doorway wall: moss lime plaster, darkened and mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | garden-bamboo-a.webp, garden-bamboo-b.webp (courtyard tall airy bamboo in round carved stone pots, cut out) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
-| spa-room.jpg (view through the doorway: candlelit spa treatment room seen from the threshold; depth-of-field added) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-27 |
+| spa-room.jpg (view through the doorway: candlelit spa treatment room seen from the threshold; gentle low-light grade) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-27 |
