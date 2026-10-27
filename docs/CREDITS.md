@@ -64,7 +64,7 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | --- | --- |
 | frame-walnut.jpg (doorway arch frame timber); frame-walnut-stained.jpg (the same, in a dark Japanese stain) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | door-iron.jpg (doorway door hardware: hinges, rivets, ring pulls) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
-| ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile, relief lighting added); step-stone.jpg (the doorway step: a clean piece of one of these flagstones, tiled) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
+| ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile, relief lighting added); step-stone.jpg (the doorway step: several of these flagstones laid end to end) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | wall-plaster.jpg (doorway wall: moss lime plaster, darkened and mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | garden-bamboo-a.webp, garden-bamboo-b.webp (courtyard tall airy bamboo in round carved stone pots, cut out) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | spa-room.jpg (view through the doorway: candlelit spa treatment room seen from the threshold, with rug, door mat and lotus painting; gentle low-light grade) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-27 |

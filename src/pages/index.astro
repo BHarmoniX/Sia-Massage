@@ -48,7 +48,7 @@ const doorIronImg = await getImage({ src: doorIron, width: 400, format: 'webp', 
 // The forecourt: an original mossy flagstone texture generated for Sia (OpenArt), mirrored
 // into a seamless tile.
 const groundStoneImg = await getImage({ src: groundStone, width: 1000, format: 'webp', quality: 76 });
-const stepStoneImg = await getImage({ src: stepStone, width: 512, format: 'webp', quality: 80 });
+const stepStoneImg = await getImage({ src: stepStone, width: 824, format: 'webp', quality: 82 });
 // The wall: an original moss lime-plaster texture generated for Sia (OpenArt), mirrored into a
 // seamless tile.
 const wallPlasterImg = await getImage({ src: wallPlaster, width: 1200, format: 'webp', quality: 74 });
@@ -518,7 +518,7 @@ const faqs = [
             <stop offset="0.7" stop-color="rgb(8 12 6)" stop-opacity="0" />
             <stop offset="1" stop-color="rgb(8 12 6)" stop-opacity="0.45" />
           </linearGradient>
-          <!-- the stone step under the doorway: the same stone as the paving (a clean piece of one paver, tiled) -->
+          <!-- the stone step under the doorway: the same stone as the paving (several pavers laid end to end) -->
           <pattern id="sia-step-stone" patternUnits="userSpaceOnUse" width="200" height="200" data-step-stone>
             <image href={stepStoneImg.src} width="200" height="200" preserveAspectRatio="none" />
           </pattern>
@@ -2340,12 +2340,12 @@ const faqs = [
         const pw = ph * (2752 / 1536); // the photo's own proportions
         doorPhoto.style.width = `${n(pw)}px`;
         doorPhoto.style.height = `${n(ph)}px`;
-        // Through the doorway we stand a step right of centre, so the side table shows.
+        // Through the doorway we stand almost on centre: the man on the left, the side table on the right.
         // Walking in, the view eases until the man's face (0.375 across the photo) sits just
         // past the end of the "Four quiet moments" heading: the heading scrolls up over the
         // still room, so beside it (never under it) the two can't cross. At least 10% in from
         // the left, at most 62% (on a phone the heading spans the width), never uncovering an edge.
-        const DOORWAY_SHIFT = 0.06;
+        const DOORWAY_SHIFT = 0.01;
         let faceX = w * 0.1;
         if (visitTitle) {
           const words = document.createRange();
@@ -2532,10 +2532,13 @@ const faqs = [
             const stonePat = sill.querySelector<SVGPatternElement>('[data-step-stone]');
             const stoneImg = stonePat?.querySelector('image');
             if (stonePat && stoneImg) {
-              const st = Math.max(120, A * 2.6) * 0.55; // large, so the tiled stone barely repeats
-              stonePat.setAttribute('x', n(cx - st * 0.37));
-              stonePat.setAttribute('y', n(base));
-              for (const el of [stonePat, stoneImg]) { el.setAttribute('width', n(st)); el.setAttribute('height', n(st)); }
+              // The step's stone: several of the paving's own pavers laid end to end (824 × 220 px,
+              // cut from the 1000 px paving image), so at the paving's scale it is the same stone.
+              const pave = Math.max(120, A * 2.6) / 1000;
+              const sw = 824 * pave, sh = 220 * pave;
+              stonePat.setAttribute('x', n(cx - sw * 0.37));
+              stonePat.setAttribute('y', n(base - sh * 0.3));
+              for (const el of [stonePat, stoneImg]) { el.setAttribute('width', n(sw)); el.setAttribute('height', n(sh)); }
             }
             sill.querySelector('[data-step-blur]')?.setAttribute('stdDeviation', n(Math.max(0.8, stepH * 0.35)));
             const top = P([[xl0, base], [xr0, base], [xr1, yFT], [xl1, yFT]]);
