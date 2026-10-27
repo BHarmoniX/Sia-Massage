@@ -532,6 +532,10 @@ const faqs = [
             <stop offset="0.5" stop-color="rgb(240 240 228)" stop-opacity="0" />
             <stop offset="1" stop-color="rgb(4 6 3)" stop-opacity="0.18" />
           </linearGradient>
+          <linearGradient id="sia-step-foot" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="10" data-step-foot>
+            <stop offset="0" stop-color="rgb(4 6 3)" stop-opacity="0" />
+            <stop offset="1" stop-color="rgb(4 6 3)" stop-opacity="0.35" />
+          </linearGradient>
           <filter id="sia-step-blur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2" data-step-blur /></filter>
           <filter id="sia-sill-soft" x="-5%" y="-60%" width="110%" height="220%"><feGaussianBlur stdDeviation="0.45" /></filter>
         </defs>
@@ -2536,10 +2540,9 @@ const faqs = [
             const top = P([[xl0, base], [xr0, base], [xr1, yFT], [xl1, yFT]]);
             const front = P([[xl1, yFT], [xr1, yFT], [xr1, yFB], [xl1, yFB]]);
             let t =
-              // shadows on the paving, away from the upper-left light: under the front edge, and
-              // off the right-hand end
-              `<path d="${P([[xl1 + stepH * 0.3, yFB - 1], [xr1 + stepH * 0.6, yFB - 1], [xr1 + stepH * 1.4, yFB + stepH * 0.9], [xl1 + stepH * 1.1, yFB + stepH * 0.9]])}" fill="rgb(4 6 3 / 0.7)" filter="url(#sia-step-blur)" />` +
-              `<path d="${P([[xr0, floor], [xr1, yFB], [xr1 + stepH * 1.8 * sc, yFB], [xr0 + stepH * 1.8, floor]])}" fill="rgb(4 6 3 / 0.45)" filter="url(#sia-step-blur)" />` +
+              // its shadow on the paving, thrown to the right by the light from the left (none in
+              // front: the light is in front)
+              `<path d="${P([[xr0 - 1, floor], [xr1 - 1, yFB], [xr1 + stepH * 1.8 * sc, yFB], [xr0 + stepH * 1.8, floor]])}" fill="rgb(4 6 3 / 0.5)" filter="url(#sia-step-blur)" />` +
               // the front face: the stone, turned a little from the light
               `<path d="${front}" fill="url(#sia-step-stone)" />` +
               `<path d="${front}" fill="rgb(10 14 8 / 0.5)" />` +
@@ -2551,7 +2554,10 @@ const faqs = [
               `<path d="${top} ${front}" fill="url(#sia-step-side)" />` +
               // a worn, lit arris along the front edge, and a dark joint under the front
               `<path d="M${n(xl1)} ${n(yFT + 0.5)} L${n(xr1)} ${n(yFT + 0.5)}" stroke="rgb(236 238 224 / 0.4)" stroke-width="${n(Math.max(0.8, stepH * 0.12))}" />` +
-              `<path d="M${n(xl1)} ${n(yFB)} L${n(xr1)} ${n(yFB)}" stroke="rgb(4 6 3 / 0.6)" stroke-width="${n(Math.max(0.8, stepH * 0.1))}" />`;
+              // seated on the paving: the foot of the front face darkens where it meets the stones
+              `<path d="${P([[xl1, yFB - stepH * sc * 0.35], [xr1, yFB - stepH * sc * 0.35], [xr1, yFB], [xl1, yFB]])}" fill="url(#sia-step-foot)" />`;
+            const stepFoot = sill.querySelector('[data-step-foot]');
+            if (stepFoot) { stepFoot.setAttribute('y1', n(yFB - stepH * sc * 0.35)); stepFoot.setAttribute('y2', n(yFB)); }
             const stepAo = sill.querySelector('[data-step-ao]');
             if (stepAo) { stepAo.setAttribute('y1', n(base)); stepAo.setAttribute('y2', n(yFT)); }
             const stepSide = sill.querySelector('[data-step-side]');
