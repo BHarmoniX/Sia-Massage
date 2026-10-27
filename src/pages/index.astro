@@ -21,9 +21,10 @@ import bambooBasin from '../client/photos/bamboo-basin.jpg';
 import mossWaterfall from '../client/photos/moss-waterfall.jpg';
 import mossRiver from '../client/photos/moss-river.jpg';
 import rainPoster from '../client/photos/rain-leaves-poster.jpg';
-import doorBoardsLeft from '../client/photos/door-boards-left.jpg';
-import doorBoardsRight from '../client/photos/door-boards-right.jpg';
-import frameWalnut from '../client/photos/frame-walnut.jpg';
+// Timber in a dark Japanese stain (the unstained originals stay on file beside them).
+import doorBoardsLeft from '../client/photos/door-boards-left-stained.jpg';
+import doorBoardsRight from '../client/photos/door-boards-right-stained.jpg';
+import frameWalnut from '../client/photos/frame-walnut-stained.jpg';
 import doorIron from '../client/photos/door-iron.jpg';
 import groundStone from '../client/photos/ground-stone.jpg';
 import wallPlaster from '../client/photos/wall-plaster.jpg';
@@ -1412,7 +1413,7 @@ const faqs = [
     background:
       repeating-linear-gradient(90deg, rgb(0 0 0 / 0.14) 0 1px, transparent 1px 3px),
       linear-gradient(90deg, rgb(240 220 190 / 0.12), transparent 30%, rgb(0 0 0 / 0.4)),
-      linear-gradient(180deg, #7a5536, #5e4029 60%, #4a3220);
+      linear-gradient(180deg, #4a3526, #33241a 60%, #241912);
     backface-visibility: hidden;
   }
   .sia-visit__leaf-svg {
@@ -2201,7 +2202,7 @@ const faqs = [
               // edge so the door reads as one solid piece.
               const back = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
               back.setAttribute('class', 'sia-visit__leaf-back');
-              back.innerHTML = `<path d="${pathOf(leafPoly(cx, base, A, side))}" fill="#4a3220" stroke="rgb(20 12 6 / 0.7)" stroke-width="1.2" />`;
+              back.innerHTML = `<path d="${pathOf(leafPoly(cx, base, A, side))}" fill="#241912" stroke="rgb(10 6 3 / 0.75)" stroke-width="1.2" />`;
               back.style.transform = `translateZ(${n(-T)}px)`;
               leaf.insertBefore(back, leaf.firstChild);
               const crown = leafPoly(cx, base, A, side).slice(1, -1);
@@ -2217,7 +2218,7 @@ const faqs = [
                 segLit.push(0.55 + 0.45 * ((-ty + tx) / Math.SQRT2));
               }
               const vLit = (i: number) => ((segLit[i - 1] ?? segLit[i]!) + (segLit[i] ?? segLit[i - 1]!)) / 2;
-              const paint = (k: number) => `rgb(${Math.round(Math.min(255, 132 * k))} ${Math.round(Math.min(255, 92 * k))} ${Math.round(Math.min(255, 60 * k))})`;
+              const paint = (k: number) => `rgb(${Math.round(Math.min(255, 76 * k))} ${Math.round(Math.min(255, 54 * k))} ${Math.round(Math.min(255, 38 * k))})`;
               for (let i = 0; i < pts.length - 1; i++) {
                 const [px, py] = pts[i]!;
                 const [qx, qy] = pts[i + 1]!;

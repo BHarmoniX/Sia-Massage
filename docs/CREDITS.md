@@ -56,13 +56,13 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | File (src/client/photos) | Source |
 |---|---|
 | therapist-linen.jpg (treatments photo) | https://www.pexels.com/photo/a-massage-therapist-7233264/ |
-| door-boards-left.jpg, door-boards-right.jpg (doorway doors: weathered hardwood, turned upright, cut into boards, oiled timber tone) | https://www.pexels.com/photo/129721/ |
+| door-boards-left.jpg, door-boards-right.jpg (doorway doors: weathered hardwood, turned upright, cut into boards, oiled timber tone); door-boards-left-stained.jpg, door-boards-right-stained.jpg (the same, in a dark Japanese stain) | https://www.pexels.com/photo/129721/ |
 
 ## Generated imagery (original, made for this site)
 
 | File | Source |
 | --- | --- |
-| frame-walnut.jpg (doorway arch frame timber) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
+| frame-walnut.jpg (doorway arch frame timber); frame-walnut-stained.jpg (the same, in a dark Japanese stain) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | door-iron.jpg (doorway door hardware: hinges, rivets, ring pulls) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile, relief lighting added) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | wall-plaster.jpg (doorway wall: moss lime plaster, darkened and mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
