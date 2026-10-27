@@ -28,6 +28,8 @@ import frameWalnut from '../client/photos/frame-walnut-stained.jpg';
 import doorIron from '../client/photos/door-iron.jpg';
 import groundStone from '../client/photos/ground-stone.jpg';
 import stepStone from '../client/photos/step-stone.jpg';
+import wallIvy from '../client/photos/wall-ivy-frame.webp';
+import wallIvyShadow from '../client/photos/wall-ivy-frame-shadow.webp';
 import wallPlaster from '../client/photos/wall-plaster.jpg';
 import gardenBambooA from '../client/photos/garden-bamboo-a.webp';
 import gardenBambooB from '../client/photos/garden-bamboo-b.webp';
@@ -48,6 +50,9 @@ const doorIronImg = await getImage({ src: doorIron, width: 400, format: 'webp', 
 // The forecourt: an original mossy flagstone texture generated for Sia (OpenArt), mirrored
 // into a seamless tile.
 const groundStoneImg = await getImage({ src: groundStone, width: 1000, format: 'webp', quality: 76 });
+// Ivy climbing the wall: in from the top and both outer sides, arching around the doorway.
+const ivyImg = await getImage({ src: wallIvy, width: 2400, format: 'webp', quality: 80 });
+const ivyShadowImg = await getImage({ src: wallIvyShadow, width: 1000, format: 'webp', quality: 70 });
 const stepStoneImg = await getImage({ src: stepStone, width: 512, format: 'webp', quality: 80 });
 // The wall: an original moss lime-plaster texture generated for Sia (OpenArt), mirrored into a
 // seamless tile.
@@ -325,6 +330,9 @@ const faqs = [
       <div class="sia-visit__ground" data-ground data-texture={groundStoneImg.src}><div class="sia-visit__ground-plane"></div></div>
       <!-- The foot of the wall, darkened where it meets the paving (damp, splash and shade). -->
       <div class="sia-visit__wall-foot" data-wall-foot></div>
+      <!-- Ivy climbing the wall: in from the top and both outer sides, arching around the doorway
+           with open wall around the arch. A soft shadow on the plaster behind it. -->
+      <div class="sia-visit__ivy" data-ivy><img class="sia-visit__ivy-shadow" src={ivyShadowImg.src} alt="" decoding="async" /><img src={ivyImg.src} alt="" decoding="async" /></div>
       <div class="sia-visit__door">
         <Img src={spaRoom} alt="" sizes="100vw" class="h-full w-full object-cover" />
       </div>
@@ -1285,6 +1293,30 @@ const faqs = [
     overflow: visible;
     pointer-events: none;
   }
+  /* Ivy on the wall: placed and scaled by the script with the couplets. */
+  .sia-visit__ivy {
+    position: absolute;
+    display: none;
+    pointer-events: none;
+  }
+  .sia-visit__ivy img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: brightness(0.8) saturate(0.85); /* in the courtyard's soft light */
+  }
+  /* Its shadow on the plaster, a little right of and below the leaves (light from the upper left). */
+  .sia-visit__ivy img.sia-visit__ivy-shadow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    height: 100%;
+    filter: none;
+    opacity: 0.55;
+    transform: translate(0.6%, 0.9%);
+  }
   .sia-visit__wall-foot {
     position: absolute;
     left: 0;
@@ -1871,6 +1903,7 @@ const faqs = [
   const glass = doorway?.querySelector<HTMLElement>('[data-glass]');
   const doorPhoto = doorway?.querySelector<HTMLImageElement>('.sia-visit__door img');
   const visitTitle = document.getElementById('visit-title');
+  const ivy = doorway?.querySelector<HTMLElement>('[data-ivy]');
   const ground = doorway?.querySelector<HTMLElement>('[data-ground]');
   const groundPlane = ground?.firstElementChild as HTMLElement | null | undefined;
   const wallFoot = doorway?.querySelector<HTMLElement>('[data-wall-foot]');
@@ -2518,11 +2551,11 @@ const faqs = [
             sill.querySelector('[data-sill-sides]')?.setAttribute('x2', n(w));
             const grout = Math.max(1, tile * 0.004);
             const soft = Math.max(0.4, tile * 0.0012);
-            // The step: a slab 300mm deep across the doorway and frame (a little overhang each
+            // The step: a slab 600mm deep across the doorway and frame (a little overhang each
             // side), its top and front foreshortened by the paving's own perspective.
             const m = (APEX * A) / 2.4;
             const eyeH = eye + stepH;
-            const sc = d / (d - 0.3 * m);
+            const sc = d / (d - 0.6 * m);
             const L = A + EDGE + 0.08 * m;
             const yFB = floor + eyeH * (sc - 1); // front bottom edge, on the paving
             const yFT = yFB - stepH * sc; // front top edge (the arris)
@@ -2670,6 +2703,36 @@ const faqs = [
           p.el.style.setProperty('--wallcut', `${n(Math.max(0, ((foot - floor) / hgt) * 100 - 0.6))}%`);
         }
         garden.style.opacity = String(Math.max(0, 1 - Math.max(0, open - 0.6) * 4));
+      }
+
+      // Ivy across the wall: the full width at the top, down to the foot of the wall at the sides
+      // (cut off there, so no leaves lie on the paving). Placed in the closed view and carried
+      // with the walk-in, like the garden.
+      if (ivy) {
+        const IVY_ASPECT = 2400 / 1340;
+        // Wider than the wall and lifted a little, so the outer growth runs off the edges and the
+        // open middle stands well clear of the arch and the couplets.
+        const iw0 = w * 1.3;
+        const ih0 = iw0 / IVY_ASPECT;
+        const top0 = -ih0 * 0.1;
+        const iw = iw0 * s;
+        const ih = ih0 * s;
+        const top = pivotY + (top0 - pivotY) * s;
+        ivy.style.display = 'block';
+        ivy.style.left = `${n(cx - (iw0 / 2) * s)}px`;
+        ivy.style.top = `${n(top)}px`;
+        ivy.style.width = `${n(iw)}px`;
+        ivy.style.clipPath = `inset(0 0 ${n(Math.max(0, top + ih - floor))}px 0)`;
+        // Keep the wall open around the doorway, its couplets and 入: an arch-shaped clearing (an
+        // ellipse rising from the foot of the wall), its edge softened so tendrils taper away.
+        const ivyLeft = cx - (iw0 / 2) * s;
+        const clearHalf = (A + EDGE + size * 1.45 * s + size * 0.9 * s) * 1.35;
+        const labelTop = base - APEX * A - EDGE - (threshold?.offsetHeight ?? 62) - 14;
+        const clearUp = floor - labelTop + 18;
+        const clearing = `radial-gradient(${n(clearHalf)}px ${n(clearUp)}px at ${n(cx - ivyLeft)}px ${n(floor - top)}px, transparent 0, transparent 93%, #000 100%)`;
+        ivy.style.setProperty('mask-image', clearing);
+        ivy.style.setProperty('-webkit-mask-image', clearing);
+        ivy.style.opacity = String(Math.max(0, 1 - Math.max(0, open - 0.6) * 4));
       }
 
       archFrame.style.opacity = String(Math.max(0, 1 - Math.max(0, open - 0.8) * 5));
