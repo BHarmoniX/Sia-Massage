@@ -1265,8 +1265,15 @@ const faqs = [
     display: grid;
     gap: 0.75rem;
   }
+  /* Over the rock photograph: deep moss, a touch heavier, with a soft pale halo behind the
+     letters so they lift clear of the stones without a visible box. */
   .sia-treatments__head p {
-    color: var(--color-muted);
+    color: #1f2a1b;
+    font-weight: 500;
+    text-shadow:
+      0 0 2px rgb(240 243 233 / 0.95),
+      0 0 10px rgb(240 243 233 / 0.85),
+      0 0 22px rgb(240 243 233 / 0.6);
   }
   .sia-treatments__frame {
     position: relative;
@@ -1410,7 +1417,6 @@ const faqs = [
       padding-bottom: 0.35rem;
       font-size: clamp(0.9375rem, 2.3vh, 1.125rem);
       line-height: 1.55;
-      color: var(--color-text); /* readable over the photograph */
     }
     .sia-treatments__frame {
       min-height: 0;
