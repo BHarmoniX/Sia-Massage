@@ -234,7 +234,7 @@ const faqs = [
           An unhurried hour eases tight shoulders, quiets a busy mind and helps you sleep more
           soundly. Genuine relaxation massage from qualified therapists, with care in every detail.
         </p>
-        <a href="#treatments" class="btn-3d sia-rain__cta">Choose your treatment</a>
+        <div class="sia-rain__cta"><a href="#treatments" class="btn-3d">Choose your treatment</a></div>
       </div>
     </div>
     <div class="sia-rain__lotus sia-rain__lotus--flower" aria-hidden="true">
@@ -1089,14 +1089,16 @@ const faqs = [
   .sia-rain__card.glass-3d {
     --glass-tint: rgb(246 243 236 / 0.7);
     width: 100%;
-    /* the words start at the top, however tall the card is made (see the script at the end) */
+    /* The lotus fills the card's lower right, so the open glass is an L: a band across the top and
+       a column down the left. The title runs across the top band toward 安; the paragraph keeps to
+       the left column, clear of the bloom; the button sits at the foot of that column, so the left
+       side carries weight to balance the flower. Sizes in cqi are shares of the card's width. */
+    container-type: inline-size;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    /* the words sit on the left, the right third left clear for the lotus that rises over it
-       (padding in % is a share of the card's own width) */
-    padding: 2.5rem 41% 2.5rem clamp(2rem, 6%, 4rem);
+    padding: clamp(2.25rem, 7cqi, 3.25rem) clamp(4.5rem, 14cqi, 6.5rem) clamp(2.25rem, 7cqi, 3.25rem) clamp(2rem, 8cqi, 3.75rem);
     border-radius: 3.45rem;
     text-align: left;
   }
@@ -1114,18 +1116,20 @@ const faqs = [
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(1.6rem, 3vw, 2.3rem);
-    line-height: 1.2;
+    font-size: clamp(1.75rem, 6.2cqi, 2.6rem);
+    line-height: 1.15;
     color: var(--color-text);
   }
+  /* the button settles at the foot of the left column */
   .sia-rain__cta {
-    margin-top: 1.5rem;
+    margin-top: auto;
   }
   .sia-rain__card p {
-    max-width: 30rem;
-    margin-top: 0.9rem;
-    font-size: clamp(1rem, 1.3vw, 1.125rem);
-    line-height: 1.6;
+    /* the left column: at this height the bloom only starts about 59% across the card */
+    max-width: 56cqi;
+    margin: clamp(1rem, 3.5cqi, 1.5rem) 0 clamp(1.5rem, 5cqi, 2.25rem);
+    font-size: clamp(1rem, 2.4cqi, 1.125rem);
+    line-height: 1.65;
     color: var(--color-text);
   }
   /* Narrow screens: the card takes the full width for its words and sits above the lotus, which
@@ -1142,6 +1146,17 @@ const faqs = [
       padding: 2.5rem clamp(1.5rem, 6vw, 2.5rem) 2.75rem;
       text-align: center;
       min-height: 0 !important;
+    }
+    .sia-rain__card > span {
+      position: static;
+      margin-bottom: 0.6rem;
+      font-size: 2.4rem;
+    }
+    .sia-rain__card p {
+      max-width: none;
+    }
+    .sia-rain__cta {
+      margin-top: 0;
     }
   }
   /* The lotus on its lily pads: from the centre of the pond to the right edge, filling the lower
