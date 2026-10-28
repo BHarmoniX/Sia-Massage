@@ -1060,11 +1060,14 @@ const faqs = [
       radial-gradient(70% 60% at 50% 45%, rgb(0 0 0 / 0), rgb(0 0 0 / 0.18));
   }
   /* The card and the lotus share one box, so the lotus always sits on the card's lower edge. */
-  /* The card, centred in the picture; the lotus rests across its lower right. */
+  /* The card, centred in the picture, its right edge running straight down to the tip of the
+     lotus's top centre petal. That tip is 52.1% across the lotus picture, which spans 60% of the
+     section from 46% in: 46 + 0.521 × 60 = 77.26% across. Centred, the card is then
+     2 × (77.26 − 50) = 54.52% wide. (Change the lotus's left/right and this must change too.) */
   .sia-rain__scene {
     display: grid;
     justify-items: center;
-    width: min(100% - 3rem, 39rem);
+    width: 54.52%;
   }
   /* The same frosted glass as the contact card ("Your hour of calm awaits"). */
   .sia-rain__card.glass-3d {
