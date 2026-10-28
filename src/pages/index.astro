@@ -11,6 +11,8 @@ import { formatAuPhone, site, telHref } from '../config/site';
 
 import bambooLight from '../client/photos/bamboo-light.jpg';
 import teaTable from '../client/photos/tea-table.jpg';
+// Placeholder shop front (generated) until the owner supplies a real photo of the studio.
+import shopFront from '../client/photos/shop-front.jpg';
 import towelCandles from '../client/photos/towel-candles.jpg';
 import therapistLinen from '../client/photos/therapist-linen.jpg';
 // The view through the doorway: a candlelit spa treatment room (generated for Sia, OpenArt).
@@ -194,7 +196,7 @@ const faqs = [
     <div class="sia-philosophy__grid">
       <figure class="sia-philosophy__tea img-reveal">
         <div class="scroll-drift h-full">
-          <Img src={teaTable} alt="Tea set laid out on a long wooden table in soft evening light" sizes="(min-width: 1024px) 58vw, 100vw" class="h-full w-full object-cover" />
+          <Img src={shopFront} alt="The Sia Massage studio front, with a therapist smiling as she welcomes a guest at the carved timber counter" sizes="(min-width: 1024px) 58vw, 100vw" class="h-full w-full object-cover sia-philosophy__shop" />
         </div>
       </figure>
 
@@ -972,6 +974,10 @@ const faqs = [
     margin: 0 auto;
     padding: 6rem 1.5rem;
     align-items: center;
+  }
+  /* the shop front is wide; the tall frame keeps the counter, both people and the lantern */
+  .sia-philosophy__tea :global(.sia-philosophy__shop) {
+    object-position: 58% 50%;
   }
   .sia-philosophy__tea {
     aspect-ratio: 4 / 5;
