@@ -1385,6 +1385,65 @@ const faqs = [
       align-self: stretch;
     }
   }
+  /* Laptop and up, on screens tall enough: the whole menu fits in one view below the header.
+     Heading row on top; photo and the 2 x 3 cards share the rest of the height, the cards
+     filling it evenly. Type scales with the screen's height so the cards never overflow. */
+  @media (min-width: 1024px) and (min-height: 600px) {
+    .sia-treatments__grid {
+      box-sizing: border-box;
+      height: calc(100svh - var(--header-height));
+      max-width: 90rem;
+      grid-template-columns: 4fr 7fr;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: clamp(1rem, 3vh, 2.25rem) clamp(1.5rem, 2.5vw, 2.75rem);
+      padding: clamp(1.5rem, 4.5vh, 3.5rem) clamp(1.5rem, 3vw, 3rem);
+    }
+    .sia-treatments__head {
+      grid-template-columns: 4fr 7fr;
+      gap: clamp(1.5rem, 2.5vw, 2.75rem);
+    }
+    .sia-treatments__head .sia-heading {
+      font-size: clamp(2.25rem, 6vh, 3.75rem);
+      line-height: 1.05;
+    }
+    .sia-treatments__head p {
+      padding-bottom: 0.35rem;
+      font-size: clamp(0.9375rem, 2.3vh, 1.125rem);
+      line-height: 1.55;
+      color: var(--color-text); /* readable over the photograph */
+    }
+    .sia-treatments__frame {
+      min-height: 0;
+    }
+    .sia-menu {
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: clamp(0.6rem, 1.8vh, 1rem);
+    }
+    .sia-menu__card {
+      min-height: 0;
+      padding: clamp(0.8rem, 2.2vh, 1.4rem) clamp(1rem, 1.6vw, 1.5rem) clamp(0.7rem, 1.8vh, 1.15rem);
+    }
+    .sia-menu__card h3 {
+      font-size: clamp(1.1rem, 3.1vh, 1.65rem);
+    }
+    .sia-menu__card h3 span {
+      font-size: clamp(0.8rem, 2.1vh, 1.05rem);
+    }
+    .sia-menu__card p {
+      margin-top: 0.25rem;
+      font-size: clamp(0.8125rem, 2.1vh, 1rem);
+      line-height: 1.45;
+    }
+    .sia-menu__card dl {
+      gap: 0;
+      padding-top: clamp(0.25rem, 0.9vh, 0.75rem);
+      font-size: clamp(0.75rem, 1.95vh, 0.9375rem);
+    }
+    .sia-menu__card dd {
+      font-size: clamp(1rem, 2.6vh, 1.35rem);
+      line-height: 1.25;
+    }
+  }
 
   /* ── Visit: step through the doorway ── */
   .sia-visit {
