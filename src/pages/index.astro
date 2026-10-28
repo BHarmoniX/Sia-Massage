@@ -200,7 +200,7 @@ const faqs = [
         </div>
       </figure>
 
-      <div class="sia-philosophy__card glass-3d crystal" data-glow data-reveal>
+      <div class="sia-philosophy__card glass-3d" data-glow data-reveal>
         <p class="sia-kicker font-han" lang="zh-Hans">静心 <span>a quiet heart</span></p>
         <h2 id="philosophy-title" class="sia-heading">A quiet place to return to yourself</h2>
         <p>
@@ -983,19 +983,19 @@ const faqs = [
     aspect-ratio: 4 / 5;
     border-radius: 0.5rem;
   }
-  /* Frosted sage glass, the same as the header, with dark moss text. */
-  .sia-philosophy__card.glass-3d.crystal {
-    --glass-tint: #d6dfc8;
-    --glass-blur: 22px;
+  /* The same frosted glass as the lotus and contact cards, in rice-paper white, with dark moss text. */
+  .sia-philosophy__card.glass-3d {
+    --glass-tint: #f7f2e6;
+    /* denser than the other cards: over the dark moss it must read as white rice paper, with the
+       photograph only glowing faintly through */
+    background: color-mix(in oklab, var(--glass-tint) 88%, transparent);
     --color-text: #27322a;
     --color-muted: #3f4c3d;
     --color-subtle: #55624f;
     --color-accent: #5c7a4c;
     color: var(--color-text);
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0) 60%),
-      linear-gradient(rgb(214 223 200 / 0.58), rgb(214 223 200 / 0.58));
     padding: 2.25rem;
+    border-radius: 3.45rem;
   }
   .sia-philosophy__tea {
     box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.7);
