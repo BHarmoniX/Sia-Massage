@@ -13,6 +13,8 @@ import bambooLight from '../client/photos/bamboo-light.jpg';
 import teaTable from '../client/photos/tea-table.jpg';
 // Placeholder shop front (generated) until the owner supplies a real photo of the studio.
 import shopFront from '../client/photos/shop-front.jpg';
+import morningRoom from '../client/photos/morning-room.jpg';
+import herbalCompress from '../client/photos/herbal-compress.jpg';
 import towelCandles from '../client/photos/towel-candles.jpg';
 import therapistLinen from '../client/photos/therapist-linen.jpg';
 // The view through the doorway: a candlelit spa treatment room (generated for Sia, OpenArt).
@@ -192,11 +194,13 @@ const faqs = [
   </section>
 
   <!-- ───────────── Philosophy: photograph and crystal card, side by side ───────────── -->
-  <!-- The hero's mountains reflected in still water: the same ridges, mirrored and drifting in
-       step, so the hero's land runs straight on into a lake and the page settles into calm. As the
-       section scrolls in (--p, 0 → 1, set by the script at the end) the photo settles into its
-       frame and the card rises. (The earlier "arriving at dusk" version is kept at the git tag
-       philosophy-dusk, for use in another section.) -->
+  <!-- Philosophy, told as a short story in three steps down the page. It opens on the hero's
+       mountains reflected in still water (the same ridges, mirrored and drifting in step, so the
+       hero runs straight on into the lake), and the lake deepens from the hero's pale sage to Sia's
+       dark moss: step one in light tones, step two in mid tones, step three (the studio) in the
+       dark. Each card has its corner nearest the photo cut away, the
+       cut growing as the story builds. (The earlier "arriving at dusk"
+       version is kept at the git tag philosophy-dusk, for use in another section.) -->
   <Section id="philosophy" labelledby="philosophy-title" class="sia-philosophy" data-dusk>
     <div class="sia-lake" aria-hidden="true">
       <div class="sia-lake__reflection">
@@ -214,28 +218,55 @@ const faqs = [
         <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
       </div>
     </div>
-    <div class="sia-philosophy__grid">
-      <!-- The photo hangs in a walnut frame, the same timber as the doorway, with carved fretwork
-           in the corners of the window, like a lattice screen. -->
-      <figure class="sia-philosophy__tea sia-frame">
-        <img class="sia-frame__wood" src={frameWalnutImg.src} alt="" aria-hidden="true" loading="lazy" decoding="async" />
-        <div class="sia-frame__window img-reveal">
-          <div class="scroll-drift h-full">
-            <Img src={shopFront} alt="The Sia Massage studio front, with a therapist smiling as she welcomes a guest at the carved timber counter" sizes="(min-width: 1024px) 58vw, 100vw" class="h-full w-full object-cover sia-philosophy__shop" />
+    <div class="sia-story">
+      <div class="sia-step sia-step--light">
+        <figure class="sia-step__photo">
+          <div class="sia-step__window img-reveal">
+            <div class="scroll-drift h-full">
+              <Img src={morningRoom} alt="A calm treatment room in morning light: folded white linen on a timber bench, a tea set and a branch of white blossom" sizes="(min-width: 1024px) 30vw, 100vw" class="h-full w-full object-cover" />
+            </div>
           </div>
-          <svg class="sia-frame__fret" viewBox="0 0 40 40" aria-hidden="true"><path class="sia-frame__fret-lit" d="M2 40 V2 H40 M2 26 H12 V12 H26 V2 M12 26 V20 H20 V12" /><path d="M2 40 V2 H40 M2 26 H12 V12 H26 V2 M12 26 V20 H20 V12" /></svg><svg class="sia-frame__fret" viewBox="0 0 40 40" aria-hidden="true"><path class="sia-frame__fret-lit" d="M2 40 V2 H40 M2 26 H12 V12 H26 V2 M12 26 V20 H20 V12" /><path d="M2 40 V2 H40 M2 26 H12 V12 H26 V2 M12 26 V20 H20 V12" /></svg><svg class="sia-frame__fret" viewBox="0 0 40 40" aria-hidden="true"><path class="sia-frame__fret-lit" d="M2 40 V2 H40 M2 26 H12 V12 H26 V2 M12 26 V20 H20 V12" /><path d="M2 40 V2 H40 M2 26 H12 V12 H26 V2 M12 26 V20 H20 V12" /></svg><svg class="sia-frame__fret" viewBox="0 0 40 40" aria-hidden="true"><path class="sia-frame__fret-lit" d="M2 40 V2 H40 M2 26 H12 V12 H26 V2 M12 26 V20 H20 V12" /><path d="M2 40 V2 H40 M2 26 H12 V12 H26 V2 M12 26 V20 H20 V12" /></svg>
+        </figure>
+        <div class="sia-step__card notch-host" data-reveal>
+          <div class="sia-step__panel glass-3d notch">
+            <p class="sia-kicker font-han" lang="zh-Hans">静心 <span>a quiet heart</span></p>
+            <h2 id="philosophy-title" class="sia-heading">A quiet place to return to yourself</h2>
+            <p>At Sia, massage is not a rush between appointments. Your hour is yours alone, unhurried from the first breath to the last.</p>
+          </div>
         </div>
-      </figure>
-
-      <div class="sia-philosophy__card glass-3d" data-glow data-reveal>
-        <p class="sia-kicker font-han" lang="zh-Hans">静心 <span>a quiet heart</span></p>
-        <h2 id="philosophy-title" class="sia-heading">A quiet place to return to yourself</h2>
-        <p>
-          At Sia, massage is not a rush between appointments. Drawing on traditional Asian bodywork,
-          every treatment is slow and attentive, so the body can soften and the mind can rest.
-        </p>
-        <p>Clean linen, low light, a cup of tea. Nothing to do but breathe.</p>
-        <blockquote>When the body is at ease, the heart follows.</blockquote>
+      </div>
+      <div class="sia-step sia-step--mid">
+        <figure class="sia-step__photo">
+          <div class="sia-step__window img-reveal">
+            <div class="scroll-drift h-full">
+              <Img src={herbalCompress} alt="A therapist pressing warm herbal compresses along a guest’s shoulders" sizes="(min-width: 1024px) 45vw, 100vw" class="h-full w-full object-cover" />
+            </div>
+          </div>
+        </figure>
+        <div class="sia-step__card notch-host" data-reveal>
+          <div class="sia-step__panel glass-3d notch">
+            <p class="sia-kicker font-han" lang="zh-Hans">手艺 <span>by hand</span></p>
+            <h3 class="sia-step__title">Traditional hands, slow and attentive</h3>
+            <p>Drawing on traditional Asian bodywork, every treatment is slow and attentive, so the body can soften and the mind can rest.</p>
+          </div>
+        </div>
+      </div>
+      <div class="sia-step sia-step--dark">
+        <figure class="sia-step__photo">
+          <div class="sia-step__window img-reveal">
+            <div class="scroll-drift h-full">
+              <Img src={shopFront} alt="The Sia Massage studio front, with a therapist smiling as she welcomes a guest at the carved timber counter" sizes="(min-width: 1024px) 34vw, 100vw" class="h-full w-full object-cover sia-step__shop" />
+            </div>
+          </div>
+        </figure>
+        <div class="sia-step__card notch-host" data-reveal>
+          <div class="sia-step__panel glass-3d notch">
+            <p class="sia-kicker font-han" lang="zh-Hans">欢迎 <span>welcome</span></p>
+            <h3 class="sia-step__title">Clean linen, low light, a cup of tea</h3>
+            <p>From the moment you arrive, there is nothing to do but breathe.</p>
+            <blockquote>When the body is at ease, the heart follows.</blockquote>
+          </div>
+        </div>
       </div>
     </div>
   </Section>
@@ -1003,156 +1034,7 @@ const faqs = [
     top: 94%;
   }
 
-  /* ── Philosophy: photograph + crystal card ── */
-  .sia-philosophy__grid {
-    display: grid;
-    gap: 2rem;
-    max-width: 82rem;
-    margin: 0 auto;
-    padding: 6rem 1.5rem;
-    align-items: center;
-  }
-  /* the shop front is wide; the tall frame keeps the counter, both people and the lantern */
-  .sia-philosophy__tea :global(.sia-philosophy__shop) {
-    object-position: 58% 50%;
-  }
-  .sia-philosophy__tea {
-    aspect-ratio: 4 / 5;
-    border-radius: 0.9rem;
-  }
-  /* The same frosted glass as the lotus and contact cards, in rice-paper white, with dark moss text. */
-  .sia-philosophy__card.glass-3d {
-    --glass-tint: #f7f2e6;
-    /* denser than the other cards: over the dark moss it must read as white rice paper, with the
-       photograph only glowing faintly through */
-    background: color-mix(in oklab, var(--glass-tint) 88%, transparent);
-    --color-text: #27322a;
-    --color-muted: #3f4c3d;
-    --color-subtle: #55624f;
-    --color-accent: #5c7a4c;
-    color: var(--color-text);
-    padding: 2.25rem;
-    border-radius: 3.45rem;
-  }
-  .sia-philosophy__tea {
-    box-shadow:
-      0 34px 64px -34px rgb(48 60 40 / 0.5),
-      0 0 0 1px rgb(255 255 255 / 0.5);
-  }
-  /* Sage glass frame with a walnut bead: frosted sage glass (like the site's cards) around the
-     outside, so the frame belongs to the pale lake, and a slim walnut timber edge around the window
-     with carved fretwork in its corners. */
-  .sia-frame {
-    --frame: clamp(0.95rem, 1.7vw, 1.35rem); /* glass width */
-    --bead: clamp(0.3rem, 0.5vw, 0.42rem); /* walnut width */
-    position: relative;
-    padding: var(--frame);
-    border-radius: 0.9rem;
-    overflow: hidden;
-    background:
-      linear-gradient(140deg, rgb(255 255 250 / 0.6), rgb(214 224 198 / 0.4) 45%, rgb(176 194 156 / 0.45));
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-    backdrop-filter: blur(14px) saturate(1.2);
-  }
-  /* the walnut shows only as the bead, just outside the window */
-  .sia-frame__wood {
-    position: absolute;
-    inset: calc(var(--frame) - var(--bead));
-    width: calc(100% - 2 * (var(--frame) - var(--bead)));
-    height: calc(100% - 2 * (var(--frame) - var(--bead)));
-    object-fit: cover;
-    border-radius: 0.3rem;
-    filter: brightness(0.92);
-    box-shadow: 0 2px 6px -2px rgb(40 48 32 / 0.4);
-  }
-  /* the glass's lit edge (upper left) and its soft shade (lower right) */
-  .sia-frame::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    box-shadow:
-      inset 1.5px 1.5px 0 rgb(255 255 255 / 0.85),
-      inset -1px -1px 0 rgb(120 140 100 / 0.35),
-      inset 10px 10px 22px -12px rgb(255 255 255 / 0.55),
-      inset -10px -10px 22px -12px rgb(90 110 72 / 0.3);
-  }
-  /* the window, set into the walnut */
-  .sia-frame__window {
-    position: relative;
-    height: 100%;
-    border-radius: 0.12rem;
-    box-shadow: 0 0 0 1px rgb(20 14 8 / 0.7);
-  }
-  .sia-frame__window::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    box-shadow:
-      inset 0 9px 16px -8px rgb(0 0 0 / 0.45),
-      inset 9px 0 16px -10px rgb(0 0 0 / 0.35);
-  }
-  /* carved walnut fretwork brackets in the window's corners */
-  .sia-frame__fret {
-    position: absolute;
-    z-index: 1;
-    width: clamp(2.6rem, 4.5vw, 3.6rem);
-    height: auto;
-    aspect-ratio: 1;
-    fill: none;
-    stroke: #3a2918;
-    stroke-width: 3;
-    stroke-linecap: square;
-    filter: drop-shadow(1px 2px 1.5px rgb(0 0 0 / 0.5));
-  }
-  .sia-frame__fret-lit {
-    stroke: #8a6a48;
-    transform: translate(-0.7px, -0.7px);
-  }
-  .sia-frame__fret:nth-of-type(1) { top: 0; left: 0; }
-  .sia-frame__fret:nth-of-type(2) { top: 0; right: 0; transform: scaleX(-1); }
-  .sia-frame__fret:nth-of-type(3) { bottom: 0; left: 0; transform: scaleY(-1); }
-  .sia-frame__fret:nth-of-type(4) { bottom: 0; right: 0; transform: scale(-1); }
-  .sia-philosophy__card > * + * {
-    margin-top: 1.1rem;
-  }
-  .sia-philosophy__card p {
-    color: var(--color-muted);
-  }
-  .sia-philosophy__card blockquote {
-    margin-top: 1.75rem;
-    padding-left: 1.25rem;
-    border-left: 1px solid color-mix(in oklab, var(--color-accent) 50%, transparent);
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.5rem;
-  }
-  @media (min-width: 1024px) {
-    /* Fits one screen below the header: the photo's height follows the screen (and it sits
-       against the card, which overlaps its edge), while the card keeps its size. */
-    .sia-philosophy__grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-      min-height: calc(100dvh - var(--header-height));
-      padding: 3.5rem 3rem;
-    }
-    .sia-philosophy__tea {
-      justify-self: end;
-      height: min(calc(100dvh - var(--header-height) - 7rem), 47.5rem);
-      max-width: 100%;
-    }
-    /* The card overlaps the photograph's edge by a fixed, deliberate amount. */
-    .sia-philosophy__card {
-      margin-left: -4rem;
-      padding: 3.25rem;
-      position: relative;
-      z-index: 2;
-    }
-  }
-
-  /* ── Philosophy: the hero's mountains reflected in a lake ── */
+  /* ── Philosophy: a story in three steps, down a lake that deepens from sage to moss ── */
   .sia-philosophy {
     --p: 1; /* scroll progress, 0 → 1; stays 1 without the script */
     position: relative;
@@ -1162,17 +1044,12 @@ const faqs = [
     isolation: isolate;
     overflow: hidden;
     /* the hero's own tones at the top, mirrored (its foot, #e6ebdc and the sage glow at the bottom
-       right, is this section's top, so the two meet without a seam), then the lake deepens into
-       Sia's dark moss as the reflection fades */
+       right, is this section's top, so the two meet without a seam); light through step one, mid
+       tones at step two, Sia's dark moss by step three */
     background:
       radial-gradient(120% 22rem at 75% 0%, rgb(196 210 176 / 0.55), transparent 70%),
-      radial-gradient(70% 60% at 20% 40%, rgb(195 209 166 / 0.1), transparent 70%),
-      linear-gradient(180deg, #e6ebdc 0, #d2dcc2 5rem, #9fb08c 11rem, #5d7250 17rem, #34442c 23rem, #2b3824 28rem, #222d1c);
+      linear-gradient(180deg, #e6ebdc 0, #e3e9d8 24%, #c9d4b8 36%, #a3b490 47%, #74885f 57%, #46573a 66%, #2f3d28 74%, #26321f 84%, #222d1c);
     color: #f3efe4;
-  }
-  .sia-philosophy__grid {
-    position: relative;
-    z-index: 1;
   }
   .sia-lake {
     position: absolute;
@@ -1258,55 +1135,170 @@ const faqs = [
     80% { opacity: 0.8; }
     100% { opacity: 0; transform: translate(-1.5rem, -18rem); }
   }
-  /* evening mist rising off the moss at the foot of the scene, meeting the pond's mist below */
-  .sia-dusk__mist {
-    position: absolute;
-    inset: auto -10% 0;
-    height: 38%;
-    background:
-      radial-gradient(40% 55% at 15% 100%, rgb(214 222 202 / 0.34), transparent 70%),
-      radial-gradient(45% 60% at 55% 100%, rgb(214 222 202 / 0.3), transparent 70%),
-      radial-gradient(40% 50% at 90% 100%, rgb(214 222 202 / 0.32), transparent 70%),
-      linear-gradient(180deg, transparent, rgb(200 210 188 / 0.22));
-    filter: blur(14px);
-    opacity: calc(0.4 + 0.6 * var(--p));
+  /* the fireflies gather in the dark water at the foot of the story */
+  .sia-lake .sia-dusk__motes {
+    inset: 62% 0 0;
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .sia-dusk__mist {
-      animation: sia-mist-drift 22s ease-in-out infinite alternate;
-    }
-  }
-  @keyframes sia-mist-drift {
-    to { transform: translateX(4%); }
-  }
-  /* the photo starts softened by the lake's mist, which clears as it settles into its frame */
-  .sia-frame__window::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+
+  .sia-story {
+    position: relative;
     z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(180deg, rgb(238 240 230 / 0.85), rgb(238 240 230 / 0.6));
-    opacity: calc(1 - var(--p));
+    display: grid;
+    gap: 4.5rem;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 5rem 1rem 6rem;
   }
-  /* walking up to the shop: the photo settles into its frame */
-  .sia-philosophy__tea :global(picture) {
+  .sia-step {
+    display: grid;
+  }
+  .sia-step__photo {
+    aspect-ratio: 4 / 5;
+  }
+  .sia-step--mid .sia-step__photo {
+    aspect-ratio: 3 / 2;
+  }
+  .sia-step__photo :global(picture) {
     display: block;
     height: 100%;
-    transform: scale(calc(1.14 - 0.14 * var(--p)));
   }
-  /* the rice-paper card rises into place */
-  .sia-philosophy__card.glass-3d {
-    translate: 0 calc((1 - var(--p)) * 3.5rem);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.7),
-      0 30px 60px -30px rgb(48 60 40 / 0.45),
-      0 0 0 1px rgb(120 140 100 / 0.18);
+  .sia-step__shop,
+  .sia-step__photo :global(.sia-step__shop) {
+    object-position: 58% 50%;
+  }
+  /* small screens: each card overlaps the foot of its photo */
+  .sia-step__card {
+    position: relative;
+    z-index: 2;
+    margin: -3rem 0.75rem 0;
+  }
+
+  /* the photographs: unframed, softly rounded, lifted off the water by a shadow */
+  .sia-step__photo {
+    position: relative;
+    border-radius: 1.4rem;
+    overflow: hidden;
+    box-shadow: 0 34px 64px -34px rgb(20 28 16 / 0.6);
+  }
+  .sia-step__window {
+    height: 100%;
+  }
+
+  /* Cards: rice paper, with the corner nearest the photo cut away; the cut grows as the story
+     builds. */
+  .sia-step .sia-step__card {
+    --notch-r: 2rem;
+    --notch-x: 0%;
+    --notch-y: 0%;
+    filter: drop-shadow(0 22px 28px rgb(20 28 16 / 0.35));
+  }
+  .sia-step--mid .sia-step__card {
+    --notch-r: 2.3rem;
+  }
+  .sia-step--dark .sia-step__card {
+    --notch-r: 2.7rem;
+  }
+  .sia-step__panel.glass-3d {
+    --glass-tint: #f7f2e6;
+    background: color-mix(in oklab, var(--glass-tint) 90%, transparent);
+    --color-text: #27322a;
+    --color-muted: #3f4c3d;
+    --color-subtle: #55624f;
+    --color-accent: #5c7a4c;
+    color: var(--color-text);
+    padding: 2.6rem 2rem 2rem 2.6rem;
+    border-radius: 0 2.6rem 2.6rem 2.6rem;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7);
+  }
+  .sia-step__panel > * + * {
+    margin-top: 1rem;
+  }
+  .sia-step__panel p {
+    color: var(--color-muted);
+  }
+  .sia-step__panel .sia-kicker {
+    font-size: 1.25rem;
+  }
+  .sia-step__title {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+    line-height: 1.08;
+  }
+  .sia-step__panel blockquote {
+    margin-top: 1.5rem;
+    padding-left: 1.25rem;
+    border-left: 1px solid color-mix(in oklab, var(--color-accent) 50%, transparent);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.4rem;
+  }
+
+  /* Wide screens: a staggered descent. Each step is a photo with its card overlapping the
+     photo's edge, alternating sides, the cut corner always the one touching the photo. */
+  @media (min-width: 1024px) {
+    .sia-story {
+      gap: clamp(3rem, 9vh, 6rem);
+      padding: clamp(5rem, 13vh, 8rem) 3rem clamp(6rem, 14vh, 9rem);
+    }
+    .sia-step {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: center;
+    }
+    .sia-step__photo,
+    .sia-step__card {
+      grid-row: 1;
+    }
+    .sia-step__card {
+      margin: 0;
+    }
+    /* one: photo at the left, the card stepping out to its right and down */
+    .sia-step--light .sia-step__photo {
+      grid-column: 2 / span 4;
+      height: min(64vh, 34rem);
+      aspect-ratio: auto;
+    }
+    .sia-step--light .sia-step__card {
+      grid-column: 5 / span 5;
+      align-self: end;
+      margin-bottom: -2.5rem;
+    }
+    /* two: a wide photo to the right, the card to its left */
+    .sia-step--mid .sia-step__photo {
+      grid-column: 6 / span 6;
+    }
+    .sia-step--mid .sia-step__card {
+      grid-column: 2 / span 5;
+      --notch-x: 100%;
+    }
+    .sia-step--mid .sia-step__panel.glass-3d {
+      padding: 2.6rem 2.6rem 2rem 2rem;
+      border-radius: 2.6rem 0 2.6rem 2.6rem;
+    }
+    /* three: the studio, the largest step, photo at the left and the card to its right */
+    .sia-step--dark .sia-step__photo {
+      grid-column: 1 / span 5;
+      height: min(74vh, 42rem);
+      aspect-ratio: auto;
+    }
+    .sia-step--dark .sia-step__card {
+      grid-column: 5 / span 7;
+    }
+    .sia-step--dark .sia-step__panel.glass-3d {
+      padding: 3.25rem 3rem 3rem 3.4rem;
+      border-radius: 0 3.2rem 3.2rem 3.2rem;
+    }
+    .sia-step--dark .sia-step__title {
+      font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+    }
   }
 
   /* ── Rain interlude ── */
   .sia-rain {
     position: relative;
+    /* tucked 1px up over the section above, so no hairline of the page shows between them */
+    z-index: 1;
+    margin-top: -1px;
     display: grid;
     place-items: center;
     min-height: clamp(34rem, 92vh, 56rem);

@@ -15,7 +15,7 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 | tea-table.jpg | https://unsplash.com/photos/dPUWgZLsOk8 |
 | tea-leaves.jpg (unused) | https://unsplash.com/photos/Qaor6nxikUM |
 | hot-stones.jpg (unused) | https://unsplash.com/photos/SMwCQZWayj0 |
-| herbal-compress.jpg (unused) | https://unsplash.com/photos/YeekhTXpTgY |
+| herbal-compress.jpg (philosophy story, step two) | https://unsplash.com/photos/YeekhTXpTgY |
 | oil-massage.jpg (unused, replaced: colours too bright) | https://unsplash.com/photos/cU53ZFBr3lk |
 | mossy-rocks.jpg (unused) | https://unsplash.com/photos/9AekDW5da34 |
 | towel-candles.jpg | https://unsplash.com/photos/W7AyAs7azHc |
@@ -66,6 +66,7 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | door-iron.jpg (doorway door hardware: hinges, rivets, ring pulls) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile, relief lighting added); step-stone.jpg (the doorway step: several of these flagstones laid end to end) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | shop-front.jpg (placeholder Sia studio front in a shopping centre, until the owner supplies a real photo) | Generated for Sia with OpenArt (GPT Image 2.5 Sunburst), Plus plan with commercial use rights, 2026-10-28 |
+| morning-room.jpg (philosophy story, step one: a pale treatment room in morning light) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
 | rain-pond.jpg (rain pause: a still forest pond seen close at water level) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
 | rain-lotus-pads.webp, rain-lotus-flower.webp (rain pause: a white lotus on its lily pads, cut out from a magenta backdrop, as two layers: the whole lotus behind the card, the flower alone in front of it) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
 | wall-plaster.jpg (doorway wall: moss lime plaster, darkened and mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
