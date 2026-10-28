@@ -1089,10 +1089,10 @@ const faqs = [
   .sia-rain__card.glass-3d {
     --glass-tint: rgb(246 243 236 / 0.7);
     width: 100%;
-    /* the words stay centred however tall the card is made (see the script at the end) */
+    /* the words start at the top, however tall the card is made (see the script at the end) */
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
     /* the words sit on the left, the right third left clear for the lotus that rises over it
        (padding in % is a share of the card's own width) */
@@ -1100,12 +1100,17 @@ const faqs = [
     border-radius: 3.45rem;
     text-align: left;
   }
-  .sia-rain__card span {
+  /* the character in the card's top right corner */
+  .sia-rain__card > span {
+    position: absolute;
+    top: clamp(1.5rem, 3vw, 2.25rem);
+    right: clamp(1.75rem, 3.5vw, 2.75rem);
+    line-height: 1;
     font-size: 2.875rem;
     color: var(--color-accent-strong);
   }
   .sia-rain__title {
-    margin-top: 0.6rem;
+    margin-top: 0;
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 400;
