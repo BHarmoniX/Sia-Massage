@@ -609,7 +609,7 @@ const faqs = [
         <div class="sia-faq__list" data-reveal>
           {
             faqs.map((f) => (
-              <details class="sia-faq__item">
+              <details class="sia-faq__item" name="sia-faq">
                 <summary>
                   {f.q}
                   <span class="sia-faq__mark" aria-hidden="true" />
@@ -1958,6 +1958,49 @@ const faqs = [
     }
     .sia-faq__image {
       aspect-ratio: 1 / 1;
+    }
+  }
+  /* Laptop and up, on screens tall enough: the FAQ fits one view below the header, with room for
+     one answer open at a time (opening another closes the last). The photo takes the full height
+     beside the list; type scales with the screen's height. */
+  @media (min-width: 1024px) and (min-height: 600px) {
+    .sia-faq__grid {
+      box-sizing: border-box;
+      height: calc(100svh - var(--header-height));
+      max-width: 90rem;
+      margin: 0 auto;
+      grid-template-columns: 4fr 6fr;
+      align-items: stretch;
+      gap: clamp(2rem, 5vw, 5rem);
+      padding: clamp(1.5rem, 5vh, 3.5rem) clamp(1.5rem, 3vw, 3rem);
+    }
+    .sia-faq__image {
+      aspect-ratio: auto;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .sia-faq__grid > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+    .sia-faq .sia-heading {
+      font-size: clamp(2.25rem, 6vh, 3.75rem);
+      line-height: 1.05;
+    }
+    .sia-faq__list {
+      margin-top: clamp(1rem, 3.5vh, 2rem);
+    }
+    .sia-faq__item summary {
+      padding: clamp(0.7rem, 2.1vh, 1.3rem) 0;
+      font-size: clamp(1.05rem, 2.7vh, 1.4rem);
+    }
+    .sia-faq__item p {
+      padding-bottom: clamp(0.75rem, 2.1vh, 1.4rem);
+      font-size: clamp(0.875rem, 2.1vh, 1.0625rem);
+      line-height: 1.55;
     }
   }
 
