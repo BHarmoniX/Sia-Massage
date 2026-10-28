@@ -192,7 +192,22 @@ const faqs = [
   </section>
 
   <!-- ───────────── Philosophy: photograph and crystal card, side by side ───────────── -->
-  <Section id="philosophy" labelledby="philosophy-title" class="sia-philosophy sia-tone-moss">
+  <!-- Arriving at dusk: from the hero's pale mountain dream down to the real studio. As the section
+       scrolls in, dark ink ridges rise across the top, the light falls to evening, the shop's
+       lantern glow blooms across the moss, the photo settles into frame and the rice-paper card
+       catches the warm light. Driven by --p (0 → 1), set from the scroll by the script at the end. -->
+  <Section id="philosophy" labelledby="philosophy-title" class="sia-philosophy sia-tone-moss" data-dusk>
+    <div class="sia-dusk" aria-hidden="true">
+      <div class="sia-dusk__sky"></div>
+      <svg class="sia-dusk__ridge sia-dusk__ridge--far" viewBox="0 0 2400 260" preserveAspectRatio="none"><path d="M0 260 H2400 V112 Q2300 70 2200 102 Q2100 64 2000 121 Q1900 84 1800 112 Q1700 82 1600 101 Q1500 80 1400 118 Q1300 92 1200 108 Q1100 76 1000 98 Q900 66 800 120 Q700 96 600 114 Q500 70 400 99 Q300 62 200 117 Q100 72 0 108 Z" /></svg>
+      <svg class="sia-dusk__ridge sia-dusk__ridge--mid" viewBox="0 0 2400 260" preserveAspectRatio="none"><path d="M0 260 H2400 V150 Q2300 128 2200 158 Q2100 120 2000 140 Q1900 112 1800 168 Q1700 136 1600 150 Q1500 116 1400 160 Q1300 126 1200 146 Q1100 118 1000 170 Q900 132 800 150 Q700 110 600 162 Q500 124 400 140 Q300 108 200 166 Q100 128 0 150 Z" /></svg>
+      <svg class="sia-dusk__ridge sia-dusk__ridge--near" viewBox="0 0 2400 260" preserveAspectRatio="none"><path d="M0 260 H2400 V186 Q2300 166 2200 200 Q2100 172 2000 188 Q1900 160 1800 206 Q1700 176 1600 190 Q1500 164 1400 204 Q1300 172 1200 186 Q1100 160 1000 210 Q900 178 800 192 Q700 162 600 202 Q500 172 400 186 Q300 158 200 204 Q100 170 0 186 Z" /></svg>
+      <div class="sia-dusk__glow"></div>
+      <div class="sia-dusk__mist"></div>
+      <div class="sia-dusk__motes">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
     <div class="sia-philosophy__grid">
       <figure class="sia-philosophy__tea img-reveal">
         <div class="scroll-drift h-full">
@@ -217,9 +232,15 @@ const faqs = [
   <!-- Layers, back to front: the pond; the lotus's lily pads (with its shadow and reflection on the
        water); the glass card; the lotus flower. The pads show softly through the glass and the bloom
        stands in front of it, so card and pond read as one picture. -->
-  <section class="sia-rain" aria-labelledby="promise-title">
+  <section class="sia-rain" aria-labelledby="promise-title" data-mist>
     <div class="sia-rain__pond-layer" aria-hidden="true"><Img src={rainPond} alt="" sizes="100vw" class="sia-rain__pond" /></div>
     <div class="sia-rain__veil" aria-hidden="true"></div>
+    <!-- Out of the dusk: the mist bank carried down from the section above lifts and parts as the
+         pond scrolls in (--m, 0 → 1), and a few of the lantern's fireflies drift on over the water. -->
+    <div class="sia-rain__mist" aria-hidden="true"></div>
+    <div class="sia-rain__motes sia-dusk__motes" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
     <div class="sia-rain__lotus sia-rain__lotus--pads" aria-hidden="true">
       <span class="sia-rain__lotus-shadow"></span>
       <Img src={rainLotusFlower} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-reflection" />
@@ -1037,6 +1058,153 @@ const faqs = [
     }
   }
 
+  /* ── Philosophy: arriving at dusk ── */
+  .sia-philosophy {
+    --p: 1; /* scroll progress, 0 → 1; stays 1 (fully lit) without the script */
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .sia-philosophy__grid {
+    position: relative;
+    z-index: 1;
+  }
+  .sia-dusk {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  /* evening: the scene starts dim and lifts as the lantern light comes up */
+  .sia-dusk::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(8 12 7 / calc(0.5 * (1 - var(--p))));
+    /* the pale sky at the top stays as the hero left it; evening gathers below the ridges */
+    mask-image: linear-gradient(180deg, transparent 0, transparent clamp(5rem, 14vw, 11rem), #000 clamp(9rem, 26vw, 20rem));
+  }
+  /* the hero's pale misty sky carried over the top of the section, so the two meet as one
+     landscape; it fades into the moss below the ridges */
+  .sia-dusk__sky {
+    position: absolute;
+    inset: 0 0 auto;
+    height: clamp(7rem, 22vw, 16rem);
+    background: linear-gradient(180deg, #e6ebdc 0%, #d3dcc4 45%, #8fa07c 75%, #2b3824 100%);
+  }
+  /* ink ridges rising out of it, from pale and misty far away to the near ridge that melts into
+     the moss: as you scroll in they rise and close over the sky, and evening falls */
+  .sia-dusk__ridge {
+    position: absolute;
+    left: -2%;
+    width: 104%;
+    top: clamp(1rem, 4vw, 3rem);
+    height: clamp(6rem, 19vw, 14rem);
+  }
+  .sia-dusk__ridge path {
+    fill: currentColor;
+  }
+  .sia-dusk__ridge--far {
+    color: #9fb08c;
+    transform: translateY(calc((1 - var(--p)) * 2.5rem));
+  }
+  .sia-dusk__ridge--mid {
+    color: #5d7250;
+    transform: translateY(calc((1 - var(--p)) * 4rem));
+  }
+  .sia-dusk__ridge--near {
+    color: #2b3824;
+    transform: translateY(calc((1 - var(--p)) * 6rem));
+  }
+  /* the lantern's glow, blooming from behind the shop front and spilling across the moss */
+  .sia-dusk__glow {
+    position: absolute;
+    left: 30%;
+    top: 52%;
+    width: 120vmax;
+    height: 120vmax;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(255 196 122 / 0.34), rgb(236 168 96 / 0.14) 38%, rgb(236 168 96 / 0.04) 62%, transparent 75%);
+    mix-blend-mode: screen;
+    opacity: var(--p);
+    transform: translate(-50%, -50%) scale(calc(0.45 + 0.55 * var(--p)));
+  }
+  /* a few slow fireflies drifting in the glow */
+  .sia-dusk__motes {
+    position: absolute;
+    inset: 0;
+    opacity: calc(var(--p) * var(--p));
+  }
+  .sia-dusk__motes span {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgb(255 214 150);
+    box-shadow: 0 0 10px 3px rgb(255 190 110 / 0.55);
+    opacity: 0;
+  }
+  .sia-dusk__motes span:nth-child(1) { left: 12%; top: 78%; --d: 17s; --t: -2s; }
+  .sia-dusk__motes span:nth-child(2) { left: 22%; top: 64%; --d: 21s; --t: -9s; }
+  .sia-dusk__motes span:nth-child(3) { left: 31%; top: 86%; --d: 19s; --t: -5s; }
+  .sia-dusk__motes span:nth-child(4) { left: 43%; top: 72%; --d: 24s; --t: -14s; }
+  .sia-dusk__motes span:nth-child(5) { left: 8%; top: 46%; --d: 22s; --t: -11s; }
+  .sia-dusk__motes span:nth-child(6) { left: 52%; top: 88%; --d: 18s; --t: -3s; }
+  .sia-dusk__motes span:nth-child(7) { left: 61%; top: 80%; --d: 26s; --t: -17s; }
+  .sia-dusk__motes span:nth-child(8) { left: 18%; top: 92%; --d: 20s; --t: -7s; }
+  .sia-dusk__motes span:nth-child(9) { left: 37%; top: 58%; --d: 23s; --t: -19s; }
+  .sia-dusk__motes span:nth-child(10) { left: 70%; top: 90%; --d: 25s; --t: -12s; }
+  .sia-dusk__motes span:nth-child(11) { left: 4%; top: 70%; --d: 19s; --t: -15s; }
+  .sia-dusk__motes span:nth-child(12) { left: 48%; top: 52%; --d: 27s; --t: -21s; }
+  @media (prefers-reduced-motion: no-preference) {
+    .sia-dusk__motes span {
+      animation: sia-firefly var(--d) ease-in-out var(--t) infinite;
+    }
+  }
+  @keyframes sia-firefly {
+    0% { opacity: 0; transform: translate(0, 0); }
+    15% { opacity: 0.9; }
+    50% { opacity: 0.35; transform: translate(2.5rem, -9rem); }
+    80% { opacity: 0.8; }
+    100% { opacity: 0; transform: translate(-1.5rem, -18rem); }
+  }
+  /* evening mist rising off the moss at the foot of the scene, meeting the pond's mist below */
+  .sia-dusk__mist {
+    position: absolute;
+    inset: auto -10% 0;
+    height: 38%;
+    background:
+      radial-gradient(40% 55% at 15% 100%, rgb(214 222 202 / 0.34), transparent 70%),
+      radial-gradient(45% 60% at 55% 100%, rgb(214 222 202 / 0.3), transparent 70%),
+      radial-gradient(40% 50% at 90% 100%, rgb(214 222 202 / 0.32), transparent 70%),
+      linear-gradient(180deg, transparent, rgb(200 210 188 / 0.22));
+    filter: blur(14px);
+    opacity: calc(0.4 + 0.6 * var(--p));
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sia-dusk__mist {
+      animation: sia-mist-drift 22s ease-in-out infinite alternate;
+    }
+  }
+  @keyframes sia-mist-drift {
+    to { transform: translateX(4%); }
+  }
+  /* walking up to the shop: the photo settles into frame and warms to full colour */
+  .sia-philosophy__tea :global(picture) {
+    display: block;
+    height: 100%;
+    transform: scale(calc(1.14 - 0.14 * var(--p)));
+    filter: brightness(calc(0.6 + 0.4 * var(--p))) saturate(calc(0.65 + 0.35 * var(--p)));
+  }
+  /* the rice-paper card rises into place and catches the lantern light */
+  .sia-philosophy__card.glass-3d {
+    translate: 0 calc((1 - var(--p)) * 3.5rem);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.6),
+      0 30px 60px -30px rgb(0 0 0 / 0.55),
+      0 0 calc(90px * var(--p)) calc(-10px + 10px * var(--p)) rgb(255 196 122 / calc(0.32 * var(--p)));
+  }
+
   /* ── Rain interlude ── */
   .sia-rain {
     position: relative;
@@ -1137,6 +1305,33 @@ const faqs = [
     font-size: clamp(1rem, 2.4cqi, 1.125rem);
     line-height: 1.65;
     color: var(--color-text);
+  }
+  /* Out of the dusk into the pond: the mist bank from the section above, covering the top of the
+     pond as it arrives and lifting away (rising and thinning) as it scrolls in. */
+  .sia-rain {
+    --m: 1; /* stays clear without the script */
+  }
+  .sia-rain__mist {
+    position: absolute;
+    inset: -2% -10% auto;
+    z-index: 3;
+    height: 75%;
+    pointer-events: none;
+    background:
+      radial-gradient(45% 45% at 20% 0%, rgb(214 222 202 / 0.85), transparent 75%),
+      radial-gradient(50% 50% at 60% 0%, rgb(214 222 202 / 0.8), transparent 75%),
+      radial-gradient(40% 45% at 95% 5%, rgb(214 222 202 / 0.82), transparent 75%),
+      linear-gradient(180deg, rgb(205 214 192 / 0.85), rgb(205 214 192 / 0.35) 45%, transparent);
+    filter: blur(18px);
+    opacity: calc(1 - var(--m));
+    transform: translateY(calc(var(--m) * -45%));
+  }
+  /* the fireflies that drifted over from the dusk, fading as the mist clears */
+  .sia-rain__motes {
+    z-index: 3;
+    inset: 0 0 auto;
+    height: 55%;
+    opacity: calc(1 - var(--m) * 0.85);
   }
   /* Narrow screens: the card takes the full width for its words and sits above the lotus, which
      rests below it across the lower right (the card's petal alignment is for wider screens). */
@@ -3030,5 +3225,39 @@ const faqs = [
     new ResizeObserver(fit).observe(rain);
     new ResizeObserver(fit).observe(rainLotus);
     fit();
+  }
+</script>
+
+<script>
+  // Philosophy, arriving at dusk: --p runs 0 → 1 as the section scrolls into view (from its top
+  // reaching the bottom of the screen to its top reaching the header). Reduced motion: stays lit.
+  // The pond below carries the journey on: its mist lifts (--m, 0 → 1) between its top reaching
+  // the bottom of the screen and reaching 40% of the way down.
+  const dusk = document.querySelector<HTMLElement>('[data-dusk]');
+  const mist = document.querySelector<HTMLElement>('[data-mist]');
+  if (dusk && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const top = dusk.getBoundingClientRect().top;
+      const vh = window.innerHeight;
+      const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) * 16 || 80;
+      const p = Math.min(1, Math.max(0, (vh - top) / (vh - header)));
+      dusk.style.setProperty('--p', p.toFixed(3));
+      if (mist) {
+        const mt = mist.getBoundingClientRect().top;
+        const m = Math.min(1, Math.max(0, (vh - mt) / (vh * 0.6)));
+        mist.style.setProperty('--m', m.toFixed(3));
+      }
+    };
+    const queue = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
+    addEventListener('scroll', queue, { passive: true });
+    addEventListener('resize', queue);
+    update();
   }
 </script>
