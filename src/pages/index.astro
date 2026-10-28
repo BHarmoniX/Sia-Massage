@@ -21,7 +21,9 @@ import mossWaterfall from '../client/photos/moss-waterfall.jpg';
 import mossRiver from '../client/photos/moss-river.jpg';
 // The rain pause: a still forest pond, and one glass-white lotus on its lily pads (both generated for Sia).
 import rainPond from '../client/photos/rain-pond.jpg';
-import rainLotus from '../client/photos/rain-lotus.webp';
+// The lotus in two layers: its lily pads (behind the glass card) and the flower (in front of it).
+import rainLotusPads from '../client/photos/rain-lotus-pads.webp';
+import rainLotusFlower from '../client/photos/rain-lotus-flower.webp';
 // Timber in a dark Japanese stain (the unstained originals stay on file beside them).
 import doorBoardsLeft from '../client/photos/door-boards-left-stained.jpg';
 import doorBoardsRight from '../client/photos/door-boards-right-stained.jpg';
@@ -210,22 +212,25 @@ const faqs = [
   </Section>
 
   <!-- ───────────── Rain: a breathing pause ───────────── -->
-  <!-- Layers, back to front: the pond; the glass card; the lotus on its lily pads, resting over the
-       card's lower edge and out onto the water (with its reflection and shadow on the water below),
-       so card and pond read as one picture. -->
+  <!-- Layers, back to front: the pond; the lotus's lily pads (with its shadow and reflection on the
+       water); the glass card; the lotus flower. The pads show softly through the glass and the bloom
+       stands in front of it, so card and pond read as one picture. -->
   <section class="sia-rain" aria-label="A white lotus on a still forest pond">
     <div class="sia-rain__pond-layer" aria-hidden="true"><Img src={rainPond} alt="" sizes="100vw" class="sia-rain__pond" /></div>
     <div class="sia-rain__veil" aria-hidden="true"></div>
+    <div class="sia-rain__lotus sia-rain__lotus--pads" aria-hidden="true">
+      <span class="sia-rain__lotus-shadow"></span>
+      <Img src={rainLotusFlower} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-reflection" />
+      <Img src={rainLotusPads} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-pads" />
+    </div>
     <div class="sia-rain__scene">
       <figure class="sia-rain__card glass-3d" data-glow data-reveal>
         <span class="font-han" lang="zh-Hans" aria-hidden="true">雨</span>
         <blockquote>Listen to the rain.<br />Let the water carry the day away.</blockquote>
       </figure>
-      <div class="sia-rain__lotus" aria-hidden="true">
-        <span class="sia-rain__lotus-shadow"></span>
-        <Img src={rainLotus} alt="" sizes="(min-width: 768px) 560px, 80vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-reflection" />
-        <Img src={rainLotus} alt="" sizes="(min-width: 768px) 560px, 80vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-flower" />
-      </div>
+    </div>
+    <div class="sia-rain__lotus sia-rain__lotus--flower" aria-hidden="true">
+      <Img src={rainLotusFlower} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-flower" />
     </div>
   </section>
 
@@ -1059,19 +1064,22 @@ const faqs = [
       linear-gradient(180deg, #222d1c 0%, rgb(34 45 28 / 0) 18%, rgb(34 45 28 / 0) 82%, #26321f 100%),
       radial-gradient(70% 60% at 50% 45%, rgb(0 0 0 / 0), rgb(0 0 0 / 0.18));
   }
-  /* The card and the lotus share one box, so the lotus always sits on the card's lower edge. */
   /* The card, centred in the picture, its right edge running straight down to the tip of the
      lotus's top centre petal. That tip is 52.1% across the lotus picture, which spans 60% of the
      section from 46% in: 46 + 0.521 × 60 = 77.26% across. Centred, the card is then
      2 × (77.26 − 50) = 54.52% wide. (Change the lotus's left/right and this must change too.) */
   .sia-rain__scene {
+    position: relative;
+    z-index: 1; /* between the pads (0) and the flower (2) */
     display: grid;
     justify-items: center;
     width: 54.52%;
   }
   /* The same frosted glass as the contact card ("Your hour of calm awaits"). */
+  /* Tint eased off a little (62% of 70%), so over the soft misty pond it reads as see-through as
+     the contact card does over its bright waterfall. */
   .sia-rain__card.glass-3d {
-    --glass-tint: #f6f3ec;
+    --glass-tint: rgb(246 243 236 / 0.7);
     width: 100%;
     /* the words stay centred however tall the card is made (see the script at the end) */
     display: flex;
@@ -1101,8 +1109,19 @@ const faqs = [
     left: 46%; /* 60% of the width, nudged right: the outer pads run just off the right edge */
     right: -6%;
     bottom: -2.5rem; /* down at the foot of the picture, the front pads running off its bottom edge */
-    z-index: 2;
     pointer-events: none;
+  }
+  /* Two copies of the same box: pads behind the card, flower in front, exactly in register. */
+  .sia-rain__lotus--pads {
+    z-index: 0;
+  }
+  .sia-rain__lotus--flower {
+    z-index: 2;
+  }
+  .sia-rain__lotus-pads {
+    position: relative;
+    z-index: 2;
+    filter: saturate(0.82) brightness(0.97) contrast(0.96);
   }
   .sia-rain__lotus :global(img) {
     display: block;
@@ -1110,8 +1129,6 @@ const faqs = [
     height: auto;
   }
   .sia-rain__lotus-flower {
-    position: relative;
-    z-index: 2;
     filter: saturate(0.82) brightness(0.97) contrast(0.96);
   }
   /* Its reflection on the still water: mirrored under the pads, faint and fading away. */
