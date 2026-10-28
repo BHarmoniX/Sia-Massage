@@ -214,7 +214,7 @@ const faqs = [
        card's lower edge and out onto the water (with its reflection and shadow on the water below),
        so card and pond read as one picture. -->
   <section class="sia-rain" aria-label="A white lotus on a still forest pond">
-    <Img src={rainPond} alt="" sizes="100vw" class="sia-rain__pond" />
+    <div class="sia-rain__pond-layer" aria-hidden="true"><Img src={rainPond} alt="" sizes="100vw" class="sia-rain__pond" /></div>
     <div class="sia-rain__veil" aria-hidden="true"></div>
     <div class="sia-rain__scene">
       <figure class="sia-rain__card glass-3d" data-glow data-reveal>
@@ -1024,7 +1024,7 @@ const faqs = [
     display: grid;
     place-items: center;
     min-height: clamp(34rem, 92vh, 56rem);
-    padding: 4rem 0 3.5rem; /* clear of the wave band below */
+    padding: 3.75rem 0; /* centred, and clear of the wave band below */
     overflow: hidden;
     isolation: isolate;
     background: #2a3726;
@@ -1037,6 +1037,12 @@ const faqs = [
     height: 100%;
     object-fit: cover;
     object-position: 50% 70%;
+  }
+  /* the photo's <picture> wrapper sits behind everything, out of the layout */
+  .sia-rain__pond-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
   }
   .sia-rain__pond :global(img),
   .sia-rain :global(picture.sia-rain__pond img) {
@@ -1054,13 +1060,11 @@ const faqs = [
       radial-gradient(70% 60% at 50% 45%, rgb(0 0 0 / 0), rgb(0 0 0 / 0.18));
   }
   /* The card and the lotus share one box, so the lotus always sits on the card's lower edge. */
-  /* The card, a little above centre and left, so the lotus has the lower right of the pond. */
+  /* The card, centred in the picture; the lotus rests across its lower right. */
   .sia-rain__scene {
     display: grid;
     justify-items: center;
     width: min(100% - 3rem, 39rem);
-    margin-right: clamp(0rem, 10vw, 8rem);
-    padding-bottom: clamp(8rem, 22vw, 14rem);
   }
   /* The same frosted glass as the contact card ("Your hour of calm awaits"). */
   .sia-rain__card.glass-3d {
