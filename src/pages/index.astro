@@ -1073,6 +1073,11 @@ const faqs = [
   .sia-rain__card.glass-3d {
     --glass-tint: #f6f3ec;
     width: 100%;
+    /* the words stay centred however tall the card is made (see the script at the end) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 3.45rem clamp(2.3rem, 6.9vw, 4rem) clamp(4rem, 10.35vw, 5.75rem);
     border-radius: 3.45rem;
     text-align: center;
@@ -2812,5 +2817,28 @@ const faqs = [
       item.addEventListener('focusin', () => show(key));
       item.addEventListener('click', () => show(key));
     }
+  }
+</script>
+
+<script>
+  // Rain pause: the card's bottom edge runs through the join between the lotus's lower-left
+  // petal and the petal above it (55.3% down the lotus picture). The card stays centred, so it
+  // grows equally up and down to reach it. Recalculated whenever the section or lotus resizes.
+  const rain = document.querySelector<HTMLElement>('.sia-rain');
+  const rainCard = rain?.querySelector<HTMLElement>('.sia-rain__card');
+  const rainLotus = rain?.querySelector<HTMLElement>('.sia-rain__lotus-flower');
+  if (rain && rainCard && rainLotus) {
+    const JOIN = 0.553;
+    const fit = () => {
+      const s = rain.getBoundingClientRect();
+      const l = rainLotus.getBoundingClientRect();
+      if (!l.height) return;
+      const centre = s.top + s.height / 2;
+      const height = 2 * (l.top + JOIN * l.height - centre);
+      rainCard.style.minHeight = height > 0 ? `${Math.round(height)}px` : '';
+    };
+    new ResizeObserver(fit).observe(rain);
+    new ResizeObserver(fit).observe(rainLotus);
+    fit();
   }
 </script>
