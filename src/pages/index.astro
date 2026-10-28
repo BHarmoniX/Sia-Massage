@@ -1018,7 +1018,7 @@ const faqs = [
   }
   .sia-philosophy__tea {
     aspect-ratio: 4 / 5;
-    border-radius: 0.5rem;
+    border-radius: 0.9rem;
   }
   /* The same frosted glass as the lotus and contact cards, in rice-paper white, with dark moss text. */
   .sia-philosophy__card.glass-3d {
@@ -1037,25 +1037,35 @@ const faqs = [
   .sia-philosophy__tea {
     box-shadow:
       0 34px 64px -34px rgb(48 60 40 / 0.5),
-      0 0 0 1px rgb(90 100 76 / 0.35);
+      0 0 0 1px rgb(255 255 255 / 0.5);
   }
-  /* Walnut frame: the timber shows around the window, bevelled (lit from the upper left) */
+  /* Sage glass frame with a walnut bead: frosted sage glass (like the site's cards) around the
+     outside, so the frame belongs to the pale lake, and a slim walnut timber edge around the window
+     with carved fretwork in its corners. */
   .sia-frame {
+    --frame: clamp(0.95rem, 1.7vw, 1.35rem); /* glass width */
+    --bead: clamp(0.3rem, 0.5vw, 0.42rem); /* walnut width */
     position: relative;
-    padding: clamp(0.55rem, 1vw, 0.8rem);
-    border-radius: 0.35rem;
+    padding: var(--frame);
+    border-radius: 0.9rem;
     overflow: hidden;
-    background: #dfe3d4; /* the timber is limewashed: its grain shows softly through a sage-white wash */
+    background:
+      linear-gradient(140deg, rgb(255 255 250 / 0.6), rgb(214 224 198 / 0.4) 45%, rgb(176 194 156 / 0.45));
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    backdrop-filter: blur(14px) saturate(1.2);
   }
+  /* the walnut shows only as the bead, just outside the window */
   .sia-frame__wood {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    inset: calc(var(--frame) - var(--bead));
+    width: calc(100% - 2 * (var(--frame) - var(--bead)));
+    height: calc(100% - 2 * (var(--frame) - var(--bead)));
     object-fit: cover;
-    opacity: 0.38;
-    filter: saturate(0.45) contrast(0.8);
+    border-radius: 0.3rem;
+    filter: brightness(0.92);
+    box-shadow: 0 2px 6px -2px rgb(40 48 32 / 0.4);
   }
+  /* the glass's lit edge (upper left) and its soft shade (lower right) */
   .sia-frame::after {
     content: '';
     position: absolute;
@@ -1063,19 +1073,17 @@ const faqs = [
     border-radius: inherit;
     pointer-events: none;
     box-shadow:
-      inset 1.5px 1.5px 0 rgb(255 255 248 / 0.6),
-      inset -1.5px -1.5px 0 rgb(70 80 58 / 0.35),
-      inset -6px -6px 12px -6px rgb(70 80 58 / 0.25);
+      inset 1.5px 1.5px 0 rgb(255 255 255 / 0.85),
+      inset -1px -1px 0 rgb(120 140 100 / 0.35),
+      inset 10px 10px 22px -12px rgb(255 255 255 / 0.55),
+      inset -10px -10px 22px -12px rgb(90 110 72 / 0.3);
   }
-  /* the window: set into the frame (a dark rebate, a thin sage bead), the photo recessed */
+  /* the window, set into the walnut */
   .sia-frame__window {
     position: relative;
     height: 100%;
-    border-radius: 0.15rem;
-    box-shadow:
-      0 0 0 1px rgb(80 70 52 / 0.45),
-      0 0 0 3px rgb(246 243 234 / 0.6),
-      -1px -1px 0 3px rgb(70 80 58 / 0.2);
+    border-radius: 0.12rem;
+    box-shadow: 0 0 0 1px rgb(20 14 8 / 0.7);
   }
   .sia-frame__window::after {
     content: '';
@@ -1083,10 +1091,10 @@ const faqs = [
     inset: 0;
     pointer-events: none;
     box-shadow:
-      inset 0 8px 14px -8px rgb(40 48 32 / 0.4),
-      inset 8px 0 14px -10px rgb(40 48 32 / 0.3);
+      inset 0 9px 16px -8px rgb(0 0 0 / 0.45),
+      inset 9px 0 16px -10px rgb(0 0 0 / 0.35);
   }
-  /* carved fretwork brackets in the window's corners */
+  /* carved walnut fretwork brackets in the window's corners */
   .sia-frame__fret {
     position: absolute;
     z-index: 1;
@@ -1094,13 +1102,13 @@ const faqs = [
     height: auto;
     aspect-ratio: 1;
     fill: none;
-    stroke: #7d6a50;
-    stroke-width: 2.6;
+    stroke: #3a2918;
+    stroke-width: 3;
     stroke-linecap: square;
-    filter: drop-shadow(1px 1.5px 1px rgb(30 24 16 / 0.35));
+    filter: drop-shadow(1px 2px 1.5px rgb(0 0 0 / 0.5));
   }
   .sia-frame__fret-lit {
-    stroke: #e9e1cf;
+    stroke: #8a6a48;
     transform: translate(-0.7px, -0.7px);
   }
   .sia-frame__fret:nth-of-type(1) { top: 0; left: 0; }
