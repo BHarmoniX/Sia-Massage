@@ -4,7 +4,6 @@
 // Full credits in docs/CREDITS.md.
 import ScrollCue from '../components/layout/ScrollCue.astro';
 import Section from '../components/layout/Section.astro';
-import AmbientVideo from '../components/media/AmbientVideo.astro';
 import Img from '../components/media/Img.astro';
 import InkLandscape from '../client/InkLandscape.astro';
 import OnePageLayout from '../layouts/OnePageLayout.astro';
@@ -20,7 +19,9 @@ import spaRoom from '../client/photos/spa-room.jpg';
 import bambooBasin from '../client/photos/bamboo-basin.jpg';
 import mossWaterfall from '../client/photos/moss-waterfall.jpg';
 import mossRiver from '../client/photos/moss-river.jpg';
-import rainPoster from '../client/photos/rain-leaves-poster.jpg';
+// The rain pause: a still forest pond, and one glass-white lotus on its lily pads (both generated for Sia).
+import rainPond from '../client/photos/rain-pond.jpg';
+import rainLotus from '../client/photos/rain-lotus.webp';
 // Timber in a dark Japanese stain (the unstained originals stay on file beside them).
 import doorBoardsLeft from '../client/photos/door-boards-left-stained.jpg';
 import doorBoardsRight from '../client/photos/door-boards-right-stained.jpg';
@@ -209,13 +210,23 @@ const faqs = [
   </Section>
 
   <!-- ───────────── Rain: a breathing pause ───────────── -->
-  <section class="sia-rain" aria-label="Rain falling on green leaves">
-    <AmbientVideo src="/video/sia-rain-leaves.mp4" poster={rainPoster} class="sia-rain__video" />
+  <!-- Layers, back to front: the pond; the glass card; the lotus on its lily pads, resting over the
+       card's lower edge and out onto the water (with its reflection and shadow on the water below),
+       so card and pond read as one picture. -->
+  <section class="sia-rain" aria-label="A white lotus on a still forest pond">
+    <Img src={rainPond} alt="" sizes="100vw" class="sia-rain__pond" />
     <div class="sia-rain__veil" aria-hidden="true"></div>
-    <figure class="sia-rain__card glass-3d crystal float" data-glow data-reveal>
-      <span class="font-han" lang="zh-Hans" aria-hidden="true">雨</span>
-      <blockquote>Listen to the rain.<br />Let the water carry the day away.</blockquote>
-    </figure>
+    <div class="sia-rain__scene">
+      <figure class="sia-rain__card glass-3d crystal" data-glow data-reveal>
+        <span class="font-han" lang="zh-Hans" aria-hidden="true">雨</span>
+        <blockquote>Listen to the rain.<br />Let the water carry the day away.</blockquote>
+      </figure>
+      <div class="sia-rain__lotus" aria-hidden="true">
+        <span class="sia-rain__lotus-shadow"></span>
+        <Img src={rainLotus} alt="" sizes="(min-width: 768px) 560px, 80vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-reflection" />
+        <Img src={rainLotus} alt="" sizes="(min-width: 768px) 560px, 80vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-flower" />
+      </div>
+    </div>
   </section>
 
   <!-- ───────────── Colour break: moss washes from the rain into the treatments ───────────── -->
@@ -1012,32 +1023,51 @@ const faqs = [
     position: relative;
     display: grid;
     place-items: center;
-    min-height: clamp(26rem, 70vh, 44rem);
+    min-height: clamp(34rem, 92vh, 56rem);
+    padding: 4rem 0 3.5rem; /* clear of the wave band below */
     overflow: hidden;
     isolation: isolate;
     background: #2a3726;
   }
-  .sia-rain__video {
+  .sia-rain__pond {
     position: absolute;
     inset: 0;
     z-index: -2;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: 50% 70%;
+  }
+  .sia-rain__pond :global(img),
+  .sia-rain :global(picture.sia-rain__pond img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 70%;
   }
   .sia-rain__veil {
     position: absolute;
     inset: 0;
     z-index: -1;
     background:
-      linear-gradient(180deg, #222d1c 0%, rgb(34 45 28 / 0) 22%, rgb(34 45 28 / 0) 75%, #26321f 100%),
-      radial-gradient(60% 60% at 50% 50%, rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.3));
+      linear-gradient(180deg, #222d1c 0%, rgb(34 45 28 / 0) 18%, rgb(34 45 28 / 0) 82%, #26321f 100%),
+      radial-gradient(70% 60% at 50% 45%, rgb(0 0 0 / 0), rgb(0 0 0 / 0.18));
+  }
+  /* The card and the lotus share one box, so the lotus always sits on the card's lower edge. */
+  .sia-rain__scene {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    width: min(100% - 3rem, 36rem);
+    /* room below the card for the half of the lotus that rests out on the water */
+    padding-bottom: clamp(5rem, 14vw, 8rem);
   }
   .sia-rain__card {
-    --glass-tint: rgb(246 243 236 / 0.55);
-    --glass-blur: 14px;
-    margin: 0 1.5rem;
-    padding: 2.5rem 3rem;
+    --glass-tint: rgb(246 243 236 / 0.42);
+    --glass-blur: 12px;
+    width: 100%;
+    /* the bloom rises into the card's lower part, so the words sit above it */
+    padding: 2.5rem 2.5rem clamp(7rem, 19vw, 9.5rem);
     text-align: center;
   }
   .sia-rain__card span {
@@ -1051,6 +1081,53 @@ const faqs = [
     font-size: clamp(1.4rem, 2.6vw, 2rem);
     line-height: 1.3;
     color: var(--color-text);
+  }
+  /* The lotus: centred on the card's lower edge, its pads spreading wider than the card, out
+     onto the pond. Softened a touch into the morning mist. */
+  .sia-rain__lotus {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    z-index: 2;
+    width: min(125%, 88vw, 33rem);
+    /* the pads' middle sits on the card's lower edge: bloom inside, pads out on the water */
+    transform: translate(-50%, 38%);
+    pointer-events: none;
+  }
+  .sia-rain__lotus :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .sia-rain__lotus-flower {
+    position: relative;
+    z-index: 2;
+    filter: saturate(0.82) brightness(0.97) contrast(0.96);
+  }
+  /* Its reflection on the still water: mirrored under the pads, faint and fading away. */
+  .sia-rain__lotus-reflection {
+    position: absolute;
+    left: 0;
+    top: 62%;
+    z-index: 0;
+    width: 100%;
+    transform: scaleY(-0.55);
+    transform-origin: 50% 0;
+    opacity: 0.22;
+    filter: blur(1.5px) saturate(0.7);
+    mask-image: linear-gradient(to top, #000 0%, transparent 70%);
+  }
+  /* A soft shadow on the water where the pads rest. */
+  .sia-rain__lotus-shadow {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 66%;
+    height: 22%;
+    z-index: 1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(14 22 16 / 0.4), transparent);
+    filter: blur(6px);
   }
 
   /* ── Colour break band ── */
