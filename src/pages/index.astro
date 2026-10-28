@@ -217,7 +217,7 @@ const faqs = [
     <Img src={rainPond} alt="" sizes="100vw" class="sia-rain__pond" />
     <div class="sia-rain__veil" aria-hidden="true"></div>
     <div class="sia-rain__scene">
-      <figure class="sia-rain__card glass-3d crystal" data-glow data-reveal>
+      <figure class="sia-rain__card glass-3d" data-glow data-reveal>
         <span class="font-han" lang="zh-Hans" aria-hidden="true">雨</span>
         <blockquote>Listen to the rain.<br />Let the water carry the day away.</blockquote>
       </figure>
@@ -1058,16 +1058,17 @@ const faqs = [
     position: relative;
     display: grid;
     justify-items: center;
-    width: min(100% - 3rem, 36rem);
-    /* room below the card for the half of the lotus that rests out on the water */
-    padding-bottom: clamp(5rem, 14vw, 8rem);
+    width: min(100% - 3rem, 34rem);
+    margin-right: clamp(0rem, 12vw, 9rem); /* the card sits a little left, the lotus to its right */
+    /* room below the card for the part of the lotus that rests out on the water */
+    padding-bottom: clamp(4rem, 11vw, 6.5rem);
   }
-  .sia-rain__card {
-    --glass-tint: rgb(246 243 236 / 0.42);
-    --glass-blur: 12px;
+  /* The same frosted glass as the contact card ("Your hour of calm awaits"). */
+  .sia-rain__card.glass-3d {
+    --glass-tint: #f6f3ec;
     width: 100%;
-    /* the bloom rises into the card's lower part, so the words sit above it */
-    padding: 2.5rem 2.5rem clamp(7rem, 19vw, 9.5rem);
+    padding: 3rem clamp(2rem, 6vw, 3.5rem) clamp(3.5rem, 9vw, 5rem);
+    border-radius: 3rem;
     text-align: center;
   }
   .sia-rain__card span {
@@ -1082,16 +1083,16 @@ const faqs = [
     line-height: 1.3;
     color: var(--color-text);
   }
-  /* The lotus: centred on the card's lower edge, its pads spreading wider than the card, out
-     onto the pond. Softened a touch into the morning mist. */
+  /* The lotus: on the card's lower right corner, its pads spreading out onto the pond. Softened
+     a touch into the morning mist. */
   .sia-rain__lotus {
     position: absolute;
-    left: 50%;
+    right: 0;
     bottom: 0;
     z-index: 2;
-    width: min(125%, 88vw, 33rem);
-    /* the pads' middle sits on the card's lower edge: bloom inside, pads out on the water */
-    transform: translate(-50%, 38%);
+    width: min(94%, 70vw, 29.7rem);
+    /* on the card's lower right corner: bloom over the card, pads out onto the water */
+    transform: translate(42%, 34%);
     pointer-events: none;
   }
   .sia-rain__lotus :global(img) {
