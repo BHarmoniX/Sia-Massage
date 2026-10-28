@@ -1054,14 +1054,13 @@ const faqs = [
       radial-gradient(70% 60% at 50% 45%, rgb(0 0 0 / 0), rgb(0 0 0 / 0.18));
   }
   /* The card and the lotus share one box, so the lotus always sits on the card's lower edge. */
+  /* The card, a little above centre and left, so the lotus has the lower right of the pond. */
   .sia-rain__scene {
-    position: relative;
     display: grid;
     justify-items: center;
     width: min(100% - 3rem, 34rem);
-    margin-right: clamp(0rem, 12vw, 9rem); /* the card sits a little left, the lotus to its right */
-    /* room below the card for the part of the lotus that rests out on the water */
-    padding-bottom: clamp(4rem, 11vw, 6.5rem);
+    margin-right: clamp(0rem, 10vw, 8rem);
+    padding-bottom: clamp(8rem, 22vw, 14rem);
   }
   /* The same frosted glass as the contact card ("Your hour of calm awaits"). */
   .sia-rain__card.glass-3d {
@@ -1083,16 +1082,14 @@ const faqs = [
     line-height: 1.3;
     color: var(--color-text);
   }
-  /* The lotus: on the card's lower right corner, its pads spreading out onto the pond. Softened
-     a touch into the morning mist. */
+  /* The lotus on its lily pads: from the centre of the pond to the right edge, filling the lower
+     right corner and overlapping the card. Softened a touch into the morning mist. */
   .sia-rain__lotus {
     position: absolute;
+    left: 50%;
     right: 0;
-    bottom: 0;
+    bottom: 2.25rem; /* resting on the water just above the wave into the next section */
     z-index: 2;
-    width: min(94%, 70vw, 29.7rem);
-    /* on the card's lower right corner: bloom over the card, pads out onto the water */
-    transform: translate(42%, 34%);
     pointer-events: none;
   }
   .sia-rain__lotus :global(img) {
