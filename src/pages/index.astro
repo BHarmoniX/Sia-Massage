@@ -1161,12 +1161,14 @@ const faqs = [
     margin-top: -1px;
     isolation: isolate;
     overflow: hidden;
-    /* the hero's own tones, mirrored: its foot (#e6ebdc and the sage glow at the bottom right)
-       is this section's top, so the two meet without a seam */
+    /* the hero's own tones at the top, mirrored (its foot, #e6ebdc and the sage glow at the bottom
+       right, is this section's top, so the two meet without a seam), then the lake deepens into
+       Sia's dark moss as the reflection fades */
     background:
-      radial-gradient(120% 70% at 75% 0%, rgb(196 210 176 / 0.55), transparent 70%),
-      linear-gradient(180deg, #e6ebdc, #eef0e6 45%, #e4e9da);
-    color: #27322a;
+      radial-gradient(120% 22rem at 75% 0%, rgb(196 210 176 / 0.55), transparent 70%),
+      radial-gradient(70% 60% at 20% 40%, rgb(195 209 166 / 0.1), transparent 70%),
+      linear-gradient(180deg, #e6ebdc 0, #d2dcc2 5rem, #9fb08c 11rem, #5d7250 17rem, #34442c 23rem, #2b3824 28rem, #222d1c);
+    color: #f3efe4;
   }
   .sia-philosophy__grid {
     position: relative;
@@ -1216,11 +1218,6 @@ const faqs = [
   }
   @keyframes sia-ripple {
     to { transform: translate(2%, 6px) scaleY(1.04); }
-  }
-  /* the fireflies, in warm lantern gold so they show against the pale water */
-  .sia-lake .sia-dusk__motes span {
-    background: rgb(240 186 104);
-    box-shadow: 0 0 10px 3px rgb(236 176 92 / 0.45);
   }
   /* a few slow fireflies drifting in the glow */
   .sia-dusk__motes {
@@ -1415,28 +1412,28 @@ const faqs = [
   }
   .sia-rain__mist {
     position: absolute;
-    inset: -12% -10% auto; /* starts above the edge, so its soft blur never shows a line */
+    inset: -2% -10% auto;
     z-index: 3;
-    height: 85%;
+    height: 75%;
     pointer-events: none;
     background:
       radial-gradient(45% 45% at 20% 0%, rgb(214 222 202 / 0.85), transparent 75%),
       radial-gradient(50% 50% at 60% 0%, rgb(214 222 202 / 0.8), transparent 75%),
       radial-gradient(40% 45% at 95% 5%, rgb(214 222 202 / 0.82), transparent 75%),
-      linear-gradient(180deg, #e4e9da 0, #e4e9da 14%, rgb(214 222 202 / 0.8) 30%, rgb(205 214 192 / 0.35) 55%, transparent);
+      linear-gradient(180deg, rgb(205 214 192 / 0.85), rgb(205 214 192 / 0.35) 45%, transparent);
     filter: blur(18px);
     opacity: calc(1 - var(--m));
     transform: translateY(calc(var(--m) * -45%));
   }
-  /* a soft shore: the lake section above fades down into the pond, with no edge between them */
+  /* a soft shore: the dark moss of the section above fades down into the pond, with no edge */
   .sia-rain::before {
     content: "";
     position: absolute;
     inset: 0 0 auto;
-    z-index: 3;
-    height: clamp(5rem, 14vh, 9rem);
+    z-index: 4;
+    height: clamp(5rem, 16vh, 10rem);
     pointer-events: none;
-    background: linear-gradient(180deg, #e4e9da, rgb(228 233 218 / 0.75) 30%, rgb(214 222 202 / 0.3) 65%, transparent);
+    background: linear-gradient(180deg, #222d1c, rgb(34 45 28 / 0.7) 30%, rgb(34 45 28 / 0.25) 65%, transparent);
   }
   /* the fireflies that drifted over from the dusk, fading as the mist clears */
   .sia-rain__motes {
