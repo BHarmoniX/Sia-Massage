@@ -198,8 +198,8 @@ const faqs = [
        mountains reflected in still water (the same ridges, mirrored and drifting in step, so the
        hero runs straight on into the lake), and the lake deepens from the hero's pale sage to Sia's
        dark moss: step one in light tones, step two in mid tones, step three (the studio) in the
-       dark. Each card has its corner nearest the photo cut away, the
-       cut growing as the story builds. (The earlier "arriving at dusk"
+       dark. The first two photos sit inside their cards, the third (the
+       studio) stands on its own in a slim walnut frame; the photos grow as the story goes down. (The earlier "arriving at dusk"
        version is kept at the git tag philosophy-dusk, for use in another section.) -->
   <Section id="philosophy" labelledby="philosophy-title" class="sia-philosophy" data-dusk>
     <div class="sia-lake" aria-hidden="true">
@@ -220,51 +220,51 @@ const faqs = [
     </div>
     <div class="sia-story">
       <div class="sia-step sia-step--light">
-        <figure class="sia-step__photo">
-          <div class="sia-step__window img-reveal">
-            <div class="scroll-drift h-full">
-              <Img src={morningRoom} alt="A calm treatment room in morning light: folded white linen on a timber bench, a tea set and a branch of white blossom" sizes="(min-width: 1024px) 30vw, 100vw" class="h-full w-full object-cover" />
+        <div class="sia-step__card" data-reveal>
+          <div class="sia-step__panel glass-3d">
+            <div class="sia-step__text">
+              <p class="sia-kicker font-han" lang="zh-Hans">静心 <span>a quiet heart</span></p>
+              <h2 id="philosophy-title" class="sia-heading">A quiet place to return to yourself</h2>
+              <p>At Sia, massage is not a rush between appointments. Your hour is yours alone, unhurried from the first breath to the last.</p>
             </div>
-          </div>
-        </figure>
-        <div class="sia-step__card notch-host" data-reveal>
-          <div class="sia-step__panel glass-3d notch">
-            <p class="sia-kicker font-han" lang="zh-Hans">静心 <span>a quiet heart</span></p>
-            <h2 id="philosophy-title" class="sia-heading">A quiet place to return to yourself</h2>
-            <p>At Sia, massage is not a rush between appointments. Your hour is yours alone, unhurried from the first breath to the last.</p>
+            <figure class="sia-step__inset img-reveal">
+              <Img src={morningRoom} alt="A calm treatment room in morning light: folded white linen on a timber bench, a tea set and a branch of white blossom" sizes="(min-width: 1024px) 18vw, 100vw" class="h-full w-full object-cover" />
+            </figure>
           </div>
         </div>
       </div>
       <div class="sia-step sia-step--mid">
-        <figure class="sia-step__photo">
-          <div class="sia-step__window img-reveal">
-            <div class="scroll-drift h-full">
-              <Img src={herbalCompress} alt="A therapist pressing warm herbal compresses along a guest’s shoulders" sizes="(min-width: 1024px) 45vw, 100vw" class="h-full w-full object-cover" />
+        <div class="sia-step__card" data-reveal>
+          <div class="sia-step__panel glass-3d">
+            <figure class="sia-step__inset img-reveal">
+              <Img src={herbalCompress} alt="A therapist pressing warm herbal compresses along a guest’s shoulders" sizes="(min-width: 1024px) 26vw, 100vw" class="h-full w-full object-cover" />
+            </figure>
+            <div class="sia-step__text">
+              <p class="sia-kicker font-han" lang="zh-Hans">手艺 <span>by hand</span></p>
+              <h3 class="sia-step__title">Traditional hands, slow and attentive</h3>
+              <p>Drawing on traditional Asian bodywork, every treatment is slow and attentive, so the body can soften and the mind can rest.</p>
             </div>
-          </div>
-        </figure>
-        <div class="sia-step__card notch-host" data-reveal>
-          <div class="sia-step__panel glass-3d notch">
-            <p class="sia-kicker font-han" lang="zh-Hans">手艺 <span>by hand</span></p>
-            <h3 class="sia-step__title">Traditional hands, slow and attentive</h3>
-            <p>Drawing on traditional Asian bodywork, every treatment is slow and attentive, so the body can soften and the mind can rest.</p>
           </div>
         </div>
       </div>
       <div class="sia-step sia-step--dark">
+        <!-- the studio itself, in a slim walnut frame (the same timber as the doorway) -->
         <figure class="sia-step__photo">
+          <img class="sia-step__wood" src={frameWalnutImg.src} alt="" aria-hidden="true" loading="lazy" decoding="async" />
           <div class="sia-step__window img-reveal">
             <div class="scroll-drift h-full">
               <Img src={shopFront} alt="The Sia Massage studio front, with a therapist smiling as she welcomes a guest at the carved timber counter" sizes="(min-width: 1024px) 34vw, 100vw" class="h-full w-full object-cover sia-step__shop" />
             </div>
           </div>
         </figure>
-        <div class="sia-step__card notch-host" data-reveal>
-          <div class="sia-step__panel glass-3d notch">
-            <p class="sia-kicker font-han" lang="zh-Hans">欢迎 <span>welcome</span></p>
-            <h3 class="sia-step__title">Clean linen, low light, a cup of tea</h3>
-            <p>From the moment you arrive, there is nothing to do but breathe.</p>
-            <blockquote>When the body is at ease, the heart follows.</blockquote>
+        <div class="sia-step__card" data-reveal>
+          <div class="sia-step__panel glass-3d">
+            <div class="sia-step__text">
+              <p class="sia-kicker font-han" lang="zh-Hans">欢迎 <span>welcome</span></p>
+              <h3 class="sia-step__title">Clean linen, low light, a cup of tea</h3>
+              <p>From the moment you arrive, there is nothing to do but breathe.</p>
+              <blockquote>When the body is at ease, the heart follows.</blockquote>
+            </div>
           </div>
         </div>
       </div>
@@ -1144,7 +1144,7 @@ const faqs = [
     position: relative;
     z-index: 1;
     display: grid;
-    gap: 4.5rem;
+    gap: 3.5rem;
     max-width: 80rem;
     margin: 0 auto;
     padding: 5rem 1rem 6rem;
@@ -1152,51 +1152,15 @@ const faqs = [
   .sia-step {
     display: grid;
   }
-  .sia-step__photo {
-    aspect-ratio: 4 / 5;
-  }
-  .sia-step--mid .sia-step__photo {
-    aspect-ratio: 3 / 2;
-  }
-  .sia-step__photo :global(picture) {
-    display: block;
-    height: 100%;
-  }
-  .sia-step__shop,
-  .sia-step__photo :global(.sia-step__shop) {
-    object-position: 58% 50%;
-  }
-  /* small screens: each card overlaps the foot of its photo */
-  .sia-step__card {
+
+  /* Cards: rice paper, growing as the story builds. */
+  .sia-step .sia-step__card {
     position: relative;
     z-index: 2;
-    margin: -3rem 0.75rem 0;
-  }
-
-  /* the photographs: unframed, softly rounded, lifted off the water by a shadow */
-  .sia-step__photo {
-    position: relative;
-    border-radius: 1.4rem;
-    overflow: hidden;
-    box-shadow: 0 34px 64px -34px rgb(20 28 16 / 0.6);
-  }
-  .sia-step__window {
-    height: 100%;
-  }
-
-  /* Cards: rice paper, with the corner nearest the photo cut away; the cut grows as the story
-     builds. */
-  .sia-step .sia-step__card {
-    --notch-r: 2rem;
-    --notch-x: 0%;
-    --notch-y: 0%;
     filter: drop-shadow(0 22px 28px rgb(20 28 16 / 0.35));
   }
-  .sia-step--mid .sia-step__card {
-    --notch-r: 2.3rem;
-  }
   .sia-step--dark .sia-step__card {
-    --notch-r: 2.7rem;
+    margin: -3rem 0.75rem 0;
   }
   .sia-step__panel.glass-3d {
     --glass-tint: #f7f2e6;
@@ -1206,17 +1170,28 @@ const faqs = [
     --color-subtle: #55624f;
     --color-accent: #5c7a4c;
     color: var(--color-text);
-    padding: 2.6rem 2rem 2rem 2.6rem;
-    border-radius: 0 2.6rem 2.6rem 2.6rem;
+    display: grid;
+    gap: 0.4rem;
+    padding: 0.7rem;
+    border-radius: 2.6rem;
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7);
   }
-  .sia-step__panel > * + * {
+  .sia-step--dark .sia-step__panel.glass-3d {
+    border-radius: 3.2rem;
+  }
+  .sia-step__text {
+    padding: 1.9rem 1.6rem 1.6rem 1.9rem;
+  }
+  .sia-step--mid .sia-step__text {
+    padding: 1.9rem 1.9rem 1.6rem 1.6rem;
+  }
+  .sia-step__text > * + * {
     margin-top: 1rem;
   }
-  .sia-step__panel p {
+  .sia-step__text p {
     color: var(--color-muted);
   }
-  .sia-step__panel .sia-kicker {
+  .sia-step__text .sia-kicker {
     font-size: 1.25rem;
   }
   .sia-step__title {
@@ -1225,7 +1200,7 @@ const faqs = [
     font-size: clamp(1.8rem, 2.8vw, 2.5rem);
     line-height: 1.08;
   }
-  .sia-step__panel blockquote {
+  .sia-step__text blockquote {
     margin-top: 1.5rem;
     padding-left: 1.25rem;
     border-left: 1px solid color-mix(in oklab, var(--color-accent) 50%, transparent);
@@ -1234,47 +1209,111 @@ const faqs = [
     font-size: 1.4rem;
   }
 
-  /* Wide screens: a staggered descent. Each step is a photo with its card overlapping the
-     photo's edge, alternating sides, the cut corner always the one touching the photo. */
+  /* the photo held inside a card, inset within the paper with softly rounded corners */
+  .sia-step__inset {
+    order: -1; /* small screens: photo on top */
+    height: 15rem;
+    border-radius: 1.95rem;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgb(60 70 50 / 0.12);
+  }
+  .sia-step--mid .sia-step__inset {
+    height: 17rem;
+  }
+  .sia-step__inset :global(picture) {
+    display: block;
+    height: 100%;
+  }
+
+  /* the studio photo, framed in slim walnut, bevelled (lit from the upper left) */
+  .sia-step__photo {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    padding: clamp(0.4rem, 0.7vw, 0.55rem);
+    border-radius: 0.4rem;
+    overflow: hidden;
+    box-shadow: 0 34px 64px -34px rgb(0 0 0 / 0.7);
+  }
+  .sia-step__wood {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.82) saturate(0.9);
+  }
+  .sia-step__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      inset 1.5px 1.5px 0 rgb(255 226 180 / 0.35),
+      inset -1.5px -1.5px 0 rgb(0 0 0 / 0.5);
+  }
+  .sia-step__window {
+    position: relative;
+    height: 100%;
+    border-radius: 0.15rem;
+    box-shadow: 0 0 0 1px rgb(20 14 8 / 0.85);
+  }
+  .sia-step__window::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    box-shadow:
+      inset 0 8px 14px -8px rgb(0 0 0 / 0.45),
+      inset 8px 0 14px -10px rgb(0 0 0 / 0.35);
+  }
+  .sia-step__photo :global(picture) {
+    display: block;
+    height: 100%;
+  }
+  .sia-step__photo :global(.sia-step__shop) {
+    object-position: 58% 50%;
+  }
+
+  /* Wide screens: a staggered descent, each step larger than the last. */
   @media (min-width: 1024px) {
     .sia-story {
-      gap: clamp(3rem, 9vh, 6rem);
+      gap: clamp(3rem, 9vh, 5.5rem);
       padding: clamp(5rem, 13vh, 8rem) 3rem clamp(6rem, 14vh, 9rem);
     }
     .sia-step {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       align-items: center;
     }
-    .sia-step__photo,
-    .sia-step__card {
+    .sia-step__card,
+    .sia-step__photo {
       grid-row: 1;
     }
-    .sia-step__card {
-      margin: 0;
+    .sia-step__inset {
+      order: 0;
+      height: auto;
     }
-    /* The photos grow as the story flows down: small, then wider, then the studio largest. */
-    /* one: a small photo at the left, the card stepping out to its right and down */
-    .sia-step--light .sia-step__photo {
-      grid-column: 3 / span 3;
-    }
+    /* one: a small card, photo at its right */
     .sia-step--light .sia-step__card {
-      grid-column: 5 / span 5;
-      align-self: end;
-      margin-bottom: -2.5rem;
+      grid-column: 2 / span 7;
     }
-    /* two: a wide photo to the right, the card to its left */
-    .sia-step--mid .sia-step__photo {
-      grid-column: 6 / span 6;
+    .sia-step--light .sia-step__panel.glass-3d {
+      grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
     }
+    .sia-step--light .sia-step__inset {
+      min-height: 20rem;
+    }
+    /* two: a larger card, stepped to the right, photo at its left */
     .sia-step--mid .sia-step__card {
-      grid-column: 2 / span 5;
-      --notch-x: 100%;
+      grid-column: 4 / span 8;
     }
     .sia-step--mid .sia-step__panel.glass-3d {
-      padding: 2.6rem 2.6rem 2rem 2rem;
-      border-radius: 2.6rem 0 2.6rem 2.6rem;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     }
-    /* three: the studio, the largest step, photo at the left and the card to its right */
+    .sia-step--mid .sia-step__inset {
+      min-height: 24rem;
+    }
+    /* three: the studio, largest, in its walnut frame with the card overlapping its edge */
     .sia-step--dark .sia-step__photo {
       grid-column: 1 / span 5;
       height: min(80vh, 46rem);
@@ -1282,10 +1321,10 @@ const faqs = [
     }
     .sia-step--dark .sia-step__card {
       grid-column: 5 / span 7;
+      margin: 0;
     }
-    .sia-step--dark .sia-step__panel.glass-3d {
-      padding: 3.25rem 3rem 3rem 3.4rem;
-      border-radius: 0 3.2rem 3.2rem 3.2rem;
+    .sia-step--dark .sia-step__text {
+      padding: 2.6rem 2.4rem 2.3rem 2.8rem;
     }
     .sia-step--dark .sia-step__title {
       font-size: clamp(2.2rem, 3.6vw, 3.2rem);
