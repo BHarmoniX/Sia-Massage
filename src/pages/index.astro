@@ -224,16 +224,17 @@ const faqs = [
       <Img src={rainLotusPads} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-pads" />
     </div>
     <div class="sia-rain__scene">
-      <!-- Sia's promise: a genuine, professional relaxation massage. The lotus, which rises clean
-           from still water, is the traditional Asian sign of purity. (Owner to confirm the details.) -->
+      <!-- In the journey: after the philosophy (how Sia feels), what a visitor walks away with, then
+           on to the treatments. The lotus is only the mood: calm, rest. (Owner to confirm the
+           "qualified therapists" line.) -->
       <div class="sia-rain__card glass-3d" data-glow data-reveal>
-        <span class="font-han" lang="zh-Hans" aria-hidden="true">净</span>
-        <h2 id="promise-title" class="sia-rain__title">Pure, professional care</h2>
+        <span class="font-han" lang="zh-Hans" aria-hidden="true">安</span>
+        <h2 id="promise-title" class="sia-rain__title">Leave lighter than you came</h2>
         <p>
-          Like the lotus rising clean from still water, every visit is genuine relaxation massage,
-          nothing more. Qualified therapists, fresh linen for every guest, and you stay covered and
-          respected throughout.
+          An unhurried hour eases tight shoulders, quiets a busy mind and helps you sleep more
+          soundly. Genuine relaxation massage from qualified therapists, with care in every detail.
         </p>
+        <a href="#treatments" class="btn-3d sia-rain__cta">Choose your treatment</a>
       </div>
     </div>
     <div class="sia-rain__lotus sia-rain__lotus--flower" aria-hidden="true">
@@ -1095,7 +1096,7 @@ const faqs = [
     align-items: flex-start;
     /* the words sit on the left, the right third left clear for the lotus that rises over it
        (padding in % is a share of the card's own width) */
-    padding: 3rem 41% 3rem clamp(2rem, 6%, 4rem);
+    padding: 2.5rem 41% 2.5rem clamp(2rem, 6%, 4rem);
     border-radius: 3.45rem;
     text-align: left;
   }
@@ -1111,6 +1112,9 @@ const faqs = [
     font-size: clamp(1.6rem, 3vw, 2.3rem);
     line-height: 1.2;
     color: var(--color-text);
+  }
+  .sia-rain__cta {
+    margin-top: 1.5rem;
   }
   .sia-rain__card p {
     max-width: 30rem;
