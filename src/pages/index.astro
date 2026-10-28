@@ -1252,11 +1252,10 @@ const faqs = [
     .sia-step__card {
       margin: 0;
     }
-    /* one: photo at the left, the card stepping out to its right and down */
+    /* The photos grow as the story flows down: small, then wider, then the studio largest. */
+    /* one: a small photo at the left, the card stepping out to its right and down */
     .sia-step--light .sia-step__photo {
-      grid-column: 2 / span 4;
-      height: min(64vh, 34rem);
-      aspect-ratio: auto;
+      grid-column: 3 / span 3;
     }
     .sia-step--light .sia-step__card {
       grid-column: 5 / span 5;
@@ -1278,7 +1277,7 @@ const faqs = [
     /* three: the studio, the largest step, photo at the left and the card to its right */
     .sia-step--dark .sia-step__photo {
       grid-column: 1 / span 5;
-      height: min(74vh, 42rem);
+      height: min(80vh, 46rem);
       aspect-ratio: auto;
     }
     .sia-step--dark .sia-step__card {
