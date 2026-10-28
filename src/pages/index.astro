@@ -215,7 +215,7 @@ const faqs = [
   <!-- Layers, back to front: the pond; the lotus's lily pads (with its shadow and reflection on the
        water); the glass card; the lotus flower. The pads show softly through the glass and the bloom
        stands in front of it, so card and pond read as one picture. -->
-  <section class="sia-rain" aria-label="A white lotus on a still forest pond">
+  <section class="sia-rain" aria-labelledby="promise-title">
     <div class="sia-rain__pond-layer" aria-hidden="true"><Img src={rainPond} alt="" sizes="100vw" class="sia-rain__pond" /></div>
     <div class="sia-rain__veil" aria-hidden="true"></div>
     <div class="sia-rain__lotus sia-rain__lotus--pads" aria-hidden="true">
@@ -224,10 +224,17 @@ const faqs = [
       <Img src={rainLotusPads} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-pads" />
     </div>
     <div class="sia-rain__scene">
-      <figure class="sia-rain__card glass-3d" data-glow data-reveal>
-        <span class="font-han" lang="zh-Hans" aria-hidden="true">雨</span>
-        <blockquote>Listen to the rain.<br />Let the water carry the day away.</blockquote>
-      </figure>
+      <!-- Sia's promise: a genuine, professional relaxation massage. The lotus, which rises clean
+           from still water, is the traditional Asian sign of purity. (Owner to confirm the details.) -->
+      <div class="sia-rain__card glass-3d" data-glow data-reveal>
+        <span class="font-han" lang="zh-Hans" aria-hidden="true">净</span>
+        <h2 id="promise-title" class="sia-rain__title">Pure, professional care</h2>
+        <p>
+          Like the lotus rising clean from still water, every visit is genuine relaxation massage,
+          nothing more. Qualified therapists, fresh linen for every guest, and you stay covered and
+          respected throughout.
+        </p>
+      </div>
     </div>
     <div class="sia-rain__lotus sia-rain__lotus--flower" aria-hidden="true">
       <Img src={rainLotusFlower} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-flower" />
@@ -1085,22 +1092,48 @@ const faqs = [
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    padding: 3.45rem clamp(2.3rem, 6.9vw, 4rem) clamp(4rem, 10.35vw, 5.75rem);
+    align-items: flex-start;
+    /* the words sit on the left, the right third left clear for the lotus that rises over it
+       (padding in % is a share of the card's own width) */
+    padding: 3rem 41% 3rem clamp(2rem, 6%, 4rem);
     border-radius: 3.45rem;
-    text-align: center;
+    text-align: left;
   }
   .sia-rain__card span {
     font-size: 2.875rem;
     color: var(--color-accent-strong);
   }
-  .sia-rain__card blockquote {
-    margin-top: 0.85rem;
+  .sia-rain__title {
+    margin-top: 0.6rem;
     font-family: var(--font-display);
     font-style: italic;
+    font-weight: 400;
     font-size: clamp(1.6rem, 3vw, 2.3rem);
-    line-height: 1.3;
+    line-height: 1.2;
     color: var(--color-text);
+  }
+  .sia-rain__card p {
+    max-width: 30rem;
+    margin-top: 0.9rem;
+    font-size: clamp(1rem, 1.3vw, 1.125rem);
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+  /* Narrow screens: the card takes the full width for its words and sits above the lotus, which
+     rests below it across the lower right (the card's petal alignment is for wider screens). */
+  @media (max-width: 899px) {
+    .sia-rain {
+      padding-bottom: calc(26vw + 2rem);
+    }
+    .sia-rain__scene {
+      width: min(100% - 2.5rem, 34rem);
+    }
+    .sia-rain__card.glass-3d {
+      align-items: center;
+      padding: 2.5rem clamp(1.5rem, 6vw, 2.5rem) 2.75rem;
+      text-align: center;
+      min-height: 0 !important;
+    }
   }
   /* The lotus on its lily pads: from the centre of the pond to the right edge, filling the lower
      right corner and overlapping the card. Softened a touch into the morning mist. */
@@ -2846,7 +2879,9 @@ const faqs = [
   const rainLotus = rain?.querySelector<HTMLElement>('.sia-rain__lotus-flower');
   if (rain && rainCard && rainLotus) {
     const JOIN = 0.553;
+    const wide = window.matchMedia('(min-width: 900px)');
     const fit = () => {
+      if (!wide.matches) { rainCard.style.minHeight = ''; return; }
       const s = rain.getBoundingClientRect();
       const l = rainLotus.getBoundingClientRect();
       if (!l.height) return;
