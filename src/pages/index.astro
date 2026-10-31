@@ -14,6 +14,9 @@ import teaTable from '../client/photos/tea-table.jpg';
 // Placeholder shop front (generated) until the owner supplies a real photo of the studio.
 import shopFront from '../client/photos/shop-front.jpg';
 import morningRoom from '../client/photos/morning-room.jpg';
+// TEMPORARY: stands in for the owner/team photo in the philosophy story until the placeholder
+// image the user is supplying arrives (then a real, approved photo of the owner and team).
+import storyPhoto from '../client/photos/round-window.jpg';
 import herbalCompress from '../client/photos/herbal-compress.jpg';
 import towelCandles from '../client/photos/towel-candles.jpg';
 import therapistLinen from '../client/photos/therapist-linen.jpg';
@@ -192,8 +195,12 @@ const faqs = [
     <ScrollCue href="#philosophy" label="Scroll to our philosophy" />
   </section>
 
-  <!-- ───────────── Philosophy: photograph and crystal card, side by side ───────────── -->
-  <!-- Philosophy, told as a short story in three steps down the page. It opens on the hero's
+  <!-- ───────────── Philosophy: who Sia is, and three pillars ───────────── -->
+  <!-- CONNECT (master brief §6). An asymmetric opening (heading left, introduction stepping in from the
+       right), then the identity story (text with a portrait beside it), then three pillars as
+       staggered steps: the place, the tradition, the experience. COPY IS PROPOSED in the brief and
+       must be reviewed by the owner before publication.
+       The scene: the hero's 
        mountains reflected in still water (the same ridges, mirrored and drifting in step, so the
        hero runs straight on into the lake), and the lake deepens from the hero's pale sage to Sia's
        dark moss: step one in light tones, step two in mid tones, step three (the studio) in the
@@ -217,14 +224,57 @@ const faqs = [
         <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
       </div>
     </div>
+    <div class="sia-phil">
+      <header class="sia-phil__intro">
+        <div class="sia-phil__head" data-reveal>
+          <p class="sia-kicker font-han" lang="zh-Hans">静心 <span>a quiet heart</span></p>
+          <h2 id="philosophy-title" class="sia-phil__title">A quieter kind of care.</h2>
+        </div>
+        <div class="sia-phil__lede" data-reveal>
+          <p class="sia-phil__lead">Sometimes, the best thing you can do is take a moment for yourself.</p>
+          <p>
+            At Sia Massage, we believe that time spent unwinding should feel just as considered as the
+            treatment itself. From the atmosphere of our space to the attentiveness of every treatment,
+            the little details come together to create an experience where you can slow down, settle in
+            and enjoy a moment away from the everyday.
+          </p>
+        </div>
+      </header>
+
+      <article class="sia-phil__story" aria-labelledby="sia-story-title">
+        <div class="sia-phil__story-text" data-reveal>
+          <p class="sia-phil__label">Our story</p>
+          <h3 id="sia-story-title" class="sia-phil__story-title">Rooted in Chinese tradition. Made for moments of calm.</h3>
+          <p>
+            Sia Massage offers a welcoming space to experience Chinese relaxation massage and take a
+            little time away from the demands of everyday life.
+          </p>
+          <p>
+            As a Chinese-owned business with a predominantly Chinese team, we bring our background and
+            experience into the way we approach our work. We believe in creating a comfortable
+            environment where every guest feels welcome, every treatment is approached with care, and
+            there's time to simply slow down and unwind.
+          </p>
+          <p>
+            Whether you're visiting for a short escape or a longer moment of relaxation, we'd love to
+            welcome you to Sia Massage.
+          </p>
+        </div>
+        <figure class="sia-phil__portrait img-reveal">
+          <Img src={storyPhoto} alt="" sizes="(min-width: 1024px) 34vw, 100vw" class="h-full w-full object-cover" />
+        </figure>
+      </article>
+    </div>
+
+    <div class="sia-pillars">
     <div class="sia-story">
       <div class="sia-step sia-step--light">
         <div class="sia-step__card" data-reveal>
           <div class="sia-step__panel glass-3d">
             <div class="sia-step__text">
-              <p class="sia-kicker font-han" lang="zh-Hans">静心 <span>a quiet heart</span></p>
-              <h2 id="philosophy-title" class="sia-heading">A quiet place to return to yourself</h2>
-              <p>At Sia, massage is not a rush between appointments. Your hour is yours alone, unhurried from the first breath to the last.</p>
+              <p class="sia-phil__label">The place</p>
+              <h3 class="sia-step__title">A space to unwind.</h3>
+              <p>A welcoming, peaceful setting where the pace feels different. A little distance from the everyday, with room to settle in and make time for yourself.</p>
             </div>
             <figure class="sia-step__inset img-reveal">
               <Img src={morningRoom} alt="A calm treatment room in morning light: folded white linen on a timber bench, a tea set and a branch of white blossom" sizes="(min-width: 1024px) 18vw, 100vw" class="h-full w-full object-cover" />
@@ -239,9 +289,9 @@ const faqs = [
               <Img src={herbalCompress} alt="A therapist pressing warm herbal compresses along a guest’s shoulders" sizes="(min-width: 1024px) 26vw, 100vw" class="h-full w-full object-cover" />
             </figure>
             <div class="sia-step__text">
-              <p class="sia-kicker font-han" lang="zh-Hans">手艺 <span>by hand</span></p>
-              <h3 class="sia-step__title">Traditional hands, slow and attentive</h3>
-              <p>Drawing on traditional Asian bodywork, every treatment is slow and attentive, so the body can soften and the mind can rest.</p>
+              <p class="sia-phil__label">The tradition</p>
+              <h3 class="sia-step__title">Chinese relaxation massage.</h3>
+              <p>Discover the people and cultural background behind Sia Massage, and the massage experience at the heart of the business.</p>
             </div>
           </div>
         </div>
@@ -259,14 +309,16 @@ const faqs = [
         <div class="sia-step__card" data-reveal>
           <div class="sia-step__panel glass-3d">
             <div class="sia-step__text">
-              <p class="sia-kicker font-han" lang="zh-Hans">欢迎 <span>welcome</span></p>
-              <h3 class="sia-step__title">Clean linen, low light, a cup of tea</h3>
-              <p>From the moment you arrive, there is nothing to do but breathe.</p>
+              <p class="sia-phil__label">The experience</p>
+              <h3 class="sia-step__title">Care in every visit.</h3>
+              <p>From the welcome you receive to the atmosphere of the treatment room, the little details help make your visit comfortable and enjoyable.</p>
               <blockquote>When the body is at ease, the heart follows.</blockquote>
+              <div class="sia-step__cta"><a href="#treatments" class="btn-3d">Explore treatments</a></div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </Section>
 
@@ -1030,12 +1082,12 @@ const faqs = [
     isolation: isolate;
     overflow: hidden;
     /* the hero's own tones at the top, mirrored (its foot, #e6ebdc and the sage glow at the bottom
-       right, is this section's top, so the two meet without a seam); light through step one, mid
-       tones at step two, Sia's dark moss by step three */
+       right, is this section's top, so the two meet without a seam); the opening and the story sit
+       in this light, and the pillars below deepen to Sia's dark moss */
     background:
       radial-gradient(120% 22rem at 75% 0%, rgb(196 210 176 / 0.55), transparent 70%),
-      linear-gradient(180deg, #e6ebdc 0, #e3e9d8 24%, #c9d4b8 36%, #a3b490 47%, #74885f 57%, #46573a 66%, #2f3d28 74%, #26321f 84%, #222d1c);
-    color: #f3efe4;
+      linear-gradient(180deg, #e6ebdc, #e8ecdf);
+    color: #27322a;
   }
   .sia-lake {
     position: absolute;
@@ -1123,7 +1175,130 @@ const faqs = [
   }
   /* the fireflies gather in the dark water at the foot of the story */
   .sia-lake .sia-dusk__motes {
-    inset: 62% 0 0;
+    inset: auto 0 0;
+    height: 22%;
+  }
+
+  /* ── The opening and the story, on the light water ── */
+  .sia-phil {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 4.5rem;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 6rem 1.5rem 3rem;
+  }
+  .sia-phil__intro {
+    display: grid;
+    gap: 1.75rem;
+  }
+  .sia-phil__title {
+    margin-top: 0.75rem;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    line-height: 1;
+    color: #27322a;
+  }
+  .sia-phil .sia-kicker {
+    color: #5c7a4c;
+  }
+  .sia-phil__lede {
+    display: grid;
+    gap: 1rem;
+    max-width: 34rem;
+    color: #3f4c3d;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    transition-delay: 0.18s; /* the introduction follows the heading */
+  }
+  .sia-phil__lead {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.45rem;
+    line-height: 1.35;
+    color: #27322a;
+  }
+  /* small spaced capitals naming each part: Our story, The place … */
+  .sia-phil__label {
+    font-size: 0.75rem;
+    font-weight: 550;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #5c7a4c;
+  }
+  .sia-phil__story {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  .sia-phil__story-text {
+    display: grid;
+    gap: 1rem;
+    color: #3f4c3d;
+    line-height: 1.75;
+  }
+  .sia-phil__story-title {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2rem, 3.6vw, 3rem);
+    line-height: 1.08;
+    color: #27322a;
+    margin-bottom: 0.5rem;
+  }
+  .sia-phil__portrait {
+    aspect-ratio: 4 / 5;
+    border-radius: 1.4rem;
+    overflow: hidden;
+    box-shadow: 0 34px 64px -34px rgb(40 52 32 / 0.55);
+  }
+  .sia-phil__portrait :global(picture) {
+    display: block;
+    height: 100%;
+  }
+  @media (min-width: 1024px) {
+    .sia-phil {
+      gap: clamp(4rem, 12vh, 7rem);
+      padding: clamp(6rem, 16vh, 9rem) 3rem clamp(3rem, 8vh, 5rem);
+    }
+    /* asymmetric: the heading at the left, the introduction stepping in lower at the right */
+    .sia-phil__intro {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: start;
+    }
+    .sia-phil__head {
+      grid-column: 2 / span 6;
+    }
+    .sia-phil__lede {
+      grid-column: 8 / span 4;
+      padding-top: clamp(6rem, 10vw, 9rem); /* steps in below the heading */
+    }
+    /* the story mirrors it: words at the left, the portrait at the right */
+    .sia-phil__story {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 0;
+    }
+    .sia-phil__story-text {
+      grid-column: 2 / span 5;
+      grid-row: 1;
+    }
+    .sia-phil__portrait {
+      grid-column: 8 / span 4;
+      grid-row: 1;
+      height: min(70vh, 36rem);
+      aspect-ratio: auto;
+    }
+  }
+
+  /* ── The three pillars: the water deepening from the light to Sia's dark moss ── */
+  .sia-pillars {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(180deg, transparent 0, rgb(201 212 184 / 0.7) 22%, #a3b490 40%, #74885f 52%, #46573a 63%, #2f3d28 73%, #26321f 84%, #222d1c);
+  }
+  .sia-step__cta {
+    margin-top: 1.75rem;
   }
 
   .sia-story {
