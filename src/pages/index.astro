@@ -661,6 +661,13 @@ const faqs = [
     <div class="sia-contact__bg" aria-hidden="true">
       <Img src={rainPond} alt="" sizes="100vw" class="h-full w-full object-cover sia-contact__pond" />
     </div>
+    <!-- Out of the FAQ: its pale sage carries on as a morning mist over the top of the pond, thinning
+         into the water, with soft wisps drifting through it (the hero's mist, at the other end of the page). -->
+    <div class="sia-contact__mist" aria-hidden="true"></div>
+    <div class="sia-contact__wisps" aria-hidden="true">
+      <div class="sia-hero__mist"></div>
+      <div class="sia-hero__mist sia-hero__mist--high"></div>
+    </div>
     <div class="sia-contact__stage">
       <div class="sia-contact__motes sia-dusk__motes" aria-hidden="true">
         <span></span><span></span><span></span><span></span><span></span><span></span>
@@ -2161,6 +2168,9 @@ const faqs = [
      the pond continues under the footer's glass. */
   .sia-contact {
     position: relative;
+    /* tucked 1px up over the FAQ, so no hairline of the page shows between them */
+    z-index: 1;
+    margin-top: -1px;
     isolation: isolate;
     overflow: hidden;
     padding-bottom: var(--sia-footer-h, 14rem);
@@ -2181,8 +2191,32 @@ const faqs = [
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(180deg, rgb(38 50 31 / 0.45) 0%, rgb(38 50 31 / 0) 22%, rgb(38 50 31 / 0) 80%, rgb(38 50 31 / 0.35) 100%),
+      linear-gradient(180deg, rgb(38 50 31 / 0) 0%, rgb(38 50 31 / 0) 80%, rgb(38 50 31 / 0.35) 100%),
       radial-gradient(70% 60% at 50% 45%, rgb(0 0 0 / 0), rgb(0 0 0 / 0.18));
+  }
+  /* The mist: the FAQ's own tones at its top edge (its #e6ebdc and the sage glow toward the right),
+     so the two meet without a seam, thinning down into the pond. */
+  .sia-contact__mist {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 0;
+    height: clamp(10rem, 30vh, 18rem);
+    pointer-events: none;
+    background:
+      radial-gradient(120% 22rem at 75% 0%, rgb(196 210 176 / 0.55), transparent 70%),
+      #e6ebdc;
+    -webkit-mask-image: linear-gradient(180deg, #000 0, rgb(0 0 0 / 0.85) 25%, rgb(0 0 0 / 0.45) 55%, rgb(0 0 0 / 0.15) 80%, transparent);
+    mask-image: linear-gradient(180deg, #000 0, rgb(0 0 0 / 0.85) 25%, rgb(0 0 0 / 0.45) 55%, rgb(0 0 0 / 0.15) 80%, transparent);
+  }
+  /* soft wisps drifting along the foot of the mist, the same as over the hero's hills */
+  .sia-contact__wisps {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 0;
+    height: clamp(12rem, 34vh, 20rem);
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.75;
   }
   /* the picture the card and lotus sit in: one screen tall, card centred */
   .sia-contact__stage {
@@ -2224,8 +2258,11 @@ const faqs = [
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    /* the bottom padding keeps the centred buttons above the bloom */
-    padding: clamp(2.9rem, 6.5cqi, 3.4rem) clamp(2rem, 8cqi, 3.75rem) clamp(3rem, 11cqi, 5.5rem);
+    /* Spaced evenly: the same gap from the 约 seal to the heading, the heading to the details,
+       the details to the buttons and the buttons to the card's foot. The top padding only clears
+       the seal (the notch is 2.4rem deep). */
+    justify-content: space-evenly;
+    padding: 2.4rem clamp(2rem, 8cqi, 3.75rem) 0;
     border-radius: 3rem;
     text-align: left;
   }
@@ -2241,9 +2278,7 @@ const faqs = [
     justify-content: center;
     align-self: stretch;
     text-align: center;
-    /* the details and buttons sit together, centred in the space below the heading */
-    margin-top: auto;
-    padding-top: clamp(1.75rem, 5.5cqi, 2.75rem);
+
   }
   .sia-contact__details dt {
     font-size: 0.75rem;
@@ -2292,8 +2327,6 @@ const faqs = [
     gap: 0.5rem 0.75rem;
     align-self: stretch;
     justify-content: center;
-    margin-bottom: auto;
-    padding-top: clamp(2rem, 6cqi, 2.75rem);
   }
   /* Narrow screens: the card takes the full width, centred, and the lotus rests below it across
      the lower right (the petal alignment is for wider screens). */
@@ -2309,6 +2342,7 @@ const faqs = [
       padding: 3.75rem clamp(1.5rem, 6vw, 2.5rem) 2.75rem;
       text-align: center;
       min-height: 0 !important;
+      gap: 1.75rem;
     }
     .sia-contact__details {
       grid-template-columns: 1fr;
