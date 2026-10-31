@@ -656,8 +656,7 @@ const faqs = [
        water); the glass card; the lotus flower. The pads show softly through the glass and the bloom
        stands in front of it, so card and pond read as one picture. The card keeps its 约 seal in the
        cut-out at its top. The heading and a row of three details (where, when, how to reach
-       us, each two lines, split by fine rules) are centred across the top, clear of the bloom; the
-       buttons sit in the open lower left, opposite it. -->
+       us, each two lines, split by fine rules) are centred across the top, clear of the bloom; the buttons sit centred below, clear of it. -->
   <Section id="contact" labelledby="contact-title" class="sia-contact">
     <div class="sia-contact__bg" aria-hidden="true">
       <Img src={rainPond} alt="" sizes="100vw" class="h-full w-full object-cover sia-contact__pond" />
@@ -1316,7 +1315,7 @@ const faqs = [
      right corner and overlapping the card. Softened a touch into the morning mist. */
   .sia-lotus {
     position: absolute;
-    left: 46%; /* 60% of the width, nudged right: the outer pads run just off the right edge */
+    left: 56%; /* 50% of the width, nudged right: the outer pads run just off the right edge */
     right: -6%;
     bottom: -2.5rem; /* down at the foot of the picture, the front pads running off its bottom edge */
     pointer-events: none;
@@ -2201,12 +2200,12 @@ const faqs = [
     opacity: 0.9;
   }
   /* The card, centred, its right edge running straight down to the tip of the lotus's top centre
-     petal (52.1% across the lotus picture, which spans 60% of the width from 46% in:
-     46 + 0.521 × 60 = 77.26%; centred, the card is 2 × (77.26 − 50) = 54.52% wide). */
+     petal (52.1% across the lotus picture, which spans 50% of the width from 56% in:
+     56 + 0.521 × 50 = 82.05%; centred, the card is 2 × (82.05 − 50) = 64.1% wide). */
   .sia-contact__scene {
     position: relative;
     z-index: 1; /* between the pads (0) and the flower (2) */
-    width: 54.52%;
+    width: 64.1%;
   }
   .sia-contact__card {
     --notch-r: 2.4rem;
@@ -2225,8 +2224,8 @@ const faqs = [
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    /* the deep bottom padding lifts the buttons to where the bloom curves away from them */
-    padding: clamp(3.4rem, 9cqi, 4.25rem) clamp(2rem, 8cqi, 3.75rem) clamp(3.5rem, 15cqi, 6.5rem);
+    /* the bottom padding keeps the centred buttons above the bloom */
+    padding: clamp(2.9rem, 6.5cqi, 3.4rem) clamp(2rem, 8cqi, 3.75rem) clamp(3rem, 11cqi, 5.5rem);
     border-radius: 3rem;
     text-align: left;
   }
@@ -2242,7 +2241,9 @@ const faqs = [
     justify-content: center;
     align-self: stretch;
     text-align: center;
-    margin-top: clamp(1.25rem, 4cqi, 2rem);
+    /* the details and buttons sit together, centred in the space below the heading */
+    margin-top: auto;
+    padding-top: clamp(1.75rem, 5.5cqi, 2.75rem);
   }
   .sia-contact__details dt {
     font-size: 0.75rem;
@@ -2284,13 +2285,15 @@ const faqs = [
     line-height: 1.6;
     white-space: nowrap;
   }
-  /* the buttons settle at the foot of the left column */
+  /* the buttons, centred at the foot of the card */
   .sia-contact__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 0.75rem;
-    margin-top: auto;
-    padding-top: clamp(1.5rem, 5cqi, 2.25rem);
+    align-self: stretch;
+    justify-content: center;
+    margin-bottom: auto;
+    padding-top: clamp(2rem, 6cqi, 2.75rem);
   }
   /* Narrow screens: the card takes the full width, centred, and the lotus rests below it across
      the lower right (the petal alignment is for wider screens). */
@@ -3236,7 +3239,9 @@ const faqs = [
 <script>
   // Contact on the pond: the card's bottom edge runs through the join between the lotus's
   // lower-left petal and the petal above it (55.3% down the lotus picture). The card stays
-  // centred, so it grows equally up and down to reach it. Recalculated on resize.
+  // centred, so it grows equally up and down to reach it. Recalculated when the window or the
+  // lotus changes size. (Not on the stage resizing: the card is part of the stage, so growing the
+  // card would move the lotus and feed back into itself, endlessly.)
   const pondStage = document.querySelector<HTMLElement>('.sia-contact__stage');
   const pondCard = pondStage?.querySelector<HTMLElement>('.sia-contact__panel');
   const pondLotus = pondStage?.querySelector<HTMLElement>('.sia-lotus-flower');
@@ -3244,7 +3249,8 @@ const faqs = [
     const JOIN = 0.553;
     const wide = window.matchMedia('(min-width: 900px)');
     const fit = () => {
-      if (!wide.matches) { pondCard.style.minHeight = ''; return; }
+      pondCard.style.minHeight = '';
+      if (!wide.matches) return;
       const s = pondStage.getBoundingClientRect();
       const l = pondLotus.getBoundingClientRect();
       if (!l.height) return;
@@ -3252,8 +3258,12 @@ const faqs = [
       const height = 2 * (l.top + JOIN * l.height - centre);
       pondCard.style.minHeight = height > 0 ? `${Math.round(height)}px` : '';
     };
-    new ResizeObserver(fit).observe(pondStage);
-    new ResizeObserver(fit).observe(pondLotus);
+    let lastWidth = 0;
+    new ResizeObserver(() => {
+      const w = Math.round(pondLotus.getBoundingClientRect().width);
+      if (w !== lastWidth) { lastWidth = w; fit(); }
+    }).observe(pondLotus);
+    addEventListener('resize', fit);
     fit();
   }
 </script>
