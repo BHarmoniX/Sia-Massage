@@ -20,7 +20,7 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 | mossy-rocks.jpg (unused) | https://unsplash.com/photos/9AekDW5da34 |
 | towel-candles.jpg | https://unsplash.com/photos/W7AyAs7azHc |
 | bamboo-basin.jpg | https://unsplash.com/photos/OqxFh3pBTa4 |
-| moss-waterfall.jpg | https://unsplash.com/photos/A_-cJ3PmB2o |
+| moss-waterfall.jpg (unused since 2026-11-01: contact now on the lotus pond) | https://unsplash.com/photos/A_-cJ3PmB2o |
 | moss-river.jpg | https://unsplash.com/photos/ALrCdq-ui_Q |
 | round-window.jpg (unused, reserved) | https://unsplash.com/photos/s2UiS34ftf8 |
 
@@ -67,8 +67,8 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile, relief lighting added); step-stone.jpg (the doorway step: several of these flagstones laid end to end) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | shop-front.jpg (placeholder Sia studio front in a shopping centre, until the owner supplies a real photo) | Generated for Sia with OpenArt (GPT Image 2.5 Sunburst), Plus plan with commercial use rights, 2026-10-28 |
 | morning-room.jpg (philosophy story, step one: a pale treatment room in morning light) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
-| rain-pond.jpg (rain pause: a still forest pond seen close at water level) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
-| rain-lotus-pads.webp, rain-lotus-flower.webp (rain pause: a white lotus on its lily pads, cut out from a magenta backdrop, as two layers: the whole lotus behind the card, the flower alone in front of it) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
+| rain-pond.jpg (contact background, formerly the rain pause: a still forest pond seen close at water level) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
+| rain-lotus-pads.webp, rain-lotus-flower.webp (contact, formerly the rain pause: a white lotus on its lily pads, cut out from a magenta backdrop, as two layers: the whole lotus behind the card, the flower alone in front of it) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
 | wall-plaster.jpg (doorway wall: moss lime plaster, darkened and mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | garden-bamboo-a.webp, garden-bamboo-b.webp (courtyard tall airy bamboo in round carved stone pots, cut out) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | spa-room.jpg (view through the doorway: candlelit spa treatment room seen from the threshold, with rug, door mat and lotus painting; gentle low-light grade) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-27 |

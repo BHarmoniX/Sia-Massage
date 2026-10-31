@@ -21,7 +21,6 @@ import therapistLinen from '../client/photos/therapist-linen.jpg';
 // The earlier bamboo path photo (bamboo-path.jpg) is kept in the photos folder in case it's wanted back.
 import spaRoom from '../client/photos/spa-room.jpg';
 import bambooBasin from '../client/photos/bamboo-basin.jpg';
-import mossWaterfall from '../client/photos/moss-waterfall.jpg';
 import mossRiver from '../client/photos/moss-river.jpg';
 // The rain pause: a still forest pond, and one glass-white lotus on its lily pads (both generated for Sia).
 import rainPond from '../client/photos/rain-pond.jpg';
@@ -270,43 +269,6 @@ const faqs = [
       </div>
     </div>
   </Section>
-
-  <!-- ───────────── Rain: a breathing pause ───────────── -->
-  <!-- Layers, back to front: the pond; the lotus's lily pads (with its shadow and reflection on the
-       water); the glass card; the lotus flower. The pads show softly through the glass and the bloom
-       stands in front of it, so card and pond read as one picture. -->
-  <section class="sia-rain" aria-labelledby="promise-title" data-mist>
-    <div class="sia-rain__pond-layer" aria-hidden="true"><Img src={rainPond} alt="" sizes="100vw" class="sia-rain__pond" /></div>
-    <div class="sia-rain__veil" aria-hidden="true"></div>
-    <!-- Out of the dusk: the mist bank carried down from the section above lifts and parts as the
-         pond scrolls in (--m, 0 → 1), and a few of the lantern's fireflies drift on over the water. -->
-    <div class="sia-rain__mist" aria-hidden="true"></div>
-    <div class="sia-rain__motes sia-dusk__motes" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <div class="sia-rain__lotus sia-rain__lotus--pads" aria-hidden="true">
-      <span class="sia-rain__lotus-shadow"></span>
-      <Img src={rainLotusFlower} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-reflection" />
-      <Img src={rainLotusPads} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-pads" />
-    </div>
-    <div class="sia-rain__scene">
-      <!-- In the journey: after the philosophy (how Sia feels), what a visitor walks away with, then
-           on to the treatments. The lotus is only the mood: calm, rest. (Owner to confirm the
-           "qualified therapists" line.) -->
-      <div class="sia-rain__card glass-3d" data-glow data-reveal>
-        <span class="font-han" lang="zh-Hans" aria-hidden="true">安</span>
-        <h2 id="promise-title" class="sia-rain__title">Leave lighter than you came</h2>
-        <p>
-          An unhurried hour eases tight shoulders, quiets a busy mind and helps you sleep more
-          soundly. Genuine relaxation massage from qualified therapists, with care in every detail.
-        </p>
-        <div class="sia-rain__cta"><a href="#treatments" class="btn-3d">Choose your treatment</a></div>
-      </div>
-    </div>
-    <div class="sia-rain__lotus sia-rain__lotus--flower" aria-hidden="true">
-      <Img src={rainLotusFlower} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-rain__lotus-flower" />
-    </div>
-  </section>
 
   <!-- ───────────── Colour break: moss washes from the rain into the treatments ───────────── -->
   <section class="sia-scroll" aria-hidden="true">
@@ -689,41 +651,59 @@ const faqs = [
     </div>
   </Section>
 
-  <!-- ───────────── Contact: a glass booking card on moss and water ───────────── -->
+  <!-- ───────────── Contact: the booking card on the lotus pond ───────────── -->
+  <!-- Layers, back to front: the pond; the lotus's lily pads (with its shadow and reflection on the
+       water); the glass card; the lotus flower. The pads show softly through the glass and the bloom
+       stands in front of it, so card and pond read as one picture. The card keeps its 约 seal in the
+       cut-out at its top; its words sit in an L around the bloom (heading across the top, details
+       down the left, the buttons at the foot of that column). -->
   <Section id="contact" labelledby="contact-title" class="sia-contact">
     <div class="sia-contact__bg" aria-hidden="true">
-      <Img src={mossWaterfall} alt="" sizes="100vw" class="h-full w-full object-cover sia-contact__falls" />
+      <Img src={rainPond} alt="" sizes="100vw" class="h-full w-full object-cover sia-contact__pond" />
     </div>
-    <div class="sia-contact__inner">
-      <div class="notch-host sia-contact__card" data-reveal>
-        <span class="notch-piece glass-3d crystal font-han sia-contact__seal" aria-hidden="true" lang="zh-Hans">约</span>
-        <div class="sia-contact__panel glass-3d notch" data-glow>
-          <h2 id="contact-title" class="sia-heading">Your hour of calm awaits</h2>
-          <dl class="sia-contact__details">
-            <div>
-              <dt>Find us</dt>
-              <dd>
-                {address.street}<br />{`${address.suburb} ${address.state} ${address.postcode}`}
-              </dd>
+    <div class="sia-contact__stage">
+      <div class="sia-contact__motes sia-dusk__motes" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="sia-lotus sia-lotus--pads" aria-hidden="true">
+        <span class="sia-lotus-shadow"></span>
+        <Img src={rainLotusFlower} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-lotus-reflection" />
+        <Img src={rainLotusPads} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-lotus-pads" />
+      </div>
+      <div class="sia-contact__scene">
+        <div class="notch-host sia-contact__card" data-reveal>
+          <span class="notch-piece glass-3d crystal font-han sia-contact__seal" aria-hidden="true" lang="zh-Hans">约</span>
+          <div class="sia-contact__panel glass-3d notch" data-glow>
+            <h2 id="contact-title" class="sia-heading">Your hour of calm awaits</h2>
+            <dl class="sia-contact__details">
+              <div>
+                <dt>Find us</dt>
+                <dd>
+                  {address.street}<br />{`${address.suburb} ${address.state} ${address.postcode}`}
+                </dd>
+              </div>
+              <div>
+                <dt>Open</dt>
+                <dd>{business.hours}</dd>
+              </div>
+              <div>
+                <dt>Phone</dt>
+                <dd><a href={telHref(phone)}>{formatAuPhone(phone)}</a></dd>
+              </div>
+              <div>
+                <dt>Email</dt>
+                <dd><a href={`mailto:${business.email}`}>{business.email}</a></dd>
+              </div>
+            </dl>
+            <div class="sia-contact__actions">
+              <a href={telHref(phone)} class="btn-3d">Call to book</a>
+              <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="btn-3d sia-btn-sage">Directions</a>
             </div>
-            <div>
-              <dt>Open</dt>
-              <dd>{business.hours}</dd>
-            </div>
-            <div>
-              <dt>Phone</dt>
-              <dd><a href={telHref(phone)}>{formatAuPhone(phone)}</a></dd>
-            </div>
-            <div>
-              <dt>Email</dt>
-              <dd><a href={`mailto:${business.email}`}>{business.email}</a></dd>
-            </div>
-          </dl>
-          <div class="sia-contact__actions">
-            <a href={telHref(phone)} class="btn-3d">Call to book</a>
-            <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="btn-3d sia-btn-sage">Directions</a>
           </div>
         </div>
+      </div>
+      <div class="sia-lotus sia-lotus--flower" aria-hidden="true">
+        <Img src={rainLotusFlower} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-lotus-flower" />
       </div>
     </div>
   </Section>
@@ -1331,177 +1311,10 @@ const faqs = [
     }
   }
 
-  /* ── Rain interlude ── */
-  .sia-rain {
-    position: relative;
-    /* tucked 1px up over the section above, so no hairline of the page shows between them */
-    z-index: 1;
-    margin-top: -1px;
-    display: grid;
-    place-items: center;
-    min-height: clamp(34rem, 92vh, 56rem);
-    padding: 3.75rem 0; /* centred, and clear of the wave band below */
-    overflow: hidden;
-    isolation: isolate;
-    background: #2a3726;
-  }
-  .sia-rain__pond {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 70%;
-  }
-  /* the photo's <picture> wrapper sits behind everything, out of the layout */
-  .sia-rain__pond-layer {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-  }
-  .sia-rain__pond :global(img),
-  .sia-rain :global(picture.sia-rain__pond img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 70%;
-  }
-  .sia-rain__veil {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background:
-      linear-gradient(180deg, #222d1c 0%, rgb(34 45 28 / 0) 18%, rgb(34 45 28 / 0) 82%, #26321f 100%),
-      radial-gradient(70% 60% at 50% 45%, rgb(0 0 0 / 0), rgb(0 0 0 / 0.18));
-  }
-  /* The card, centred in the picture, its right edge running straight down to the tip of the
-     lotus's top centre petal. That tip is 52.1% across the lotus picture, which spans 60% of the
-     section from 46% in: 46 + 0.521 × 60 = 77.26% across. Centred, the card is then
-     2 × (77.26 − 50) = 54.52% wide. (Change the lotus's left/right and this must change too.) */
-  .sia-rain__scene {
-    position: relative;
-    z-index: 1; /* between the pads (0) and the flower (2) */
-    display: grid;
-    justify-items: center;
-    width: 54.52%;
-  }
-  /* The same frosted glass as the contact card ("Your hour of calm awaits"). */
-  /* Tint eased off a little (62% of 70%), so over the soft misty pond it reads as see-through as
-     the contact card does over its bright waterfall. */
-  .sia-rain__card.glass-3d {
-    --glass-tint: rgb(246 243 236 / 0.7);
-    width: 100%;
-    /* The lotus fills the card's lower right, so the open glass is an L: a band across the top and
-       a column down the left. The title runs across the top band toward 安; the paragraph keeps to
-       the left column, clear of the bloom; the button sits at the foot of that column, so the left
-       side carries weight to balance the flower. Sizes in cqi are shares of the card's width. */
-    container-type: inline-size;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: clamp(2.25rem, 7cqi, 3.25rem) clamp(4.5rem, 14cqi, 6.5rem) clamp(2.25rem, 7cqi, 3.25rem) clamp(2rem, 8cqi, 3.75rem);
-    border-radius: 3.45rem;
-    text-align: left;
-  }
-  /* the character in the card's top right corner */
-  .sia-rain__card > span {
-    position: absolute;
-    top: clamp(1.5rem, 3vw, 2.25rem);
-    right: clamp(1.75rem, 3.5vw, 2.75rem);
-    line-height: 1;
-    font-size: 2.875rem;
-    color: var(--color-accent-strong);
-  }
-  .sia-rain__title {
-    margin-top: 0;
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(1.75rem, 6.2cqi, 2.6rem);
-    line-height: 1.15;
-    color: var(--color-text);
-  }
-  /* the button settles at the foot of the left column */
-  .sia-rain__cta {
-    margin-top: auto;
-  }
-  .sia-rain__card p {
-    /* the left column: at this height the bloom only starts about 59% across the card */
-    max-width: 56cqi;
-    margin: clamp(1rem, 3.5cqi, 1.5rem) 0 clamp(1.5rem, 5cqi, 2.25rem);
-    font-size: clamp(1rem, 2.4cqi, 1.125rem);
-    line-height: 1.65;
-    color: var(--color-text);
-  }
-  /* Out of the dusk into the pond: the mist bank from the section above, covering the top of the
-     pond as it arrives and lifting away (rising and thinning) as it scrolls in. */
-  .sia-rain {
-    --m: 1; /* stays clear without the script */
-  }
-  .sia-rain__mist {
-    position: absolute;
-    inset: -2% -10% auto;
-    z-index: 3;
-    height: 75%;
-    pointer-events: none;
-    background:
-      radial-gradient(45% 45% at 20% 0%, rgb(214 222 202 / 0.85), transparent 75%),
-      radial-gradient(50% 50% at 60% 0%, rgb(214 222 202 / 0.8), transparent 75%),
-      radial-gradient(40% 45% at 95% 5%, rgb(214 222 202 / 0.82), transparent 75%),
-      linear-gradient(180deg, rgb(205 214 192 / 0.85), rgb(205 214 192 / 0.35) 45%, transparent);
-    filter: blur(18px);
-    opacity: calc(1 - var(--m));
-    transform: translateY(calc(var(--m) * -45%));
-  }
-  /* a soft shore: the dark moss of the section above fades down into the pond, with no edge */
-  .sia-rain::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto;
-    z-index: 4;
-    height: clamp(5rem, 16vh, 10rem);
-    pointer-events: none;
-    background: linear-gradient(180deg, #222d1c, rgb(34 45 28 / 0.7) 30%, rgb(34 45 28 / 0.25) 65%, transparent);
-  }
-  /* the fireflies that drifted over from the dusk, fading as the mist clears */
-  .sia-rain__motes {
-    z-index: 3;
-    inset: 0 0 auto;
-    height: 55%;
-    opacity: calc(1 - var(--m) * 0.85);
-  }
-  /* Narrow screens: the card takes the full width for its words and sits above the lotus, which
-     rests below it across the lower right (the card's petal alignment is for wider screens). */
-  @media (max-width: 899px) {
-    .sia-rain {
-      padding-bottom: calc(26vw + 2rem);
-    }
-    .sia-rain__scene {
-      width: min(100% - 2.5rem, 34rem);
-    }
-    .sia-rain__card.glass-3d {
-      align-items: center;
-      padding: 2.5rem clamp(1.5rem, 6vw, 2.5rem) 2.75rem;
-      text-align: center;
-      min-height: 0 !important;
-    }
-    .sia-rain__card > span {
-      position: static;
-      margin-bottom: 0.6rem;
-      font-size: 2.4rem;
-    }
-    .sia-rain__card p {
-      max-width: none;
-    }
-    .sia-rain__cta {
-      margin-top: 0;
-    }
-  }
+  /* ── The lotus (contact): pads behind the card, the bloom in front ── */
   /* The lotus on its lily pads: from the centre of the pond to the right edge, filling the lower
      right corner and overlapping the card. Softened a touch into the morning mist. */
-  .sia-rain__lotus {
+  .sia-lotus {
     position: absolute;
     left: 46%; /* 60% of the width, nudged right: the outer pads run just off the right edge */
     right: -6%;
@@ -1509,27 +1322,27 @@ const faqs = [
     pointer-events: none;
   }
   /* Two copies of the same box: pads behind the card, flower in front, exactly in register. */
-  .sia-rain__lotus--pads {
+  .sia-lotus--pads {
     z-index: 0;
   }
-  .sia-rain__lotus--flower {
+  .sia-lotus--flower {
     z-index: 2;
   }
-  .sia-rain__lotus-pads {
+  .sia-lotus-pads {
     position: relative;
     z-index: 2;
     filter: saturate(0.82) brightness(0.97) contrast(0.96);
   }
-  .sia-rain__lotus :global(img) {
+  .sia-lotus :global(img) {
     display: block;
     width: 100%;
     height: auto;
   }
-  .sia-rain__lotus-flower {
+  .sia-lotus-flower {
     filter: saturate(0.82) brightness(0.97) contrast(0.96);
   }
   /* Its reflection on the still water: mirrored under the pads, faint and fading away. */
-  .sia-rain__lotus-reflection {
+  .sia-lotus-reflection {
     position: absolute;
     left: 0;
     top: 62%;
@@ -1542,7 +1355,7 @@ const faqs = [
     mask-image: linear-gradient(to top, #000 0%, transparent 70%);
   }
   /* A soft shadow on the water where the pads rest. */
-  .sia-rain__lotus-shadow {
+  .sia-lotus-shadow {
     position: absolute;
     left: 6%;
     right: 6%;
@@ -2344,40 +2157,56 @@ const faqs = [
     }
   }
 
-  /* ── Contact: glass booking card on moss ── */
+  /* ── Contact: the booking card on the lotus pond ── */
   /* The contact section reaches down behind the footer (its height is measured below), so
-     the waterfall continues under the footer's glass. */
+     the pond continues under the footer's glass. */
   .sia-contact {
     position: relative;
     isolation: isolate;
     overflow: hidden;
     padding-bottom: var(--sia-footer-h, 14rem);
     margin-bottom: calc(-1 * var(--sia-footer-h, 14rem));
+    background: #2a3726;
   }
   .sia-contact__bg {
     position: absolute;
     inset: 0;
     z-index: -1;
   }
+  .sia-contact__bg :global(img),
+  .sia-contact__pond {
+    object-position: 50% 70%;
+  }
   .sia-contact__bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgb(38 50 31 / 0.35), rgb(38 50 31 / 0.15) 45%, rgb(38 50 31 / 0.4) 100%);
+    background:
+      linear-gradient(180deg, rgb(38 50 31 / 0.45) 0%, rgb(38 50 31 / 0) 22%, rgb(38 50 31 / 0) 80%, rgb(38 50 31 / 0.35) 100%),
+      radial-gradient(70% 60% at 50% 45%, rgb(0 0 0 / 0), rgb(0 0 0 / 0.18));
   }
-  .sia-contact__inner {
-    max-width: 52rem;
-    margin: 0 auto;
-    padding: 7rem 1.25rem;
+  /* the picture the card and lotus sit in: one screen tall, card centred */
+  .sia-contact__stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: clamp(36rem, 92vh, 56rem);
+    padding: 6rem 0;
   }
-  .sia-contact__falls {
-    object-position: 50% 35%;
+  /* a few fireflies over the water */
+  .sia-contact__motes {
+    z-index: 0; /* behind the card */
+    inset: 0 0 auto;
+    height: 60%;
+    opacity: 0.9;
   }
-  .sia-contact__panel.glass-3d {
-    --glass-tint: #f6f3ec;
-    padding: 3.75rem 2rem 2.75rem;
-    border-radius: 3rem;
-    text-align: center;
+  /* The card, centred, its right edge running straight down to the tip of the lotus's top centre
+     petal (52.1% across the lotus picture, which spans 60% of the width from 46% in:
+     46 + 0.521 × 60 = 77.26%; centred, the card is 2 × (77.26 − 50) = 54.52% wide). */
+  .sia-contact__scene {
+    position: relative;
+    z-index: 1; /* between the pads (0) and the flower (2) */
+    width: 54.52%;
   }
   .sia-contact__card {
     --notch-r: 2.4rem;
@@ -2387,10 +2216,28 @@ const faqs = [
     font-size: 1.9rem;
     color: #46613a;
   }
+  /* The lotus fills the card's lower right, so the open glass is an L: the heading across the top,
+     the details down the left, the buttons at the foot of that column. Sizes in cqi are shares of
+     the card's width. */
+  .sia-contact__panel.glass-3d {
+    --glass-tint: #f6f3ec;
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(3.4rem, 9cqi, 4.25rem) clamp(2rem, 8cqi, 3.75rem) clamp(2.25rem, 7cqi, 3.25rem);
+    border-radius: 3rem;
+    text-align: left;
+  }
+  .sia-contact__panel .sia-heading {
+    font-size: clamp(2rem, 6.4cqi, 3.1rem);
+  }
   .sia-contact__details {
     display: grid;
-    gap: 1.25rem;
-    margin-top: 2.25rem;
+    grid-template-columns: repeat(2, auto);
+    gap: 1.4rem 2.25rem;
+    max-width: 64cqi; /* clear of the bloom, which starts about 59% across */
+    margin-top: clamp(1.25rem, 4cqi, 2rem);
   }
   .sia-contact__details dt {
     font-size: 0.75rem;
@@ -2421,17 +2268,47 @@ const faqs = [
     text-decoration-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
     text-underline-offset: 4px;
   }
+  .sia-contact__details dd {
+    white-space: nowrap;
+  }
+  /* the buttons settle at the foot of the left column */
   .sia-contact__actions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 0.5rem 0.75rem;
-    margin-top: 2.25rem;
+    margin-top: auto;
+    padding-top: clamp(1.5rem, 5cqi, 2.25rem);
   }
-  @media (min-width: 640px) {
+  /* Narrow screens: the card takes the full width, centred, and the lotus rests below it across
+     the lower right (the petal alignment is for wider screens). */
+  @media (max-width: 899px) {
+    .sia-contact__stage {
+      padding: 6rem 0 calc(26vw + 2rem);
+    }
+    .sia-contact__scene {
+      width: min(100% - 2.5rem, 36rem);
+    }
+    .sia-contact__panel.glass-3d {
+      align-items: center;
+      padding: 3.75rem clamp(1.5rem, 6vw, 2.5rem) 2.75rem;
+      text-align: center;
+      min-height: 0 !important;
+    }
     .sia-contact__details {
-      grid-template-columns: repeat(2, 1fr);
-      row-gap: 1.75rem;
+      max-width: none;
+      grid-template-columns: 1fr;
+      justify-content: center;
+    }
+    .sia-contact__details dd {
+      white-space: normal;
+    }
+    .sia-contact__actions {
+      justify-content: center;
+    }
+  }
+  @media (min-width: 640px) and (max-width: 899px) {
+    .sia-contact__details {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>
@@ -3343,26 +3220,26 @@ const faqs = [
 </script>
 
 <script>
-  // Rain pause: the card's bottom edge runs through the join between the lotus's lower-left
-  // petal and the petal above it (55.3% down the lotus picture). The card stays centred, so it
-  // grows equally up and down to reach it. Recalculated whenever the section or lotus resizes.
-  const rain = document.querySelector<HTMLElement>('.sia-rain');
-  const rainCard = rain?.querySelector<HTMLElement>('.sia-rain__card');
-  const rainLotus = rain?.querySelector<HTMLElement>('.sia-rain__lotus-flower');
-  if (rain && rainCard && rainLotus) {
+  // Contact on the pond: the card's bottom edge runs through the join between the lotus's
+  // lower-left petal and the petal above it (55.3% down the lotus picture). The card stays
+  // centred, so it grows equally up and down to reach it. Recalculated on resize.
+  const pondStage = document.querySelector<HTMLElement>('.sia-contact__stage');
+  const pondCard = pondStage?.querySelector<HTMLElement>('.sia-contact__panel');
+  const pondLotus = pondStage?.querySelector<HTMLElement>('.sia-lotus-flower');
+  if (pondStage && pondCard && pondLotus) {
     const JOIN = 0.553;
     const wide = window.matchMedia('(min-width: 900px)');
     const fit = () => {
-      if (!wide.matches) { rainCard.style.minHeight = ''; return; }
-      const s = rain.getBoundingClientRect();
-      const l = rainLotus.getBoundingClientRect();
+      if (!wide.matches) { pondCard.style.minHeight = ''; return; }
+      const s = pondStage.getBoundingClientRect();
+      const l = pondLotus.getBoundingClientRect();
       if (!l.height) return;
       const centre = s.top + s.height / 2;
       const height = 2 * (l.top + JOIN * l.height - centre);
-      rainCard.style.minHeight = height > 0 ? `${Math.round(height)}px` : '';
+      pondCard.style.minHeight = height > 0 ? `${Math.round(height)}px` : '';
     };
-    new ResizeObserver(fit).observe(rain);
-    new ResizeObserver(fit).observe(rainLotus);
+    new ResizeObserver(fit).observe(pondStage);
+    new ResizeObserver(fit).observe(pondLotus);
     fit();
   }
 </script>
@@ -3370,10 +3247,7 @@ const faqs = [
 <script>
   // Philosophy, arriving at dusk: --p runs 0 → 1 as the section scrolls into view (from its top
   // reaching the bottom of the screen to its top reaching the header). Reduced motion: stays lit.
-  // The pond below carries the journey on: its mist lifts (--m, 0 → 1) between its top reaching
-  // the bottom of the screen and reaching 40% of the way down.
   const dusk = document.querySelector<HTMLElement>('[data-dusk]');
-  const mist = document.querySelector<HTMLElement>('[data-mist]');
   if (dusk && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     let queued = false;
     const update = () => {
@@ -3383,11 +3257,6 @@ const faqs = [
       const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) * 16 || 80;
       const p = Math.min(1, Math.max(0, (vh - top) / (vh - header)));
       dusk.style.setProperty('--p', p.toFixed(3));
-      if (mist) {
-        const mt = mist.getBoundingClientRect().top;
-        const m = Math.min(1, Math.max(0, (vh - mt) / (vh * 0.6)));
-        mist.style.setProperty('--m', m.toFixed(3));
-      }
     };
     const queue = () => {
       if (!queued) {

@@ -290,7 +290,6 @@ export const site: Site = siteSchema.parse({
       { work: 'Photograph: mossy stream (treatments background)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/ALrCdq-ui_Q' },
       { work: 'Photograph: bamboo path (your visit)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/Um769ucDvd4' },
       { work: 'Photograph: bamboo water basin (FAQ and treatments)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/OqxFh3pBTa4' },
-      { work: 'Photograph: moss waterfall (contact)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/A_-cJ3PmB2o' },
       { work: 'Music: Rain Meditation (background music)', credit: 'diepthanhdk via Pixabay', licence: 'Pixabay Content License', href: 'https://pixabay.com/music/meditationspiritual-rain-meditation-450575/' },
       { work: 'Illustration: moon-window ink landscape, clouds and birds (welcome)', credit: 'Illuminara Creative Studio, drawn in code with AI-assisted tools', licence: 'Original artwork' },
       { work: 'Typefaces: Cormorant Garamond (Christian Thalmann) and Jost (Owen Earl)', credit: 'Fontsource', licence: 'SIL Open Font License', href: 'https://fontsource.org' },
