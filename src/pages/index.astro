@@ -655,8 +655,9 @@ const faqs = [
   <!-- Layers, back to front: the pond; the lotus's lily pads (with its shadow and reflection on the
        water); the glass card; the lotus flower. The pads show softly through the glass and the bloom
        stands in front of it, so card and pond read as one picture. The card keeps its 约 seal in the
-       cut-out at its top; its words sit in an L around the bloom (heading across the top, details
-       down the left, the buttons at the foot of that column). -->
+       cut-out at its top. The heading and a row of three details (where, when, how to reach
+       us, each two lines, split by fine rules) are centred across the top, clear of the bloom; the
+       buttons sit in the open lower left, opposite it. -->
   <Section id="contact" labelledby="contact-title" class="sia-contact">
     <div class="sia-contact__bg" aria-hidden="true">
       <Img src={rainPond} alt="" sizes="100vw" class="h-full w-full object-cover sia-contact__pond" />
@@ -684,15 +685,14 @@ const faqs = [
               </div>
               <div>
                 <dt>Open</dt>
-                <dd>{business.hours}</dd>
+                <dd>{(business.hours ?? '').split(' · ').map((part, i) => <>{i > 0 && <br />}{part}</>)}</dd>
               </div>
               <div>
-                <dt>Phone</dt>
-                <dd><a href={telHref(phone)}>{formatAuPhone(phone)}</a></dd>
-              </div>
-              <div>
-                <dt>Email</dt>
-                <dd><a href={`mailto:${business.email}`}>{business.email}</a></dd>
+                <dt>Call or email</dt>
+                <dd>
+                  <a href={telHref(phone)}>{formatAuPhone(phone)}</a><br />
+                  <a href={`mailto:${business.email}`}>{business.email}</a>
+                </dd>
               </div>
             </dl>
             <div class="sia-contact__actions">
@@ -2216,16 +2216,17 @@ const faqs = [
     font-size: 1.9rem;
     color: #46613a;
   }
-  /* The lotus fills the card's lower right, so the open glass is an L: the heading across the top,
-     the details down the left, the buttons at the foot of that column. Sizes in cqi are shares of
-     the card's width. */
+  /* The lotus fills the card's lower right, so the open glass is an L: the heading and a centred
+     row of details across the top, the buttons in the lower left. Sizes in cqi are shares of the
+     card's width. */
   .sia-contact__panel.glass-3d {
     --glass-tint: #f6f3ec;
     container-type: inline-size;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: clamp(3.4rem, 9cqi, 4.25rem) clamp(2rem, 8cqi, 3.75rem) clamp(2.25rem, 7cqi, 3.25rem);
+    /* the deep bottom padding lifts the buttons to where the bloom curves away from them */
+    padding: clamp(3.4rem, 9cqi, 4.25rem) clamp(2rem, 8cqi, 3.75rem) clamp(3.5rem, 15cqi, 6.5rem);
     border-radius: 3rem;
     text-align: left;
   }
@@ -2236,11 +2237,11 @@ const faqs = [
   }
   .sia-contact__details {
     display: grid;
-    /* address and phone/email down the left; the opening hours balance them at the top right,
-       above the bloom */
-    grid-template-columns: auto auto 1fr;
-    gap: 1.4rem 2.25rem;
+    /* three equal two-line columns, centred under the heading, split by fine rules */
+    grid-template-columns: repeat(3, auto);
+    justify-content: center;
     align-self: stretch;
+    text-align: center;
     margin-top: clamp(1.25rem, 4cqi, 2rem);
   }
   .sia-contact__details dt {
@@ -2272,13 +2273,17 @@ const faqs = [
     text-decoration-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
     text-underline-offset: 4px;
   }
+  .sia-contact__details > div {
+    padding: 0 clamp(1rem, 3.4cqi, 1.6rem);
+  }
+  .sia-contact__details > div + div {
+    border-left: 1px solid rgb(63 86 52 / 0.25);
+  }
   .sia-contact__details dd {
+    font-size: 1rem;
+    line-height: 1.6;
     white-space: nowrap;
   }
-  .sia-contact__details > div:nth-child(1) { grid-area: 1 / 1; }
-  .sia-contact__details > div:nth-child(2) { grid-area: 1 / 3; justify-self: end; text-align: right; }
-  .sia-contact__details > div:nth-child(3) { grid-area: 2 / 1; }
-  .sia-contact__details > div:nth-child(4) { grid-area: 2 / 2; }
   /* the buttons settle at the foot of the left column */
   .sia-contact__actions {
     display: flex;
@@ -2306,10 +2311,11 @@ const faqs = [
       grid-template-columns: 1fr;
       justify-content: center;
     }
-    .sia-contact__details > div:nth-child(n) {
-      grid-area: auto;
-      justify-self: auto;
-      text-align: center;
+    .sia-contact__details {
+      gap: 1.25rem;
+    }
+    .sia-contact__details > div + div {
+      border-left: 0;
     }
     .sia-contact__details dd {
       white-space: normal;
@@ -2318,11 +2324,7 @@ const faqs = [
       justify-content: center;
     }
   }
-  @media (min-width: 640px) and (max-width: 899px) {
-    .sia-contact__details {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
+
 </style>
 
 <script>
