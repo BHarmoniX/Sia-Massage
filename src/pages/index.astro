@@ -3137,9 +3137,14 @@ const faqs = [
     };
 
     let queued = false;
+    let needsDraw = true; // at load and after a resize, draw even if off-screen
     const update = () => {
       queued = false;
-      const top = doorway.getBoundingClientRect().top;
+      const box = doorway.getBoundingClientRect();
+      // Nowhere near the screen: skip all the work, so scrolling the rest of the page stays free.
+      if (!needsDraw && (box.bottom < -200 || box.top > window.innerHeight + 200)) return;
+      needsDraw = false;
+      const top = box.top;
       const capture = document.documentElement.classList.contains('sia-capture');
       // Two phases of scroll: first the doors swing in (over 45% of a screen), then the
       // gateway opens around you (over the next 65%).
@@ -3685,7 +3690,14 @@ const faqs = [
       },
       { passive: true },
     );
-    addEventListener('resize', update, { passive: true });
+    addEventListener(
+      'resize',
+      () => {
+        needsDraw = true;
+        update();
+      },
+      { passive: true },
+    );
   }
 
   // Treatment menu: while the section is on screen the picture crossfades slowly through the
@@ -3825,6 +3837,20 @@ const faqs = [
 </script>
 
 <script>
+  // Looping animations (hero ink scene, fireflies, mist, floating cards) pause while their section
+  // is off-screen and resume just before it comes back, so they don't use the main thread while
+  // you scroll elsewhere. Nothing visible changes.
+  const loopers = document.querySelectorAll<HTMLElement>('main section, .sia-hero');
+  if ('IntersectionObserver' in window && loopers.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) e.target.toggleAttribute('data-offscreen', !e.isIntersecting);
+      },
+      { rootMargin: '300px 0px' },
+    );
+    loopers.forEach((el) => io.observe(el));
+  }
+
   // Philosophy, arriving at dusk: --p runs 0 → 1 as the section scrolls into view (from its top
   // reaching the bottom of the screen to its top reaching the header). Reduced motion: stays lit.
   const dusk = document.querySelector<HTMLElement>('[data-dusk]');

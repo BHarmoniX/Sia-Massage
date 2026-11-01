@@ -406,3 +406,10 @@ html[data-capture-blocked] body::after {
   color: var(--color-muted);
   pointer-events: none;
 }
+
+/* Looping animations pause while their section is off-screen (set by the page script). */
+[data-offscreen] *,
+[data-offscreen] *::before,
+[data-offscreen] *::after {
+  animation-play-state: paused !important;
+}
