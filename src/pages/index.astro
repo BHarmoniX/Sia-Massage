@@ -1423,6 +1423,20 @@ const faqs = [
     display: grid;
   }
 
+  /* The three cards under the mountains in frosted sage glass (like the contact card over the
+     pond): the dusk and its fireflies glow faintly through, the words stay dark moss. */
+  .sia-pillars .sia-step__panel.glass-3d {
+    --glass-tint: #e4ead9;
+    --glass-blur: 20px;
+    background: color-mix(in oklab, var(--glass-tint) 78%, transparent);
+    border: 1px solid rgb(255 255 255 / 0.35);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.55),
+      0 24px 48px -26px rgb(0 0 0 / 0.55);
+  }
+  .sia-pillars .sia-step__panel p {
+    color: #33402f;
+  }
   /* Cards: rice paper, growing as the story builds. */
   .sia-step .sia-step__card {
     position: relative;
