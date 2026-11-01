@@ -1373,6 +1373,53 @@ const faqs = [
   .sia-step__cta {
     margin-top: 1.75rem;
   }
+  /* Wide screens, under the mountains: a compact staggered set instead of one card per row.
+     "The place" and "The tradition" side by side (the second stepping down), photo across the
+     top of each; "The experience" closes the set at full width, words left, studio right. */
+  @media (min-width: 1024px) {
+    .sia-pillars .sia-story {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(1.25rem, 2.5vw, 2.25rem);
+      row-gap: clamp(1.75rem, 4vh, 2.75rem);
+      align-items: start;
+    }
+    .sia-pillars .sia-step {
+      display: block;
+    }
+    .sia-pillars .sia-step--light {
+      grid-column: 2 / span 5;
+    }
+    .sia-pillars .sia-step--mid {
+      grid-column: 7 / span 5;
+      margin-top: clamp(2.5rem, 7vh, 4.5rem); /* the step down */
+    }
+    .sia-pillars .sia-step--dark {
+      grid-column: 2 / span 10;
+    }
+    .sia-pillars .sia-step--light .sia-step__panel.glass-3d,
+    .sia-pillars .sia-step--mid .sia-step__panel.glass-3d {
+      grid-template-columns: 1fr;
+    }
+    .sia-pillars .sia-step--light .sia-step__inset,
+    .sia-pillars .sia-step--mid .sia-step__inset {
+      order: -1;
+      min-height: 0;
+      border-top-left-radius: 1.95rem;
+    }
+    .sia-pillars .sia-step--light .sia-step__inset {
+      height: clamp(13rem, 30vh, 17rem);
+    }
+    .sia-pillars .sia-step--mid .sia-step__inset {
+      height: clamp(15rem, 36vh, 20rem);
+    }
+    .sia-pillars .sia-step--mid .sia-step__text,
+    .sia-pillars .sia-step--light .sia-step__text {
+      padding: 1.5rem 1.75rem 1.6rem;
+    }
+    .sia-pillars .sia-step--dark .sia-step__inset {
+      min-height: clamp(20rem, 52vh, 28rem);
+    }
+  }
 
   .sia-story {
     position: relative;
