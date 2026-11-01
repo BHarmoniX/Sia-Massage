@@ -486,6 +486,23 @@
   }
 }
 
+/* Float only while pointed at or focused: still at rest, a gentle drift on hover. */
+@keyframes depth-float-hover {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -6px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .float-on-hover:hover,
+  .float-on-hover:focus-visible {
+    animation: depth-float-hover 4s ease-in-out infinite;
+  }
+}
+
 /* ── Jigsaw cut-outs: a true circular opening in a card's edge ────────────────────
 
   <li class="notch-host">
