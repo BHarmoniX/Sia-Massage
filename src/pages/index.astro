@@ -1381,17 +1381,22 @@ const faqs = [
       grid-template-columns: repeat(12, minmax(0, 1fr));
       column-gap: clamp(1.25rem, 2.5vw, 2.25rem);
       row-gap: clamp(1.75rem, 4vh, 2.75rem);
-      align-items: start;
+      align-items: stretch; /* the two cards stand level and the same height */
     }
     .sia-pillars .sia-step {
       display: block;
+    }
+    .sia-pillars .sia-step--light .sia-step__card,
+    .sia-pillars .sia-step--mid .sia-step__card,
+    .sia-pillars .sia-step--light .sia-step__panel.glass-3d,
+    .sia-pillars .sia-step--mid .sia-step__panel.glass-3d {
+      height: 100%;
     }
     .sia-pillars .sia-step--light {
       grid-column: 2 / span 5;
     }
     .sia-pillars .sia-step--mid {
       grid-column: 7 / span 5;
-      margin-top: clamp(2.5rem, 7vh, 4.5rem); /* the step down */
     }
     .sia-pillars .sia-step--dark {
       grid-column: 2 / span 10;
@@ -1406,11 +1411,9 @@ const faqs = [
       min-height: 0;
       border-top-left-radius: 1.95rem;
     }
-    .sia-pillars .sia-step--light .sia-step__inset {
-      height: clamp(13rem, 30vh, 17rem);
-    }
+    .sia-pillars .sia-step--light .sia-step__inset,
     .sia-pillars .sia-step--mid .sia-step__inset {
-      height: clamp(15rem, 36vh, 20rem);
+      height: clamp(14rem, 33vh, 18rem);
     }
     .sia-pillars .sia-step--mid .sia-step__text,
     .sia-pillars .sia-step--light .sia-step__text {
