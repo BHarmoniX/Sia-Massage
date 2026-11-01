@@ -85,48 +85,49 @@ const treatmentImages = {
   water: { src: bambooBasin, alt: 'Water running from a bamboo spout into a stone basin' },
 } as const;
 
-// Sia offers relaxation massage only. MOCK: options, durations and prices.
+// Chinese relaxation massage. Names and lines from the master brief (DRAFT: the owner to confirm
+// what each treatment includes). MOCK: options, durations and prices.
 const treatments = [
   {
-    name: 'A quiet pause',
+    name: 'A Quiet Pause',
     zh: '片刻',
     image: 'oil',
-    text: 'Back, neck and shoulders. Thirty minutes to set the day down.',
+    text: 'A little time to unwind.',
     prices: [['30 min', '$55']],
   },
   {
-    name: 'Classic relaxation',
+    name: 'Classic Relaxation',
     zh: '放松',
     image: 'oil',
-    text: 'Full body, long flowing strokes with warm oil. Our most loved hour.',
+    text: 'An unhurried escape.',
     prices: [['60 min', '$90']],
   },
   {
-    name: 'Deep relaxation',
+    name: 'Deep Relaxation',
     zh: '静养',
     image: 'calm',
-    text: 'Unhurried, full body, with time to drift somewhere quiet.',
+    text: 'Time to truly switch off.',
     prices: [['90 min', '$130']],
   },
   {
-    name: 'The Sia ritual',
+    name: 'The Sia Ritual',
     zh: '仪式',
     image: 'tea',
-    text: 'Our longest: full body, scalp and feet, finished with warm tea.',
+    text: 'Make time for yourself.',
     prices: [['120 min', '$170']],
   },
   {
     name: 'Together',
     zh: '同享',
     image: 'calm',
-    text: 'Side-by-side relaxation massage for two, in the same quiet room.',
+    text: 'Share a moment of calm.',
     prices: [['60 min', '$180'], ['90 min', '$260']],
   },
   {
-    name: 'Gift of calm',
+    name: 'Gift of Calm',
     zh: '礼物',
     image: 'water',
-    text: 'A voucher for any treatment, beautifully presented.',
+    text: 'Give someone time for themselves.',
     prices: [['From', '$55']],
   },
 ] as const;
@@ -352,8 +353,12 @@ const faqs = [
     </div>
     <div class="sia-treatments__grid">
       <header class="sia-treatments__head" data-reveal>
-        <h2 id="treatments-title" class="sia-heading">Relaxation massage</h2>
-        <p>One treatment, perfected. Choose your time; we tailor the pressure to you on the day.<br />Prices in AUD, GST inclusive.</p>
+        <h2 id="treatments-title" class="sia-heading">Find your moment.</h2>
+        <p>
+          Every visit is an opportunity to slow down. Choose the treatment that feels right for you.
+          Whether you're looking for a little time to unwind or a longer massage experience, explore our
+          treatments and find a moment to make your own.
+        </p>
       </header>
 
       <div class="sia-treatments__visual" data-reveal>
@@ -365,7 +370,13 @@ const faqs = [
               </div>
             ))
           }
+          <!-- help for the undecided, across the foot of the photograph -->
+          <div class="sia-treatments__help glass-3d">
+            <p><strong>Not sure which treatment to choose?</strong> We're happy to help you find an option that suits your preferences.</p>
+            <a href="#contact" class="sia-treatments__help-link">Get in touch</a>
+          </div>
         </div>
+        <p class="sia-treatments__note">Prices in AUD, GST inclusive.</p>
       </div>
 
       <ul class="sia-menu" role="list">
@@ -377,6 +388,7 @@ const faqs = [
                 <span class="font-han" lang="zh-Hans">{t.zh}</span>
               </h3>
               <p>{t.text}</p>
+              <div class="sia-menu__foot">
               <dl>
                 {t.prices.map(([time, price]) => (
                   <div>
@@ -386,6 +398,9 @@ const faqs = [
                   </div>
                 ))}
               </dl>
+              {/* No booking system yet: books through the contact section for now. */}
+              <a href="#contact" class="sia-menu__book" aria-label={`Book ${t.name}`}>Book</a>
+              </div>
             </li>
           ))
         }
@@ -1592,12 +1607,80 @@ const faqs = [
     font-size: 0.875rem;
     color: var(--color-muted);
   }
-  .sia-menu__card dl {
-    display: grid;
-    gap: 0.2rem;
+  /* prices, with the booking link at the end of the last line */
+  .sia-menu__foot {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
     margin-top: auto;
     padding-top: 1rem;
+  }
+  .sia-menu__card dl {
+    flex: 1;
+    display: grid;
+    gap: 0.2rem;
     font-size: 0.8125rem;
+  }
+  .sia-menu__book {
+    padding-bottom: 0.15rem;
+    font-size: 0.8125rem;
+    font-weight: 550;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent-strong);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--color-accent) 45%, transparent);
+    text-underline-offset: 4px;
+    white-space: nowrap;
+  }
+  .sia-menu__book:hover,
+  .sia-menu__book:focus-visible {
+    text-decoration-color: currentColor;
+  }
+  /* the help panel over the foot of the photograph */
+  .sia-treatments__help.glass-3d {
+    --glass-tint: #f6f3ec;
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.25rem;
+    padding: 0.9rem 1.2rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: #27322a;
+  }
+  .sia-treatments__help p {
+    flex: 1 1 14rem;
+  }
+  .sia-treatments__help strong {
+    font-weight: 600;
+  }
+  .sia-treatments__help-link {
+    font-weight: 550;
+    color: #3f5634;
+    white-space: nowrap;
+    text-decoration: underline;
+    text-decoration-color: rgb(63 86 52 / 0.4);
+    text-underline-offset: 4px;
+  }
+  .sia-treatments__note {
+    margin-top: 0.6rem;
+    font-size: 0.8125rem;
+    color: #1f2a1b;
+  }
+  .sia-treatments__visual {
+    display: flex;
+    flex-direction: column;
+  }
+  .sia-treatments__visual .sia-treatments__frame {
+    flex: 1;
   }
   .sia-menu__card dl div {
     display: flex;
@@ -1691,10 +1774,15 @@ const faqs = [
       font-size: clamp(0.8125rem, 2.1vh, 1rem);
       line-height: 1.45;
     }
+    .sia-menu__foot {
+      padding-top: clamp(0.25rem, 0.9vh, 0.75rem);
+    }
     .sia-menu__card dl {
       gap: 0;
-      padding-top: clamp(0.25rem, 0.9vh, 0.75rem);
       font-size: clamp(0.75rem, 1.95vh, 0.9375rem);
+    }
+    .sia-treatments__head p {
+      max-width: 44rem;
     }
     .sia-menu__card dd {
       font-size: clamp(1rem, 2.6vh, 1.35rem);
