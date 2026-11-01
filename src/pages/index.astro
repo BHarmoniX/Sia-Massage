@@ -2272,6 +2272,8 @@ const faqs = [
     font-size: 40px;
     text-anchor: middle;
     dominant-baseline: central;
+    /* no font hinting: hinted glyphs snap to whole pixels as they scale, so they wobble */
+    text-rendering: geometricPrecision;
   }
   .sia-carving__gilt {
     fill: rgb(124 142 106 / 0.9);
@@ -3582,8 +3584,11 @@ const faqs = [
       // Beside the doorway, with a little breathing room between frame and text.
       const offset = A + EDGE + size * 1.45 * s;
       const yTop = base - (SHOULDER * A) + size * 0.4 * s;
-      couplets.right.setAttribute('transform', `translate(${n(cx + offset)} ${n(yTop)}) scale(${n(k)})`);
-      couplets.left.setAttribute('transform', `translate(${n(cx - offset)} ${n(yTop)}) scale(${n(k)})`);
+      // Fine precision here: rounding the scale to 0.1 made the characters jump in steps
+      // (up and down) while the doorway zooms, instead of growing smoothly.
+      const fine = (v: number) => v.toFixed(4);
+      couplets.right.setAttribute('transform', `translate(${fine(cx + offset)} ${fine(yTop)}) scale(${fine(k)})`);
+      couplets.left.setAttribute('transform', `translate(${fine(cx - offset)} ${fine(yTop)}) scale(${fine(k)})`);
       couplets.right.style.opacity = couplets.left.style.opacity = String(show);
       const coupletsShown = show > 0 || room > size * 1.6;
 
