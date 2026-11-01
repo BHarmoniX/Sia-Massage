@@ -14,9 +14,9 @@ import teaTable from '../client/photos/tea-table.jpg';
 // Placeholder shop front (generated) until the owner supplies a real photo of the studio.
 import shopFront from '../client/photos/shop-front.jpg';
 import morningRoom from '../client/photos/morning-room.jpg';
-// TEMPORARY: stands in for the owner/team photo in the philosophy story until the placeholder
-// image the user is supplying arrives (then a real, approved photo of the owner and team).
-import storyPhoto from '../client/photos/round-window.jpg';
+// PLACEHOLDER (supplied 2026-11-01, licence unknown): stands in for a real, approved photo of
+// Sia's owner and team in the philosophy story. Replace before launch.
+import storyPhoto from '../client/photos/team-placeholder.jpg';
 import herbalCompress from '../client/photos/herbal-compress.jpg';
 import towelCandles from '../client/photos/towel-candles.jpg';
 import therapistLinen from '../client/photos/therapist-linen.jpg';
@@ -261,7 +261,7 @@ const faqs = [
           </p>
         </div>
         <figure class="sia-phil__portrait img-reveal">
-          <Img src={storyPhoto} alt="" sizes="(min-width: 1024px) 34vw, 100vw" class="h-full w-full object-cover" />
+          <Img src={storyPhoto} alt="A smiling therapist in a dark uniform, with two colleagues standing behind her" sizes="(min-width: 1024px) 34vw, 100vw" class="h-full w-full object-cover sia-phil__team" />
         </figure>
       </article>
     </div>
@@ -1248,14 +1248,18 @@ const faqs = [
     margin-bottom: 0.5rem;
   }
   .sia-phil__portrait {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4 / 3;
     border-radius: 1.4rem;
     overflow: hidden;
     box-shadow: 0 34px 64px -34px rgb(40 52 32 / 0.55);
   }
-  .sia-phil__portrait :global(picture) {
+  .sia-phil__portrait picture {
     display: block;
     height: 100%;
+  }
+  /* the team photo: the therapist in front, her colleagues behind */
+  .sia-phil__portrait .sia-phil__team {
+    object-position: 55% 40%;
   }
   @media (min-width: 1024px) {
     .sia-phil {
@@ -1277,16 +1281,17 @@ const faqs = [
     /* the story mirrors it: words at the left, the portrait at the right */
     .sia-phil__story {
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 0;
+      column-gap: clamp(1.5rem, 3vw, 3rem);
     }
     .sia-phil__story-text {
       grid-column: 2 / span 5;
       grid-row: 1;
     }
+    /* wide enough for a group photo of the team */
     .sia-phil__portrait {
-      grid-column: 8 / span 4;
+      grid-column: 7 / span 6;
       grid-row: 1;
-      height: min(70vh, 36rem);
+      height: min(64vh, 31rem);
       aspect-ratio: auto;
     }
   }
@@ -1381,7 +1386,7 @@ const faqs = [
   .sia-step--mid .sia-step__inset {
     height: 17rem;
   }
-  .sia-step__inset :global(picture) {
+  .sia-step__inset picture {
     display: block;
     height: 100%;
   }
@@ -1428,11 +1433,11 @@ const faqs = [
       inset 0 8px 14px -8px rgb(0 0 0 / 0.45),
       inset 8px 0 14px -10px rgb(0 0 0 / 0.35);
   }
-  .sia-step__photo :global(picture) {
+  .sia-step__photo picture {
     display: block;
     height: 100%;
   }
-  .sia-step__photo :global(.sia-step__shop) {
+  .sia-step__photo .sia-step__shop {
     object-position: 58% 50%;
   }
 
@@ -1514,7 +1519,7 @@ const faqs = [
     z-index: 2;
     filter: saturate(0.82) brightness(0.97) contrast(0.96);
   }
-  .sia-lotus :global(img) {
+  .sia-lotus img {
     display: block;
     width: 100%;
     height: auto;
@@ -2354,7 +2359,7 @@ const faqs = [
     inset: 0;
     z-index: -1;
   }
-  .sia-contact__bg :global(img),
+  .sia-contact__bg img,
   .sia-contact__pond {
     object-position: 50% 70%;
   }
