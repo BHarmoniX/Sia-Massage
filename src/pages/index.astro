@@ -1515,20 +1515,7 @@ const faqs = [
     opacity: 0.5;
     mix-blend-mode: luminosity;
   }
-  /* a soft shore: the dark moss of the philosophy above fades down into the treatments, with no
-     band or edge between them */
-  .sia-treatments::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto;
-    z-index: 0;
-    height: clamp(6rem, 18vh, 11rem);
-    pointer-events: none;
-    background: linear-gradient(180deg, #222d1c, rgb(34 45 28 / 0.75) 25%, rgb(34 45 28 / 0.3) 60%, transparent);
-  }
   .sia-treatments__grid {
-    position: relative;
-    z-index: 1;
     display: grid;
     gap: 2rem;
     max-width: 82rem;
