@@ -1373,54 +1373,60 @@ const faqs = [
   .sia-step__cta {
     margin-top: 1.75rem;
   }
-  /* Wide screens, under the mountains: a compact staggered set instead of one card per row.
-     "The place" and "The tradition" side by side (the second stepping down), photo across the
-     top of each; "The experience" closes the set at full width, words left, studio right. */
+  /* Wide screens, under the mountains: a connected story. Three editorial cards at three-quarter
+     width, alternating sides (left, right, left), each with its photo on the card's outer edge, and
+     a fine thread of light running down the middle that shows in the gaps, linking them. */
   @media (min-width: 1024px) {
     .sia-pillars .sia-story {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       column-gap: clamp(1.25rem, 2.5vw, 2.25rem);
-      row-gap: clamp(1.75rem, 4vh, 2.75rem);
-      align-items: stretch; /* the two cards stand level and the same height */
+      row-gap: clamp(3rem, 8vh, 4.5rem);
+    }
+    .sia-pillars .sia-story::before {
+      content: '';
+      position: absolute;
+      left: calc(50% - 1px);
+      top: calc(var(--ridge-foot) + 1rem);
+      bottom: clamp(3rem, 8vh, 5rem);
+      width: 2px;
+      background: linear-gradient(180deg, transparent, rgb(219 230 194 / 0.55) 6%, rgb(219 230 194 / 0.55) 94%, transparent);
+      box-shadow: 0 0 8px rgb(219 230 194 / 0.35);
+      pointer-events: none;
     }
     .sia-pillars .sia-step {
       display: block;
     }
-    .sia-pillars .sia-step--light .sia-step__card,
-    .sia-pillars .sia-step--mid .sia-step__card,
-    .sia-pillars .sia-step--light .sia-step__panel.glass-3d,
-    .sia-pillars .sia-step--mid .sia-step__panel.glass-3d {
-      height: 100%;
-    }
-    .sia-pillars .sia-step--light {
-      grid-column: 2 / span 5;
+    .sia-pillars .sia-step--light,
+    .sia-pillars .sia-step--dark {
+      grid-column: 2 / span 8;
     }
     .sia-pillars .sia-step--mid {
-      grid-column: 7 / span 5;
+      grid-column: 4 / span 8;
     }
-    .sia-pillars .sia-step--dark {
-      grid-column: 2 / span 10;
+    .sia-pillars .sia-step .sia-step__panel.glass-3d {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      align-items: stretch;
+      /* solid rice paper (the same tone it shows over the dark), so the thread passes behind */
+      background: #e1ddd0;
     }
-    .sia-pillars .sia-step--light .sia-step__panel.glass-3d,
-    .sia-pillars .sia-step--mid .sia-step__panel.glass-3d {
-      grid-template-columns: 1fr;
-    }
+    /* the photo on each card's outer edge */
     .sia-pillars .sia-step--light .sia-step__inset,
-    .sia-pillars .sia-step--mid .sia-step__inset {
-      order: -1;
-      min-height: 0;
-      border-top-left-radius: 1.95rem;
-    }
-    .sia-pillars .sia-step--light .sia-step__inset,
-    .sia-pillars .sia-step--mid .sia-step__inset {
-      height: clamp(14rem, 33vh, 18rem);
-    }
-    .sia-pillars .sia-step--mid .sia-step__text,
-    .sia-pillars .sia-step--light .sia-step__text {
-      padding: 1.5rem 1.75rem 1.6rem;
-    }
     .sia-pillars .sia-step--dark .sia-step__inset {
-      min-height: clamp(20rem, 52vh, 28rem);
+      order: -1;
+    }
+    .sia-pillars .sia-step--mid .sia-step__inset {
+      order: 1;
+    }
+    .sia-pillars .sia-step--mid .sia-step__panel.glass-3d {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    }
+    .sia-pillars .sia-step .sia-step__inset {
+      height: auto;
+      min-height: clamp(16rem, 40vh, 21rem);
+    }
+    .sia-pillars .sia-step .sia-step__text {
+      align-self: center;
+      padding: 2rem 2.25rem;
     }
   }
 
