@@ -262,7 +262,7 @@ const faqs = [
 
       <article class="sia-step sia-step--story" aria-labelledby="sia-story-title">
         <div class="sia-step__card" data-reveal>
-          <div class="sia-step__panel glass-3d">
+          <div class="sia-step__panel glass-3d" data-glow>
             <figure class="sia-step__inset img-reveal">
               <Img src={storyPhoto} alt="A smiling therapist in a dark uniform, with two colleagues standing behind her" sizes="(min-width: 1024px) 42vw, 100vw" class="h-full w-full object-cover sia-phil__team" />
             </figure>
@@ -1423,6 +1423,15 @@ const faqs = [
     display: grid;
   }
 
+  /* "Our story" in the contact card's glass: frosted ivory at 62%, white edge, pointer glow */
+  .sia-step--story .sia-step__panel.glass-3d {
+    --glass-tint: #f6f3ec;
+    background: color-mix(in oklab, var(--glass-tint) 62%, transparent);
+    border: 1px solid color-mix(in oklab, white 45%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, white 18%, transparent),
+      0 24px 48px -28px color-mix(in oklab, var(--color-text) 45%, transparent);
+  }
   /* The three cards under the mountains in frosted sage glass (like the contact card over the
      pond): the dusk and its fireflies glow faintly through, the words stay dark moss. */
   .sia-pillars .sia-step__panel.glass-3d {
