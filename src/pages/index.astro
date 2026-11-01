@@ -342,28 +342,6 @@ const faqs = [
     </div>
   </Section>
 
-  <!-- ───────────── Colour break: moss washes from the rain into the treatments ───────────── -->
-  <section class="sia-scroll" aria-hidden="true">
-    <svg class="sia-colourbreak" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <defs>
-        <linearGradient id="sia-break-a" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0" stop-color="#2f3d2a" />
-          <stop offset="0.45" stop-color="#5c7a4c" />
-          <stop offset="1" stop-color="#b9c8a4" />
-        </linearGradient>
-        <linearGradient id="sia-break-b" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0" stop-color="#b9c8a4" />
-          <stop offset="0.6" stop-color="#dfe5d4" />
-          <stop offset="1" stop-color="#5c7a4c" />
-        </linearGradient>
-      </defs>
-      <path class="sia-colourbreak__back" fill="url(#sia-break-b)" opacity="0.7"
-        d="M0 0 H1440 V58 C1300 92 1160 34 1010 62 C860 90 720 40 560 66 C400 92 250 48 120 70 C70 78 30 76 0 72 Z" />
-      <path class="sia-colourbreak__front" fill="url(#sia-break-a)"
-        d="M0 0 H1440 V30 C1310 60 1180 14 1030 38 C880 62 740 18 590 42 C430 68 290 26 150 46 C90 54 40 52 0 48 Z" />
-    </svg>
-  </section>
-
   <!-- ───────────── Treatments: menu with a living picture ───────────── -->
   <Section id="treatments" labelledby="treatments-title" class="sia-treatments">
     <div class="sia-treatments__backdrop" aria-hidden="true">
@@ -1517,32 +1495,12 @@ const faqs = [
     filter: blur(6px);
   }
 
-  /* ── Colour break band ── */
-  .sia-scroll {
-    /* Runs straight from the rain above into the treatments' sage below: no paper gaps. */
-    background: #e3e8d9;
-  }
-  /* Stylised colour break: layered moss-to-sage ink washes that drip from the scroll. */
-  .sia-colourbreak {
-    display: block;
-    width: 100%;
-    height: clamp(3.5rem, 7vw, 6.5rem);
-    margin-top: -1px;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .sia-colourbreak__back {
-      animation: sia-wash 14s ease-in-out infinite alternate;
-    }
-  }
-  @keyframes sia-wash {
-    to {
-      transform: translateX(-2%);
-    }
-  }
-
   /* ── Treatments: sage mist, tall photograph, 2×3 crystal price cards ── */
   .sia-treatments {
     position: relative;
+    /* tucked 1px up over the philosophy, so no hairline of the page shows between them */
+    z-index: 1;
+    margin-top: -1px;
     isolation: isolate;
     overflow: hidden;
     background:
@@ -1557,7 +1515,20 @@ const faqs = [
     opacity: 0.5;
     mix-blend-mode: luminosity;
   }
+  /* a soft shore: the dark moss of the philosophy above fades down into the treatments, with no
+     band or edge between them */
+  .sia-treatments::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 0;
+    height: clamp(6rem, 18vh, 11rem);
+    pointer-events: none;
+    background: linear-gradient(180deg, #222d1c, rgb(34 45 28 / 0.75) 25%, rgb(34 45 28 / 0.3) 60%, transparent);
+  }
   .sia-treatments__grid {
+    position: relative;
+    z-index: 1;
     display: grid;
     gap: 2rem;
     max-width: 82rem;
