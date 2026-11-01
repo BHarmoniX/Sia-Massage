@@ -3580,15 +3580,20 @@ const faqs = [
       const room = cx - A0 - EDGE - 24;
       const size = Math.min(56, Math.max(28, A0 * 0.36));
       const show = room > size * 1.6 ? Math.max(0, 1 - open * 2.4) : 0;
-      const k = (size / 40) * s;
-      // Beside the doorway, with a little breathing room between frame and text.
-      const offset = A + EDGE + size * 1.45 * s;
-      const yTop = base - (SHOULDER * A) + size * 0.4 * s;
-      // Fine precision here: rounding the scale to 0.1 made the characters jump in steps
-      // (up and down) while the doorway zooms, instead of growing smoothly.
+      // Fixed to the wall: placed beside the closed doorway (a little breathing room past the
+      // frame), then zoomed exactly as the wall layer is (same scale, rounded the same way,
+      // about the same point), so the characters stay put on the plaster and grow with the
+      // wall and the door as you walk in. Fine precision: rounding here made them jump.
+      const sWall = Math.round(s * 1000) / 1000;
+      const onWall = (x: number, y: number): [number, number] => [cx + (x - cx) * sWall, pivotY + (y - pivotY) * sWall];
+      const offset0 = A0 + EDGE + size * 1.45;
+      const yTop0 = base0 - SHOULDER * A0 + size * 0.4;
+      const k = (size / 40) * sWall;
       const fine = (v: number) => v.toFixed(4);
-      couplets.right.setAttribute('transform', `translate(${fine(cx + offset)} ${fine(yTop)}) scale(${fine(k)})`);
-      couplets.left.setAttribute('transform', `translate(${fine(cx - offset)} ${fine(yTop)}) scale(${fine(k)})`);
+      const [xr, yr] = onWall(cx + offset0, yTop0);
+      const [xl] = onWall(cx - offset0, yTop0);
+      couplets.right.setAttribute('transform', `translate(${fine(xr)} ${fine(yr)}) scale(${fine(k)})`);
+      couplets.left.setAttribute('transform', `translate(${fine(xl)} ${fine(yr)}) scale(${fine(k)})`);
       couplets.right.style.opacity = couplets.left.style.opacity = String(show);
       const coupletsShown = show > 0 || room > size * 1.6;
 
