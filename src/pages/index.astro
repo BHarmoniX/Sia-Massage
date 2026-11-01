@@ -3145,9 +3145,17 @@ const faqs = [
     };
 
     let queued = false;
-    const update = () => {
+    let drawnOnce = false;
+    let roomKey = '';
+    const update = (event?: Event) => {
       queued = false;
-      const top = doorway.getBoundingClientRect().top;
+      const box = doorway.getBoundingClientRect();
+      const top = box.top;
+      // Nowhere near the screen: nothing to draw (scrolling elsewhere on the page stays free).
+      // Always drawn once at load and on resize, so it's ready when it comes into view.
+      const offscreen = box.bottom < -200 || box.top > window.innerHeight + 200;
+      if (offscreen && drawnOnce && event?.type !== 'resize') return;
+      drawnOnce = true;
       const capture = document.documentElement.classList.contains('sia-capture');
       // Two phases of scroll: first the doors swing in (over 45% of a screen), then the
       // gateway opens around you (over the next 65%).
@@ -3360,6 +3368,11 @@ const faqs = [
           const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
           const cw = Math.round(w * dpr);
           const chh = Math.round(h * dpr);
+          const loaded = doorPhoto.complete && doorPhoto.naturalWidth > 0;
+          // Repaint only when the room view actually changes.
+          const key = `${cw}x${chh}|${sWall}|${SHIFT.toFixed(5)}|${open.toFixed(4)}|${loaded}`;
+          if (key !== roomKey) {
+          roomKey = key;
           if (roomCanvas.width !== cw || roomCanvas.height !== chh) {
             roomCanvas.width = cw;
             roomCanvas.height = chh;
@@ -3387,6 +3400,7 @@ const faqs = [
               ctx.globalAlpha = 1;
             }
             ctx.restore();
+          }
           }
         }
       }
@@ -3730,7 +3744,7 @@ const faqs = [
       () => {
         if (!queued) {
           queued = true;
-          requestAnimationFrame(update);
+          requestAnimationFrame(() => update());
         }
       },
       { passive: true },
