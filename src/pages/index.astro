@@ -241,7 +241,7 @@ const faqs = [
       </header>
 
       <article class="sia-phil__story" aria-labelledby="sia-story-title">
-        <div class="sia-phil__story-text" data-reveal>
+        <div class="sia-phil__story-text glass-3d" data-reveal>
           <p class="sia-phil__label">Our story</p>
           <h3 id="sia-story-title" class="sia-phil__story-title">Rooted in Chinese tradition. Made for moments of calm.</h3>
           <p>
@@ -1152,36 +1152,46 @@ const faqs = [
     height: 22%;
   }
 
-  /* ── The opening and the story, on the light water ── */
+  /* ── The opening and the story, on the light water ──
+     One frame for the whole section: on wide screens everything lines up between grid lines 2
+     and 12 (the content runs from column 2 to column 11), and each block alternates sides of it. */
   .sia-phil {
     position: relative;
     z-index: 1;
     display: grid;
-    gap: 4.5rem;
+    gap: 3.5rem;
     max-width: 80rem;
     margin: 0 auto;
-    /* begins below the reflected hills, on the open page */
-    padding: calc(min(34vh, 22rem) + 2.5rem) 1.5rem 3rem;
+    /* begins where the reflected hills fade out */
+    padding: calc(min(34vh, 22rem) * 0.62) 1.5rem 0;
   }
+  /* the opening: one centred group (character, heading, introduction) */
   .sia-phil__intro {
     display: grid;
-    gap: 1.75rem;
+    justify-items: center;
+    gap: 1.5rem;
+    text-align: center;
   }
-  .sia-phil__title {
-    margin-top: 0.75rem;
-    font-family: var(--font-display);
-    font-weight: 300;
-    font-size: clamp(2.6rem, 6vw, 5rem);
-    line-height: 1;
-    color: #27322a;
+  .sia-phil__head {
+    display: grid;
+    justify-items: center;
   }
   .sia-phil .sia-kicker {
+    justify-content: center;
     color: #5c7a4c;
+  }
+  .sia-phil__title {
+    margin-top: 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(2.6rem, 5.2vw, 4.4rem);
+    line-height: 1.02;
+    color: #27322a;
   }
   .sia-phil__lede {
     display: grid;
-    gap: 1rem;
-    max-width: 34rem;
+    gap: 0.9rem;
+    max-width: 40rem;
     color: #3f4c3d;
     font-size: 1.05rem;
     line-height: 1.75;
@@ -1202,26 +1212,34 @@ const faqs = [
     text-transform: uppercase;
     color: #5c7a4c;
   }
+  /* the story: the team photo with a rice-paper card over its edge, like the pillars below */
   .sia-phil__story {
     display: grid;
-    gap: 2rem;
-    align-items: center;
   }
-  .sia-phil__story-text {
+  .sia-phil__story-text.glass-3d {
+    --glass-tint: #f7f2e6;
+    background: color-mix(in oklab, var(--glass-tint) 90%, transparent);
+    position: relative;
+    z-index: 2;
     display: grid;
-    gap: 1rem;
+    gap: 0.9rem;
+    margin: -3rem 0.75rem 0;
+    padding: 2.25rem 1.75rem;
+    border-radius: 2.6rem;
     color: #3f4c3d;
     line-height: 1.75;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), 0 22px 40px -22px rgb(20 28 16 / 0.45);
   }
   .sia-phil__story-title {
     font-family: var(--font-display);
     font-weight: 300;
-    font-size: clamp(2rem, 3.6vw, 3rem);
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
     line-height: 1.08;
     color: #27322a;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
   }
   .sia-phil__portrait {
+    order: -1; /* small screens: the photo first, the card overlapping its foot */
     aspect-ratio: 4 / 3;
     border-radius: 1.4rem;
     overflow: hidden;
@@ -1237,36 +1255,24 @@ const faqs = [
   }
   @media (min-width: 1024px) {
     .sia-phil {
-      gap: clamp(4rem, 12vh, 7rem);
-      padding: calc(min(34vh, 22rem) + clamp(2.5rem, 6vh, 4rem)) 3rem clamp(3rem, 8vh, 5rem);
+      gap: clamp(3.5rem, 9vh, 5rem);
+      padding: calc(min(34vh, 22rem) * 0.62) 3rem 0;
     }
-    /* asymmetric: the heading at the left, the introduction stepping in lower at the right */
-    .sia-phil__intro {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      align-items: start;
-    }
-    .sia-phil__head {
-      grid-column: 2 / span 6;
-    }
-    .sia-phil__lede {
-      grid-column: 8 / span 4;
-      padding-top: clamp(6rem, 10vw, 9rem); /* steps in below the heading */
-    }
-    /* the story mirrors it: words at the left, the portrait at the right */
     .sia-phil__story {
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: clamp(1.5rem, 3vw, 3rem);
+      align-items: stretch; /* the photo matches the card's height */
     }
-    .sia-phil__story-text {
-      grid-column: 2 / span 5;
-      grid-row: 1;
-    }
-    /* wide enough for a group photo of the team */
     .sia-phil__portrait {
-      grid-column: 7 / span 6;
+      grid-column: 2 / span 6;
       grid-row: 1;
-      height: min(64vh, 31rem);
+      min-height: 26rem;
       aspect-ratio: auto;
+    }
+    .sia-phil__story-text.glass-3d {
+      grid-column: 7 / span 5;
+      grid-row: 1;
+      margin: 0;
+      padding: 2.75rem 2.5rem;
     }
   }
 
@@ -1418,8 +1424,8 @@ const faqs = [
   /* Wide screens: a staggered descent, each step larger than the last. */
   @media (min-width: 1024px) {
     .sia-story {
-      gap: clamp(3rem, 9vh, 5.5rem);
-      padding: clamp(5rem, 13vh, 8rem) 3rem clamp(6rem, 14vh, 9rem);
+      gap: clamp(3rem, 9vh, 5rem);
+      padding: clamp(3.5rem, 9vh, 5rem) 3rem clamp(6rem, 14vh, 9rem);
     }
     .sia-step {
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -1445,22 +1451,22 @@ const faqs = [
     }
     /* two: a larger card, stepped to the right, photo at its left */
     .sia-step--mid .sia-step__card {
-      grid-column: 4 / span 8;
+      grid-column: 5 / span 7;
     }
     .sia-step--mid .sia-step__panel.glass-3d {
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
     }
     .sia-step--mid .sia-step__inset {
       min-height: 24rem;
     }
     /* three: the studio, largest, in its walnut frame with the card overlapping its edge */
     .sia-step--dark .sia-step__photo {
-      grid-column: 1 / span 5;
+      grid-column: 2 / span 5;
       height: min(80vh, 46rem);
       aspect-ratio: auto;
     }
     .sia-step--dark .sia-step__card {
-      grid-column: 5 / span 7;
+      grid-column: 6 / span 6;
       margin: 0;
     }
     .sia-step--dark .sia-step__text {
