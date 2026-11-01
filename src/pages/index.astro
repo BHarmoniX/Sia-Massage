@@ -3743,7 +3743,8 @@ const faqs = [
 
 <script>
   // Your Visit: the numeral circles light up as the visitor reaches the cards. Wide screens (one
-  // row): in turn from 1 to 4 as the row scrolls from 85% to 40% down the screen. Small screens
+  // row): in turn from 1 to 4 as the row scrolls from 85% to 52% down the screen (4 lights as the
+  // whole row comes into full view). Small screens
   // (stacked): each as its own card passes 75% down. Reduced motion: all lit, no animation.
   const thread = document.querySelector<HTMLElement>('[data-thread]');
   if (thread) {
@@ -3758,7 +3759,7 @@ const faqs = [
         const vh = window.innerHeight;
         if (wide.matches) {
           const top = thread.getBoundingClientRect().top;
-          const p = Math.min(1, Math.max(0, (vh * 0.85 - top) / (vh * 0.45)));
+          const p = Math.min(1, Math.max(0, (vh * 0.85 - top) / (vh * 0.33)));
           const t = p * (cards.length - 1);
           cards.forEach((card, i) => card.classList.toggle('is-lit', p > 0 && t >= i - 0.001));
         } else {
