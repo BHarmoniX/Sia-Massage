@@ -2187,6 +2187,9 @@ const faqs = [
     backdrop-filter: blur(10px) saturate(1.2);
   }
   /* The arch border: a confident line on the doorway's edge and a fine line outside it. */
+  .sia-visit__frame.is-zooming .sia-timber {
+    filter: none;
+  }
   .sia-visit__frame {
     position: absolute;
     inset: 0;
@@ -3285,6 +3288,10 @@ const faqs = [
       const Af = A0;
       const bf = base0;
       frameZoom?.setAttribute('transform', `matrix(${sWall} 0 0 ${sWall} ${(cx * (1 - sWall)).toFixed(3)} ${(pivotY * (1 - sWall)).toFixed(3)})`);
+      // The timber's carved-lighting effect is by far the slowest thing to redraw as the frame
+      // grows (a screen recording showed the zoom updating only ~15 times a second): kept at rest,
+      // dropped while zooming, when the lit and shaded edge lines carry the look.
+      archFrame.classList.toggle('is-zooming', sWall > 1);
       // The photo reaches out to the outer line, under the glass band.
       const timberPath = `${arch(cx, bf, Af, EDGE, true)} ${arch(cx, bf, Af, BAND, true)}`;
       archFrame.querySelector('[data-timber]')?.setAttribute('d', timberPath);
@@ -3448,7 +3455,10 @@ const faqs = [
       // The path inside runs right down to the threshold, where it meets the forecourt.
       // The forecourt: a flat plane laid from the foot of the wall toward you, seen from eye
       // level in the doorway, so it widens and comes closer exactly as real ground does.
-      if (ground && groundPlane) {
+      // Once the forecourt has slid below the stage (early in the walk-in), stop drawing it.
+      const forecourtGone = floor - Math.max(10, A * 0.12) - 24 > h;
+      for (const el of [ground, sill, wallFoot]) if (el) el.style.visibility = forecourtGone ? 'hidden' : '';
+      if (ground && groundPlane && !forecourtGone) {
         // The same standing eye level as the room seen through the doorway, so the paving and the
         // room's floor recede to one horizon.
         const eye = Math.max(20, APEX * A * (1.6 / 2.4));
