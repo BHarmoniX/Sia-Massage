@@ -1373,60 +1373,39 @@ const faqs = [
   .sia-step__cta {
     margin-top: 1.75rem;
   }
-  /* Wide screens, under the mountains: a connected story. Three editorial cards at three-quarter
-     width, alternating sides (left, right, left), each with its photo on the card's outer edge, and
-     a fine thread of light running down the middle that shows in the gaps, linking them. */
+  /* Wide screens, under the mountains: three separate cards of the same size, one under another
+     across the full width, each with its photo on the left and the words beside it. */
   @media (min-width: 1024px) {
     .sia-pillars .sia-story {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       column-gap: clamp(1.25rem, 2.5vw, 2.25rem);
-      row-gap: clamp(3rem, 8vh, 4.5rem);
-    }
-    .sia-pillars .sia-story::before {
-      content: '';
-      position: absolute;
-      left: calc(50% - 1px);
-      top: calc(var(--ridge-foot) + 1rem);
-      bottom: clamp(3rem, 8vh, 5rem);
-      width: 2px;
-      background: linear-gradient(180deg, transparent, rgb(219 230 194 / 0.55) 6%, rgb(219 230 194 / 0.55) 94%, transparent);
-      box-shadow: 0 0 8px rgb(219 230 194 / 0.35);
-      pointer-events: none;
+      row-gap: clamp(1.5rem, 3.5vh, 2.25rem);
     }
     .sia-pillars .sia-step {
       display: block;
-    }
-    .sia-pillars .sia-step--light,
-    .sia-pillars .sia-step--dark {
-      grid-column: 2 / span 8;
-    }
-    .sia-pillars .sia-step--mid {
-      grid-column: 4 / span 8;
+      grid-column: 2 / span 10;
     }
     .sia-pillars .sia-step .sia-step__panel.glass-3d {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
       align-items: stretch;
-      /* solid rice paper (the same tone it shows over the dark), so the thread passes behind */
-      background: #e1ddd0;
-    }
-    /* the photo on each card's outer edge */
-    .sia-pillars .sia-step--light .sia-step__inset,
-    .sia-pillars .sia-step--dark .sia-step__inset {
-      order: -1;
-    }
-    .sia-pillars .sia-step--mid .sia-step__inset {
-      order: 1;
-    }
-    .sia-pillars .sia-step--mid .sia-step__panel.glass-3d {
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     }
     .sia-pillars .sia-step .sia-step__inset {
-      height: auto;
-      min-height: clamp(16rem, 40vh, 21rem);
+      order: -1; /* the photo always on the left */
+      position: relative;
+      height: auto; /* fills the card's full height */
+      min-height: clamp(15rem, 38vh, 19rem);
+    }
+    /* the photo fills its slot without its own shape setting the card's height */
+    .sia-pillars .sia-step .sia-step__inset picture,
+    .sia-pillars .sia-step .sia-step__inset img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
     }
     .sia-pillars .sia-step .sia-step__text {
       align-self: center;
-      padding: 2rem 2.25rem;
+      padding: 2rem clamp(2rem, 3.5vw, 3rem);
     }
   }
 
