@@ -141,10 +141,10 @@ const treatments = [
 
 // The four moments of a visit. Copy from the master brief (proposed; owner to review).
 const journey = [
-  { n: '一', title: 'Arrive', line: 'Leave the day at the door.', text: "Take a moment to settle in. Enjoy a warm welcome, a little time to unwind and a few words about how you're feeling." },
-  { n: '二', title: 'Breathe', line: 'Ease into the moment.', text: 'Get comfortable and let the outside world fade away. Your therapist will discuss your preferences and the pressure that feels right for you.' },
-  { n: '三', title: 'Release', line: 'Time to let go.', text: 'Settle into your treatment as attentive hands and considered techniques help you enjoy a moment of relaxation.' },
-  { n: '四', title: 'Restore', line: 'Return to your day, unhurried.', text: 'Take your time getting up. Enjoy a quiet moment before heading back into the day, hopefully feeling refreshed.' },
+  { n: '1', title: 'Arrive', line: 'Leave the day at the door.', text: "Take a moment to settle in. Enjoy a warm welcome, a little time to unwind and a few words about how you're feeling." },
+  { n: '2', title: 'Breathe', line: 'Ease into the moment.', text: 'Get comfortable and let the outside world fade away. Your therapist will discuss your preferences and the pressure that feels right for you.' },
+  { n: '3', title: 'Release', line: 'Time to let go.', text: 'Settle into your treatment as attentive hands and considered techniques help you enjoy a moment of relaxation.' },
+  { n: '4', title: 'Restore', line: 'Return to your day, unhurried.', text: 'Take your time getting up. Enjoy a quiet moment before heading back into the day, hopefully feeling refreshed.' },
 ];
 
 // MOCK: answers to confirm with the owner
@@ -689,13 +689,13 @@ const faqs = [
       <ol class="sia-visit__cards" role="list" data-thread>
         {
           journey.map((j) => (
-            <li class="sia-visit__card notch-host" data-tilt data-reveal>
+            <li class="sia-visit__card notch-host float" data-tilt data-reveal>
               <div class="sia-visit__panel glass-3d crystal notch" data-glow>
                 <p class="sia-visit__label">{j.title}</p>
                 <h3>{j.line}</h3>
                 <p>{j.text}</p>
               </div>
-              <span class="notch-piece glass-3d crystal font-han" aria-hidden="true" lang="zh-Hans">
+              <span class="notch-piece glass-3d crystal sia-visit__num" aria-hidden="true">
                 {j.n}
               </span>
             </li>
@@ -2254,55 +2254,29 @@ const faqs = [
       grid-template-columns: repeat(4, 1fr);
     }
   }
-  /* The connecting line (wide screens): a fine thread through the four numeral circles that
-     lights up from 一 to 四 as the cards scroll into view. Each card draws its own two halves
-     (from the gap before it to its circle, and from its circle to the gap after it), between
-     the card and its circle, so the circles always sit on top. --l and --r (0 → 1) are how much
-     of each half is lit, set from the scroll by the script at the end. */
-  @media (min-width: 1024px) {
-    .sia-visit__card::before,
-    .sia-visit__card::after {
-      content: '';
-      position: absolute;
-      top: -5px; /* just above the cards' pale top edges, over the dark room, through the circles */
-      z-index: 1;
-      height: 2px;
-      border-radius: 2px;
-      pointer-events: none;
-      filter: drop-shadow(0 0 5px rgb(219 230 194 / 0.7));
-    }
-    .sia-visit__card::before {
-      left: -0.625rem; /* half the gap between cards */
-      width: calc(50% + 0.625rem - var(--notch-r));
-      background: linear-gradient(90deg, #dbe6c2 calc(var(--l, 0) * 100%), rgb(219 230 194 / 0.3) calc(var(--l, 0) * 100%));
-    }
-    .sia-visit__card::after {
-      left: calc(50% + var(--notch-r));
-      right: -0.625rem;
-      background: linear-gradient(90deg, #dbe6c2 calc(var(--r, 0) * 100%), rgb(219 230 194 / 0.3) calc(var(--r, 0) * 100%));
-    }
-    .sia-visit__card:first-child::before,
-    .sia-visit__card:last-child::after {
-      display: none;
-    }
-    /* a circle glows once the light reaches it */
-    .sia-visit__card .notch-piece.glass-3d.crystal {
-      transition: box-shadow 600ms var(--depth-ease);
-    }
-    .sia-visit__card.is-lit .notch-piece.glass-3d.crystal {
-      box-shadow:
-        0 0 0 3px rgb(219 230 194 / 0.35),
-        0 0 22px 2px rgb(219 230 194 / 0.45);
-    }
+  /* Each numeral circle lights up as the visitor reaches it: in turn from 1 to 4 on wide
+     screens, card by card on small ones (set by the script at the end). */
+  .sia-visit__card .notch-piece.glass-3d.crystal {
+    transition: box-shadow 700ms var(--depth-ease), background-color 700ms var(--depth-ease);
+  }
+  .sia-visit__card.is-lit .notch-piece.glass-3d.crystal {
+    background-color: rgb(92 122 76 / 0.98);
+    box-shadow:
+      0 0 0 3px rgb(219 230 194 / 0.35),
+      0 0 24px 3px rgb(219 230 194 / 0.5);
+  }
+  /* the numbers in the circles, in the display face */
+  .sia-visit__card .sia-visit__num {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    line-height: 1;
+    font-variant-numeric: lining-nums; /* full-height figures, so 1 reads as 1, not I */
   }
   @media (prefers-reduced-motion: reduce) {
     .sia-visit {
       --open: 1;
     }
-    .sia-visit__card {
-      --l: 1;
-      --r: 1;
-    }
+
   }
 
   /* ── FAQ ── */
@@ -3575,34 +3549,38 @@ const faqs = [
 </script>
 
 <script>
-  // Your Visit: the thread through the four moments lights from 一 to 四 as the cards scroll in
-  // (from the cards' top reaching 85% down the screen to reaching 40%). Reduced motion: the CSS
-  // shows it fully lit and this does nothing.
+  // Your Visit: the numeral circles light up as the visitor reaches the cards. Wide screens (one
+  // row): in turn from 1 to 4 as the row scrolls from 85% to 40% down the screen. Small screens
+  // (stacked): each as its own card passes 75% down. Reduced motion: all lit, no animation.
   const thread = document.querySelector<HTMLElement>('[data-thread]');
-  if (thread && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (thread) {
     const cards = [...thread.children] as HTMLElement[];
-    const span = (t: number, a: number, b: number) => Math.min(1, Math.max(0, (t - a) / (b - a)));
-    let queued = false;
-    const update = () => {
-      queued = false;
-      const vh = window.innerHeight;
-      const top = thread.getBoundingClientRect().top;
-      const p = span(vh * 0.85 - top, 0, vh * 0.45);
-      const t = p * (cards.length - 1); // position of the light, in cards
-      cards.forEach((card, i) => {
-        card.style.setProperty('--l', span(t, i - 0.5, i).toFixed(3));
-        card.style.setProperty('--r', span(t, i, i + 0.5).toFixed(3));
-        card.classList.toggle('is-lit', p > 0 && t >= i - 0.001);
-      });
-    };
-    addEventListener('scroll', () => {
-      if (!queued) {
-        queued = true;
-        requestAnimationFrame(update);
-      }
-    }, { passive: true });
-    addEventListener('resize', update);
-    update();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      for (const card of cards) card.classList.add('is-lit');
+    } else {
+      const wide = window.matchMedia('(min-width: 1024px)');
+      let queued = false;
+      const update = () => {
+        queued = false;
+        const vh = window.innerHeight;
+        if (wide.matches) {
+          const top = thread.getBoundingClientRect().top;
+          const p = Math.min(1, Math.max(0, (vh * 0.85 - top) / (vh * 0.45)));
+          const t = p * (cards.length - 1);
+          cards.forEach((card, i) => card.classList.toggle('is-lit', p > 0 && t >= i - 0.001));
+        } else {
+          for (const card of cards) card.classList.toggle('is-lit', card.getBoundingClientRect().top < vh * 0.75);
+        }
+      };
+      addEventListener('scroll', () => {
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(update);
+        }
+      }, { passive: true });
+      addEventListener('resize', update);
+      update();
+    }
   }
 </script>
 
