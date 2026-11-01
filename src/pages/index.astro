@@ -10,7 +10,6 @@ import OnePageLayout from '../layouts/OnePageLayout.astro';
 import { formatAuPhone, site, telHref } from '../config/site';
 
 import bambooLight from '../client/photos/bamboo-light.jpg';
-import teaTable from '../client/photos/tea-table.jpg';
 // Placeholder shop front (generated) until the owner supplies a real photo of the studio.
 import shopFront from '../client/photos/shop-front.jpg';
 import morningRoom from '../client/photos/morning-room.jpg';
@@ -18,8 +17,13 @@ import morningRoom from '../client/photos/morning-room.jpg';
 // Sia's owner and team in the philosophy story. Replace before launch.
 import storyPhoto from '../client/photos/team-placeholder.jpg';
 import herbalCompress from '../client/photos/herbal-compress.jpg';
-import towelCandles from '../client/photos/towel-candles.jpg';
-import therapistLinen from '../client/photos/therapist-linen.jpg';
+// Treatment photos: generated for Sia (OpenArt, Nano Banana Pro), graded toward the site's sage.
+import treatQuietPause from '../client/photos/treat-quiet-pause.jpg';
+import treatClassic from '../client/photos/treat-classic.jpg';
+import treatDeep from '../client/photos/treat-deep.jpg';
+import treatRitual from '../client/photos/treat-ritual.jpg';
+import treatTogether from '../client/photos/treat-together.jpg';
+import treatGift from '../client/photos/treat-gift.jpg';
 // The view through the doorway: a candlelit spa treatment room (generated for Sia, OpenArt).
 // The earlier bamboo path photo (bamboo-path.jpg) is kept in the photos folder in case it's wanted back.
 import spaRoom from '../client/photos/spa-room.jpg';
@@ -78,11 +82,14 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
 
 // Pictures the treatment menu crossfades between as you move through it.
 // Pictures the menu crossfades between as you move through it.
+// One photo per treatment, each showing that treatment.
 const treatmentImages = {
-  oil: { src: therapistLinen, alt: 'A therapist in a linen uniform giving a slow relaxation massage in soft daylight' },
-  calm: { src: towelCandles, alt: 'Rolled towel, candles and a reed diffuser in soft light' },
-  tea: { src: teaTable, alt: 'Tea set laid out on a long wooden table' },
-  water: { src: bambooBasin, alt: 'Water running from a bamboo spout into a stone basin' },
+  pause: { src: treatQuietPause, alt: 'A therapist in a sage uniform gently massaging the neck and shoulders of a client lying face down' },
+  classic: { src: treatClassic, alt: 'A young therapist giving a man a slow relaxation massage along his back' },
+  deep: { src: treatDeep, alt: 'A woman resting with her eyes closed as a therapist rests her palms on her shoulders' },
+  ritual: { src: treatRitual, alt: 'A therapist giving a woman a gentle head and temple massage as she lies with her eyes closed' },
+  together: { src: treatTogether, alt: 'A couple side by side on two massage tables, each with their own therapist' },
+  gift: { src: treatGift, alt: 'A gift voucher in a kraft envelope tied with a sage ribbon, on folded linen beside a tea cup' },
 } as const;
 
 // Chinese relaxation massage. Names and lines from the master brief (DRAFT: the owner to confirm
@@ -91,42 +98,42 @@ const treatments = [
   {
     name: 'A Quiet Pause',
     zh: '片刻',
-    image: 'oil',
+    image: 'pause',
     text: 'A little time to unwind.',
     prices: [['30 min', '$55']],
   },
   {
     name: 'Classic Relaxation',
     zh: '放松',
-    image: 'oil',
+    image: 'classic',
     text: 'An unhurried escape.',
     prices: [['60 min', '$90']],
   },
   {
     name: 'Deep Relaxation',
     zh: '静养',
-    image: 'calm',
+    image: 'deep',
     text: 'Time to truly switch off.',
     prices: [['90 min', '$130']],
   },
   {
     name: 'The Sia Ritual',
     zh: '仪式',
-    image: 'tea',
+    image: 'ritual',
     text: 'Make time for yourself.',
     prices: [['120 min', '$170']],
   },
   {
     name: 'Together',
     zh: '同享',
-    image: 'calm',
+    image: 'together',
     text: 'Share a moment of calm.',
     prices: [['60 min', '$180'], ['90 min', '$260']],
   },
   {
     name: 'Gift of Calm',
     zh: '礼物',
-    image: 'water',
+    image: 'gift',
     text: 'Give someone time for themselves.',
     prices: [['From', '$55']],
   },
@@ -1552,8 +1559,8 @@ const faqs = [
   .sia-treatments__img {
     position: absolute;
     inset: 0;
-    /* A gentle grade so every photo here sits in the site's soft, organic palette. */
-    filter: saturate(0.82) sepia(0.08);
+    /* the photos are graded toward the site's sage already; only a touch softer here */
+    filter: saturate(0.94);
     opacity: 0;
     transform: scale(1.06);
     transition:

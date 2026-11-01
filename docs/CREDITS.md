@@ -12,13 +12,13 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 | bamboo-light.jpg | https://unsplash.com/photos/FguFp1l5X0E |
 | bamboo-path.jpg | https://unsplash.com/photos/Um769ucDvd4 |
 | bamboo-dark.jpg (unused) | https://unsplash.com/photos/eobySVu7nN4 |
-| tea-table.jpg | https://unsplash.com/photos/dPUWgZLsOk8 |
+| tea-table.jpg (unused since 2026-11-01) | https://unsplash.com/photos/dPUWgZLsOk8 |
 | tea-leaves.jpg (unused) | https://unsplash.com/photos/Qaor6nxikUM |
 | hot-stones.jpg (unused) | https://unsplash.com/photos/SMwCQZWayj0 |
 | herbal-compress.jpg (philosophy story, step two) | https://unsplash.com/photos/YeekhTXpTgY |
 | oil-massage.jpg (unused, replaced: colours too bright) | https://unsplash.com/photos/cU53ZFBr3lk |
 | mossy-rocks.jpg (unused) | https://unsplash.com/photos/9AekDW5da34 |
-| towel-candles.jpg | https://unsplash.com/photos/W7AyAs7azHc |
+| towel-candles.jpg (unused since 2026-11-01) | https://unsplash.com/photos/W7AyAs7azHc |
 | bamboo-basin.jpg | https://unsplash.com/photos/OqxFh3pBTa4 |
 | moss-waterfall.jpg (unused since 2026-11-01: contact now on the lotus pond) | https://unsplash.com/photos/A_-cJ3PmB2o |
 | moss-river.jpg | https://unsplash.com/photos/ALrCdq-ui_Q |
@@ -55,7 +55,7 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 
 | File (src/client/photos) | Source |
 |---|---|
-| therapist-linen.jpg (treatments photo) | https://www.pexels.com/photo/a-massage-therapist-7233264/ |
+| therapist-linen.jpg (unused since 2026-11-01) | https://www.pexels.com/photo/a-massage-therapist-7233264/ |
 | door-boards-left.jpg, door-boards-right.jpg (doorway doors: weathered hardwood, turned upright, cut into boards, oiled timber tone); door-boards-left-stained.jpg, door-boards-right-stained.jpg (the same, in a dark Japanese stain) | https://www.pexels.com/photo/129721/ |
 
 ## Generated imagery (original, made for this site)
@@ -68,6 +68,7 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | shop-front.jpg (placeholder Sia studio front in a shopping centre, until the owner supplies a real photo) | Generated for Sia with OpenArt (GPT Image 2.5 Sunburst), Plus plan with commercial use rights, 2026-10-28 |
 | morning-room.jpg (philosophy story, step one: a pale treatment room in morning light) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
 | team-placeholder.jpg (philosophy story: PLACEHOLDER for a real photo of the owner and team) | Supplied by the designer as a placeholder, 2026-11-01; source and licence unknown — not for launch, replace with the owner's own approved photo |
+| treat-quiet-pause.jpg, treat-classic.jpg, treat-deep.jpg, treat-ritual.jpg, treat-together.jpg, treat-gift.jpg (treatments: one photo per treatment) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-11-01; graded toward the site palette. AI-generated people: replace with real photos of Sia's own team and rooms when available |
 | rain-pond.jpg (contact background, formerly the rain pause: a still forest pond seen close at water level) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
 | rain-lotus-pads.webp, rain-lotus-flower.webp (contact, formerly the rain pause: a white lotus on its lily pads, cut out from a magenta backdrop, as two layers: the whole lotus behind the card, the flower alone in front of it) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
 | wall-plaster.jpg (doorway wall: moss lime plaster, darkened and mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
