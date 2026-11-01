@@ -1381,9 +1381,12 @@ const faqs = [
       column-gap: clamp(1.25rem, 2.5vw, 2.25rem);
       row-gap: clamp(1.5rem, 3.5vh, 2.25rem);
     }
+    .sia-pillars .sia-story {
+      max-width: 90rem; /* the cards fill more of the screen */
+    }
     .sia-pillars .sia-step {
       display: block;
-      grid-column: 2 / span 10;
+      grid-column: 1 / -1;
     }
     .sia-pillars .sia-step .sia-step__panel.glass-3d {
       grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
