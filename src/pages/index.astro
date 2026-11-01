@@ -1581,6 +1581,13 @@ const faqs = [
       box-shadow 500ms var(--depth-ease),
       background-position 1.4s var(--depth-ease);
   }
+  /* the cards whose picture is showing */
+  .sia-menu__card.is-featured {
+    box-shadow:
+      0 18px 36px -24px rgb(39 50 42 / 0.55),
+      0 0 0 1px color-mix(in oklab, var(--color-accent) 30%, transparent),
+      0 0 28px -10px color-mix(in oklab, var(--color-accent) 45%, transparent);
+  }
   .sia-menu__card:hover,
   .sia-menu__card:focus-visible {
     transform: translateY(-4px);
@@ -3422,19 +3429,55 @@ const faqs = [
     addEventListener('resize', update, { passive: true });
   }
 
-  // Treatment menu: hovering, focusing or tapping a treatment crossfades the picture.
+  // Treatment menu: while the section is on screen the picture crossfades slowly through the
+  // treatments on its own (the matching cards glow softly), so the visitor sees them all while
+  // they're here. Hovering, focusing or tapping a card shows its picture at once and pauses the
+  // cycle until the pointer or focus leaves the menu. Reduced motion: no automatic cycle.
   const frame = document.querySelector('[data-treatment-frame]');
-  if (frame) {
+  const menu = document.querySelector<HTMLElement>('.sia-menu');
+  if (frame && menu) {
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-treatment]')];
+    const keys = [...frame.querySelectorAll<HTMLElement>('[data-treatment-img]')].map((el) => el.dataset.treatmentImg!);
+    let current: string = keys[0] ?? '';
     const show = (key: string | undefined) => {
       if (!key) return;
+      current = key;
       for (const img of frame.querySelectorAll<HTMLElement>('[data-treatment-img]')) {
         img.classList.toggle('is-active', img.dataset.treatmentImg === key);
       }
+      for (const card of cards) card.classList.toggle('is-featured', card.dataset.treatment === key);
     };
+
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timer = 0;
+    let inView = false;
+    let held = false; // a visitor is pointing at or focused in the menu
+    const stop = () => {
+      clearInterval(timer);
+      timer = 0;
+    };
+    const start = () => {
+      if (still || timer || !inView || held) return;
+      timer = window.setInterval(() => show(keys[(keys.indexOf(current) + 1) % keys.length]), 4200);
+    };
+    new IntersectionObserver(
+      ([entry]) => {
+        inView = !!entry?.isIntersecting;
+        if (inView) {
+          show(current);
+          start();
+        } else {
+          stop();
+          for (const card of cards) card.classList.remove('is-featured');
+        }
+      },
+      { threshold: 0.45 },
+    ).observe(menu.closest('section') ?? menu);
+
     // Change only once the pointer rests on a card, so sweeping across the grid
     // doesn't blend several pictures together.
     let dwell = 0;
-    for (const item of document.querySelectorAll<HTMLElement>('[data-treatment]')) {
+    for (const item of cards) {
       const key = item.dataset.treatment;
       item.addEventListener('pointerenter', () => {
         clearTimeout(dwell);
@@ -3444,6 +3487,12 @@ const faqs = [
       item.addEventListener('focusin', () => show(key));
       item.addEventListener('click', () => show(key));
     }
+    menu.addEventListener('pointerenter', () => { held = true; stop(); });
+    menu.addEventListener('pointerleave', () => { held = false; start(); });
+    menu.addEventListener('focusin', () => { held = true; stop(); });
+    menu.addEventListener('focusout', (e) => {
+      if (!menu.contains(e.relatedTarget as Node | null)) { held = false; start(); }
+    });
   }
 </script>
 
