@@ -49,7 +49,7 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 
 | File | Source |
 |---|---|
-| public/video/sia-rain-leaves.mp4 (+ src/client/photos/rain-leaves-poster.jpg) | Rain on leaves — https://pixabay.com/videos/plants-leaves-foliage-rain-water-152800/ (tiny rendition, 4.8 MB) |
+| archive/video/sia-rain-leaves.mp4 (+ src/client/photos/rain-leaves-poster.jpg) — not used on the site, kept on file | Rain on leaves — https://pixabay.com/videos/plants-leaves-foliage-rain-water-152800/ (tiny rendition, 4.8 MB) |
 
 ## Photography: Pexels (free to use, Pexels licence)
 

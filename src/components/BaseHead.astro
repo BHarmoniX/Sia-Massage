@@ -16,7 +16,9 @@ const { title, description = site.description, image = '/og-default.png', noinde
   Astro.props;
 
 const fullTitle = title ? `${title} | ${site.name}` : site.name;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// Pages build as .html files but are served without the extension (as the sitemap lists them),
+// so the canonical drops `index.html` / `.html` to match.
+const canonical = new URL(Astro.url.pathname.replace(/(?:index)?\.html$/, '') || '/', Astro.site);
 const imageUrl = new URL(image, Astro.site);
 ---
 
