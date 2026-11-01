@@ -776,7 +776,12 @@ const faqs = [
         <div class="notch-host sia-contact__card" data-reveal>
           <span class="notch-piece glass-3d crystal font-han sia-contact__seal" aria-hidden="true" lang="zh-Hans">约</span>
           <div class="sia-contact__panel glass-3d notch" data-glow>
-            <h2 id="contact-title" class="sia-heading">Your hour of calm awaits</h2>
+            <h2 id="contact-title" class="sia-heading">Your hour of calm awaits.</h2>
+            <!-- Copy from the master brief (proposed; owner to review). -->
+            <p class="sia-contact__intro">
+              Whenever you're ready, we'd love to welcome you. Take a little time for yourself, choose a
+              treatment, book a moment that suits you and let us take care of the rest.
+            </p>
             <dl class="sia-contact__details">
               <div>
                 <dt>Find us</dt>
@@ -797,8 +802,11 @@ const faqs = [
               </div>
             </dl>
             <div class="sia-contact__actions">
-              <a href={telHref(phone)} class="btn-3d">Call to book</a>
-              <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="btn-3d sia-btn-sage">Directions</a>
+              {/* No booking system yet: "Book a treatment" leads to the treatments, where each card has
+                  its own Book link. Point it at the booking page once the owner shares it. */}
+              <a href="#treatments" class="btn-3d">Book a treatment</a>
+              <a href={telHref(phone)} class="btn-3d sia-btn-sage">Call us</a>
+              <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="btn-3d sia-btn-white">Get directions</a>
             </div>
           </div>
         </div>
@@ -1458,7 +1466,7 @@ const faqs = [
      right corner and overlapping the card. Softened a touch into the morning mist. */
   .sia-lotus {
     position: absolute;
-    left: 56%; /* 50% of the width, nudged right: the outer pads run just off the right edge */
+    left: 62%; /* 44% of the width, nudged right: the outer pads run just off the right edge */
     right: -6%;
     bottom: -2.5rem; /* down at the foot of the picture, the front pads running off its bottom edge */
     pointer-events: none;
@@ -2523,12 +2531,12 @@ const faqs = [
     opacity: 0.9;
   }
   /* The card, centred, its right edge running straight down to the tip of the lotus's top centre
-     petal (52.1% across the lotus picture, which spans 50% of the width from 56% in:
-     56 + 0.521 × 50 = 82.05%; centred, the card is 2 × (82.05 − 50) = 64.1% wide). */
+     petal (52.1% across the lotus picture, which spans 44% of the width from 62% in:
+     62 + 0.521 × 44 = 84.92%; centred, the card is 2 × (84.92 − 50) = 69.85% wide). */
   .sia-contact__scene {
     position: relative;
     z-index: 1; /* between the pads (0) and the flower (2) */
-    width: 64.1%;
+    width: 69.85%;
   }
   .sia-contact__card {
     --notch-r: 2.4rem;
@@ -2554,6 +2562,13 @@ const faqs = [
     padding: 2.4rem clamp(2rem, 8cqi, 3.75rem) 0;
     border-radius: 3rem;
     text-align: left;
+  }
+  .sia-contact__intro {
+    align-self: center;
+    max-width: 34rem;
+    text-align: center;
+    line-height: 1.65;
+    color: var(--color-muted);
   }
   .sia-contact__panel .sia-heading {
     align-self: stretch;
@@ -2621,7 +2636,12 @@ const faqs = [
      the lower right (the petal alignment is for wider screens). */
   @media (max-width: 899px) {
     .sia-contact__stage {
-      padding: 6rem 0 calc(26vw + 2rem);
+      padding: 6rem 0 calc(36vw + 2rem);
+    }
+    /* phones: the lotus is the anchor beneath the card, so it keeps a generous size */
+    .sia-lotus {
+      left: 24%;
+      right: -8%;
     }
     .sia-contact__scene {
       width: min(100% - 2.5rem, 36rem);
