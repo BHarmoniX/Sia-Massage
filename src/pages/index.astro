@@ -458,9 +458,9 @@ const faqs = [
       <div class="sia-visit__wall-foot" data-wall-foot></div>
       <div class="sia-visit__door">
         <Img src={spaRoom} alt="" sizes="100vw" class="h-full w-full object-cover" />
-        <!-- The room is drawn here, in the frame's own zoom (same transform), so photo and frame
-             move together to the sub-pixel: the <img> above only loads the picture. -->
-        <svg class="sia-visit__room" data-room aria-hidden="true"><g data-room-zoom><image data-room-image preserveAspectRatio="none" /></g></svg>
+        <!-- The room is painted here each frame by the doorway script (GPU canvas: fast and exact
+             to the sub-pixel, in the frame's own zoom, cut to the arch): the <img> only loads it. -->
+        <canvas class="sia-visit__room" data-room aria-hidden="true"></canvas>
       </div>
       <!-- A gateway: the outline of the client's stone arch (crown mirrored exactly, posts
            extended to doorway height), traced by a sage line and an even fine line. The path
@@ -1990,7 +1990,6 @@ const faqs = [
         round calc(var(--closed) * 50%) calc(var(--closed) * 50%) 0 0 / calc(var(--closed) * 30%)
         calc(var(--closed) * 30%) 0 0
     );
-    will-change: clip-path;
   }
   /* The room photo is drawn by the SVG layer below (in the frame's zoom); the <img> only
      loads it, so it stays invisible. */
@@ -2004,15 +2003,8 @@ const faqs = [
     inset: 0;
     width: 100%;
     height: 100%;
-    overflow: visible;
   }
-  .sia-visit__door::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgb(20 28 18 / 0.5), rgb(20 28 18 / 0.15) 45%, rgb(20 28 18 / 0.55));
-    opacity: var(--open);
-  }
+  /* (The room's darkening tint, rising with --open, is painted on the room canvas, inside the arch.) */
   /* The wall: moss plaster with a soft relief, lit from the top left. */
   .sia-visit__wall {
     position: absolute;
@@ -2198,6 +2190,9 @@ const faqs = [
     backdrop-filter: blur(10px) saturate(1.2);
   }
   /* The arch border: a confident line on the doorway's edge and a fine line outside it. */
+  .sia-visit__frame.is-zooming .sia-timber {
+    filter: none;
+  }
   .sia-visit__frame {
     position: absolute;
     inset: 0;
@@ -2853,8 +2848,8 @@ const faqs = [
   const threshold = doorway?.querySelector<HTMLElement>('.sia-visit__threshold');
   const glass = doorway?.querySelector<HTMLElement>('[data-glass]');
   const doorPhoto = doorway?.querySelector<HTMLImageElement>('.sia-visit__door img');
-  const roomZoom = doorway?.querySelector<SVGGElement>('[data-room-zoom]');
-  const roomImage = doorway?.querySelector<SVGImageElement>('[data-room-image]');
+  const roomCanvas = doorway?.querySelector<HTMLCanvasElement>('[data-room]');
+  const roomCtx = roomCanvas?.getContext('2d', { alpha: true }) ?? null;
   const visitTitle = document.getElementById('visit-title');
   const ground = doorway?.querySelector<HTMLElement>('[data-ground]');
   const groundPlane = ground?.firstElementChild as HTMLElement | null | undefined;
@@ -3297,7 +3292,10 @@ const faqs = [
       const zoomTy = (pivotY * (1 - sWall)).toFixed(3);
       const zoomMatrix = `matrix(${sWall} 0 0 ${sWall} ${zoomTx} ${zoomTy})`;
       frameZoom?.setAttribute('transform', zoomMatrix);
-      roomZoom?.setAttribute('transform', zoomMatrix);
+      // The timber's lighting relief is by far the costliest thing to redraw as the frame grows
+      // (frames ran late and the lines stuttered), and barely shows beside the lit/shaded edge
+      // lines: kept at rest, dropped while zooming.
+      archFrame.classList.toggle('is-zooming', sWall > 1);
       // The photo reaches out to the outer line, under the glass band.
       const timberPath = `${arch(cx, bf, Af, EDGE, true)} ${arch(cx, bf, Af, BAND, true)}`;
       archFrame.querySelector('[data-timber]')?.setAttribute('d', timberPath);
@@ -3325,12 +3323,13 @@ const faqs = [
         ?.setAttribute('d', `${arch(cx, bf, Af, BAND, true)} ${arch(cx, bf, Af, INNER, true)}`);
       archFrame.querySelector('[data-glass-shade="outer"]')?.setAttribute('d', arch(cx, bf, Af, BAND, false));
       archFrame.querySelector('[data-glass-shade="inner"]')?.setAttribute('d', arch(cx, bf, Af, INNER, false));
-      door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A, BAND * sWall, true)}")`;
+      // The room is cut to the arch on its own canvas (below), so the door layer itself isn't clipped.
+      door.style.clipPath = 'none';
       // The room behind the doors, at true scale: its floor starts at the threshold and its
       // eye level (a third of the way down the photo) sits where a standing person's eyes would
       // be in a doorway this size (opening ~1.6 m wide, so eye height ~2/3 of the way to the
       // apex). It scales with the doorway as you walk in.
-      if (doorPhoto && roomImage) {
+      if (doorPhoto) {
         const HZ = 0.335; // the photo's eye level, from its top
         // At rest size (the zoom above scales it with the frame).
         const eyeY0 = base0 - APEX * A0 * (1.6 / 2.4);
@@ -3355,13 +3354,41 @@ const faqs = [
         const endShift = Math.min(cover, Math.max(-cover, (cx - faceX) / pw - 0.125));
         const k = clamp01((open - 0.3) / 0.7);
         const SHIFT = DOORWAY_SHIFT + (endShift - DOORWAY_SHIFT) * k * k * (3 - 2 * k);
-        const href = doorPhoto.currentSrc || doorPhoto.src;
-        if (href && roomImage.getAttribute('href') !== href) roomImage.setAttribute('href', href);
-        const fine = (v: number) => v.toFixed(4);
-        roomImage.setAttribute('x', fine(cx - pw0 * (0.5 + SHIFT)));
-        roomImage.setAttribute('y', fine(base0 - ph0));
-        roomImage.setAttribute('width', fine(pw0));
-        roomImage.setAttribute('height', fine(ph0));
+        // Paint the room: canvas at device resolution, in the frame's zoom, cut to the glass's
+        // outer line while the doorway still frames it.
+        if (roomCanvas && roomCtx) {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+          const cw = Math.round(w * dpr);
+          const chh = Math.round(h * dpr);
+          if (roomCanvas.width !== cw || roomCanvas.height !== chh) {
+            roomCanvas.width = cw;
+            roomCanvas.height = chh;
+          }
+          const ctx = roomCtx;
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.clearRect(0, 0, cw, chh);
+          if (doorPhoto.complete && doorPhoto.naturalWidth > 0) {
+            ctx.setTransform(dpr * sWall, 0, 0, dpr * sWall, dpr * Number(zoomTx), dpr * Number(zoomTy));
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.save();
+            if (open < 1) ctx.clip(new Path2D(arch(cx, bf, Af, BAND, true)));
+            ctx.drawImage(doorPhoto, cx - pw0 * (0.5 + SHIFT), base0 - ph0, pw0, ph0);
+            // The room darkens a little as you walk in (top and foot), so text reads over it.
+            if (open > 0) {
+              ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+              const tint = ctx.createLinearGradient(0, 0, 0, h);
+              tint.addColorStop(0, 'rgb(20 28 18 / 0.5)');
+              tint.addColorStop(0.45, 'rgb(20 28 18 / 0.15)');
+              tint.addColorStop(1, 'rgb(20 28 18 / 0.55)');
+              ctx.globalAlpha = open;
+              ctx.fillStyle = tint;
+              ctx.fillRect(0, 0, w, h);
+              ctx.globalAlpha = 1;
+            }
+            ctx.restore();
+          }
+        }
       }
       // Each foot: a timber plinth across the leg, its two sides the arch's tip curve rotated
       // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
