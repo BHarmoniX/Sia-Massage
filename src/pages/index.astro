@@ -68,8 +68,8 @@ const stepStoneImg = await getImage({ src: stepStone, width: 824, format: 'webp'
 const wallPlasterImg = await getImage({ src: wallPlaster, width: 1200, format: 'webp', quality: 74 });
 // The courtyard garden: original cut-outs generated for Sia (OpenArt) — tall, airy bamboo in round
 // carved stone pots, its tips leaning toward the door.
-const bambooAImg = await getImage({ src: gardenBambooA, width: 1000, format: 'webp', quality: 80 });
-const bambooBImg = await getImage({ src: gardenBambooB, width: 1000, format: 'webp', quality: 80 });
+const bambooAImg = await getImage({ src: gardenBambooA, width: 700, format: 'webp', quality: 80 });
+const bambooBImg = await getImage({ src: gardenBambooB, width: 700, format: 'webp', quality: 80 });
 // Each plant's shadow, pre-blurred (a live blur filter on the plants is too heavy to paint).
 const bambooAShadowImg = await getImage({ src: gardenBambooAShadow, width: 450, format: 'webp', quality: 70 });
 const bambooBShadowImg = await getImage({ src: gardenBambooBShadow, width: 450, format: 'webp', quality: 70 });
@@ -674,8 +674,8 @@ const faqs = [
       </svg>
       <!-- The courtyard garden on the forecourt: bamboo either side of the doorway. -->
       <div class="sia-visit__garden" data-garden>
-        <div class="sia-visit__prop" data-prop="bamboo-left"><img class="sia-visit__prop-shadow" src={bambooAShadowImg.src} alt="" decoding="async" /><img src={bambooAImg.src} alt="" decoding="async" /></div>
-        <div class="sia-visit__prop sia-visit__prop--mirror" data-prop="bamboo-right"><img class="sia-visit__prop-shadow" src={bambooBShadowImg.src} alt="" decoding="async" /><img src={bambooBImg.src} alt="" decoding="async" /></div>
+        <div class="sia-visit__prop" data-prop="bamboo-left"><img class="sia-visit__prop-shadow" src={bambooAShadowImg.src} alt="" loading="lazy" decoding="async" /><img src={bambooAImg.src} alt="" loading="lazy" decoding="async" /></div>
+        <div class="sia-visit__prop sia-visit__prop--mirror" data-prop="bamboo-right"><img class="sia-visit__prop-shadow" src={bambooBShadowImg.src} alt="" loading="lazy" decoding="async" /><img src={bambooBImg.src} alt="" loading="lazy" decoding="async" /></div>
       </div>
       <p class="sia-visit__threshold">
         <!-- 入, carved into the plaster exactly like the couplets (same text style and #sia-engrave cut). -->
