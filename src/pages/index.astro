@@ -169,8 +169,11 @@ const faqs = [
         <h1 id="hero-title" class="sia-display">
           Sia<br /><em>Massage</em>
         </h1>
+        <!-- Copy from the master brief (proposed; owner to review). -->
+        <p class="sia-hero__tagline">A quieter place to unwind.</p>
         <p class="sia-hero__lede">
-          Traditional Asian relaxation massage in a quiet room, with unhurried hands. An hour that belongs only to you.
+          Chinese relaxation massage in a welcoming, peaceful setting. Take time for yourself, ease into
+          the moment and enjoy a little space to simply unwind.
         </p>
         <div class="sia-hero__cta-group">
           <div class="sia-hero__actions">
@@ -966,6 +969,18 @@ const faqs = [
     .sia-hero__copy {
       top: -2.1rem;
     }
+  }
+  .sia-hero__tagline {
+    margin-top: 1.5rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+    line-height: 1.2;
+    color: #3f5634;
+  }
+  .sia-hero__tagline + .sia-hero__lede {
+    margin-top: 0.9rem;
   }
   .sia-hero__lede {
     max-width: 28rem;
