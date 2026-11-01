@@ -1218,7 +1218,7 @@ const faqs = [
     max-width: 80rem;
     margin: 0 auto;
     /* begins where the reflected hills fade out */
-    padding: calc(min(34vh, 22rem) * 0.62) 1.5rem 0;
+    padding: calc(min(34vh, 22rem) * 0.62) 1.5rem 1.5rem;
   }
   /* the opening: one centred group (character, heading, introduction) */
   .sia-phil__intro {
@@ -1281,26 +1281,30 @@ const faqs = [
   /* ── The three pillars: the water deepening from the light to Sia's dark moss ── */
   .sia-pillars {
     --q: 1; /* how far the scene has risen into view, 0 → 1 (set by the script; 1 without it) */
+    /* the mountain band: where the ridges start, how tall they are; the cards begin below it */
+    --ridge-top: clamp(0.75rem, 2vw, 1.5rem);
+    --ridge-h: clamp(6rem, 19vw, 14rem);
+    --ridge-foot: calc(var(--ridge-top) + var(--ridge-h));
     position: relative;
     z-index: 1;
   }
   .sia-pillars .sia-story {
     z-index: 2;
   }
-  /* The dusk scene: begins a little below the top of the pillars (behind "The place"), its sky
-     the same pale sage as the light above so the two meet without an edge. */
+  /* The dusk scene: begins right below the story card, its sky the same pale sage as the light
+     above so the two meet without an edge; the mountains stand clear, the cards below them. */
   .sia-dusk {
     position: absolute;
-    inset: clamp(6rem, 14vh, 10rem) 0 0;
+    inset: 0;
     z-index: 1;
     pointer-events: none;
     overflow: hidden;
-    background: linear-gradient(180deg, transparent 0, transparent clamp(5rem, 15vw, 11rem), #2b3824 clamp(9rem, 24vw, 18rem), #26321f 60%, #222d1c);
+    background: linear-gradient(180deg, transparent 0, transparent calc(var(--ridge-foot) * 0.5), #2b3824 var(--ridge-foot), #26321f 60%, #222d1c);
   }
   .sia-dusk__sky {
     position: absolute;
     inset: 0 0 auto;
-    height: clamp(9rem, 24vw, 18rem);
+    height: var(--ridge-foot);
     background: linear-gradient(180deg, rgb(230 235 220 / 0) 0%, #e3e9d8 18%, #d3dcc4 45%, #8fa07c 75%, #2b3824 100%);
   }
   /* the roundel's mountains, pale and far to dark and near, rising into place as you arrive */
@@ -1308,8 +1312,8 @@ const faqs = [
     position: absolute;
     left: -2%;
     width: 104%;
-    top: clamp(3rem, 8vw, 6rem);
-    height: clamp(6rem, 19vw, 14rem);
+    top: var(--ridge-top);
+    height: var(--ridge-h);
   }
   .sia-dusk__ridge--far {
     transform: translateY(calc((1 - var(--q)) * 2.5rem));
@@ -1319,6 +1323,17 @@ const faqs = [
   }
   .sia-dusk__ridge--near {
     transform: translateY(calc((1 - var(--q)) * 6rem));
+  }
+  /* shade gathering at the foot of the mountains, so they melt into the moss with no hard edge */
+  .sia-dusk::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--ridge-foot) - 4.5rem);
+    height: 6rem;
+    background: linear-gradient(180deg, rgb(43 56 36 / 0), rgb(43 56 36 / 0.85) 60%, #2b3824 75%);
+    pointer-events: none;
   }
   /* the lantern's glow, blooming around the studio at the foot of the story */
   .sia-dusk__glow {
@@ -1363,7 +1378,8 @@ const faqs = [
     gap: 3.5rem;
     max-width: 80rem;
     margin: 0 auto;
-    padding: 5rem 1rem 6rem;
+    /* starts below the mountain band */
+    padding: calc(var(--ridge-foot) + 2rem) 1rem 6rem;
   }
   .sia-step {
     display: grid;
@@ -1457,7 +1473,7 @@ const faqs = [
   @media (min-width: 1024px) {
     .sia-story {
       gap: clamp(3rem, 9vh, 5rem);
-      padding: clamp(3.5rem, 9vh, 5rem) 3rem clamp(6rem, 14vh, 9rem);
+      padding: calc(var(--ridge-foot) + clamp(2rem, 5vh, 3.5rem)) 3rem clamp(6rem, 14vh, 9rem);
     }
     .sia-step {
       grid-template-columns: repeat(12, minmax(0, 1fr));
