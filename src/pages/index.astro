@@ -139,11 +139,12 @@ const treatments = [
   },
 ] as const;
 
+// The four moments of a visit. Copy from the master brief (proposed; owner to review).
 const journey = [
-  { n: '一', title: 'Arrive', text: 'Leave the day at the door. Warm tea, a quiet welcome, a few words about how you feel.' },
-  { n: '二', title: 'Breathe', text: 'Soft light, clean linen, the scent of camphor. Your therapist tunes the pressure to you.' },
-  { n: '三', title: 'Release', text: 'Skilled hands follow tension to its source, guided by traditional technique.' },
-  { n: '四', title: 'Restore', text: 'Rise slowly. Sit a moment. Leave lighter than you came.' },
+  { n: '一', title: 'Arrive', line: 'Leave the day at the door.', text: "Take a moment to settle in. Enjoy a warm welcome, a little time to unwind and a few words about how you're feeling." },
+  { n: '二', title: 'Breathe', line: 'Ease into the moment.', text: 'Get comfortable and let the outside world fade away. Your therapist will discuss your preferences and the pressure that feels right for you.' },
+  { n: '三', title: 'Release', line: 'Time to let go.', text: 'Settle into your treatment as attentive hands and considered techniques help you enjoy a moment of relaxation.' },
+  { n: '四', title: 'Restore', line: 'Return to your day, unhurried.', text: 'Take your time getting up. Enjoy a quiet moment before heading back into the day, hopefully feeling refreshed.' },
 ];
 
 // MOCK: answers to confirm with the owner
@@ -676,17 +677,22 @@ const faqs = [
         <svg class="sia-visit__ru" viewBox="-24 -24 48 48" role="img" aria-label="入: enter" lang="zh-Hans">
           <g class="sia-carving"><text class="sia-carving__gilt" x="0" y="0">入</text></g>
         </svg>
-        <span class="sia-visit__threshold-text">Step inside</span>
+        <span class="sia-visit__threshold-text">Step inside.</span>
       </p>
     </div>
     <div class="sia-visit__inner">
       <h2 id="visit-title" class="sia-heading sia-heading--light" data-reveal>Four quiet moments</h2>
+      <p class="sia-visit__intro" data-reveal>
+        A little space away from the everyday. Leave the rush behind and take a moment to settle into
+        a quieter pace.
+      </p>
       <ol class="sia-visit__cards" role="list">
         {
           journey.map((j) => (
             <li class="sia-visit__card notch-host float" data-tilt data-reveal>
               <div class="sia-visit__panel glass-3d crystal notch" data-glow>
-                <h3>{j.title}</h3>
+                <p class="sia-visit__label">{j.title}</p>
+                <h3>{j.line}</h3>
                 <p>{j.text}</p>
               </div>
               <span class="notch-piece glass-3d crystal font-han" aria-hidden="true" lang="zh-Hans">
@@ -2206,13 +2212,33 @@ const faqs = [
     background-image: none;
     border-color: rgb(255 255 255 / 0.3);
   }
-  .sia-visit__card h3 {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
+  .sia-visit__intro {
+    max-width: 26rem; /* stays clear of the face in the room photograph */
+    text-shadow: 0 2px 18px rgb(0 0 0 / 0.45);
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #d3d8c6;
+    transition-delay: 0.15s;
   }
-  .sia-visit__card p {
-    margin-top: 0.5rem;
+  /* small spaced capitals naming each moment, the headline beneath */
+  .sia-visit__label {
+    font-size: 0.75rem;
+    font-weight: 550;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #5c7a4c;
+  }
+  .sia-visit__card h3 {
+    margin-top: 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    line-height: 1.15;
+  }
+  .sia-visit__card h3 + p {
+    margin-top: 0.6rem;
     font-size: 0.9375rem;
+    line-height: 1.6;
     color: var(--color-muted);
   }
   @media (min-width: 640px) {
