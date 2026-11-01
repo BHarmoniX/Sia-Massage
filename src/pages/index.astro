@@ -219,7 +219,6 @@ const faqs = [
         
         </div>
       </div>
-      <div class="sia-lake__ripples"></div>
       <div class="sia-dusk__motes">
         <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
       </div>
@@ -1108,32 +1107,6 @@ const faqs = [
     height: 100%;
     transform: scaleY(-1);
   }
-  /* faint ripples catching the light across the reflection */
-  .sia-lake__ripples {
-    position: absolute;
-    inset: 0 -5% auto;
-    height: min(40vh, 26rem);
-    background:
-      repeating-linear-gradient(180deg, transparent 0 9px, rgb(255 255 250 / 0.32) 9px 10px, transparent 10px 23px),
-      repeating-linear-gradient(180deg, transparent 0 15px, rgb(120 140 100 / 0.08) 15px 16px, transparent 16px 31px);
-    -webkit-mask-image:
-      linear-gradient(180deg, transparent 0, #000 12%, #000 55%, transparent 100%),
-      linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
-    mask-image:
-      linear-gradient(180deg, transparent 0, #000 12%, #000 55%, transparent 100%),
-      linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
-    opacity: 0.7;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .sia-lake__ripples {
-      animation: sia-ripple 9s ease-in-out infinite alternate;
-    }
-  }
-  @keyframes sia-ripple {
-    to { transform: translate(2%, 6px) scaleY(1.04); }
-  }
   /* a few slow fireflies drifting in the glow */
   .sia-dusk__motes {
     position: absolute;
@@ -1187,7 +1160,8 @@ const faqs = [
     gap: 4.5rem;
     max-width: 80rem;
     margin: 0 auto;
-    padding: 6rem 1.5rem 3rem;
+    /* begins below the reflected hills, on the open page */
+    padding: calc(min(34vh, 22rem) + 2.5rem) 1.5rem 3rem;
   }
   .sia-phil__intro {
     display: grid;
@@ -1264,7 +1238,7 @@ const faqs = [
   @media (min-width: 1024px) {
     .sia-phil {
       gap: clamp(4rem, 12vh, 7rem);
-      padding: clamp(6rem, 16vh, 9rem) 3rem clamp(3rem, 8vh, 5rem);
+      padding: calc(min(34vh, 22rem) + clamp(2.5rem, 6vh, 4rem)) 3rem clamp(3rem, 8vh, 5rem);
     }
     /* asymmetric: the heading at the left, the introduction stepping in lower at the right */
     .sia-phil__intro {
