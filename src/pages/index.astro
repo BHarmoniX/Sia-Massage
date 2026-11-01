@@ -3847,6 +3847,68 @@ const faqs = [
 </script>
 
 <script>
+  // TEMPORARY (remove before launch, like ?capture): open the page with ?perf to time the doorway
+  // walk-in in this browser. It scrolls through the walk-in by itself, once as-is and once with
+  // each part hidden, timing every frame, then shows a table of the results.
+  if (new URLSearchParams(location.search).has('perf')) {
+    const raf = () => new Promise<number>((r) => requestAnimationFrame(r));
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const stage = document.querySelector<HTMLElement>('.sia-visit__stage');
+    const track = stage?.parentElement;
+    const parts: [string, string][] = [
+      ['as it is', ''],
+      ['no frame', '[data-frame]'],
+      ['no glass', '.sia-visit__glass'],
+      ['no room photo', '.sia-visit__door'],
+      ['no doors', '[data-doors]'],
+      ['no wall', '.sia-visit__wall'],
+      ['no plants', '.sia-visit__garden'],
+      ['no paving', '.sia-visit__ground, [data-threshold], [data-wall-foot]'],
+      ['no cards/heading', '.sia-visit__content, .sia-visit__cards, #visit-title'],
+    ];
+    const box = document.createElement('pre');
+    box.style.cssText =
+      'position:fixed;z-index:99999;left:12px;bottom:12px;margin:0;padding:12px 14px;background:#111d;color:#fff;font:13px/1.5 ui-monospace,monospace;border-radius:10px;white-space:pre;pointer-events:none';
+    box.textContent = 'Doorway timing test: starting in 2s, please don\'t scroll…';
+    document.body.append(box);
+    const run = async () => {
+      if (!track) return;
+      await wait(2000);
+      const rows: string[] = [];
+      for (const [label, sel] of parts) {
+        const hidden = sel ? [...document.querySelectorAll<HTMLElement>(sel)] : [];
+        hidden.forEach((el) => (el.style.visibility = 'hidden'));
+        const t0 = track.getBoundingClientRect().top + scrollY;
+        // the walk-in: from the doors starting to swing to the room filling the screen
+        const from = t0 + 0.3 * innerHeight;
+        const to = t0 + 1.15 * innerHeight;
+        scrollTo(0, from);
+        await wait(400);
+        await raf();
+        const gaps: number[] = [];
+        let last = await raf();
+        const steps = 120; // two seconds at 60 fps
+        for (let i = 1; i <= steps; i++) {
+          scrollTo(0, from + ((to - from) * i) / steps);
+          const t = await raf();
+          gaps.push(t - last);
+          last = t;
+        }
+        hidden.forEach((el) => (el.style.visibility = ''));
+        gaps.sort((a, b) => a - b);
+        const med = gaps[gaps.length >> 1]!;
+        const p90 = gaps[Math.floor(gaps.length * 0.9)]!;
+        const slow = gaps.filter((g) => g > 20).length;
+        const fps = 1000 / (gaps.reduce((a, b) => a + b, 0) / gaps.length);
+        rows.push(`${label.padEnd(18)} ${fps.toFixed(0).padStart(3)} fps   median ${med.toFixed(1).padStart(5)}ms   slow frames ${String(slow).padStart(3)}/${steps}   p90 ${p90.toFixed(1)}ms`);
+        box.textContent = 'Doorway timing test (please don\'t scroll)\n\n' + rows.join('\n');
+      }
+      box.textContent = 'Doorway timing test: done (screenshot this)\n\n' + rows.join('\n');
+      console.table(rows);
+    };
+    addEventListener('load', () => void run());
+  }
+
   // Looping animations (hero ink scene, fireflies, mist, floating cards) pause while their section
   // is off-screen and resume just before it comes back, so they don't use the main thread while
   // you scroll elsewhere. Nothing visible changes.
