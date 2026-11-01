@@ -27,7 +27,8 @@ import treatGift from '../client/photos/treat-gift.jpg';
 // The view through the doorway: a candlelit spa treatment room (generated for Sia, OpenArt).
 // The earlier bamboo path photo (bamboo-path.jpg) is kept in the photos folder in case it's wanted back.
 import spaRoom from '../client/photos/spa-room.jpg';
-import bambooBasin from '../client/photos/bamboo-basin.jpg';
+// FAQ: a treatment room made up and waiting (generated for Sia, OpenArt Nano Banana Pro).
+import faqRoom from '../client/photos/faq-room.jpg';
 import mossRiver from '../client/photos/moss-river.jpg';
 // The rain pause: a still forest pond, and one glass-white lotus on its lily pads (both generated for Sia).
 import rainPond from '../client/photos/rain-pond.jpg';
@@ -148,12 +149,23 @@ const journey = [
 ];
 
 // MOCK: answers to confirm with the owner
+// Questions from the master brief. DRAFT answers: built only from what the site already states
+// (the cancellation terms come from the legal settings, which are still MOCK). Owner to confirm
+// every answer reflects how Sia actually works.
+const cancel = site.legal?.cancellation;
 const faqs = [
   { q: 'Do I need to book ahead?', a: 'Booking is best, especially evenings and weekends. Walk-ins are welcome whenever a therapist is free.' },
   { q: 'What should I wear?', a: 'Come as you are. You undress only to your comfort, and stay covered with fresh towels throughout.' },
-  { q: 'How early should I arrive?', a: 'Five to ten minutes before your time, so you can settle in and tell us about any health concerns.' },
-  { q: 'Do you offer remedial or deep tissue massage?', a: 'We specialise in relaxation massage only, so every visit is about rest. Firmer pressure is always welcome on request.' },
-  { q: 'Is massage safe during pregnancy?', a: 'Please let us know when booking and we will suggest the treatments that suit you.' },
+  { q: 'Should I arrive early?', a: 'Five to ten minutes before your time is ideal, so you can settle in and tell us how you are feeling.' },
+  { q: 'Can I choose the massage pressure?', a: 'Yes. Your therapist will ask about your preferences before you begin, and you can ask for lighter or firmer pressure at any time.' },
+  { q: 'How do I choose the right treatment?', a: "Start with how much time you would like for yourself. If you're not sure, get in touch and we'll happily help you find an option that suits you." },
+  { q: 'Is there anything I should mention before my massage?', a: 'Please let us know about any injuries, health conditions, pregnancy or areas you would like us to avoid, so we can keep your treatment comfortable.' },
+  {
+    q: 'What is your cancellation or rescheduling policy?',
+    a: cancel
+      ? `Please give us at least ${cancel.noticeHours} hours' notice if you need to cancel or reschedule. Later cancellations may be charged ${cancel.lateCancelFee}, and missed appointments ${cancel.noShowFee}.`
+      : 'Please let us know as early as you can if you need to cancel or reschedule.',
+  },
 ];
 ---
 
@@ -709,10 +721,14 @@ const faqs = [
   <Section id="faq" labelledby="faq-title" class="sia-faq">
     <div class="sia-faq__grid">
       <figure class="sia-faq__image img-reveal">
-        <Img src={bambooBasin} alt="Water running from a bamboo spout into a mossy stone basin" sizes="(min-width: 1024px) 38vw, 100vw" class="h-full w-full object-cover" />
+        <Img src={faqRoom} alt="A treatment room made up and waiting: fresh white linen on the massage table, a robe and slippers on a timber bench, tea and a paper lantern" sizes="(min-width: 1024px) 38vw, 100vw" class="h-full w-full object-cover sia-faq__room" />
       </figure>
       <div>
-        <h2 id="faq-title" class="sia-heading" data-reveal>Before you arrive</h2>
+        <h2 id="faq-title" class="sia-heading" data-reveal>Before you arrive.</h2>
+        <p class="sia-faq__intro" data-reveal>
+          A few helpful details to make your visit feel simple from the start. Whether it's your first
+          visit or you're returning for another moment of calm, here are a few things you might like to know.
+        </p>
         <div class="sia-faq__list" data-reveal>
           {
             faqs.map((f) => (
@@ -2299,6 +2315,37 @@ const faqs = [
     border-radius: 0.75rem;
     box-shadow: 0 40px 80px -40px rgb(39 50 42 / 0.5);
   }
+  /* the room photo: keep the lantern, robe and slippers in a tall frame */
+  .sia-faq__image .sia-faq__room {
+    object-position: 52% 50%;
+  }
+  .sia-faq__intro {
+    max-width: 34rem;
+    margin-top: 1rem;
+    color: var(--color-muted);
+    line-height: 1.7;
+    transition-delay: 0.15s;
+  }
+  /* Smooth opening and closing where the browser can animate to "auto" height; elsewhere the
+     answers simply appear, as before. */
+  .sia-faq {
+    interpolate-size: allow-keywords;
+  }
+  .sia-faq__item::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 420ms var(--depth-ease),
+      content-visibility 420ms allow-discrete;
+  }
+  .sia-faq__item[open]::details-content {
+    block-size: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sia-faq__item::details-content {
+      transition: none;
+    }
+  }
   .sia-faq__list {
     margin-top: 2rem;
     border-top: 1px solid var(--color-border);
@@ -2388,12 +2435,18 @@ const faqs = [
       font-size: clamp(2.25rem, 6vh, 3.75rem);
       line-height: 1.05;
     }
+    /* seven questions and an intro: tighter rows so one open answer still fits */
+    .sia-faq__intro {
+      margin-top: clamp(0.5rem, 1.4vh, 1rem);
+      font-size: clamp(0.875rem, 2vh, 1.0625rem);
+      line-height: 1.6;
+    }
     .sia-faq__list {
-      margin-top: clamp(1rem, 3.5vh, 2rem);
+      margin-top: clamp(0.75rem, 2.4vh, 1.75rem);
     }
     .sia-faq__item summary {
-      padding: clamp(0.7rem, 2.1vh, 1.3rem) 0;
-      font-size: clamp(1.05rem, 2.7vh, 1.4rem);
+      padding: clamp(0.45rem, 1.45vh, 1rem) 0;
+      font-size: clamp(1rem, 2.4vh, 1.3rem);
     }
     .sia-faq__item p {
       padding-bottom: clamp(0.75rem, 2.1vh, 1.4rem);
