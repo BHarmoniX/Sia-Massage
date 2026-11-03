@@ -3141,6 +3141,41 @@ const faqs = [
 
     let queued = false;
     let needsDraw = true; // at load and after a resize, draw even if off-screen
+    // Gentle walk-in for browsers running at ~30 frames a second (battery saver, Low Power Mode,
+    // slow devices): there the scroll-linked zoom can't keep up with the page and lurches, so
+    // instead, once the doorway settles on screen the walk-in plays by itself, evenly timed
+    // (scrolling back up plays it in reverse). Full-speed browsers keep the scroll-linked
+    // walk-in. ?lite forces the gentle version (for checking it).
+    const forceLite = new URLSearchParams(location.search).has('lite');
+    let lite = forceLite;
+    let walk: number | null = null; // 0 = closed .. 1 = walked in (gentle version only)
+    let walkT = 0;
+    const WALK_MS = 2400;
+    const measureFrameRate = async () => {
+      if (forceLite || reduced) return;
+      const stamps: number[] = [];
+      for (let i = 0; i < 12; i++) stamps.push(await new Promise<number>((r) => requestAnimationFrame(r)));
+      const gaps = stamps.slice(1).map((t, i) => t - stamps[i]!).sort((a, b) => a - b);
+      const median = gaps[gaps.length >> 1] ?? 16;
+      // only switch while the doorway is still ahead or behind, never mid walk-in
+      const p = -doorway.getBoundingClientRect().top / window.innerHeight;
+      if (p < 0 || p > 1.2) {
+        const next = median > 25;
+        if (next !== lite) {
+          lite = next;
+          walk = null;
+          needsDraw = true;
+          update();
+        }
+      }
+    };
+    // Re-check each time the doorway comes near (battery saver can switch on and off).
+    new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) void measureFrameRate();
+      },
+      { rootMargin: '100% 0px' },
+    ).observe(doorway);
     const update = () => {
       queued = false;
       const box = doorway.getBoundingClientRect();
@@ -3153,8 +3188,26 @@ const faqs = [
       // gateway opens around you (over the next 65%).
       const DOOR = 0.45;
       const ZOOM = 0.65;
-      const progress = -top / window.innerHeight;
       const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+      let progress = -top / window.innerHeight;
+      let walking = false;
+      if (lite && !reduced && !capture) {
+        // Walk in once the doorway has settled on screen; walk back out above it.
+        const want = progress > 0.12 ? 1 : 0;
+        const now = performance.now();
+        if (walk === null) {
+          walk = want;
+        } else if (walk !== want) {
+          // first step of a new walk: one frame's worth; after that, real elapsed time
+          const dt = walkT ? Math.min(100, Math.max(0, now - walkT)) : 33;
+          walk = want > walk ? Math.min(1, walk + dt / WALK_MS) : Math.max(0, walk - dt / WALK_MS);
+        }
+        walking = walk !== want;
+        walkT = walking ? now : 0;
+        const u = walk;
+        const eased = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+        progress = eased * (DOOR + ZOOM);
+      }
       const swing = capture ? 0 : reduced ? 1 : clamp01(progress / DOOR);
       const open = capture ? 0 : reduced ? 1 : clamp01((progress - DOOR) / ZOOM);
       doorway.style.setProperty('--open', open.toFixed(3));
@@ -3687,6 +3740,11 @@ const faqs = [
         threshold.style.transformOrigin = '50% 0';
         threshold.style.transform = `translateX(-50%) scale(${(Math.round(s * 1000) / 1000)})`;
       }
+      // The gentle walk-in runs on its own clock: keep drawing until it arrives.
+      if (walking && !queued) {
+        queued = true;
+        requestAnimationFrame(() => update());
+      }
     };
 
     update();
@@ -3700,6 +3758,7 @@ const faqs = [
       },
       { passive: true },
     );
+
     addEventListener(
       'resize',
       () => {
