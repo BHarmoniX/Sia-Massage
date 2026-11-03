@@ -3194,7 +3194,7 @@ const faqs = [
     let tl: number | null = null; // ms along the sequence: 0 = doors closed .. END = inside
     let tlT = 0;
     let liteDrawn: number | null = null; // the scene's last drawn progress in battery mode
-    let enter: { wrap: HTMLDivElement; img: HTMLImageElement; tint: HTMLDivElement; r0: DOMRectReadOnly; r1: DOMRectReadOnly } | null = null;
+    let enter: { wrap: HTMLDivElement; img: HTMLImageElement; tint: HTMLDivElement; r0: DOMRectReadOnly; r1: DOMRectReadOnly; sw: number; sh: number } | null = null;
     const easeIO = (u: number) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
     const setLiteMarks = () => {
       visitSection?.toggleAttribute('data-lite', lite && !reduced);
@@ -3290,7 +3290,7 @@ const faqs = [
             tint.className = 'sia-visit__enter-tint';
             wrap.append(img, tint);
             stage.append(wrap);
-            enter = { wrap, img, tint, r0, r1 };
+            enter = { wrap, img, tint, r0, r1, sw: stageBox.width, sh: stageBox.height };
           }
           if (enter) {
             const u = clamp01((tl - ENTER0) / ENTER_MS);
@@ -3307,8 +3307,7 @@ const faqs = [
               const y = r0.y + (r1.y - r0.y) * e - r1.y;
               enter.img.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${sc.toFixed(5)})`;
               // Fade in as the picture outgrows the screen, so its edges never show over the wall.
-              const sb = enter.wrap.getBoundingClientRect();
-              const cover = Math.min((r1.width * sc) / sb.width, (r1.height * sc) / sb.height);
+              const cover = Math.min((r1.width * sc) / enter.sw, (r1.height * sc) / enter.sh);
               enter.wrap.style.opacity = clamp01((cover - 0.85) / 0.2).toFixed(3);
               enter.tint.style.opacity = e.toFixed(3);
             }
