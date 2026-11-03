@@ -759,9 +759,6 @@ const faqs = [
       <div class="sia-hero__mist sia-hero__mist--high"></div>
     </div>
     <div class="sia-contact__stage">
-      <div class="sia-contact__motes sia-dusk__motes" aria-hidden="true">
-        <span></span><span></span><span></span><span></span><span></span><span></span>
-      </div>
       <div class="sia-lotus sia-lotus--pads" aria-hidden="true">
         <span class="sia-lotus-shadow"></span>
         <Img src={rainLotusFlower} alt="" sizes="60vw" widths={[480, 768, 1120, 1600]} class="sia-lotus-reflection" />
@@ -3101,13 +3098,6 @@ const faqs = [
     place-items: center;
     min-height: clamp(36rem, 92vh, 56rem);
     padding: 6rem 0;
-  }
-  /* a few fireflies over the water */
-  .sia-contact__motes {
-    z-index: 0; /* behind the card */
-    inset: 0 0 auto;
-    height: 60%;
-    opacity: 0.9;
   }
   /* The card, centred, its right edge running straight down to the tip of the lotus's top centre
      petal (52.1% across the lotus picture, which spans 44% of the width from 62% in:
