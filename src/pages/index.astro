@@ -2140,8 +2140,21 @@ const faqs = [
     filter: none;
     opacity: 0.55;
     transform: translate(22%, -0.6%);
-    /* only the part falling on the wall: the paving below has the plant's own ground shadow */
-    clip-path: inset(0 0 var(--wallcut, 0%) 0);
+    /* Only the part falling on the wall (the paving below has the plant's own ground shadow).
+       No hard edge where wall meets paving: it fades softly into the foot of the wall and a
+       touch beyond, where the ground shadow reaches up under it, so the two run together. */
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 calc(100% - var(--wallcut, 0%) - 6%),
+      rgb(0 0 0 / 0.6) calc(100% - var(--wallcut, 0%)),
+      transparent calc(100% - var(--wallcut, 0%) + 2%)
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      #000 calc(100% - var(--wallcut, 0%) - 6%),
+      rgb(0 0 0 / 0.6) calc(100% - var(--wallcut, 0%)),
+      transparent calc(100% - var(--wallcut, 0%) + 2%)
+    );
   }
   .sia-visit__prop--mirror img.sia-visit__prop-shadow {
     transform: scaleX(-1) translate(-22%, -0.6%);
@@ -2170,8 +2183,9 @@ const faqs = [
     left: calc(var(--sx, 50%) - 21%);
     width: 42%;
     bottom: 0;
-    height: var(--wallcut, 10%);
-    background: linear-gradient(0deg, rgb(4 7 3 / 0.55), rgb(4 7 3 / 0.4) 70%, rgb(4 7 3 / 0.3));
+    /* reaches a little up the wall, under the wall shadow's soft fade, so the two blend */
+    height: calc(var(--wallcut, 10%) + 2.5%);
+    background: linear-gradient(0deg, rgb(4 7 3 / 0.55), rgb(4 7 3 / 0.45) 70%, rgb(4 7 3 / 0.38) 88%, transparent);
     border-radius: 30% 30% 50% 50% / 25% 25% 45% 45%;
     transform-origin: 50% 100%;
     transform: skewX(var(--gskew, -30deg));
