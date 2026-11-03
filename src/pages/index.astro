@@ -2080,8 +2080,11 @@ const faqs = [
      stems are upright, so the join never shows. The two pots keep different time. Only the
      graphics card does this (rotation), it stops off-screen, and it is left out in battery mode
      and for reduced motion. */
+  /* The still pot reaches a little above the cut (73.4%), under the swaying plant, so neither
+     the soft edge of the cut nor the plant's slight tilt can ever open a line onto the wall:
+     anything showing there is the same picture. */
   .sia-visit__prop img.sia-visit__prop-pot {
-    clip-path: inset(74.2% 0 0 0);
+    clip-path: inset(73.4% 0 0 0);
   }
   .sia-visit__prop img.sia-visit__prop-sway:not(.sia-visit__prop-shadow) {
     position: absolute;
@@ -2089,11 +2092,10 @@ const faqs = [
     height: 100%;
     clip-path: inset(0 0 25.8% 0);
   }
+  /* The shadow is see-through, so it isn't split (two overlapping halves would show a darker
+     band): it sways whole. Its pot part sits at the pivot and moves less than a pixel. */
   .sia-visit__prop img.sia-visit__prop-shadow:not(.sia-visit__prop-sway) {
-    clip-path: inset(74.2% 0 var(--wallcut, 0%) 0);
-  }
-  .sia-visit__prop img.sia-visit__prop-shadow.sia-visit__prop-sway {
-    clip-path: inset(0 0 max(var(--wallcut, 0%), 25.8%) 0);
+    display: none;
   }
   @keyframes sia-breeze {
     0%,
