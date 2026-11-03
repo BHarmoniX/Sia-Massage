@@ -3269,8 +3269,8 @@ const faqs = [
           if (want > tl) {
             tl = Math.min(want, tl + dt);
           } else {
-            // walking out: twice as fast, and no pause
-            tl = Math.max(want, tl - dt * 2);
+            // walking out: the same speed as walking in, without the pause
+            tl = Math.max(want, tl - dt);
             if (tl > SWING_MS && tl <= ENTER0) tl = SWING_MS;
           }
         }
