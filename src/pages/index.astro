@@ -3325,7 +3325,10 @@ const faqs = [
               // Never quite opaque (0.999, invisible): otherwise the browser stops drawing the
               // doorway behind it, and walking out it then has to draw it all at once halfway
               // through, which drops frames.
-              enter.wrap.style.opacity = Math.min(0.999, clamp01((cover - 0.85) / 0.2)).toFixed(3);
+              // A long, soft handover (eased at both ends) between the view through the doorway
+              // and the picture, so the last bit of shrinking walking out doesn't read as a jump.
+              const f = clamp01((cover - 0.8) / 0.4);
+              enter.wrap.style.opacity = Math.min(0.999, f * f * (3 - 2 * f)).toFixed(3);
               enter.tint.style.opacity = e.toFixed(3);
             }
           }
