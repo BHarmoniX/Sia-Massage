@@ -676,8 +676,8 @@ const faqs = [
       </svg>
       <!-- The courtyard garden on the forecourt: bamboo either side of the doorway. -->
       <div class="sia-visit__garden" data-garden>
-        <div class="sia-visit__prop" data-prop="bamboo-left"><img class="sia-visit__prop-shadow" src={bambooAShadowImg.src} alt="" loading="lazy" decoding="async" /><img src={bambooAImg.src} alt="" loading="lazy" decoding="async" /></div>
-        <div class="sia-visit__prop sia-visit__prop--mirror" data-prop="bamboo-right"><img class="sia-visit__prop-shadow" src={bambooBShadowImg.src} alt="" loading="lazy" decoding="async" /><img src={bambooBImg.src} alt="" loading="lazy" decoding="async" /></div>
+        <div class="sia-visit__prop" data-prop="bamboo-left"><img class="sia-visit__prop-shadow" src={bambooAShadowImg.src} alt="" loading="lazy" decoding="async" /><img class="sia-visit__prop-shadow sia-visit__prop-sway" src={bambooAShadowImg.src} alt="" loading="lazy" decoding="async" /><img class="sia-visit__prop-pot" src={bambooAImg.src} alt="" loading="lazy" decoding="async" /><img class="sia-visit__prop-sway" src={bambooAImg.src} alt="" loading="lazy" decoding="async" /></div>
+        <div class="sia-visit__prop sia-visit__prop--mirror" data-prop="bamboo-right"><img class="sia-visit__prop-shadow" src={bambooBShadowImg.src} alt="" loading="lazy" decoding="async" /><img class="sia-visit__prop-shadow sia-visit__prop-sway" src={bambooBShadowImg.src} alt="" loading="lazy" decoding="async" /><img class="sia-visit__prop-pot" src={bambooBImg.src} alt="" loading="lazy" decoding="async" /><img class="sia-visit__prop-sway" src={bambooBImg.src} alt="" loading="lazy" decoding="async" /></div>
       </div>
       <p class="sia-visit__threshold">
         <!-- 入, carved into the plaster exactly like the couplets (same text style and #sia-engrave cut). -->
@@ -2073,6 +2073,61 @@ const faqs = [
   }
   .sia-visit__prop--mirror img {
     transform: scaleX(-1);
+  }
+  /* A gentle breeze: the bamboo (not the pot) sways a fraction of a degree, rising and falling
+     irregularly, its shadow on the wall moving in step. Each picture is split at the pot's rim
+     (74.2% down): the pot stays put, and the plant above pivots right on that line, where the
+     stems are upright, so the join never shows. The two pots keep different time. Only the
+     graphics card does this (rotation), it stops off-screen, and it is left out in battery mode
+     and for reduced motion. */
+  .sia-visit__prop img.sia-visit__prop-pot {
+    clip-path: inset(74.2% 0 0 0);
+  }
+  .sia-visit__prop img.sia-visit__prop-sway:not(.sia-visit__prop-shadow) {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    clip-path: inset(0 0 25.8% 0);
+  }
+  .sia-visit__prop img.sia-visit__prop-shadow:not(.sia-visit__prop-sway) {
+    clip-path: inset(74.2% 0 var(--wallcut, 0%) 0);
+  }
+  .sia-visit__prop img.sia-visit__prop-shadow.sia-visit__prop-sway {
+    clip-path: inset(0 0 max(var(--wallcut, 0%), 25.8%) 0);
+  }
+  @keyframes sia-breeze {
+    0%,
+    100% {
+      rotate: 0deg;
+    }
+    18% {
+      rotate: 0.55deg;
+    }
+    32% {
+      rotate: 0.2deg;
+    }
+    50% {
+      rotate: 0.9deg;
+    }
+    64% {
+      rotate: 0.35deg;
+    }
+    82% {
+      rotate: 0.6deg;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sia-visit__prop img.sia-visit__prop-sway {
+      transform-origin: 50% 74.2%;
+      animation: sia-breeze 9s ease-in-out infinite;
+    }
+    .sia-visit__prop--mirror img.sia-visit__prop-sway {
+      animation-duration: 11.5s;
+      animation-delay: -4s;
+    }
+    .sia-visit[data-lite] .sia-visit__prop img.sia-visit__prop-sway {
+      animation: none;
+    }
   }
   /* The plant's shadow, thrown back and to the right onto the wall by the upper-left light. */
   .sia-visit__prop img.sia-visit__prop-shadow {
