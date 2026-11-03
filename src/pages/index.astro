@@ -3316,9 +3316,15 @@ const faqs = [
             } else {
               const e = easeIO(u);
               const { r0, r1 } = enter;
-              const sc = (r0.width + (r1.width - r0.width) * e) / r1.width;
-              const x = r0.x + (r1.x - r0.x) * e - r1.x;
-              const y = r0.y + (r1.y - r0.y) * e - r1.y;
+              // A true zoom: the picture grows by an even share of its size each moment (not an
+              // even number of pixels, which made the end of walking out rush in), about the one
+              // point that carries it from where it starts to where it ends.
+              const g0 = r0.width / r1.width;
+              const sc = Math.pow(g0, 1 - e);
+              const px = (r0.x - r1.x * g0) / (1 - g0);
+              const py = (r0.y - r1.y * g0) / (1 - g0);
+              const x = px + (r1.x - px) * sc - r1.x;
+              const y = py + (r1.y - py) * sc - r1.y;
               enter.img.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${sc.toFixed(5)})`;
               // Fade in as the picture outgrows the screen, so its edges never show over the wall.
               const cover = Math.min((r1.width * sc) / enter.sw, (r1.height * sc) / enter.sh);
