@@ -2190,6 +2190,39 @@ const faqs = [
   .sia-visit__frame.is-zooming .sia-timber {
     filter: none;
   }
+  /* Battery mode: the room rising into view as one picture (see the doorway script). */
+  .sia-visit__enter {
+    position: absolute;
+    inset: 0;
+    z-index: 5; /* over everything in the scene, the plants included */
+    overflow: hidden;
+    pointer-events: none;
+    will-change: opacity;
+  }
+  .sia-visit__enter img {
+    position: absolute;
+    max-width: none;
+    transform-origin: 0 0;
+    will-change: transform;
+  }
+  .sia-visit__enter-tint {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(20 28 18 / 0.5), rgb(20 28 18 / 0.15) 45%, rgb(20 28 18 / 0.55));
+    will-change: opacity;
+  }
+  /* Battery mode: the heading and cards wait, then glide up into place once you're inside. */
+  .sia-visit[data-lite] .sia-visit__inner {
+    opacity: 0;
+    transform: translateY(56px);
+    transition:
+      opacity 700ms ease,
+      transform 1000ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .sia-visit[data-lite] .sia-visit__inner[data-arrived] {
+    opacity: 1;
+    transform: none;
+  }
   .sia-visit__frame {
     position: absolute;
     inset: 0;
@@ -3133,6 +3166,7 @@ const faqs = [
       right: doorway.querySelector<HTMLElement>('[data-leaf="right"]'),
     };
     let leafKey = '';
+    let frameDrawn = '';
 
     const couplets = {
       left: archFrame.querySelector<SVGGElement>('[data-couplet="left"]')!,
@@ -3141,16 +3175,35 @@ const faqs = [
 
     let queued = false;
     let needsDraw = true; // at load and after a resize, draw even if off-screen
-    // Gentle walk-in for browsers running at ~30 frames a second (battery saver, Low Power Mode,
-    // slow devices): there the scroll-linked zoom can't keep up with the page and lurches, so
-    // instead, once the doorway settles on screen the walk-in plays by itself, evenly timed
-    // (scrolling back up plays it in reverse). Full-speed browsers keep the scroll-linked
-    // walk-in. ?lite forces the gentle version (for checking it).
+    // Battery mode, for browsers running at ~30 frames a second (battery saver, Low Power Mode,
+    // slow devices), where redrawing the zooming scene every frame can't keep up and it lurches.
+    // There, once the doorway settles on screen, a short sequence plays by itself: the doors
+    // swing open, a pause to see the room, then the room rises to fill the screen as a single
+    // picture (moved by the graphics card, nothing redrawn) while the wall and frame fall away,
+    // and the heading and cards glide up into place. Scrolling back up plays it in reverse.
+    // Full-speed browsers keep the scroll-linked walk-in. ?lite forces battery mode.
     const forceLite = new URLSearchParams(location.search).has('lite');
     let lite = forceLite;
-    let walk: number | null = null; // 0 = closed .. 1 = walked in (gentle version only)
-    let walkT = 0;
-    const WALK_MS = 2400;
+    const visitSection = doorway.closest<HTMLElement>('section');
+    const visitInner = document.querySelector<HTMLElement>('.sia-visit__inner');
+    const SWING_MS = 1300;
+    const PAUSE_MS = 1100;
+    const ENTER_MS = 1500;
+    const ENTER0 = SWING_MS + PAUSE_MS;
+    const END = ENTER0 + ENTER_MS;
+    let tl: number | null = null; // ms along the sequence: 0 = doors closed .. END = inside
+    let tlT = 0;
+    let liteDrawn: number | null = null; // the scene's last drawn progress in battery mode
+    let enter: { wrap: HTMLDivElement; img: HTMLImageElement; tint: HTMLDivElement; r0: DOMRectReadOnly; r1: DOMRectReadOnly } | null = null;
+    const easeIO = (u: number) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+    const setLiteMarks = () => {
+      visitSection?.toggleAttribute('data-lite', lite && !reduced);
+      visitInner?.toggleAttribute('data-arrived', !lite || reduced || (tl !== null && tl >= END));
+    };
+    const dropEnter = () => {
+      enter?.wrap.remove();
+      enter = null;
+    };
     const measureFrameRate = async () => {
       if (forceLite || reduced) return;
       const stamps: number[] = [];
@@ -3163,7 +3216,10 @@ const faqs = [
         const next = median > 25;
         if (next !== lite) {
           lite = next;
-          walk = null;
+          tl = null;
+          liteDrawn = null;
+          dropEnter();
+          setLiteMarks();
           needsDraw = true;
           update();
         }
@@ -3176,11 +3232,11 @@ const faqs = [
       },
       { rootMargin: '100% 0px' },
     ).observe(doorway);
-    const update = () => {
-      queued = false;
+    const update = (force?: number) => {
+      if (force === undefined) queued = false;
       const box = doorway.getBoundingClientRect();
       // Nowhere near the screen: skip all the work, so scrolling the rest of the page stays free.
-      if (!needsDraw && (box.bottom < -200 || box.top > window.innerHeight + 200)) return;
+      if (force === undefined && !needsDraw && (box.bottom < -200 || box.top > window.innerHeight + 200)) return;
       needsDraw = false;
       const top = box.top;
       const capture = document.documentElement.classList.contains('sia-capture');
@@ -3191,22 +3247,85 @@ const faqs = [
       const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
       let progress = -top / window.innerHeight;
       let walking = false;
-      if (lite && !reduced && !capture) {
-        // Walk in once the doorway has settled on screen; walk back out above it.
-        const want = progress > 0.12 ? 1 : 0;
+      if (force !== undefined) {
+        progress = force;
+      } else if (lite && !reduced && !capture) {
+        // Play forward once the doorway has settled on screen; back again above it.
+        const want = progress > 0.12 ? END : 0;
         const now = performance.now();
-        if (walk === null) {
-          walk = want;
-        } else if (walk !== want) {
-          // first step of a new walk: one frame's worth; after that, real elapsed time
-          const dt = walkT ? Math.min(100, Math.max(0, now - walkT)) : 33;
-          walk = want > walk ? Math.min(1, walk + dt / WALK_MS) : Math.max(0, walk - dt / WALK_MS);
+        if (tl === null) {
+          tl = want;
+        } else if (tl !== want) {
+          // first step: one frame's worth; after that, real elapsed time
+          const dt = tlT ? Math.min(100, Math.max(0, now - tlT)) : 33;
+          tl = want > tl ? Math.min(want, tl + dt) : Math.max(want, tl - dt);
         }
-        walking = walk !== want;
-        walkT = walking ? now : 0;
-        const u = walk;
-        const eased = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
-        progress = eased * (DOOR + ZOOM);
+        walking = tl !== want;
+        tlT = walking ? now : 0;
+        progress = tl < SWING_MS ? easeIO(tl / SWING_MS) * DOOR : tl < END ? DOOR : DOOR + ZOOM;
+        // The room rising into view: one picture, moved by the graphics card.
+        if (tl >= SWING_MS && tl < END) {
+          if (!enter && doorPhoto && stage) {
+            const stageBox = stage.getBoundingClientRect();
+            const place = () => {
+              const r = doorPhoto.getBoundingClientRect();
+              return new DOMRectReadOnly(r.left - stageBox.left, r.top - stageBox.top, r.width, r.height);
+            };
+            update(DOOR);
+            const r0 = place();
+            update(DOOR + ZOOM);
+            const r1 = place();
+            update(DOOR);
+            liteDrawn = DOOR;
+            const wrap = document.createElement('div');
+            wrap.className = 'sia-visit__enter';
+            const img = document.createElement('img');
+            img.alt = '';
+            img.src = doorPhoto.currentSrc || doorPhoto.src;
+            img.style.left = `${r1.x}px`;
+            img.style.top = `${r1.y}px`;
+            img.style.width = `${r1.width}px`;
+            img.style.height = `${r1.height}px`;
+            const tint = document.createElement('div');
+            tint.className = 'sia-visit__enter-tint';
+            wrap.append(img, tint);
+            stage.append(wrap);
+            enter = { wrap, img, tint, r0, r1 };
+          }
+          if (enter) {
+            const u = clamp01((tl - ENTER0) / ENTER_MS);
+            if (u <= 0) {
+              // during the pause: ready at full size (so it's sharp) but not shown yet
+              enter.wrap.style.opacity = '0.001';
+              enter.img.style.transform = 'none';
+              enter.tint.style.opacity = '0';
+            } else {
+              const e = easeIO(u);
+              const { r0, r1 } = enter;
+              const sc = (r0.width + (r1.width - r0.width) * e) / r1.width;
+              const x = r0.x + (r1.x - r0.x) * e - r1.x;
+              const y = r0.y + (r1.y - r0.y) * e - r1.y;
+              enter.img.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${sc.toFixed(5)})`;
+              // Fade in as the picture outgrows the screen, so its edges never show over the wall.
+              const sb = enter.wrap.getBoundingClientRect();
+              const cover = Math.min((r1.width * sc) / sb.width, (r1.height * sc) / sb.height);
+              enter.wrap.style.opacity = clamp01((cover - 0.85) / 0.2).toFixed(3);
+              enter.tint.style.opacity = e.toFixed(3);
+            }
+          }
+        } else if (enter) {
+          dropEnter();
+        }
+        setLiteMarks();
+        // Nothing in the scene itself changes during the pause and the rise: skip redrawing it.
+        if (progress === liteDrawn) {
+          if (walking && !queued) {
+            queued = true;
+            requestAnimationFrame(() => update());
+          }
+          return;
+        }
+        liteDrawn = progress;
       }
       const swing = capture ? 0 : reduced ? 1 : clamp01(progress / DOOR);
       const open = capture ? 0 : reduced ? 1 : clamp01((progress - DOOR) / ZOOM);
@@ -3345,33 +3464,40 @@ const faqs = [
       // grows (a screen recording showed the zoom updating only ~15 times a second): kept at rest,
       // dropped while zooming, when the lit and shaded edge lines carry the look.
       archFrame.classList.toggle('is-zooming', sWall > 1);
-      // The photo reaches out to the outer line, under the glass band.
-      const timberPath = `${arch(cx, bf, Af, EDGE, true)} ${arch(cx, bf, Af, BAND, true)}`;
-      archFrame.querySelector('[data-timber]')?.setAttribute('d', timberPath);
-      archFrame.querySelector('[data-timber-edge="lit"]')?.setAttribute('d', arch(cx, bf, Af, BAND + 1.5, false));
-      archFrame.querySelector('[data-timber-edge="shade"]')?.setAttribute('d', arch(cx, bf, Af, EDGE - 0.5, false));
-      // Thin inner timber on the doorway's edge, lit on the opening side.
-      archFrame.querySelector('[data-timber-inner]')?.setAttribute('d', `${arch(cx, bf, Af, INNER, true)} ${arch(cx, bf, Af)}`);
-      archFrame.querySelector('[data-timber-inner-edge="lit"]')?.setAttribute('d', arch(cx, bf, Af, 0.5, false));
-      archFrame.querySelector('[data-timber-inner-edge="shade"]')?.setAttribute('d', arch(cx, bf, Af, INNER - 0.5, false));
-      // Depth: the frame's shadow on the wall (outside the frame, above the ground only), and the timber's
-      // shadow along both edges of the glass (inside the glass only).
-      const outline = arch(cx, bf, Af, EDGE, true);
-      archFrame
-        .querySelector('[data-wall-clip]')
-        ?.setAttribute('d', `M-5000 -5000 H${n(w + 5000)} V${n(bf)} H-5000 Z ${outline}`);
-      const lift = Math.max(3, Af * 0.035);
-      archFrame
-        .querySelector('[data-frame-shadow]')
-        ?.setAttribute('d', outline);
-      archFrame
-        .querySelector('[data-frame-shadow]')
-        ?.setAttribute('transform', `translate(${n(lift * 0.7)} ${n(lift)})`);
-      archFrame
-        .querySelector('[data-glass-clip]')
-        ?.setAttribute('d', `${arch(cx, bf, Af, BAND, true)} ${arch(cx, bf, Af, INNER, true)}`);
-      archFrame.querySelector('[data-glass-shade="outer"]')?.setAttribute('d', arch(cx, bf, Af, BAND, false));
-      archFrame.querySelector('[data-glass-shade="inner"]')?.setAttribute('d', arch(cx, bf, Af, INNER, false));
+      // The frame is drawn at rest size and zoomed as one piece, so its outline only changes
+      // with the window size: rebuild it then, not on every frame.
+      const frameKey = `${w}|${h}|${A0}|${base0}`;
+      const frameStale = frameKey !== frameDrawn;
+      frameDrawn = frameKey;
+      if (frameStale) {
+        // The photo reaches out to the outer line, under the glass band.
+        const timberPath = `${arch(cx, bf, Af, EDGE, true)} ${arch(cx, bf, Af, BAND, true)}`;
+        archFrame.querySelector('[data-timber]')?.setAttribute('d', timberPath);
+        archFrame.querySelector('[data-timber-edge="lit"]')?.setAttribute('d', arch(cx, bf, Af, BAND + 1.5, false));
+        archFrame.querySelector('[data-timber-edge="shade"]')?.setAttribute('d', arch(cx, bf, Af, EDGE - 0.5, false));
+        // Thin inner timber on the doorway's edge, lit on the opening side.
+        archFrame.querySelector('[data-timber-inner]')?.setAttribute('d', `${arch(cx, bf, Af, INNER, true)} ${arch(cx, bf, Af)}`);
+        archFrame.querySelector('[data-timber-inner-edge="lit"]')?.setAttribute('d', arch(cx, bf, Af, 0.5, false));
+        archFrame.querySelector('[data-timber-inner-edge="shade"]')?.setAttribute('d', arch(cx, bf, Af, INNER - 0.5, false));
+        // Depth: the frame's shadow on the wall (outside the frame, above the ground only), and the timber's
+        // shadow along both edges of the glass (inside the glass only).
+        const outline = arch(cx, bf, Af, EDGE, true);
+        archFrame
+          .querySelector('[data-wall-clip]')
+          ?.setAttribute('d', `M-5000 -5000 H${n(w + 5000)} V${n(bf)} H-5000 Z ${outline}`);
+        const lift = Math.max(3, Af * 0.035);
+        archFrame
+          .querySelector('[data-frame-shadow]')
+          ?.setAttribute('d', outline);
+        archFrame
+          .querySelector('[data-frame-shadow]')
+          ?.setAttribute('transform', `translate(${n(lift * 0.7)} ${n(lift)})`);
+        archFrame
+          .querySelector('[data-glass-clip]')
+          ?.setAttribute('d', `${arch(cx, bf, Af, BAND, true)} ${arch(cx, bf, Af, INNER, true)}`);
+        archFrame.querySelector('[data-glass-shade="outer"]')?.setAttribute('d', arch(cx, bf, Af, BAND, false));
+        archFrame.querySelector('[data-glass-shade="inner"]')?.setAttribute('d', arch(cx, bf, Af, INNER, false));
+      }
       door.style.clipPath = open >= 1 ? 'none' : `path("${arch(cx, base, A, BAND * sWall, true)}")`;
       // The room behind the doors, at true scale: its floor starts at the threshold and its
       // eye level (a third of the way down the photo) sits where a standing person's eyes would
@@ -3405,104 +3531,106 @@ const faqs = [
         doorPhoto.style.left = `${n(cx - pw * (0.5 + SHIFT))}px`;
         doorPhoto.style.top = `${n(base - ph)}px`;
       }
-      // Each foot: a timber plinth across the leg, its two sides the arch's tip curve rotated
-      // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
-      const fh = 0.085 * Af;
-      const fw = ((0.17 * Af) / TIP) * 0.35;
-      const foot = (x0: number, x1: number) =>
-        `M${n(x0 - fw)} ${n(bf)} C${n(x0 - 0.552 * fw)} ${n(bf - 0.098 * fh)} ${n(x0)} ${n(bf - 0.448 * fh)} ${n(x0)} ${n(bf - fh)} ` +
-        `L${n(x1)} ${n(bf - fh)} ` +
-        `C${n(x1)} ${n(bf - 0.448 * fh)} ${n(x1 + 0.552 * fw)} ${n(bf - 0.098 * fh)} ${n(x1 + fw)} ${n(bf)} Z`;
-      archFrame
-        .querySelector<SVGPathElement>('[data-feet]')
-        ?.setAttribute('d', foot(cx - Af - EDGE, cx - Af) + ' ' + foot(cx + Af, cx + Af + EDGE));
-      // A fine line across the top of each foot, from the outer glass line to the inner timber,
-      // joining the design lines' ends into one piece.
-      archFrame
-        .querySelector<SVGPathElement>('[data-foot-line]')
-        ?.setAttribute(
-          'd',
-          `M${n(cx - Af - BAND)} ${n(bf - fh)} H${n(cx - Af - INNER)} M${n(cx + Af + INNER)} ${n(bf - fh)} H${n(cx + Af + BAND)}`,
-        );
-      // Braces: from the foot of the arch's outer line, the tip curve the right way up (rising
-      // upright, turning level) until it meets the thick inner line. Crown proportions.
-      const bw = BAND - INNER; // ends at the inner timber
-      const bh = bw * TIP;
-      const by = bf - fh;
-      const brace = (tip: number, dir: number) => {
-        const x = (k: number) => n(tip + dir * k * bw);
-        return `M${x(0)} ${n(by)} C${x(0)} ${n(by - 0.552 * bh)} ${x(0.552)} ${n(by - 0.902 * bh)} ${x(1)} ${n(by - bh)}`;
-      };
-      archFrame
-        .querySelector<SVGPathElement>('[data-braces]')
-        ?.setAttribute('d', brace(cx - Af - BAND, 1) + ' ' + brace(cx + Af + BAND, -1));
-      // The same curve along its top side, touching the brace: from where it meets the outer
-      // moss line to where it meets the seam (the fine sage line beside the inner moss line).
-      const FINE = 1.5; // half the brace (2px) + half the fine line (1px): touching
-      const SEAM = 13; // the seam line's distance out from the doorway's edge
-      const braceFine = (tip: number, dir: number) => {
-        const p1y = -0.552 * bh, p2x = 0.552 * bw * dir, p2y = -0.902 * bh, p3x = bw * dir, p3y = -bh;
-        const pts: [number, number][] = [];
-        for (let i = 0; i <= 48; i++) {
-          const t = i / 48;
-          const u = 1 - t;
-          const x = 3 * u * t * t * p2x + t ** 3 * p3x;
-          const y = 3 * u * u * t * p1y + 3 * u * t * t * p2y + t ** 3 * p3y;
-          const dx = 6 * u * t * p2x + 3 * t * t * (p3x - p2x);
-          const dy = 3 * u * u * p1y + 6 * u * t * (p2y - p1y) + 3 * t * t * (p3y - p2y);
-          const len = Math.hypot(dx, dy) || 1;
-          // Top side: away from the corner the brace encloses.
-          const nx = (dir * dy) / len, ny = (dir * -dx) / len;
-          pts.push([x + nx * FINE, y + ny * FINE]);
-        }
-        // Keep the part between the outer line (x = 0 here) and the seam, with exact end points.
-        const end = (BAND - SEAM) * dir;
-        const inside = (x: number) => x * dir >= 0 && x * dir <= end * dir;
-        const out: [number, number][] = [];
-        for (let i = 0; i < pts.length; i++) {
-          const p = pts[i]!;
-          const q = pts[i - 1];
-          if (q) {
-            for (const edge of [0, end]) {
-              if ((q[0] - edge) * (p[0] - edge) < 0) {
-                const f = (edge - q[0]) / (p[0] - q[0]);
-                out.push([edge, q[1] + (p[1] - q[1]) * f]);
+      if (frameStale) {
+        // Each foot: a timber plinth across the leg, its two sides the arch's tip curve rotated
+        // half a turn, rising from the ground to meet the leg upright. Kept low and subtle.
+        const fh = 0.085 * Af;
+        const fw = ((0.17 * Af) / TIP) * 0.35;
+        const foot = (x0: number, x1: number) =>
+          `M${n(x0 - fw)} ${n(bf)} C${n(x0 - 0.552 * fw)} ${n(bf - 0.098 * fh)} ${n(x0)} ${n(bf - 0.448 * fh)} ${n(x0)} ${n(bf - fh)} ` +
+          `L${n(x1)} ${n(bf - fh)} ` +
+          `C${n(x1)} ${n(bf - 0.448 * fh)} ${n(x1 + 0.552 * fw)} ${n(bf - 0.098 * fh)} ${n(x1 + fw)} ${n(bf)} Z`;
+        archFrame
+          .querySelector<SVGPathElement>('[data-feet]')
+          ?.setAttribute('d', foot(cx - Af - EDGE, cx - Af) + ' ' + foot(cx + Af, cx + Af + EDGE));
+        // A fine line across the top of each foot, from the outer glass line to the inner timber,
+        // joining the design lines' ends into one piece.
+        archFrame
+          .querySelector<SVGPathElement>('[data-foot-line]')
+          ?.setAttribute(
+            'd',
+            `M${n(cx - Af - BAND)} ${n(bf - fh)} H${n(cx - Af - INNER)} M${n(cx + Af + INNER)} ${n(bf - fh)} H${n(cx + Af + BAND)}`,
+          );
+        // Braces: from the foot of the arch's outer line, the tip curve the right way up (rising
+        // upright, turning level) until it meets the thick inner line. Crown proportions.
+        const bw = BAND - INNER; // ends at the inner timber
+        const bh = bw * TIP;
+        const by = bf - fh;
+        const brace = (tip: number, dir: number) => {
+          const x = (k: number) => n(tip + dir * k * bw);
+          return `M${x(0)} ${n(by)} C${x(0)} ${n(by - 0.552 * bh)} ${x(0.552)} ${n(by - 0.902 * bh)} ${x(1)} ${n(by - bh)}`;
+        };
+        archFrame
+          .querySelector<SVGPathElement>('[data-braces]')
+          ?.setAttribute('d', brace(cx - Af - BAND, 1) + ' ' + brace(cx + Af + BAND, -1));
+        // The same curve along its top side, touching the brace: from where it meets the outer
+        // moss line to where it meets the seam (the fine sage line beside the inner moss line).
+        const FINE = 1.5; // half the brace (2px) + half the fine line (1px): touching
+        const SEAM = 13; // the seam line's distance out from the doorway's edge
+        const braceFine = (tip: number, dir: number) => {
+          const p1y = -0.552 * bh, p2x = 0.552 * bw * dir, p2y = -0.902 * bh, p3x = bw * dir, p3y = -bh;
+          const pts: [number, number][] = [];
+          for (let i = 0; i <= 48; i++) {
+            const t = i / 48;
+            const u = 1 - t;
+            const x = 3 * u * t * t * p2x + t ** 3 * p3x;
+            const y = 3 * u * u * t * p1y + 3 * u * t * t * p2y + t ** 3 * p3y;
+            const dx = 6 * u * t * p2x + 3 * t * t * (p3x - p2x);
+            const dy = 3 * u * u * p1y + 6 * u * t * (p2y - p1y) + 3 * t * t * (p3y - p2y);
+            const len = Math.hypot(dx, dy) || 1;
+            // Top side: away from the corner the brace encloses.
+            const nx = (dir * dy) / len, ny = (dir * -dx) / len;
+            pts.push([x + nx * FINE, y + ny * FINE]);
+          }
+          // Keep the part between the outer line (x = 0 here) and the seam, with exact end points.
+          const end = (BAND - SEAM) * dir;
+          const inside = (x: number) => x * dir >= 0 && x * dir <= end * dir;
+          const out: [number, number][] = [];
+          for (let i = 0; i < pts.length; i++) {
+            const p = pts[i]!;
+            const q = pts[i - 1];
+            if (q) {
+              for (const edge of [0, end]) {
+                if ((q[0] - edge) * (p[0] - edge) < 0) {
+                  const f = (edge - q[0]) / (p[0] - q[0]);
+                  out.push([edge, q[1] + (p[1] - q[1]) * f]);
+                }
               }
             }
+            if (inside(p[0])) out.push(p);
           }
-          if (inside(p[0])) out.push(p);
+          return `M${out.map(([x, y]) => `${n(tip + x)} ${n(by + y)}`).join(' L')}`;
+        };
+        archFrame
+          .querySelector<SVGPathElement>('[data-brace-fine]')
+          ?.setAttribute('d', braceFine(cx - Af - BAND, 1) + ' ' + braceFine(cx + Af + BAND, -1));
+        // A line marked data-to-brace stops where it meets the brace curve, rather than running
+        // on to the ground: find the point on the curve level with the line, and start there.
+        const braceMeet = (d: number) => {
+          const k = (BAND - d) / bw; // how far across the brace the line sits, 0..1
+          let lo = 0, hi = 1;
+          for (let i = 0; i < 30; i++) {
+            const t = (lo + hi) / 2;
+            const x = 3 * (1 - t) * t * t * 0.552 + t ** 3;
+            if (x < k) lo = t; else hi = t;
+          }
+          const t = (lo + hi) / 2;
+          const rise = 3 * (1 - t) ** 2 * t * 0.552 + 3 * (1 - t) * t * t * 0.902 + t ** 3;
+          return by - bh * rise;
+        };
+        for (const line of lines) {
+          const d = Number(line.dataset.line);
+          const foot = line.hasAttribute('data-to-brace')
+            ? braceMeet(d)
+            : line.hasAttribute('data-to-foot')
+              ? bf - fh
+              : bf;
+          line.setAttribute('d', arch(cx, bf, Af, d, false, foot));
         }
-        return `M${out.map(([x, y]) => `${n(tip + x)} ${n(by + y)}`).join(' L')}`;
-      };
-      archFrame
-        .querySelector<SVGPathElement>('[data-brace-fine]')
-        ?.setAttribute('d', braceFine(cx - Af - BAND, 1) + ' ' + braceFine(cx + Af + BAND, -1));
+      }
       if (glass) {
         glass.style.clipPath = `path(evenodd, "${arch(cx, base, A, BAND * sWall, true)} ${arch(cx, base, A)}")`;
         glass.style.opacity = String(Math.max(0, 1 - Math.max(0, open - 0.8) * 5));
-      }
-      // A line marked data-to-brace stops where it meets the brace curve, rather than running
-      // on to the ground: find the point on the curve level with the line, and start there.
-      const braceMeet = (d: number) => {
-        const k = (BAND - d) / bw; // how far across the brace the line sits, 0..1
-        let lo = 0, hi = 1;
-        for (let i = 0; i < 30; i++) {
-          const t = (lo + hi) / 2;
-          const x = 3 * (1 - t) * t * t * 0.552 + t ** 3;
-          if (x < k) lo = t; else hi = t;
-        }
-        const t = (lo + hi) / 2;
-        const rise = 3 * (1 - t) ** 2 * t * 0.552 + 3 * (1 - t) * t * t * 0.902 + t ** 3;
-        return by - bh * rise;
-      };
-      for (const line of lines) {
-        const d = Number(line.dataset.line);
-        const foot = line.hasAttribute('data-to-brace')
-          ? braceMeet(d)
-          : line.hasAttribute('data-to-foot')
-            ? bf - fh
-            : bf;
-        line.setAttribute('d', arch(cx, bf, Af, d, false, foot));
       }
 
       // The path inside runs right down to the threshold, where it meets the forecourt.
@@ -3740,7 +3868,7 @@ const faqs = [
         threshold.style.transformOrigin = '50% 0';
         threshold.style.transform = `translateX(-50%) scale(${(Math.round(s * 1000) / 1000)})`;
       }
-      // The gentle walk-in runs on its own clock: keep drawing until it arrives.
+      // Battery mode runs on its own clock: keep drawing until it arrives.
       if (walking && !queued) {
         queued = true;
         requestAnimationFrame(() => update());
@@ -3753,16 +3881,19 @@ const faqs = [
       () => {
         if (!queued) {
           queued = true;
-          requestAnimationFrame(update);
+          requestAnimationFrame(() => update());
         }
       },
       { passive: true },
     );
+    setLiteMarks();
 
     addEventListener(
       'resize',
       () => {
         needsDraw = true;
+        liteDrawn = null;
+        dropEnter();
         update();
       },
       { passive: true },
