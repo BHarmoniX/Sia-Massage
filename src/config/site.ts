@@ -281,7 +281,6 @@ export const site: Site = siteSchema.parse({
     // Shown under "Attribution" in the Terms. Keep in step with docs/CREDITS.md.
     attribution: [
       { work: 'Photograph: bamboo leaves in soft light (welcome)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/FguFp1l5X0E' },
-      { work: 'Photograph: herbal compress massage (philosophy)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/YeekhTXpTgY' },
       { work: 'Video: rain on leaves (rain interlude)', credit: 'Pixabay', licence: 'Pixabay Content License', href: 'https://pixabay.com/videos/plants-leaves-foliage-rain-water-152800/' },
       { work: 'Photograph: weathered hardwood (doorway doors)', credit: 'Pexels', licence: 'Pexels License', href: 'https://www.pexels.com/photo/129721/' },
       { work: 'Photograph: mossy stream (treatments background)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/ALrCdq-ui_Q' },

@@ -15,7 +15,7 @@ Downloaded 2026-10-24 from unsplash.com (free licence, not Unsplash+).
 | tea-table.jpg (unused since 2026-11-01) | https://unsplash.com/photos/dPUWgZLsOk8 |
 | tea-leaves.jpg (unused) | https://unsplash.com/photos/Qaor6nxikUM |
 | hot-stones.jpg (unused) | https://unsplash.com/photos/SMwCQZWayj0 |
-| herbal-compress.jpg (philosophy story, step two) | https://unsplash.com/photos/YeekhTXpTgY |
+| herbal-compress.jpg (no longer used; was philosophy step two) | https://unsplash.com/photos/YeekhTXpTgY |
 | oil-massage.jpg (unused, replaced: colours too bright) | https://unsplash.com/photos/cU53ZFBr3lk |
 | mossy-rocks.jpg (unused) | https://unsplash.com/photos/9AekDW5da34 |
 | towel-candles.jpg (unused since 2026-11-01) | https://unsplash.com/photos/W7AyAs7azHc |
@@ -67,7 +67,7 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | ground-stone.jpg (doorway forecourt flagstones, mirrored into a seamless tile, relief lighting added); step-stone.jpg (the doorway step: several of these flagstones laid end to end) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | shop-front.jpg (placeholder Sia studio front in a shopping centre, until the owner supplies a real photo) | Generated for Sia with OpenArt (GPT Image 2.5 Sunburst), Plus plan with commercial use rights, 2026-10-28 |
 | morning-room.jpg (philosophy story, step one: a pale treatment room in morning light) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
-| team-placeholder.jpg (philosophy story: PLACEHOLDER for a real photo of the owner and team) | Supplied by the designer as a placeholder, 2026-11-01; source and licence unknown — not for launch, replace with the owner's own approved photo |
+| team-placeholder.jpg (no longer used; was the philosophy story placeholder) | Supplied by the designer as a placeholder, 2026-11-01; source and licence unknown — not for launch, replace with the owner's own approved photo |
 | treat-quiet-pause.jpg, treat-classic.jpg, treat-deep.jpg, treat-ritual.jpg, treat-together.jpg, treat-gift.jpg (treatments: one photo per treatment) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-11-01; graded toward the site palette. AI-generated people: replace with real photos of Sia's own team and rooms when available |
 | faq-room.jpg (FAQ: a treatment room made up and waiting) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-11-01; graded toward the site palette. Replace with a real photo of Sia's own room when available |
 | rain-pond.jpg (contact background, formerly the rain pause: a still forest pond seen close at water level) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-28 |
@@ -75,3 +75,5 @@ AI-generated tracks were excluded on purpose: a brand sound should be human-made
 | wall-plaster.jpg (doorway wall: moss lime plaster, darkened and mirrored into a seamless tile) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | garden-bamboo-a.webp, garden-bamboo-b.webp (courtyard tall airy bamboo in round carved stone pots, cut out) | Generated for Sia with OpenArt (Nano Banana 2), Plus plan with commercial use rights, 2026-10-26 |
 | spa-room.jpg (view through the doorway: candlelit spa treatment room seen from the threshold, with rug, door mat and lotus painting; gentle low-light grade; therapist and client re-done 2026-11-01 — only the people were regenerated, from a crop, and blended back into the unchanged room) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-10-27 (people 2026-11-01) |
+| team-sia.jpg (philosophy story: AI-generated PLACEHOLDER of a therapist team in sage uniforms; these are not Sia's staff — replace with the owner's real team photo before launch) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-11-03 |
+| tradition-hands.jpg (philosophy: the tradition card; a therapist's hands on a guest's back) | Generated for Sia with OpenArt (Nano Banana Pro), Plus plan with commercial use rights, 2026-11-03 |

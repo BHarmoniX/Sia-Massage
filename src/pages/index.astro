@@ -15,8 +15,8 @@ import shopFront from '../client/photos/shop-front.jpg';
 import morningRoom from '../client/photos/morning-room.jpg';
 // PLACEHOLDER (supplied 2026-11-01, licence unknown): stands in for a real, approved photo of
 // Sia's owner and team in the philosophy story. Replace before launch.
-import storyPhoto from '../client/photos/team-placeholder.jpg';
-import herbalCompress from '../client/photos/herbal-compress.jpg';
+import storyPhoto from '../client/photos/team-sia.jpg'; // AI-generated PLACEHOLDER until the owner's real team photo
+import traditionHands from '../client/photos/tradition-hands.jpg';
 // Treatment photos: generated for Sia (OpenArt, Nano Banana Pro), graded toward the site's sage.
 import treatQuietPause from '../client/photos/treat-quiet-pause.jpg';
 import treatClassic from '../client/photos/treat-classic.jpg';
@@ -264,7 +264,7 @@ const faqs = [
         <div class="sia-step__card" data-reveal>
           <div class="sia-step__panel glass-3d" data-glow>
             <figure class="sia-step__inset img-reveal">
-              <Img src={storyPhoto} alt="A smiling therapist in a dark uniform, with two colleagues standing behind her" sizes="(min-width: 1024px) 42vw, 100vw" class="h-full w-full object-cover sia-phil__team" />
+              <Img src={storyPhoto} alt="A smiling therapist in a sage uniform, with two colleagues standing behind her in the studio" sizes="(min-width: 1024px) 42vw, 100vw" class="h-full w-full object-cover sia-phil__team" />
             </figure>
             <div class="sia-step__text">
               <p class="sia-phil__label">Our story</p>
@@ -307,6 +307,7 @@ const faqs = [
         <div class="sia-dusk__motes">
           <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
         </div>
+        <div class="sia-dusk__buzz"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       </div>
     <div class="sia-story">
       <div class="sia-step sia-step--light">
@@ -327,7 +328,7 @@ const faqs = [
         <div class="sia-step__card" data-reveal>
           <div class="sia-step__panel glass-3d">
             <figure class="sia-step__inset img-reveal">
-              <Img src={herbalCompress} alt="A therapist pressing warm herbal compresses along a guest’s shoulders" sizes="(min-width: 1024px) 26vw, 100vw" class="h-full w-full object-cover" />
+              <Img src={traditionHands} alt="A therapist’s hands resting gently on a guest’s back" sizes="(min-width: 1024px) 26vw, 100vw" class="h-full w-full object-cover" />
             </figure>
             <div class="sia-step__text">
               <p class="sia-phil__label">The tradition</p>
@@ -1204,6 +1205,61 @@ const faqs = [
     50% { opacity: 0.35; transform: translate(2.5rem, -9rem); }
     80% { opacity: 0.8; }
     100% { opacity: 0; transform: translate(-1.5rem, -18rem); }
+  }
+  /* More fireflies, buzzing over the mountains: smaller and livelier than the drifting ones,
+     each hovering in its own little loop and blinking, spread across the whole range. They
+     appear as the mountains rise (--q). Moved by the graphics card only; paused off-screen. */
+  .sia-dusk__buzz {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--ridge-top) + var(--ridge-h) * 0.3);
+    height: calc(var(--ridge-h) * 0.75);
+    opacity: var(--q);
+  }
+  .sia-dusk__buzz span {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgb(255 222 160);
+    box-shadow: 0 0 7px 2px rgb(255 196 112 / 0.6);
+    opacity: 0;
+  }
+  .sia-dusk__buzz span:nth-child(1) { left: 4%; top: 58%; --d: 7.2s; --t: -1.1s; --a: 1.0; }
+  .sia-dusk__buzz span:nth-child(2) { left: 9%; top: 30%; --d: 8.6s; --t: -4.0s; --a: 0.8; }
+  .sia-dusk__buzz span:nth-child(3) { left: 15%; top: 66%; --d: 6.4s; --t: -2.3s; --a: 1.2; }
+  .sia-dusk__buzz span:nth-child(4) { left: 21%; top: 42%; --d: 9.3s; --t: -6.1s; --a: 0.9; }
+  .sia-dusk__buzz span:nth-child(5) { left: 27%; top: 74%; --d: 7.7s; --t: -0.4s; --a: 1.1; }
+  .sia-dusk__buzz span:nth-child(6) { left: 33%; top: 22%; --d: 10.1s; --t: -7.2s; --a: 0.7; }
+  .sia-dusk__buzz span:nth-child(7) { left: 39%; top: 55%; --d: 6.9s; --t: -3.3s; --a: 1.3; }
+  .sia-dusk__buzz span:nth-child(8) { left: 45%; top: 36%; --d: 8.2s; --t: -5.5s; --a: 1.0; }
+  .sia-dusk__buzz span:nth-child(9) { left: 51%; top: 70%; --d: 9.8s; --t: -1.8s; --a: 0.8; }
+  .sia-dusk__buzz span:nth-child(10) { left: 57%; top: 26%; --d: 7.4s; --t: -6.6s; --a: 1.1; }
+  .sia-dusk__buzz span:nth-child(11) { left: 63%; top: 60%; --d: 8.9s; --t: -2.9s; --a: 0.9; }
+  .sia-dusk__buzz span:nth-child(12) { left: 69%; top: 40%; --d: 6.6s; --t: -4.7s; --a: 1.2; }
+  .sia-dusk__buzz span:nth-child(13) { left: 75%; top: 72%; --d: 10.4s; --t: -0.9s; --a: 1.0; }
+  .sia-dusk__buzz span:nth-child(14) { left: 81%; top: 32%; --d: 7.9s; --t: -5.9s; --a: 0.8; }
+  .sia-dusk__buzz span:nth-child(15) { left: 87%; top: 62%; --d: 9.1s; --t: -3.7s; --a: 1.1; }
+  .sia-dusk__buzz span:nth-child(16) { left: 94%; top: 46%; --d: 8.4s; --t: -2.1s; --a: 0.9; }
+  @media (prefers-reduced-motion: no-preference) {
+    .sia-dusk__buzz span {
+      animation: sia-buzz var(--d) ease-in-out var(--t) infinite;
+    }
+    .sia-dusk__buzz span:nth-child(even) {
+      animation-direction: reverse;
+    }
+  }
+  @keyframes sia-buzz {
+    0%,
+    100% { opacity: 0; transform: translate(0, 0); }
+    10% { opacity: 0.9; }
+    22% { transform: translate(calc(1.2rem * var(--a)), calc(-0.8rem * var(--a))); }
+    35% { opacity: 0.25; transform: translate(calc(2rem * var(--a)), calc(0.4rem * var(--a))); }
+    48% { opacity: 0.85; transform: translate(calc(0.8rem * var(--a)), calc(1.1rem * var(--a))); }
+    62% { opacity: 0.4; transform: translate(calc(-0.9rem * var(--a)), calc(0.3rem * var(--a))); }
+    76% { opacity: 0.9; transform: translate(calc(-1.6rem * var(--a)), calc(-0.9rem * var(--a))); }
+    90% { opacity: 0.3; }
   }
   /* the fireflies gather in the dark water at the foot of the story */
   /* the fireflies drift in the dark below the mountains */
