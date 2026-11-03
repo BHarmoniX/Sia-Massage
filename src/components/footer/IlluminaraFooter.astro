@@ -139,7 +139,7 @@ const legalLine = [
         }
       </address>
 
-      <a href="/" class="ill-footer__brand" aria-label={`${site.name} home`}>
+      <a href="/" class="ill-footer__brand">
         {
           logo ? (
             <img
@@ -555,6 +555,12 @@ const legalLine = [
     border-top: 1px solid color-mix(in oklab, white 9%, transparent);
     text-align: center;
     font-size: 0.75rem;
+  }
+  /* Phones: keep the last line clear of the floating sound button in the bottom corner. */
+  @media (max-width: 640px) {
+    .ill-footer__legal {
+      padding-inline: 4.25rem;
+    }
   }
 
   /* ── Tablet and phone: the two glass pieces stack, still separated by the jigsaw gap,
