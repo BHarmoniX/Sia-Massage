@@ -1232,7 +1232,7 @@ const faqs = [
   .sia-dusk .sia-dusk__motes span:nth-child(6) { left: 51%; top: 93%; --s: 7px; --r: 64cqh; --w: 1.3rem; --d: 24s; --t: -14s; }
   .sia-dusk .sia-dusk__motes span:nth-child(7) { left: 59%; top: 98%; --s: 6px; --r: 48cqh; --w: 1.5rem; --d: 20s; --t: -5s; }
   .sia-dusk .sia-dusk__motes span:nth-child(8) { left: 66%; top: 95%; --s: 9px; --r: 56cqh; --w: 1.7rem; --d: 22s; --t: -18s; }
-  .sia-dusk .sia-dusk__motes span:nth-child(9) { left: 73%; top: 97%; --s: 7px; --r: 95cqh; --w: 1.2rem; --d: 38s; --t: -9s; }
+  .sia-dusk .sia-dusk__motes span:nth-child(9) { --dir: -1; left: 73%; top: 97%; --s: 7px; --r: 95cqh; --w: 1.2rem; --d: 38s; --t: -9s; }
   .sia-dusk .sia-dusk__motes span:nth-child(10) { left: 80%; top: 94%; --s: 8px; --r: 44cqh; --w: 1.8rem; --d: 19s; --t: -13s; }
   .sia-dusk .sia-dusk__motes span:nth-child(11) { left: 87%; top: 98%; --s: 6px; --r: 58cqh; --w: 1.4rem; --d: 25s; --t: -4s; }
   .sia-dusk .sia-dusk__motes span:nth-child(12) { left: 93%; top: 95%; --s: 7px; --r: 50cqh; --w: 1.6rem; --d: 21s; --t: -20s; }
@@ -1257,14 +1257,14 @@ const faqs = [
     50% { opacity: 0.9; transform: translate(calc(var(--w) * 0.5), calc(var(--r) * -0.8)) scale(0.65); }
     /* arrives over the dark foot of the mountains */
     60% { opacity: 1; transform: translate(0, calc(var(--r) * -0.92)) scale(0.6); }
-    /* plays there a while, darting and dipping */
-    66% { opacity: 0.55; transform: translate(1.4rem, calc(var(--r) * -0.95)) scale(0.6); }
-    72% { opacity: 1; transform: translate(2.6rem, calc(var(--r) * -0.9)) scale(0.58); }
-    78% { opacity: 0.6; transform: translate(0.8rem, calc(var(--r) * -0.97)) scale(0.58); }
-    84% { opacity: 1; transform: translate(-1.3rem, calc(var(--r) * -0.91)) scale(0.56); }
-    90% { opacity: 0.85; transform: translate(-0.4rem, calc(var(--r) * -0.96)) scale(0.56); }
+    /* plays there a while: darting sideways as much as up and down (--dir mirrors it) */
+    66% { opacity: 0.6; transform: translate(calc(5rem * var(--dir, 1)), calc(var(--r) * -0.92 - 1.2rem)) scale(0.6); }
+    72% { opacity: 1; transform: translate(calc(9rem * var(--dir, 1)), calc(var(--r) * -0.92 + 0.8rem)) scale(0.58); }
+    78% { opacity: 0.6; transform: translate(calc(4rem * var(--dir, 1)), calc(var(--r) * -0.92 - 2rem)) scale(0.58); }
+    84% { opacity: 1; transform: translate(calc(-4rem * var(--dir, 1)), calc(var(--r) * -0.92 + 0.5rem)) scale(0.56); }
+    90% { opacity: 0.85; transform: translate(calc(-7rem * var(--dir, 1)), calc(var(--r) * -0.92 - 1.5rem)) scale(0.56); }
     /* then drifts up into the pale sky, fading */
-    100% { opacity: 0; transform: translate(0.8rem, calc(var(--r) * -0.96 - 7rem)) scale(0.46); }
+    100% { opacity: 0; transform: translate(calc(-4rem * var(--dir, 1)), calc(var(--r) * -0.92 - 8rem)) scale(0.46); }
   }
   @keyframes sia-rise {
     0% { opacity: 0; transform: translate(0, 0) scale(1); }
