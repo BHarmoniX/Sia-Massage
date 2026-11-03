@@ -3322,7 +3322,10 @@ const faqs = [
               enter.img.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${sc.toFixed(5)})`;
               // Fade in as the picture outgrows the screen, so its edges never show over the wall.
               const cover = Math.min((r1.width * sc) / enter.sw, (r1.height * sc) / enter.sh);
-              enter.wrap.style.opacity = clamp01((cover - 0.85) / 0.2).toFixed(3);
+              // Never quite opaque (0.999, invisible): otherwise the browser stops drawing the
+              // doorway behind it, and walking out it then has to draw it all at once halfway
+              // through, which drops frames.
+              enter.wrap.style.opacity = Math.min(0.999, clamp01((cover - 0.85) / 0.2)).toFixed(3);
               enter.tint.style.opacity = e.toFixed(3);
             }
           }
