@@ -435,6 +435,9 @@ const faqs = [
        moments rise over the scene. -->
   <Section id="visit" labelledby="visit-title" class="sia-visit sia-tone-moss" data-doorway>
     <div class="sia-visit__stage" aria-hidden="true">
+      <!-- The whole closed scene in one layer: on short screens (a phone turned sideways) it is laid
+           out as on a small desktop and scaled down to fit, so nothing has to squeeze. -->
+      <div class="sia-visit__scene" data-scene>
       <!-- The wall the doorway is set into: real moss lime plaster (trowel marks, mottling, fine
            cracks), lit from the top left like the frame. -->
       <svg class="sia-visit__wall" preserveAspectRatio="none">
@@ -696,6 +699,7 @@ const faqs = [
         </svg>
         <span class="sia-visit__threshold-text">Step inside.</span>
       </p>
+      </div>
     </div>
     <div class="sia-visit__inner">
       <h2 id="visit-title" class="sia-heading sia-heading--light" data-reveal>Four quiet moments</h2>
@@ -2592,6 +2596,16 @@ const faqs = [
     position: relative;
     isolation: isolate;
   }
+  /* The scene fills the stage; on short screens the script lays it out taller (and wider) and
+     scales it down to fit (see SCENE_MIN_H). */
+  .sia-visit__scene {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: 0 0;
+  }
   .sia-visit__stage {
     position: sticky;
     top: var(--header-height);
@@ -3627,6 +3641,7 @@ const faqs = [
   const sillStones = sill?.querySelector<SVGGElement>('[data-threshold-stones]');
   let edgeKey = '';
   const garden = doorway?.querySelector<HTMLElement>('[data-garden]');
+  const scene = doorway?.querySelector<HTMLElement>('[data-scene]');
   // Each piece: where it stands (x from the doorway's centre, in doorway half-widths, past the
   // frame), how far forward on the forecourt, how tall, and its picture's height ÷ width.
   const props = [
@@ -4096,8 +4111,21 @@ const faqs = [
       const open = capture ? 0 : reduced ? 1 : clamp01((progress - DOOR) / ZOOM);
       doorway.style.setProperty('--open', open.toFixed(3));
 
-      const w = stage.clientWidth;
-      const h = stage.clientHeight;
+      // On a short screen (a phone turned sideways) the scene is laid out at least SCENE_MIN_H tall,
+      // as on a small desktop window, and scaled down to fit: the arch, its frame, 入, the couplets
+      // and the plants all keep their desktop proportions.
+      const stageW = stage.clientWidth;
+      const stageH = stage.clientHeight;
+      const SCENE_MIN_H = 520;
+      const sceneK = stageH < SCENE_MIN_H && stageW > stageH ? stageH / SCENE_MIN_H : 1;
+      if (scene && scene.dataset.k !== sceneK.toFixed(4)) {
+        scene.dataset.k = sceneK.toFixed(4);
+        scene.style.width = sceneK === 1 ? '' : `${stageW / sceneK}px`;
+        scene.style.height = sceneK === 1 ? '' : `${stageH / sceneK}px`;
+        scene.style.transform = sceneK === 1 ? '' : `scale(${sceneK.toFixed(4)})`;
+      }
+      const w = stageW / sceneK;
+      const h = stageH / sceneK;
       const cx = w / 2;
       // Closed: the gateway stands on its threshold near the foot of the stage, full height
       // in view with room above for the heading.
@@ -4290,7 +4318,7 @@ const faqs = [
           const words = document.createRange();
           words.selectNodeContents(visitTitle);
           const r = words.getBoundingClientRect();
-          if (r.width > 0) faceX = Math.max(faceX, r.right - stage.getBoundingClientRect().left + Math.max(44, w * 0.07));
+          if (r.width > 0) faceX = Math.max(faceX, (r.right - stage.getBoundingClientRect().left) / sceneK + Math.max(44, w * 0.07));
         }
         faceX = Math.min(faceX, w * 0.62);
         const cover = Math.max(0, 0.5 - w / (2 * pw));
