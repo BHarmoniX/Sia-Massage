@@ -1173,6 +1173,58 @@ const faqs = [
     width: min(100%, 34rem);
     margin-inline: auto;
   }
+  /* Phones turned sideways (wide but short): side by side like the desktop, all on one screen.
+     Words and buttons on the left, the roundel on the right, sized from the screen's height. */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .sia-hero .sia-hero__grid {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      align-items: center;
+      align-content: center;
+      gap: 1.25rem;
+      padding: 0.75rem clamp(1.5rem, 5vw, 3rem);
+    }
+    .sia-hero .sia-hero__copy {
+      padding-left: 0;
+      top: 0;
+    }
+    .sia-hero .sia-hero__copy .sia-display {
+      font-size: clamp(2.4rem, 13svh, 3.6rem);
+      white-space: nowrap;
+    }
+    .sia-hero .sia-hero__copy .sia-display br {
+      display: none;
+    }
+    .sia-hero .sia-hero__tagline {
+      margin-top: 0.5rem;
+      font-size: clamp(1.05rem, 5.5svh, 1.4rem);
+    }
+    .sia-hero .sia-hero__tagline + .sia-hero__lede {
+      margin-top: 0.5rem;
+    }
+    .sia-hero .sia-hero__lede {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      max-width: 26rem;
+    }
+    .sia-hero .sia-hero__actions {
+      margin-top: 1rem;
+      gap: 0.6rem;
+      flex-wrap: nowrap;
+    }
+    /* a touch more compact, so the pair stays on one row */
+    .sia-hero .sia-hero__actions > .btn-3d {
+      padding: 0.7rem 1.25rem;
+      font-size: 0.8125rem;
+      white-space: nowrap;
+    }
+    .sia-hero .sia-hero__hours {
+      margin-top: 0.6rem;
+    }
+    /* the roundel: as large as the screen's height allows below the header */
+    .sia-hero .sia-hero__grid .sia-hero__gate-wrap {
+      width: min(100%, calc(100svh - var(--header-height) - 2rem));
+    }
+  }
   /* The moon gate as a deep round window in the hero wall: a slim frame (lit top left, shaded
      bottom right) with a thin mid-green trim, and depth from the wall's shadow falling into the opening from the top
      left with a little light bouncing up from the bottom right. The window stays still; only
