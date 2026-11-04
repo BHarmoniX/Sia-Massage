@@ -2125,6 +2125,45 @@ const faqs = [
       font-size: clamp(2.2rem, 3.6vw, 3.2rem);
     }
   }
+  /* Phones turned sideways (wide but short): stacked, each photo would be a thin strip. Instead
+     every card has its photo beside the words (on the left), as on the desktop, the photo
+     filling the card's height. */
+  @media (orientation: landscape) and (max-height: 500px) and (max-width: 1023.98px) {
+    .sia-philosophy .sia-step .sia-step__panel.glass-3d {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      align-items: stretch;
+    }
+    .sia-philosophy .sia-step .sia-step__inset {
+      order: -1;
+      position: relative;
+      height: auto;
+      min-height: clamp(13rem, calc(100svh - var(--header-height) - 4rem), 20rem);
+    }
+    .sia-philosophy .sia-step .sia-step__inset picture,
+    .sia-philosophy .sia-step .sia-step__inset img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .sia-philosophy .sia-step .sia-step__text {
+      align-self: center;
+      padding: 1.25rem 1.5rem 1.25rem 1.25rem;
+    }
+    .sia-philosophy .sia-step .sia-step__text > * + * {
+      margin-top: 0.7rem;
+    }
+    .sia-philosophy .sia-step .sia-step__title {
+      font-size: 1.6rem;
+    }
+    .sia-philosophy .sia-step .sia-step__text p {
+      font-size: 0.9rem;
+    }
+    .sia-philosophy .sia-step .sia-step__text blockquote {
+      margin-top: 0.9rem;
+      font-size: 1.15rem;
+    }
+  }
 
   /* ── The lotus (contact): pads behind the card, the bloom in front ── */
   /* The lotus on its lily pads: from the centre of the pond to the right edge, filling the lower
