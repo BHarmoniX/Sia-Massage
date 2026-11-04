@@ -3949,7 +3949,11 @@ const faqs = [
       // Closed: the gateway stands on its threshold near the foot of the stage, full height
       // in view with room above for the heading.
       // The wall stands on a stone forecourt that fills the foot of the stage.
-      const base0 = h - Math.max(60, h * 0.14);
+      // On an upright phone the doorway is held to the screen's width, so a deeper forecourt
+      // (the camera a little lower) keeps the wall above it from looming: from 14% of the stage
+      // on landscape screens to 24% on a phone held upright.
+      const tallness = Math.min(1, Math.max(0, (0.75 - w / h) / 0.3));
+      const base0 = h - Math.max(60, h * (0.14 + 0.1 * tallness));
       // As tall as the stage allows, leaving just the room 入 and its line need above the arch
       // (their own height, the 14px gap the label is set at, and a 10px margin to the top).
       const labelRoom = (threshold?.offsetHeight ?? 62) + 14 + 10;
@@ -4445,8 +4449,15 @@ const faqs = [
           left0 = p.side < 0
             ? Math.min(left0, coupletOuter - potIn * w0)
             : Math.max(left0, w - coupletOuter - (1 - potIn) * w0);
+          // Upright phones have no room for the couplets, but the bamboo still frames the doorway:
+          // each pot stands at the screen's edge (half out of view), the canopy leaning in over the
+          // wall above the arch.
+          const phone = !coupletsShown && w < h;
+          if (phone) {
+            left0 = p.side < 0 ? w * 0.02 - p.trough * w0 : w - w * 0.02 - (1 - p.trough) * w0;
+          }
           // Tall bamboo may run off the top of the scene, as it would through a real view.
-          const show = coupletsShown;
+          const show = coupletsShown || phone;
           p.el.style.display = show ? 'block' : 'none';
           if (!show) continue;
           const wid = w0 * s;
