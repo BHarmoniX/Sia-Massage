@@ -4464,9 +4464,15 @@ const faqs = [
           // each pot stands at the screen's edge (half out of view), the canopy leaning in over the
           // wall above the arch.
           const phone = !coupletsShown && w < h;
-          const POT_PHONE = 0.6; // the pots on phones, as a share of their full size (the plants keep theirs)
+          // On phones the plant is a little shorter (85%), and the pot smaller again (60% of its
+          // full size, set as a share of the shorter plant).
+          const PLANT_PHONE = 0.85;
+          const POT_PHONE = 0.6 / PLANT_PHONE;
           if (phone) {
-            left0 = p.side < 0 ? w * 0.02 - p.trough * w0 : w - w * 0.02 - (1 - p.trough) * w0;
+            w0 *= PLANT_PHONE;
+            h0 *= PLANT_PHONE;
+            // the pot's centre a little past the screen's edge
+            left0 = p.side < 0 ? -w * 0.06 - p.trough * w0 : w + w * 0.06 - (1 - p.trough) * w0;
           }
           // Tall bamboo may run off the top of the scene, as it would through a real view.
           const show = coupletsShown || phone;
