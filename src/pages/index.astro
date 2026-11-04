@@ -956,11 +956,18 @@ const faqs = [
     bottom: 52%;
     opacity: 0.8;
   }
-  /* Phones: no mist (on the slim band of hills there it washed whole stretches out), and no sage
-     glow around the hills on the right (the hills' own colour, so they vanished into it). The hero's
-     foot and the philosophy's top stay the same #e6ebdc, so they still meet without a seam. */
+  /* Phones: on the slim band of hills there, only the low mist, kept down among the near and middle
+     hills (below the far mountains' crests, which stay clear), and no sage glow around the hills on
+     the right (the hills' own colour, so they vanished into it). The hero's foot and the
+     philosophy's top stay the same #e6ebdc, so they still meet without a seam. */
   @media (max-width: 479.98px) {
-    .sia-hero__mist {
+    .sia-hero__land .sia-hero__mist {
+      bottom: 6%;
+      height: 26%;
+      opacity: 0.75;
+      filter: blur(3px);
+    }
+    .sia-hero__land .sia-hero__mist--high {
       display: none;
     }
     .sia-hero {
