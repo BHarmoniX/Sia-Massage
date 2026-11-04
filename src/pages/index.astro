@@ -2165,6 +2165,47 @@ const faqs = [
     }
   }
 
+  /* Phones turned sideways (wide but short): the heading centred across the top; below it the
+     photo on the left, staying in view while the treatment cards scroll by in a column on the
+     right (as on the desktop, where the photo sits beside the cards). */
+  @media (orientation: landscape) and (max-height: 500px) and (max-width: 1023.98px) {
+    /* clip (not hidden): still trims the backdrop, but lets the photo stay in view */
+    section.sia-treatments {
+      overflow: clip;
+    }
+    section.sia-treatments .sia-treatments__grid {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      align-items: start;
+      gap: 1.25rem;
+      padding: 2.5rem clamp(1.5rem, 5vw, 3rem);
+    }
+    section.sia-treatments .sia-treatments__head {
+      grid-column: 1 / -1;
+      justify-items: center;
+      text-align: center;
+    }
+    section.sia-treatments .sia-treatments__head p {
+      max-width: 40rem;
+      text-wrap: balance;
+    }
+    section.sia-treatments .sia-treatments__visual {
+      position: sticky;
+      top: calc(var(--header-height) + 0.75rem);
+      height: calc(100svh - var(--header-height) - 1.5rem);
+    }
+    section.sia-treatments .sia-treatments__frame {
+      min-height: 0;
+    }
+    section.sia-treatments .sia-treatments__help.glass-3d {
+      font-size: 0.8125rem;
+      padding: 0.7rem 0.9rem;
+    }
+    section.sia-treatments .sia-menu {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
+
   /* ── The lotus (contact): pads behind the card, the bloom in front ── */
   /* The lotus on its lily pads: from the centre of the pond to the right edge, filling the lower
      right corner and overlapping the card. Softened a touch into the morning mist. */
