@@ -1044,6 +1044,22 @@ const faqs = [
     width: fit-content;
     max-width: 100%;
   }
+  /* Phones: the buttons stack, both as wide as "Book a treatment", centred with the hours. */
+  @media (max-width: 479.98px) {
+    .sia-hero__cta-group {
+      width: 100%;
+    }
+    .sia-hero__actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      width: fit-content;
+      margin-inline: auto;
+    }
+    .sia-hero__actions > .btn-3d {
+      justify-content: center;
+      text-align: center;
+    }
+  }
   .sia-hero__hours {
     margin-top: 1.75rem;
     text-align: center;
