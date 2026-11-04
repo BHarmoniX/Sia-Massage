@@ -2596,6 +2596,9 @@ const faqs = [
   .sia-visit__prop img.sia-visit__prop-sway {
     /* the plant's cut (74.2%) lands on the smaller pot's cut line */
     translate: var(--plantx, 0%) calc(25.8% * (1 - var(--pot, 1)));
+    /* taller from the rim up (phones), without widening the stems at the rim */
+    transform-origin: 50% 74.2%;
+    scale: 1 var(--planty, 1);
   }
   /* With a smaller pot, the plant's base (full width) would overhang the narrower rim: its last
      few percent fade out, so the stems run down into the pot's own soil and stem ends. */
@@ -4506,6 +4509,7 @@ const faqs = [
           // The left plant's stems stand a little right of its pot's centre: over the smaller pot
           // they're shifted left to sit within the rim.
           p.el.style.setProperty('--plantx', phone && p.side < 0 ? '-3%' : '0%');
+          p.el.style.setProperty('--planty', phone ? '1.12' : '1');
           // How far the shadow falls to the side (share of the picture's width): closer in on
           // phones, where the plants stand mostly past the screen's edge.
           const shoff = phone ? 0.1 : 0.22;
