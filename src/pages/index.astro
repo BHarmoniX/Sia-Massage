@@ -4485,8 +4485,8 @@ const faqs = [
             w0 *= PLANT_PHONE;
             h0 *= PLANT_PHONE;
             // the pot's centre a little past the screen's edge
-            // (the left one a little further out, so its stems clear the characters)
-            left0 = p.side < 0 ? -w * 0.08 - p.trough * w0 : w + w * 0.05 - (1 - p.trough) * w0;
+            // (both the same distance past their edge, so the two pots show equally)
+            left0 = p.side < 0 ? -w * 0.05 - p.trough * w0 : w + w * 0.05 - (1 - p.trough) * w0;
           }
           // Tall bamboo may run off the top of the scene, as it would through a real view.
           const show = coupletsShown || phone;
