@@ -2159,6 +2159,15 @@ const faqs = [
     display: grid;
     gap: 0.75rem;
   }
+  /* Phones: less of a gap from the last philosophy card down to "Find your moment." */
+  @media (max-width: 479.98px) {
+    .sia-treatments__grid {
+      padding-top: 2.5rem;
+    }
+    .sia-pillars .sia-story {
+      padding-bottom: 2.5rem;
+    }
+  }
   /* Over the rock photograph: deep moss, a touch heavier, with a soft pale halo behind the
      letters so they lift clear of the stones without a visible box. */
   .sia-treatments__head p {
