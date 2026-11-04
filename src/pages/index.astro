@@ -1066,6 +1066,28 @@ const faqs = [
     }
     .sia-hero__cta-group--below .sia-hero__actions {
       margin-top: 0;
+      gap: 0.75rem;
+    }
+    .sia-hero__cta-group--below .sia-hero__hours {
+      margin-top: 1rem;
+    }
+    /* Text, roundel and buttons all on the first screen: tighter spacing, and the roundel
+       sized from the screen's height (whatever is left after the text and buttons). */
+    .sia-hero__grid {
+      gap: 1.5rem;
+      padding-top: 1.75rem;
+      padding-bottom: 2rem;
+      align-content: start;
+    }
+    .sia-hero__tagline {
+      margin-top: 0.9rem;
+    }
+    .sia-hero__grid .sia-hero__gate-wrap {
+      width: clamp(12rem, calc(100svh - 35.5rem), 100%);
+    }
+    .sia-hero__copy .sia-hero__lede {
+      font-size: 1rem;
+      text-wrap: balance;
     }
     /* The heading, tagline and text centred too, "Sia Massage" on one line. */
     .sia-hero__copy {
