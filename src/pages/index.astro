@@ -188,7 +188,7 @@ const faqs = [
     <div class="sia-hero__grid">
       <div class="sia-hero__copy" data-reveal>
         <h1 id="hero-title" class="sia-display">
-          Sia<br /><em>Massage</em>
+          Sia<br /> <em>Massage</em>
         </h1>
         <!-- Copy from the master brief (proposed; owner to review). -->
         <p class="sia-hero__tagline">A quieter place to unwind.</p>
@@ -1046,6 +1046,21 @@ const faqs = [
   }
   /* Phones: the buttons stack, both as wide as "Book a treatment", centred with the hours. */
   @media (max-width: 479.98px) {
+    /* The heading, tagline and text centred too, "Sia Massage" on one line. */
+    .sia-hero__copy {
+      padding-left: 0;
+      text-align: center;
+    }
+    .sia-hero__copy .sia-display {
+      font-size: clamp(2.5rem, 15vw, 4rem);
+      white-space: nowrap;
+    }
+    .sia-hero__copy .sia-display br {
+      display: none;
+    }
+    .sia-hero__lede {
+      margin-inline: auto;
+    }
     .sia-hero__cta-group {
       width: 100%;
     }
