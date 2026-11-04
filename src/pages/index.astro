@@ -2174,6 +2174,9 @@ const faqs = [
     font-weight: 600;
   }
   .sia-treatments__help-link {
+    /* tall enough to tap comfortably (24px minimum) */
+    display: inline-block;
+    padding-block: 0.2rem;
     font-weight: 550;
     color: #3f5634;
     white-space: nowrap;
@@ -3178,6 +3181,8 @@ const faqs = [
     font-size: 1.05rem;
   }
   .sia-contact__details a {
+    display: inline-block;
+    padding-block: 0.15rem; /* 24px+ to tap */
     text-decoration: underline;
     text-decoration-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
     text-underline-offset: 4px;

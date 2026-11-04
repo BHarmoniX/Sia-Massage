@@ -172,6 +172,25 @@ header.site-header[data-site-header] .site-header__cta {
   padding: 0.66rem 1.43rem;
   font-size: 0.9625rem;
 }
+/* The full menu needs about 925px on one line at Sia's header size: below 1024px (tablets,
+   phones turned sideways) keep the menu button, and never let header words wrap. */
+header.site-header[data-site-header] :is(.site-header__wordmark, .site-header__link, .site-header__cta) {
+  white-space: nowrap;
+}
+/* The menu panel never runs past the bottom of the screen (phones turned sideways): it scrolls. */
+header.site-header[data-site-header] .site-header__sheet {
+  max-height: calc(100dvh - var(--header-height));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  header.site-header[data-site-header] .site-header__nav {
+    display: none;
+  }
+  header.site-header[data-site-header] .site-header__mobile {
+    display: block;
+  }
+}
 /* Pages start below the fixed header, except where the first section (the home hero) makes
    its own room, so the page can run up behind the glass. */
 main#main {
