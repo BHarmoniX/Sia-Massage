@@ -4412,23 +4412,29 @@ const faqs = [
       // Carved couplets in the wall either side, from the shoulder of the doorway downward.
       const room = cx - A0 - EDGE - 24;
       const size = Math.min(56, Math.max(28, A0 * 0.36));
-      const show = room > size * 1.6 ? Math.max(0, 1 - open * 2.4) : 0;
+      const fits = room > size * 1.6;
+      // On a phone there's only a narrow strip of wall each side of the frame: the characters are
+      // sized from the doorway (never more than half that strip wide) and centred in it.
+      const strip = cx - A0 - EDGE;
+      const csize = fits ? size : Math.min(size, A0 * 0.36, strip * 0.5);
+      const show = fits || csize >= 14 ? Math.max(0, 1 - open * 2.4) : 0;
       // Carved into the wall beside the closed doorway (a little breathing room past the frame).
       // They sit in the frame layer, which zooms with the wall, so they stay fixed to the plaster.
       const fine = (v: number) => v.toFixed(4);
-      const offset0 = A0 + EDGE + size * 1.45;
+      const offset0 = fits ? A0 + EDGE + size * 1.45 : A0 + EDGE + strip / 2;
       // On a narrower screen (a tablet, a square window) the full-size bamboo's leaves reach in
       // over the top of the characters, so the couplets sit lower there: from none on a wide
       // desktop (1.45:1 and wider) to the full drop on a square or upright screen.
       const narrow = Math.min(1, Math.max(0, (1.45 - w / h) / 0.45));
       // …but never so low that the last character (about 5.3 × size down) nears the doorstep.
-      const yRest0 = base0 - SHOULDER * A0 + size * 0.4;
-      const yTop0 = Math.max(yRest0, Math.min(yRest0 + size * 2.4 * narrow, base0 - size * 5.7));
-      const k = size / 40;
+      const yRest0 = base0 - SHOULDER * A0 + csize * 0.4;
+      const yTop0 = Math.max(yRest0, Math.min(yRest0 + csize * 2.4 * narrow, base0 - csize * 5.7));
+      const k = csize / 40;
       couplets.right.setAttribute('transform', `translate(${fine(cx + offset0)} ${fine(yTop0)}) scale(${fine(k)})`);
       couplets.left.setAttribute('transform', `translate(${fine(cx - offset0)} ${fine(yTop0)}) scale(${fine(k)})`);
       couplets.right.style.opacity = couplets.left.style.opacity = String(show);
-      const coupletsShown = show > 0 || room > size * 1.6;
+      // (the wide placement, beside the frame with room to spare; the bamboo works from this)
+      const coupletsShown = fits;
 
       // The garden: placed in the closed view, then carried with the walk-in (scaled about the
       // same eye point), so it stays put on the forecourt as you step through.
@@ -4472,7 +4478,7 @@ const faqs = [
             w0 *= PLANT_PHONE;
             h0 *= PLANT_PHONE;
             // the pot's centre a little past the screen's edge
-            left0 = p.side < 0 ? -w * 0.06 - p.trough * w0 : w + w * 0.06 - (1 - p.trough) * w0;
+            left0 = p.side < 0 ? -w * 0.13 - p.trough * w0 : w + w * 0.13 - (1 - p.trough) * w0;
           }
           // Tall bamboo may run off the top of the scene, as it would through a real view.
           const show = coupletsShown || phone;
