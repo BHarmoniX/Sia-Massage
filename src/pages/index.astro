@@ -2585,6 +2585,17 @@ const faqs = [
   .sia-visit__prop img.sia-visit__prop-pot {
     clip-path: inset(73.4% 0 0 0);
   }
+  /* The pot can be smaller than the plant it holds (--pot, set by the script; phones): the pot
+     shrinks about its own base on the paving, and the plant (and its shadow) drop by the height
+     the pot lost, so the stems still rise from its rim. */
+  .sia-visit__prop img.sia-visit__prop-pot {
+    transform-origin: 50% 100%;
+    translate: calc((var(--sxn, 0.5) - 0.5) * (1 - var(--pot, 1)) * 100%) 0;
+    scale: var(--pot, 1);
+  }
+  .sia-visit__prop img.sia-visit__prop-sway {
+    translate: 0 calc(26.6% * (1 - var(--pot, 1)));
+  }
   .sia-visit__prop img.sia-visit__prop-sway:not(.sia-visit__prop-shadow) {
     position: absolute;
     inset: 0;
@@ -2679,8 +2690,8 @@ const faqs = [
      wall, where the shadow on the wall (.sia-visit__prop-shadow) carries on up. The script sets
      the lean (--gskew) so it lands exactly under the wall shadow. */
   .sia-visit__prop::after {
-    left: calc(var(--sx, 50%) - 21%);
-    width: 42%;
+    left: calc(var(--sx, 50%) - 21% * var(--pot, 1));
+    width: calc(42% * var(--pot, 1));
     bottom: 0;
     /* reaches a little up the wall, under the wall shadow's soft fade, so the two blend */
     height: calc(var(--wallcut, 10%) + 2.5%);
@@ -4453,6 +4464,7 @@ const faqs = [
           // each pot stands at the screen's edge (half out of view), the canopy leaning in over the
           // wall above the arch.
           const phone = !coupletsShown && w < h;
+          const POT_PHONE = 0.6; // the pots on phones, as a share of their full size (the plants keep theirs)
           if (phone) {
             left0 = p.side < 0 ? w * 0.02 - p.trough * w0 : w - w * 0.02 - (1 - p.trough) * w0;
           }
@@ -4467,7 +4479,9 @@ const faqs = [
           p.el.style.top = `${n(foot - hgt)}px`;
           p.el.style.width = `${n(wid)}px`;
           p.el.style.setProperty('--sx', `${n((p.side < 0 ? p.trough : 1 - p.trough) * 100)}%`);
-          p.el.style.setProperty('--sw', '22%');
+          p.el.style.setProperty('--sw', `${n(22 * (phone ? POT_PHONE : 1))}%`);
+          p.el.style.setProperty('--sxn', (p.side < 0 ? p.trough : 1 - p.trough).toFixed(3));
+          p.el.style.setProperty('--pot', phone ? String(POT_PHONE) : '1');
           // Where the wall meets the paving, measured up from the plant's foot (the wall shadow stops there).
           // The ground shadow's lean: across 22% of the picture's width over the ground to the wall.
           p.el.style.setProperty('--gskew', `${n((-Math.atan((wid * 0.22) / Math.max(1, foot - floor)) * 180) / Math.PI)}deg`);
