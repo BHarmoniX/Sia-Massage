@@ -956,14 +956,20 @@ const faqs = [
     bottom: 52%;
     opacity: 0.8;
   }
-  /* Phones: the hills are a slim band there, so the drifting mist would wash whole stretches of
-     them out; just a breath of it. */
+  /* Phones: no mist (on the slim band of hills there it washed whole stretches out), and no sage
+     glow around the hills on the right (the hills' own colour, so they vanished into it). The hero's
+     foot and the philosophy's top stay the same #e6ebdc, so they still meet without a seam. */
   @media (max-width: 479.98px) {
     .sia-hero__mist {
-      opacity: 0.3;
+      display: none;
     }
-    .sia-hero__mist--high {
-      opacity: 0.25;
+    .sia-hero {
+      background:
+        radial-gradient(80% 60% at 0% 0%, rgb(255 253 246 / 0.7), transparent 70%),
+        linear-gradient(180deg, #f1f1e7, #e6ebdc);
+    }
+    section.sia-philosophy {
+      background: linear-gradient(180deg, #e6ebdc, #e8ecdf);
     }
   }
   @media (prefers-reduced-motion: no-preference) {
