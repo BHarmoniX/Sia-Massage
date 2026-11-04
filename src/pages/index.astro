@@ -4470,9 +4470,9 @@ const faqs = [
           // each pot stands at the screen's edge (half out of view), the canopy leaning in over the
           // wall above the arch.
           const phone = !coupletsShown && w < h;
-          // On phones the plant is a little shorter (92%), and the pot smaller again (60% of its
+          // On phones the plant keeps its full height, and the pot is smaller (60% of its
           // full size, set as a share of the shorter plant).
-          const PLANT_PHONE = 0.92;
+          const PLANT_PHONE = 1;
           const POT_PHONE = 0.6 / PLANT_PHONE;
           if (phone) {
             w0 *= PLANT_PHONE;
