@@ -1003,6 +1003,14 @@ const faqs = [
     mask-composite: intersect;
     pointer-events: none;
   }
+  /* Phones: across the whole width, so a little shows on the left of the roundel too. */
+  @media (max-width: 479.98px) {
+    .sia-hero__bamboo {
+      width: 100%;
+      -webkit-mask-image: linear-gradient(to left, black 50%, rgb(0 0 0 / 0.35) 85%, transparent 100%), linear-gradient(180deg, black 62%, transparent 92%);
+      mask-image: linear-gradient(to left, black 50%, rgb(0 0 0 / 0.35) 85%, transparent 100%), linear-gradient(180deg, black 62%, transparent 92%);
+    }
+  }
   .sia-hero__grid {
     position: relative;
     display: grid;
