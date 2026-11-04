@@ -903,10 +903,19 @@ const faqs = [
       radial-gradient(80% 60% at 0% 0%, rgb(255 253 246 / 0.7), transparent 70%),
       linear-gradient(180deg, #f1f1e7, #e6ebdc);
   }
+  /* Height of the hero's hills and of their mirrored reflection below (kept equal). Lower on phones. */
+  :root {
+    --sia-land: min(34vh, 22rem);
+  }
+  @media (max-width: 479.98px) {
+    :root {
+      --sia-land: min(20vh, 10rem);
+    }
+  }
   .sia-hero__land {
     position: absolute;
     inset: auto 0 0 0;
-    height: min(34vh, 22rem);
+    height: var(--sia-land);
     pointer-events: none;
   }
   .sia-hero__ridge {
@@ -1228,7 +1237,7 @@ const faqs = [
   .sia-lake__reflection {
     position: absolute;
     inset: 0 0 auto;
-    height: min(34vh, 22rem);
+    height: var(--sia-land);
     -webkit-mask-image: linear-gradient(180deg, #000 0, #000 35%, transparent 100%);
     mask-image: linear-gradient(180deg, #000 0, #000 35%, transparent 100%);
   }
@@ -1643,7 +1652,7 @@ const faqs = [
     max-width: 80rem;
     margin: 0 auto;
     /* begins where the reflected hills fade out */
-    padding: calc(min(34vh, 22rem) * 0.62) 1.5rem 1.5rem;
+    padding: calc(var(--sia-land) * 0.62) 1.5rem 1.5rem;
   }
   /* the opening: one centred group (character, heading, introduction) */
   .sia-phil__intro {
@@ -1699,7 +1708,7 @@ const faqs = [
   @media (min-width: 1024px) {
     .sia-phil {
       gap: clamp(3.5rem, 9vh, 5rem);
-      padding: calc(min(34vh, 22rem) * 0.62) 3rem 0;
+      padding: calc(var(--sia-land) * 0.62) 3rem 0;
     }
   }
 
