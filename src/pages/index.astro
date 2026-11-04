@@ -196,7 +196,7 @@ const faqs = [
           Chinese relaxation massage in a welcoming, peaceful setting. Take time for yourself, ease into
           the moment and enjoy a little space to simply unwind.
         </p>
-        <div class="sia-hero__cta-group">
+        <div class="sia-hero__cta-group sia-hero__cta-group--beside">
           <div class="sia-hero__actions">
             <a href="#contact" class="btn-3d">Book a treatment</a>
             <a href="#treatments" class="btn-3d sia-btn-white">See the menu</a>
@@ -213,6 +213,14 @@ const faqs = [
             <span class="sia-hero__rest font-han" lang="zh-Hans" aria-hidden="true"><span data-depth="0.5">静</span><span data-depth="0.7">息</span></span>
           </div>
         </div>
+      </div>
+      <!-- Phones: the same buttons and hours again, below the roundel (the ones above are hidden there). -->
+      <div class="sia-hero__cta-group sia-hero__cta-group--below" data-reveal>
+        <div class="sia-hero__actions">
+          <a href="#contact" class="btn-3d">Book a treatment</a>
+          <a href="#treatments" class="btn-3d sia-btn-white">See the menu</a>
+        </div>
+        <p class="sia-hero__hours">{business.hours}</p>
       </div>
     </div>
 
@@ -1044,8 +1052,21 @@ const faqs = [
     width: fit-content;
     max-width: 100%;
   }
+  /* On phones the buttons sit below the roundel; elsewhere beside it, with the heading. */
+  .sia-hero__cta-group--below {
+    display: none;
+  }
   /* Phones: the buttons stack, both as wide as "Book a treatment", centred with the hours. */
   @media (max-width: 479.98px) {
+    .sia-hero__cta-group--beside {
+      display: none;
+    }
+    .sia-hero__cta-group--below {
+      display: grid;
+    }
+    .sia-hero__cta-group--below .sia-hero__actions {
+      margin-top: 0;
+    }
     /* The heading, tagline and text centred too, "Sia Massage" on one line. */
     .sia-hero__copy {
       padding-left: 0;
