@@ -1888,6 +1888,15 @@ const faqs = [
   .sia-step {
     display: grid;
   }
+  /* Phones: "Our story" closer to the opening above it, and the three cards closer together. */
+  @media (max-width: 479.98px) {
+    .sia-phil {
+      gap: 1.75rem;
+    }
+    .sia-story {
+      gap: 1.5rem;
+    }
+  }
 
   /* "Our story" in the contact card's glass: frosted ivory at 62%, white edge, pointer glow */
   .sia-step--story .sia-step__panel.glass-3d {
