@@ -3399,6 +3399,21 @@ const faqs = [
       justify-content: center;
     }
   }
+  /* Phones: the three buttons stacked, all as wide as "Book a treatment", centred (as in the hero). */
+  @media (max-width: 479.98px) {
+    .sia-contact__actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      width: fit-content;
+      align-self: center;
+      margin-inline: auto;
+      gap: 0.75rem;
+    }
+    .sia-contact__actions > .btn-3d {
+      justify-content: center;
+      text-align: center;
+    }
+  }
 
 </style>
 
