@@ -2594,7 +2594,14 @@ const faqs = [
     scale: var(--pot, 1);
   }
   .sia-visit__prop img.sia-visit__prop-sway {
-    translate: 0 calc(26.6% * (1 - var(--pot, 1)));
+    /* the plant's cut (74.2%) lands on the smaller pot's cut line */
+    translate: 0 calc(25.8% * (1 - var(--pot, 1)));
+  }
+  /* With a smaller pot, the plant's base (full width) would overhang the narrower rim: its last
+     few percent fade out, so the stems run down into the pot's own soil and stem ends. */
+  .sia-visit__prop img.sia-visit__prop-sway:not(.sia-visit__prop-shadow) {
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(74.2% - var(--potfade, 0%)), transparent 74.2%);
+    mask-image: linear-gradient(to bottom, #000 calc(74.2% - var(--potfade, 0%)), transparent 74.2%);
   }
   .sia-visit__prop img.sia-visit__prop-sway:not(.sia-visit__prop-shadow) {
     position: absolute;
@@ -2649,7 +2656,7 @@ const faqs = [
     height: 100%;
     filter: none;
     opacity: 0.55;
-    transform: translate(22%, -0.6%);
+    transform: translate(var(--shoff, 22%), -0.6%);
     /* Only the part falling on the wall (the paving below has the plant's own ground shadow).
        No hard edge where wall meets paving: it fades softly into the foot of the wall and a
        touch beyond, where the ground shadow reaches up under it, so the two run together. */
@@ -2667,7 +2674,7 @@ const faqs = [
     );
   }
   .sia-visit__prop--mirror img.sia-visit__prop-shadow {
-    transform: scaleX(-1) translate(-22%, -0.6%);
+    transform: scaleX(-1) translate(calc(var(--shoff, 22%) * -1), -0.6%);
   }
   /* Grounding: a tight dark contact right where the foot meets the stone (centred on the
      foot's bottom edge, so it runs under and just behind it), and a soft shadow cast away from
@@ -4478,7 +4485,8 @@ const faqs = [
             w0 *= PLANT_PHONE;
             h0 *= PLANT_PHONE;
             // the pot's centre a little past the screen's edge
-            left0 = p.side < 0 ? -w * 0.05 - p.trough * w0 : w + w * 0.05 - (1 - p.trough) * w0;
+            // (the left one a little further out, so its stems clear the characters)
+            left0 = p.side < 0 ? -w * 0.08 - p.trough * w0 : w + w * 0.05 - (1 - p.trough) * w0;
           }
           // Tall bamboo may run off the top of the scene, as it would through a real view.
           const show = coupletsShown || phone;
@@ -4494,9 +4502,14 @@ const faqs = [
           p.el.style.setProperty('--sw', `${n(22 * (phone ? POT_PHONE : 1))}%`);
           p.el.style.setProperty('--sxn', (p.side < 0 ? p.trough : 1 - p.trough).toFixed(3));
           p.el.style.setProperty('--pot', phone ? String(POT_PHONE) : '1');
+          p.el.style.setProperty('--potfade', phone ? '3%' : '0%');
+          // How far the shadow falls to the side (share of the picture's width): closer in on
+          // phones, where the plants stand mostly past the screen's edge.
+          const shoff = phone ? 0.1 : 0.22;
+          p.el.style.setProperty('--shoff', `${shoff * 100}%`);
           // Where the wall meets the paving, measured up from the plant's foot (the wall shadow stops there).
           // The ground shadow's lean: across 22% of the picture's width over the ground to the wall.
-          p.el.style.setProperty('--gskew', `${n((-Math.atan((wid * 0.22) / Math.max(1, foot - floor)) * 180) / Math.PI)}deg`);
+          p.el.style.setProperty('--gskew', `${n((-Math.atan((wid * shoff) / Math.max(1, foot - floor)) * 180) / Math.PI)}deg`);
           p.el.style.setProperty('--gblur', `${n(Math.max(2, wid * 0.014))}px`);
           p.el.style.setProperty('--wallcut', `${n(Math.max(0, ((foot - floor) / hgt) * 100 - 0.6))}%`);
         }
