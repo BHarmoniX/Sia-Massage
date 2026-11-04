@@ -23,7 +23,7 @@ const legal: NonNullable<Site['legal']> = site.legal ?? {
   giftVouchers: false,
   healthSafety: false,
   attribution: [],
-  ai: { builtWithAI: true, aiImagery: false, aiChat: false, customerDataInAI: false },
+  ai: { builtWithAI: true, aiImagery: false, aiPhotographs: false, aiChat: false, customerDataInAI: false },
 };
 
 export const info = {

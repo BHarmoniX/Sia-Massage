@@ -164,12 +164,16 @@ export const siteSchema = z.object({
           builtWithAI: z.boolean().default(true),
           /** Some imagery on the site is AI-generated (it should then be credited as such). */
           aiImagery: z.boolean().default(false),
+          /** That AI imagery includes photographs of people or places (not just illustrations):
+           *  the Terms then say so plainly, and that they are not the business's own staff,
+           *  guests or premises. */
+          aiPhotographs: z.boolean().default(false),
           /** The site has an automated chat assistant. */
           aiChat: z.boolean().default(false),
           /** Personal information is processed with AI tools (business-grade, no training). */
           customerDataInAI: z.boolean().default(false),
         })
-        .default({ builtWithAI: true, aiImagery: false, aiChat: false, customerDataInAI: false }),
+        .default({ builtWithAI: true, aiImagery: false, aiPhotographs: false, aiChat: false, customerDataInAI: false }),
       /** Physical access to the premises, for the Accessibility page, if known. */
       premisesAccess: z.string().optional(),
       /** Cancellation Policy page (Client Care). */
@@ -281,15 +285,17 @@ export const site: Site = siteSchema.parse({
     // Shown under "Attribution" in the Terms. Keep in step with docs/CREDITS.md.
     attribution: [
       { work: 'Photograph: bamboo leaves in soft light (welcome)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/FguFp1l5X0E' },
-      { work: 'Video: rain on leaves (rain interlude)', credit: 'Pixabay', licence: 'Pixabay Content License', href: 'https://pixabay.com/videos/plants-leaves-foliage-rain-water-152800/' },
       { work: 'Photograph: weathered hardwood (doorway doors)', credit: 'Pexels', licence: 'Pexels License', href: 'https://www.pexels.com/photo/129721/' },
       { work: 'Photograph: mossy stream (treatments background)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/ALrCdq-ui_Q' },
-      { work: 'Photograph: bamboo path (your visit)', credit: 'Unsplash', licence: 'Unsplash License', href: 'https://unsplash.com/photos/Um769ucDvd4' },
+      { work: 'AI-generated photographs: treatment scenes with therapists and guests (treatments, your visit, philosophy)', credit: 'Created for Sia Massage with OpenArt (AI); not Sia staff or guests', licence: 'OpenArt commercial licence' },
+      { work: 'AI-generated photograph: a therapist team (philosophy)', credit: 'Created for Sia Massage with OpenArt (AI); not Sia staff', licence: 'OpenArt commercial licence' },
+      { work: 'AI-generated photographs: treatment rooms, studio front and lotus pond (philosophy, FAQ, contact)', credit: 'Created for Sia Massage with OpenArt (AI); not Sia premises', licence: 'OpenArt commercial licence' },
+      { work: 'AI-generated textures and objects: doorway timber, iron, plaster, paving and bamboo pots (your visit)', credit: 'Created for Sia Massage with OpenArt (AI)', licence: 'OpenArt commercial licence' },
       { work: 'Music: Rain Meditation (background music)', credit: 'diepthanhdk via Pixabay', licence: 'Pixabay Content License', href: 'https://pixabay.com/music/meditationspiritual-rain-meditation-450575/' },
       { work: 'Illustration: moon-window ink landscape, clouds and birds (welcome)', credit: 'Illuminara Creative Studio, drawn in code with AI-assisted tools', licence: 'Original artwork' },
       { work: 'Typefaces: Cormorant Garamond (Christian Thalmann) and Jost (Owen Earl)', credit: 'Fontsource', licence: 'SIL Open Font License', href: 'https://fontsource.org' },
     ],
-    ai: { builtWithAI: true, aiImagery: false, aiChat: false, customerDataInAI: false },
+    ai: { builtWithAI: true, aiImagery: true, aiPhotographs: true, aiChat: false, customerDataInAI: false },
   },
   securityContact: 'hello@siamassage.com.au', // MOCK
 });

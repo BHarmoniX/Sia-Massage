@@ -144,7 +144,13 @@ const sections = [
       )
     }
     {
-      info.legal.ai.aiImagery ? (
+      info.legal.ai.aiImagery && info.legal.ai.aiPhotographs ? (
+        <li>
+          <strong>Images.</strong> Some photographs on this site, including scenes with people, are
+          created with AI tools to illustrate the experience; they are credited as AI-generated
+          above. They are not photographs of our own staff, guests or premises.
+        </li>
+      ) : info.legal.ai.aiImagery ? (
         <li>
           <strong>Images.</strong> Some illustrations on this site are created with AI tools; they are
           credited as such above. Photographs of people and places are real.

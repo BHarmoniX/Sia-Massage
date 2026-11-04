@@ -82,9 +82,11 @@ Conduct) use these placeholder choices (`site.ts` → `legal`):
 
 - [ ] Owner confirms each policy; the wording is reviewed; then set `legal.reviewed: true`
       (a production build refuses to publish until this is done).
-- [ ] **AI disclosure:** the settings say the site uses **no AI imagery** (`ai.aiImagery: false`),
-      but several photos are AI-generated (section 7). This statement on the Terms page needs
-      to be made accurate once the final photos are decided.
+- [x] **AI disclosure (done 2026-11-04):** the Terms page now says some photographs, including
+      scenes with people, are AI-generated to illustrate the experience and are not Sia's staff,
+      guests or premises, and the credits list them as AI-generated. **When real photos replace
+      the AI ones**, update the credits (`site.ts` → `legal.attribution`); once none are left,
+      set `ai.aiPhotographs` (and `aiImagery`) back to `false`.
 
 ## 7. Photos that are AI-generated or placeholders
 
