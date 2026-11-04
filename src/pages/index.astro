@@ -4230,7 +4230,9 @@ const faqs = [
       // They sit in the frame layer, which zooms with the wall, so they stay fixed to the plaster.
       const fine = (v: number) => v.toFixed(4);
       const offset0 = A0 + EDGE + size * 1.45;
-      const yTop0 = base0 - SHOULDER * A0 + size * 0.4;
+      // On an upright screen (a tablet) the full-size bamboo's leaves reach in over the top of
+      // the characters, so the couplets sit a little lower there.
+      const yTop0 = base0 - SHOULDER * A0 + size * (w < h ? 1.6 : 0.4);
       const k = size / 40;
       couplets.right.setAttribute('transform', `translate(${fine(cx + offset0)} ${fine(yTop0)}) scale(${fine(k)})`);
       couplets.left.setAttribute('transform', `translate(${fine(cx - offset0)} ${fine(yTop0)}) scale(${fine(k)})`);
