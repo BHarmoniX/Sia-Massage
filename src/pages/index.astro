@@ -956,6 +956,16 @@ const faqs = [
     bottom: 52%;
     opacity: 0.8;
   }
+  /* Phones: the hills are a slim band there, so the drifting mist would wash whole stretches of
+     them out; just a breath of it. */
+  @media (max-width: 479.98px) {
+    .sia-hero__mist {
+      opacity: 0.3;
+    }
+    .sia-hero__mist--high {
+      opacity: 0.25;
+    }
+  }
   @media (prefers-reduced-motion: no-preference) {
     .sia-hero__ridge--far {
       animation: sia-slide 240s linear infinite;
