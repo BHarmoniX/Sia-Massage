@@ -465,7 +465,9 @@ const faqs = [
       <!-- The foot of the wall, darkened where it meets the paving (damp, splash and shade). -->
       <div class="sia-visit__wall-foot" data-wall-foot></div>
       <div class="sia-visit__door">
-        <Img src={spaRoom} alt="" sizes="100vw" class="h-full w-full object-cover" />
+        {/* On upright and square screens the room is shown far wider than the screen (it fills the
+             height, and the walk-in frames it close), so those load the full-size photo. */}
+        <Img src={spaRoom} alt="" sizes="(max-aspect-ratio: 4/3) 2800px, 100vw" widths={[480, 768, 1080, 1440, 1920, 2560, 2800]} class="h-full w-full object-cover" />
       </div>
       <!-- A gateway: the outline of the client's stone arch (crown mirrored exactly, posts
            extended to doorway height), traced by a sage line and an even fine line. The path
