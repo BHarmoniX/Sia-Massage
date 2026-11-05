@@ -189,7 +189,7 @@ const faqs = [
     <div class="sia-hero__grid">
       <div class="sia-hero__copy" data-reveal>
         <h1 id="hero-title" class="sia-display">
-          Sia<br /> <em>Massage</em>
+          Sia <em>Massage</em>
         </h1>
         <!-- Copy from the master brief (proposed; owner to review). -->
         <p class="sia-hero__tagline">A quieter place to unwind.</p>
@@ -864,9 +864,17 @@ const faqs = [
   .sia-display {
     font-family: var(--font-display);
     font-weight: 300;
-    font-size: clamp(4rem, 9vw, 8.5rem);
+    /* one line: "Sia Massage" */
+    white-space: nowrap;
+    font-size: clamp(3.5rem, 7vw, 7.5rem);
     line-height: 0.88;
     letter-spacing: -0.01em;
+  }
+  /* below the desktop layout the words have the full width: a little larger there */
+  @media (max-width: 1023.98px) {
+    .sia-display {
+      font-size: clamp(3.5rem, 11vw, 6rem);
+    }
   }
   .sia-display em {
     font-style: italic;
