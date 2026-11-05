@@ -115,8 +115,8 @@ These are not photos of Sia. Real photos are preferred wherever the owner can su
 
 ## Launch-day technical tasks (for us, not the owner)
 
-- [ ] Remove the temporary `?capture` screenshot mode, the `?perf` timing test and the `?tour`
-      walkthrough mode (`src/client/TourMode.astro` and its `<TourMode />` line in `index.astro`)
+- [ ] Remove the temporary `?capture` screenshot mode and the `?perf` timing test
+      (the `?tour` walkthrough mode was removed on 2026-11-05; it can be restored from git commit 0dd33af)
 - [ ] Production build (`SITE_ENV=production`) so search engines can index the site
 - [ ] Connect the real domain and hosting (Hostinger)
 - [ ] Google Analytics: to set up together another day (needs a privacy-policy update and a
