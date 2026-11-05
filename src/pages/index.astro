@@ -48,6 +48,7 @@ import gardenBambooB from '../client/photos/garden-bamboo-b.webp';
 import gardenBambooAShadow from '../client/photos/garden-bamboo-a-shadow.webp';
 import gardenBambooBShadow from '../client/photos/garden-bamboo-b-shadow.webp';
 import { getImage } from 'astro:assets';
+import TourMode from '../client/TourMode.astro';
 
 // The doorway's doors: natural oiled hardwood boards, one sheet per leaf, cut from a real
 // hardwood photo turned so its grain runs up the boards (each board a different part of it).
@@ -822,6 +823,8 @@ const faqs = [
       </div>
     </div>
   </Section>
+  {/* TEMPORARY (remove before launch): ?tour walkthrough mode for recording a client video. */}
+  <TourMode />
 </OnePageLayout>
 
 <style is:global>
