@@ -212,7 +212,7 @@ export type Site = z.infer<typeof siteSchema>;
 // ─────────────────────────────────────────────────────────────────────────────────────
 export const site: Site = siteSchema.parse({
   name: 'Sia Massage',
-  tagline: 'Find your stillness',
+  tagline: 'A quieter kind of care',
   description:
     'Chinese relaxation massage in a calm, quiet space. Unhurried treatments to rest the body and quiet the mind.', // proposed: owner to review
   url: 'https://www.siamassage.com.au', // MOCK: confirm the real domain
