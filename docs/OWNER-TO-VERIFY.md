@@ -51,7 +51,9 @@ Also to confirm:
 |---|---|
 | "As a Chinese-owned business with a predominantly Chinese team…" | Philosophy → Our story |
 | "Rooted in Chinese tradition." | Philosophy → Our story heading |
-| "Chinese relaxation massage" (identity; also the search description) | Hero, search description |
+| "Chinese relaxation massage" (identity; also the search description) | Search description |
+| "Treat yourself to a moment of total relaxation. Rediscover your wellness through the art of traditional Chinese massage." (new 2026-11-05; "traditional Chinese massage" vs "Chinese relaxation massage" used elsewhere) | Hero paragraph |
+| "A quieter kind of care." (now both the hero tagline and the Philosophy heading) | Hero, Philosophy |
 | "Your therapist will discuss your preferences and the pressure that feels right for you." | Your visit → Breathe |
 | "attentive hands and considered techniques" | Your visit → Release |
 
